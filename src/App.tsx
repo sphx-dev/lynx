@@ -1,12 +1,17 @@
-import logo from "./logo.svg"
-// import { Counter } from "./features/counter/Counter"
+import Container from "react-bootstrap/Container"
+import Row from "react-bootstrap/Row"
+import OrderInput from "./OrderInput"
 import "./App.css"
 
 function App() {
   return (
-    <div className="App">
-      <div>Test App bitch ass</div>
-    </div>
+    <>
+      <Container style={{ marginTop: "5rem" }}>
+        <Row>
+          <OrderInput />
+        </Row>
+      </Container>
+    </>
   )
 }
 
