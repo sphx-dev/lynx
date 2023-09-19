@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
 import OrderInput from "./OrderInput"
 import OrderBook from "./orderbook/OrderBook"
 import "./App.css"
@@ -20,9 +21,11 @@ function App() {
     <>
       <Container style={{ marginTop: "5rem" }}>
         <Row>
-          <OrderInput />
-          <br />
-          <br />
+          <Col>
+            <OrderInput />
+          </Col>
+        </Row>
+        <Row>
           <OrderBook windowWidth={windowWidth} />
         </Row>
       </Container>
