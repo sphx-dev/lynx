@@ -27,11 +27,11 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
         <>
           <span className="price">{price}</span>
           <span>{size}</span>
-          <span>{total}</span>
+          {/* <span>{total}</span> */}
         </>
       ) : (
         <>
-          <span>{total}</span>
+          {/* <span>{total}</span> */}
           <span>{size}</span>
           <span className="price">{price}</span>
         </>

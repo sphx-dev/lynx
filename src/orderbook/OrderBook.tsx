@@ -1,8 +1,10 @@
 import { useState, FunctionComponent } from "react"
 import { useAppSelector, useAppDispatch } from "../hooks"
 import { getOrderBook, orderBook } from "./orderBookSlice"
+import TitleRow from "./TitleRow"
 import DepthVisualizer from "./DepthVisualizer"
 import PriceLevelRow from "./PriceLevelRow"
+import { Container, TableContainer } from "./OrderBookStyle"
 import styles from "../features-old/counter/Counter.module.css"
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle"
 import { MOBILE_WIDTH } from "../constants"
@@ -27,6 +29,8 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
     levels: number[][],
     orderType: OrderType = OrderType.BIDS,
   ): React.ReactNode => {
+    console.log("LEVELS")
+    console.log(levels)
     const sortedLevelsByPrice: number[][] = [...levels].sort(
       (currentLevel: number[], nextLevel: number[]): number => {
         let result: number = 0
@@ -68,17 +72,50 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   }
 
   return (
-    <div style={{ marginTop: "2rem" }}>
-      <div className={styles.row}>
-        <button
-          className={styles.asyncButton}
-          onClick={() => dispatch(getOrderBook())}
-        >
-          Fetch order book
-        </button>
+    <Container>
+      <div style={{ marginTop: "2rem" }}>
+        <div className={styles.row}>
+          <button
+            className={styles.asyncButton}
+            onClick={() => dispatch(getOrderBook())}
+          >
+            Fetch order book
+          </button>
+        </div>
       </div>
-    </div>
+
+      {book.bids.length && book.asks.length ? (
+        <>
+          <TableContainer>
+            {windowWidth > MOBILE_WIDTH && (
+              <TitleRow windowWidth={windowWidth} reversedFieldsOrder={false} />
+            )}
+            <div>{buildPriceLevels(book.bids, OrderType.BIDS)}</div>
+          </TableContainer>
+          {/* <Spread bids={book.bids} asks={book.asks} /> */}
+          <TableContainer>
+            <TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />
+            <div>{buildPriceLevels(book.asks, OrderType.ASKS)}</div>
+          </TableContainer>
+        </>
+      ) : (
+        <div>
+          <h1>NO DATA</h1>
+        </div>
+      )}
+    </Container>
   )
+}
+
+const formatPrice = (arg: number): string => {
+  return arg.toLocaleString("en", {
+    useGrouping: true,
+    minimumFractionDigits: 2,
+  })
+}
+
+const formatNumber = (arg: number): string => {
+  return new Intl.NumberFormat("en-US").format(arg)
 }
 
 export default OrderBook

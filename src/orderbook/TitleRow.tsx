@@ -17,11 +17,11 @@ const TitleRow: FunctionComponent<TitleRowProps> = ({
         <>
           <span>PRICE</span>
           <span>SIZE</span>
-          <span>TOTAL</span>
+          {/* <span>TOTAL</span> */}
         </>
       ) : (
         <>
-          <span>TOTAL</span>
+          {/* <span>TOTAL</span> */}
           <span>SIZE</span>
           <span>PRICE</span>
         </>
