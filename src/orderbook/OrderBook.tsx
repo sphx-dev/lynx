@@ -1,4 +1,4 @@
-import { useState, FunctionComponent } from "react"
+import { useState, useEffect, FunctionComponent } from "react"
 import { useAppSelector, useAppDispatch } from "../hooks"
 import { getOrderBook, orderBook } from "./orderBookSlice"
 import TitleRow from "./TitleRow"
@@ -24,6 +24,10 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const [orderbook, setOrderBook] = useState([])
 
   console.log(book)
+
+  useEffect(() => {
+    dispatch(getOrderBook())
+  }, [])
 
   const buildPriceLevels = (
     levels: number[][],
@@ -73,16 +77,16 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
 
   return (
     <Container>
-      <div style={{ marginTop: "2rem" }}>
-        <div className={styles.row}>
-          <button
-            className={styles.asyncButton}
-            onClick={() => dispatch(getOrderBook())}
-          >
-            Fetch order book
-          </button>
-        </div>
-      </div>
+      {/* <div style={{ marginTop: "2rem" }}> */}
+      {/*   <div className={styles.row}> */}
+      {/*     <button */}
+      {/*       className={styles.asyncButton} */}
+      {/*       onClick={() => dispatch(getOrderBook())} */}
+      {/*     > */}
+      {/*       Fetch order book */}
+      {/*     </button> */}
+      {/*   </div> */}
+      {/* </div> */}
 
       {book.bids.length && book.asks.length ? (
         <>
