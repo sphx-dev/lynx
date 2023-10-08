@@ -19,12 +19,8 @@ export const getOrderBook = createAsyncThunk(
   "orderbook/getOrderBook",
   async () => {
     const response = await axios.get("http://localhost:23336/order_book")
-    // fetch data
-    // const response = await fetchCount(amount)
     // The value we return becomes the `fulfilled` action payload
     return response.data
-    // return response.data
-    // return null
   },
 )
 
@@ -57,10 +53,5 @@ export const orderBookSlice = createSlice({
 })
 
 export const { clear } = orderBookSlice.actions
-
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const orderBook = (state: RootState) => state.orderBook
-
 export default orderBookSlice.reducer
