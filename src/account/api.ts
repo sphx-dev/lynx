@@ -20,7 +20,16 @@ const initialState: AccountState = {
 
 // dispatch(getAccount())
 export const getAccount = createAsyncThunk("account/getAccount", async () => {
-  const response = await axios.get("http://localhost:8080/accounts/current")
+  const opts = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  }
+  const response = await axios.get(
+    "http://localhost:8080/accounts/current",
+    opts,
+  )
   // The value we return becomes the `fulfilled` action payload
   // console.log(response.data)
   return response.data

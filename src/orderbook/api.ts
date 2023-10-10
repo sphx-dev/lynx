@@ -18,7 +18,13 @@ const initialState: OrderBookState = {
 export const getOrderBook = createAsyncThunk(
   "orderbook/getOrderBook",
   async () => {
-    const response = await axios.get("http://localhost:8080/orderbook/")
+    const opts = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+    const response = await axios.get("http://localhost:8080/orderbook/", opts)
     // The value we return becomes the `fulfilled` action payload
     return response.data
   },

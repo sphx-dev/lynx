@@ -32,6 +32,7 @@ function App() {
             <OrderInput />
           </Col>
         </Row>
+        <br></br>
         <Row>
           <OrderBook windowWidth={windowWidth} />
         </Row>
