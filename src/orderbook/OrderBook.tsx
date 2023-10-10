@@ -23,26 +23,20 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const dispatch = useAppDispatch()
   const [orderbook, setOrderBook] = useState([])
 
-  console.log(book)
-
   useEffect(() => {
-    dispatch(getOrderBook())
+    setInterval(() => {
+      dispatch(getOrderBook())
+    }, 1000)
   }, [])
 
   const buildPriceLevels = (
     levels: number[][],
     orderType: OrderType = OrderType.BIDS,
   ): React.ReactNode => {
-    console.log("LEVELS")
-    console.log(levels)
     const sortedLevelsByPrice: number[][] = [...levels].sort(
       (currentLevel: number[], nextLevel: number[]): number => {
         let result: number = 0
-        if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
-          result = nextLevel[0] - currentLevel[0]
-        } else {
-          result = currentLevel[0] - nextLevel[0]
-        }
+        result = currentLevel[0] - nextLevel[0]
         return result
       },
     )

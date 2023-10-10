@@ -18,7 +18,7 @@ const initialState: OrderBookState = {
 export const getOrderBook = createAsyncThunk(
   "orderbook/getOrderBook",
   async () => {
-    const response = await axios.get("http://localhost:23336/order_book")
+    const response = await axios.get("http://localhost:8080/orderbook/")
     // The value we return becomes the `fulfilled` action payload
     return response.data
   },
@@ -43,14 +43,71 @@ export const orderBookSlice = createSlice({
       })
       .addCase(getOrderBook.fulfilled, (state, action) => {
         state.status = "idle"
-        state.bids = action.payload.bids
-        state.asks = action.payload.asks
+        let bids = action.payload.bids
+        bids = ordersToArray(bids)
+        bids = addTotalSums(bids)
+        bids = addDepths(bids)
+
+        let asks = action.payload.asks
+        asks = ordersToArray(asks)
+        asks = addTotalSums(asks)
+        asks = addDepths(asks)
+
+        console.log(bids)
+        console.log(asks)
+
+        state.bids = bids
+        state.asks = asks
+
+        // const sumBids = addTotalSums(state.bids)
+        // console.log(sumBids)
       })
       .addCase(getOrderBook.rejected, (state) => {
         state.status = "failed"
       })
   },
 })
+
+const ordersToArray = (orders: any): any => {
+  const orderArray = []
+  for (const [key, value] of Object.entries(orders)) {
+    orderArray.push([Number(key), Number(value)])
+  }
+  return orderArray
+}
+
+const addTotalSums = (orders: number[][]): number[][] => {
+  const totalSums: number[] = []
+
+  return orders.map((order: number[], idx) => {
+    const size: number = order[1]
+    if (typeof order[2] !== "undefined") {
+      return order
+    } else {
+      const updatedLevel = [...order]
+      const totalSum: number = idx === 0 ? size : size + totalSums[idx - 1]
+      updatedLevel[2] = totalSum
+      totalSums.push(totalSum)
+      return updatedLevel
+    }
+  })
+}
+
+const addDepths = (orders: number[][]): number[][] => {
+  const totalSums: number[] = orders.map((order) => order[2])
+  const maxTotal = Math.max.apply(Math, totalSums)
+  return orders.map((order) => {
+    if (typeof order[3] !== "undefined") {
+      return order
+    } else {
+      const calculatedTotal: number = order[2]
+      const depth = (calculatedTotal / maxTotal) * 100
+      const updatedOrder = [...order]
+      updatedOrder[3] = depth
+      return updatedOrder
+    }
+  })
+}
 
 export const { clear } = orderBookSlice.actions
 export const orderBook = (state: RootState) => state.orderBook

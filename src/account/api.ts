@@ -3,12 +3,18 @@ import { RootState, AppThunk } from "../store"
 import axios from "axios"
 
 export interface AccountState {
-  account: any
+  id: any
+  balance: Number
+  closedOrders: []
+  openOrders: []
   status: "idle" | "loading" | "failed"
 }
 
 const initialState: AccountState = {
-  account: null,
+  id: null,
+  balance: 0,
+  closedOrders: [],
+  openOrders: [],
   status: "idle",
 }
 
@@ -25,7 +31,10 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     clear: (state) => {
-      state.account = null
+      state.id = null
+      state.balance = 0
+      state.closedOrders = []
+      state.openOrders = []
     },
   },
 
@@ -37,9 +46,11 @@ export const accountSlice = createSlice({
         state.status = "loading"
       })
       .addCase(getAccount.fulfilled, (state, action) => {
+        state.id = action.payload.account.Id
+        state.balance = action.payload.account.Balance
+        state.openOrders = action.payload.account.openOrders
+        state.closedOrders = action.payload.account.closedOrders
         state.status = "idle"
-        state.account = action.payload.account
-        console.log(state.account)
       })
       .addCase(getAccount.rejected, (state) => {
         state.status = "failed"
