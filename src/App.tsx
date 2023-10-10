@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import OrderInput from "./OrderInput"
+import AccountCard from "./account/Account"
+import OrderInput from "./orderbook/OrderInput"
 import OrderBook from "./orderbook/OrderBook"
 import "./App.css"
 
@@ -20,6 +21,12 @@ function App() {
   return (
     <>
       <Container style={{ marginTop: "5rem" }}>
+        <Row>
+          <Col>
+            <AccountCard />
+          </Col>
+        </Row>
+        <br></br>
         <Row>
           <Col>
             <OrderInput />

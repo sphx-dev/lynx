@@ -8,14 +8,15 @@ export interface AccountState {
 }
 
 const initialState: AccountState = {
-  account: [],
+  account: null,
   status: "idle",
 }
 
 // dispatch(getAccount())
 export const getAccount = createAsyncThunk("account/getAccount", async () => {
-  const response = await axios.get("http://localhost:23336/order_book")
+  const response = await axios.get("http://localhost:8080/accounts/current")
   // The value we return becomes the `fulfilled` action payload
+  // console.log(response.data)
   return response.data
 })
 
@@ -24,7 +25,7 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     clear: (state) => {
-      state.account = []
+      state.account = null
     },
   },
 
@@ -38,6 +39,7 @@ export const accountSlice = createSlice({
       .addCase(getAccount.fulfilled, (state, action) => {
         state.status = "idle"
         state.account = action.payload.account
+        console.log(state.account)
       })
       .addCase(getAccount.rejected, (state) => {
         state.status = "failed"
@@ -46,5 +48,5 @@ export const accountSlice = createSlice({
 })
 
 export const { clear } = accountSlice.actions
-export const orderBook = (state: RootState) => state.account
+export const account = (state: RootState) => state.account
 export default accountSlice.reducer
