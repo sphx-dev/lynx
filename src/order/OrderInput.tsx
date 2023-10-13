@@ -1,6 +1,7 @@
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import Form from "react-bootstrap/Form"
+import Row from "react-bootstrap/Row"
 
 function OrderInput() {
   return (
@@ -10,9 +11,16 @@ function OrderInput() {
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
             <Card.Body>
               <Form>
+                <Row>
+                  <Form.Check // prettier-ignore
+                    type="switch"
+                    id="short-switch"
+                    label="Short"
+                  />
+                </Row>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Long (USDC) Oil</Form.Label>
-                  <Form.Control type="float" placeholder="0.00" />
+                  <Form.Label>Price</Form.Label>
+                  <Form.Control type="float" placeholder="85.00" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Amount</Form.Label>

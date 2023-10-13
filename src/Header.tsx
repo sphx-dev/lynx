@@ -13,7 +13,7 @@ function Header() {
             <img src={logo} height="60" />
           </Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>Account Balance: $254,679 USDC</Navbar.Text>
+            <Navbar.Text>Trading Demo</Navbar.Text>
           </Navbar.Collapse>
         </Container>
       </Navbar>

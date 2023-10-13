@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import AccountCard from "./account/Account"
-import OrderInput from "./orderbook/OrderInput"
+import OrderInput from "./order/OrderInput"
 import OrderBook from "./orderbook/OrderBook"
 import "./App.css"
 
