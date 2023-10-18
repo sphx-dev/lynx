@@ -1,3 +1,6 @@
+import React, { useState, useCallback } from "react"
+import { useAppDispatch } from "../hooks"
+import { placeLimitOrder } from "./api"
 import Button from "react-bootstrap/Button"
 import ButtonGroup from "react-bootstrap/ButtonGroup"
 import Card from "react-bootstrap/Card"
@@ -6,6 +9,17 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 
 function OrderInput() {
+  const dispatch = useAppDispatch()
+  const [price, setPrice] = useState("")
+  const [volume, setVolume] = useState("")
+
+  const submitOrder = () => {
+    console.log("SUBMIT ORDER")
+    console.log(price)
+    console.log(volume)
+    dispatch(placeLimitOrder({ price }))
+  }
+
   return (
     <>
       <Card style={{ backgroundColor: "#e5e5e5" }}>
@@ -23,19 +37,26 @@ function OrderInput() {
               </ButtonGroup>
             </Col>
           </Row>
-
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formPrice">
                   <Form.Label>Price</Form.Label>
-                  <Form.Control type="float" placeholder="0.00" />
+                  <Form.Control
+                    type="float"
+                    placeholder="0.00"
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formVolume">
                   <Form.Label>Amount</Form.Label>
-                  <Form.Control type="number" placeholder="Amount" />
+                  <Form.Control
+                    type="number"
+                    placeholder="Amount"
+                    onChange={(e) => setVolume(e.target.value)}
+                  />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" onClick={submitOrder}>
                   Place my trade
                 </Button>
               </Form>

@@ -19,16 +19,38 @@ const initialState: OrderState = {
 }
 
 // dispatch(getOrder())
-export const getOrder = createAsyncThunk("order/placeOrder", async () => {
+export const getOrder = createAsyncThunk("order/getOrders", async () => {
   const opts = {
     headers: {
       "Content-Type": "application/json",
     },
     withCredentials: true,
   }
-  const response = await axios.get("http://localhost:8080/orders/current", opts)
+  const response = await axios.get("http://127.0.0.1:8080/orders/current", opts)
   return response.data
 })
+
+export const placeLimitOrder = createAsyncThunk(
+  "order/placeLimitOrder",
+  async (data) => {
+    // const { price, volume } = data
+    const body = {
+      price: 83,
+      volume: 10,
+      isBuy: true,
+    }
+    const opts = {
+      withCredentials: true,
+    }
+    const response = await axios.post(
+      "http://127.0.0.1:8080/order/limit",
+      body,
+      opts,
+    )
+    console.log(response.data)
+    return response.data
+  },
+)
 
 export const orderSlice = createSlice({
   name: "order",

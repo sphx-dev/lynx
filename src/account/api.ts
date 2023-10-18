@@ -27,7 +27,7 @@ export const getAccount = createAsyncThunk("account/getAccount", async () => {
     withCredentials: true,
   }
   const response = await axios.get(
-    "http://localhost:8080/accounts/current",
+    "http://127.0.0.1:8080/accounts/current",
     opts,
   )
   // The value we return becomes the `fulfilled` action payload
@@ -45,6 +45,13 @@ export const accountSlice = createSlice({
       state.closedOrders = []
       state.openOrders = []
     },
+    update: (state, action) => {
+      console.log("ACTION: ", action)
+      state.id = action.payload.account.Id
+      state.balance = action.payload.account.Balance
+      state.openOrders = action.payload.account.OpenOrders
+      state.closedOrders = action.payload.account.ClosedOrders
+    },
   },
 
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -57,8 +64,8 @@ export const accountSlice = createSlice({
       .addCase(getAccount.fulfilled, (state, action) => {
         state.id = action.payload.account.Id
         state.balance = action.payload.account.Balance
-        state.openOrders = action.payload.account.openOrders
-        state.closedOrders = action.payload.account.closedOrders
+        state.openOrders = action.payload.account.OpenOrders
+        state.closedOrders = action.payload.account.ClosedOrders
         state.status = "idle"
       })
       .addCase(getAccount.rejected, (state) => {
@@ -67,6 +74,6 @@ export const accountSlice = createSlice({
   },
 })
 
-export const { clear } = accountSlice.actions
+export const { clear, update } = accountSlice.actions
 export const account = (state: RootState) => state.account
 export default accountSlice.reducer

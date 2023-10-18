@@ -36,7 +36,11 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
     const sortedLevelsByPrice: number[][] = [...levels].sort(
       (currentLevel: number[], nextLevel: number[]): number => {
         let result: number = 0
-        result = currentLevel[0] - nextLevel[0]
+        if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
+          result = nextLevel[0] - currentLevel[0]
+        } else {
+          result = currentLevel[0] - nextLevel[0]
+        }
         return result
       },
     )
@@ -71,17 +75,6 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
 
   return (
     <Container>
-      {/* <div style={{ marginTop: "2rem" }}> */}
-      {/*   <div className={styles.row}> */}
-      {/*     <button */}
-      {/*       className={styles.asyncButton} */}
-      {/*       onClick={() => dispatch(getOrderBook())} */}
-      {/*     > */}
-      {/*       Fetch order book */}
-      {/*     </button> */}
-      {/*   </div> */}
-      {/* </div> */}
-
       {book.bids.length && book.asks.length ? (
         <>
           <TableContainer>

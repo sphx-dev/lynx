@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "../store"
 import axios from "axios"
+import { update } from "../account/api"
+
+const ORDERBOOK_LEVELS: number = 15
 
 export interface OrderBookState {
   bids: any
@@ -19,12 +22,9 @@ export const getOrderBook = createAsyncThunk(
   "orderbook/getOrderBook",
   async () => {
     const opts = {
-      headers: {
-        "Content-Type": "application/json",
-      },
       withCredentials: true,
     }
-    const response = await axios.get("http://localhost:8080/orderbook/", opts)
+    const response = await axios.get("http://127.0.0.1:8080/orderbook/", opts)
     // The value we return becomes the `fulfilled` action payload
     return response.data
   },
@@ -51,22 +51,24 @@ export const orderBookSlice = createSlice({
         state.status = "idle"
         let bids = action.payload.bids
         bids = ordersToArray(bids)
+        bids = bids.reverse()
+        bids = bids.slice(0, 15)
         bids = addTotalSums(bids)
         bids = addDepths(bids)
 
         let asks = action.payload.asks
         asks = ordersToArray(asks)
+        asks = asks.slice(0, 15)
+
         asks = addTotalSums(asks)
         asks = addDepths(asks)
-
-        console.log(bids)
-        console.log(asks)
 
         state.bids = bids
         state.asks = asks
 
         // const sumBids = addTotalSums(state.bids)
         // console.log(sumBids)
+        update(action)
       })
       .addCase(getOrderBook.rejected, (state) => {
         state.status = "failed"
