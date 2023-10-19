@@ -15,9 +15,9 @@ function OrderInput() {
 
   const submitOrder = () => {
     console.log("SUBMIT ORDER")
-    console.log(price)
-    console.log(volume)
-    dispatch(placeLimitOrder({ price }))
+    if (price && volume) {
+      dispatch(placeLimitOrder({ price, volume }))
+    }
   }
 
   return (

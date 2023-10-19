@@ -1,11 +1,11 @@
 import styled from "styled-components"
 
-interface ContainerProps {
+interface PriceLevelContainerProps {
   isRight: boolean
   windowWidth: number
 }
 
-export const Container = styled.div<ContainerProps>`
+export const PriceLevelContainer = styled.div<PriceLevelContainerProps>`
   display: flex;
   justify-content: space-around;
   background-color: #121723;

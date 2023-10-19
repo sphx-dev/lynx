@@ -33,7 +33,8 @@ export const getOrder = createAsyncThunk("order/getOrders", async () => {
 export const placeLimitOrder = createAsyncThunk(
   "order/placeLimitOrder",
   async (data) => {
-    // const { price, volume } = data
+    console.log("DATA: ")
+    console.log(data)
     const body = {
       price: 83,
       volume: 10,
@@ -74,8 +75,8 @@ export const orderSlice = createSlice({
       .addCase(getOrder.fulfilled, (state, action) => {
         state.id = action.payload.order.Id
         state.balance = action.payload.order.Balance
-        state.openOrders = action.payload.order.openOrders
-        state.closedOrders = action.payload.order.closedOrders
+        state.openOrders = action.payload.order.OpenOrders
+        state.closedOrders = action.payload.order.ClosedOrders
         state.status = "idle"
       })
       .addCase(getOrder.rejected, (state) => {

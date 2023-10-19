@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react"
-import { Container } from "./PriceLevelRowStyle"
+import { PriceLevelContainer } from "./PriceLevelRowStyle"
 import { MOBILE_WIDTH } from "../constants"
 
 interface PriceLevelRowProps {
@@ -18,7 +18,7 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
   windowWidth,
 }) => {
   return (
-    <Container
+    <PriceLevelContainer
       data-testid="price-level-row"
       isRight={!reversedFieldsOrder}
       windowWidth={windowWidth}
@@ -36,7 +36,7 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
           <span className="price">{price}</span>
         </>
       )}
-    </Container>
+    </PriceLevelContainer>
   )
 }
 

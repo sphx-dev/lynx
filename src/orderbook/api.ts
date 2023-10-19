@@ -57,6 +57,7 @@ export const orderBookSlice = createSlice({
         bids = addDepths(bids)
 
         let asks = action.payload.asks
+        console.log(asks)
         asks = ordersToArray(asks)
         asks = asks.slice(0, 15)
 
@@ -77,7 +78,7 @@ export const orderBookSlice = createSlice({
 })
 
 const ordersToArray = (orders: any): any => {
-  const orderArray = []
+  const orderArray: any = []
   for (const [key, value] of Object.entries(orders)) {
     orderArray.push([Number(key), Number(value)])
   }
@@ -112,6 +113,11 @@ const addDepths = (orders: number[][]): number[][] => {
       const depth = (calculatedTotal / maxTotal) * 100
       const updatedOrder = [...order]
       updatedOrder[3] = depth
+
+      // console.log("DEPTH: ...", depth)
+      // console.log("CALC TOTAL: ", calculatedTotal)
+      // console.log("MAX TOTAL: ", maxTotal)
+
       return updatedOrder
     }
   })

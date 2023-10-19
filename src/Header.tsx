@@ -2,6 +2,7 @@ import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
 import Navbar from "react-bootstrap/Navbar"
 import Image from "react-bootstrap/Image"
+import ReadMe from "./ReadMe"
 import logo from "./static/logo.png"
 
 function Header() {
@@ -13,7 +14,7 @@ function Header() {
             <img src={logo} height="60" />
           </Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>Trading Demo</Navbar.Text>
+            <ReadMe />
           </Navbar.Collapse>
         </Container>
       </Navbar>
