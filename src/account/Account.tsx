@@ -45,7 +45,6 @@ function AccountCard() {
               <>
                 <ListGroup>
                   {acct.openOrders?.map((order, i) => {
-                    console.log(order)
                     // Return the element. Also pass key
                     return (
                       <ListGroup.Item key={i}>

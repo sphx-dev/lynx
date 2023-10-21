@@ -57,7 +57,6 @@ export const orderBookSlice = createSlice({
         bids = addDepths(bids)
 
         let asks = action.payload.asks
-        console.log(asks)
         asks = ordersToArray(asks)
         asks = asks.slice(0, 15)
 

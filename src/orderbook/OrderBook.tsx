@@ -45,16 +45,12 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
       },
     )
 
-    // console.log(sortedLevelsByPrice)
-
     return sortedLevelsByPrice.map((level, idx) => {
       const calculatedTotal: number = level[2]
       const total: string = formatNumber(calculatedTotal)
       const depth = level[3]
       const size: string = formatNumber(level[1])
       const price: string = formatPrice(level[0])
-
-      // console.log(depth)
 
       return (
         <PriceLevelRowContainer key={idx + depth}>

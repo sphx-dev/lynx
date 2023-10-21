@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "../store"
 import axios from "axios"
 
@@ -34,6 +34,8 @@ export const getAccount = createAsyncThunk("account/getAccount", async () => {
   // console.log(response.data)
   return response.data
 })
+
+export const updateAccount = createAction<any>("account/updateAccount")
 
 export const accountSlice = createSlice({
   name: "account",
