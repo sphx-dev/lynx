@@ -48,8 +48,8 @@ function AccountCard() {
                     // Return the element. Also pass key
                     return (
                       <ListGroup.Item key={i}>
-                        ID: {order?.id}, Price: {order?.price}, Volume:{" "}
-                        {order?.quantity}
+                        ID: {order["id"]}, Price: {order["price"]}, Volume:{" "}
+                        {order["quantity"]}
                       </ListGroup.Item>
                     )
                   })}
