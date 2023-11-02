@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState, AppThunk } from "../store"
 import axios from "axios"
+import { RootState, AppThunk } from "../store"
 import { update } from "../account/api"
-
-const ORDERBOOK_LEVELS: number = 15
+import { ORDERBOOK_LEVELS, API_URL } from "../constants"
 
 export interface OrderBookState {
   bids: any
@@ -24,7 +23,7 @@ export const getOrderBook = createAsyncThunk(
     const opts = {
       withCredentials: true,
     }
-    const response = await axios.get("http://127.0.0.1:8080/orderbook/", opts)
+    const response = await axios.get(`${API_URL}/orderbook/`, opts)
     // The value we return becomes the `fulfilled` action payload
     return response.data
   },
@@ -52,13 +51,13 @@ export const orderBookSlice = createSlice({
         let bids = action.payload.bids
         bids = ordersToArray(bids)
         bids = bids.reverse()
-        bids = bids.slice(0, 15)
+        bids = bids.slice(0, ORDERBOOK_LEVELS)
         bids = addTotalSums(bids)
         bids = addDepths(bids)
 
         let asks = action.payload.asks
         asks = ordersToArray(asks)
-        asks = asks.slice(0, 15)
+        asks = asks.slice(0, ORDERBOOK_LEVELS)
 
         asks = addTotalSums(asks)
         asks = addDepths(asks)
@@ -112,11 +111,6 @@ const addDepths = (orders: number[][]): number[][] => {
       const depth = (calculatedTotal / maxTotal) * 100
       const updatedOrder = [...order]
       updatedOrder[3] = depth
-
-      // console.log("DEPTH: ...", depth)
-      // console.log("CALC TOTAL: ", calculatedTotal)
-      // console.log("MAX TOTAL: ", maxTotal)
-
       return updatedOrder
     }
   })

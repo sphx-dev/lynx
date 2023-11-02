@@ -1,3 +1,10 @@
-export const MOBILE_WIDTH: number = 800 // px
+// Mobile in in pixels
+export const MOBILE_WIDTH: number = 800
 
-export const ORDERBOOK_LEVELS: number = 25 // rows count
+// Order book rows
+export const ORDERBOOK_LEVELS: number = 20
+
+// BASE API URL
+const url = import.meta.env.VITE_API_HOST
+const port = import.meta.env.VITE_API_PORT
+export const API_URL: string = `http://${url}:${port}`

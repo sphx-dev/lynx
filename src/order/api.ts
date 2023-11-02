@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "../store"
 import { useAppDispatch } from "../hooks"
 import axios from "axios"
+import { API_URL } from "../constants"
 
 export interface OrderState {
   done: Array<any>
@@ -27,7 +28,7 @@ export const getOrder = createAsyncThunk("order/getOrders", async () => {
     },
     withCredentials: true,
   }
-  const response = await axios.get("http://127.0.0.1:8080/orders/current", opts)
+  const response = await axios.get(`${API_URL}/orders/current`, opts)
   return response.data
 })
 
@@ -44,11 +45,7 @@ export const placeLimitOrder = createAsyncThunk(
     const opts = {
       withCredentials: true,
     }
-    const response = await axios.post(
-      "http://127.0.0.1:8080/order/limit",
-      body,
-      opts,
-    )
+    const response = await axios.post(`${API_URL}/order/limit`, body, opts)
     console.log(response.data)
     return response.data
   },

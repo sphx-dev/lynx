@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit"
-import { RootState, AppThunk } from "../store"
 import axios from "axios"
+import { RootState, AppThunk } from "../store"
+import { API_URL } from "../constants"
 
 export interface AccountState {
   id: any
@@ -26,12 +27,7 @@ export const getAccount = createAsyncThunk("account/getAccount", async () => {
     },
     withCredentials: true,
   }
-  const response = await axios.get(
-    "http://127.0.0.1:8080/accounts/current",
-    opts,
-  )
-  // The value we return becomes the `fulfilled` action payload
-  // console.log(response.data)
+  const response = await axios.get(`${API_URL}/accounts/current`, opts)
   return response.data
 })
 
