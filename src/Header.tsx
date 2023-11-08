@@ -1,7 +1,5 @@
 import Container from "react-bootstrap/Container"
-import Nav from "react-bootstrap/Nav"
 import Navbar from "react-bootstrap/Navbar"
-import Image from "react-bootstrap/Image"
 import ReadMe from "./ReadMe"
 import logo from "./static/logo.png"
 
@@ -9,9 +7,9 @@ function Header() {
   return (
     <>
       <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
+        <Container fluid={true}>
           <Navbar.Brand href="#home">
-            <img src={logo} height="60" />
+            <img src={logo} height="60" alt="header-logo" />
           </Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
             <ReadMe />
