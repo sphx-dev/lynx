@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col"
 import AccountCard from "./account/Account"
 import OrderInput from "./order/OrderInput"
 import OrderBook from "./orderbook/OrderBook"
+import { TradingViewContainer } from "./chart/TradingViewContainer"
 import "./App.css"
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <Row>
           <OrderBook windowWidth={windowWidth} />
         </Row>
+        <TradingViewContainer />
       </Container>
     </>
   )
