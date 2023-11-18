@@ -21,23 +21,24 @@ function App() {
 
   return (
     <>
-      <Container style={{ marginTop: "5rem" }}>
+      <Container fluid={true} style={{ marginTop: "2rem" }}>
         <Row>
+          <Col md={3}>
+            <OrderBook windowWidth={windowWidth} />
+          </Col>
           <Col>
+            <TradingViewContainer />
+          </Col>
+          <Col md={3}>
             <AccountCard />
-          </Col>
-        </Row>
-        <br></br>
-        <Row>
-          <Col>
             <OrderInput />
+            <br></br>
           </Col>
+          <br></br>
+          <Row>
+            <Col></Col>
+          </Row>
         </Row>
-        <br></br>
-        <Row>
-          <OrderBook windowWidth={windowWidth} />
-        </Row>
-        <TradingViewContainer />
       </Container>
     </>
   )
