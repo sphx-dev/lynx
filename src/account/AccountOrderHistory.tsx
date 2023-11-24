@@ -4,7 +4,7 @@ import { getAccount, account } from "./api"
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
 
-function AccountCard() {
+function AccountOrderHistory() {
   const acct = useAppSelector(account)
   const dispatch = useAppDispatch()
 
@@ -17,14 +17,19 @@ function AccountCard() {
       <Card style={{ backgroundColor: "#e5e5e5" }}>
         <Card.Body>
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-            <Card.Body>Account Info</Card.Body>
-            {acct ? (
+            <Card.Body>Orders</Card.Body>
+            {acct && acct.openOrders?.length !== 0 ? (
               <>
                 <ListGroup>
-                  <ListGroup.Item>ID: {acct.id}</ListGroup.Item>
-                  <ListGroup.Item>
-                    USDC Balance: {acct.balance.toString()}
-                  </ListGroup.Item>
+                  {acct.openOrders?.map((order, i) => {
+                    // Return the element. Also pass key
+                    return (
+                      <ListGroup.Item key={i}>
+                        ID: {order["id"]}, Price: {order["price"]}, Volume:{" "}
+                        {order["quantity"]}
+                      </ListGroup.Item>
+                    )
+                  })}
                 </ListGroup>
               </>
             ) : (
@@ -37,4 +42,4 @@ function AccountCard() {
   )
 }
 
-export default AccountCard
+export default AccountOrderHistory
