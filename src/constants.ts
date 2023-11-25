@@ -2,7 +2,7 @@
 export const MOBILE_WIDTH: number = 800
 
 // Order book rows
-export const ORDERBOOK_LEVELS: number = 25
+export const ORDERBOOK_LEVELS: number = 29
 
 // BASE API URL
 const url = import.meta.env.VITE_API_HOST

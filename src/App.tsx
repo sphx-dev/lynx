@@ -7,6 +7,7 @@ import OrderInput from "./order/OrderInput"
 import OrderBook from "./orderbook/OrderBook"
 import { TradingViewContainer } from "./chart/TradingViewContainer"
 import "./App.css"
+import AccountOrderHistory from "./account/AccountOrderHistory"
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(0)
@@ -34,9 +35,12 @@ function App() {
             <OrderInput />
             <br></br>
           </Col>
-          <br></br>
           <Row>
-            <Col></Col>
+            <Col />
+            <Col md={11}>
+              <AccountOrderHistory />
+            </Col>
+            <Col />
           </Row>
         </Row>
       </Container>

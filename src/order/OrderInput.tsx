@@ -25,12 +25,12 @@ function OrderInput() {
       <Card style={{ backgroundColor: "#e5e5e5" }}>
         <Card.Body>
           <Row>
-            <Col xs={10}>
+            <Col md={3}>
               <div style={{ marginTop: "5px", marginLeft: "10px" }}>
                 Oil / USDC
               </div>
             </Col>
-            <Col>
+            <Col md={8}>
               <ButtonGroup aria-label="long-short">
                 <Button variant="primary">Long</Button>
                 <Button variant="secondary">Short</Button>

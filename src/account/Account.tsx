@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "../hooks"
 import { getAccount, account } from "./api"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
 
@@ -16,8 +18,13 @@ function AccountCard() {
     <>
       <Card style={{ backgroundColor: "#e5e5e5" }}>
         <Card.Body>
+          <Row>
+            <Col>
+              <div>Acccount Info</div>
+            </Col>
+          </Row>
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-            <Card.Body>Account Info</Card.Body>
+            {/* <Card.Body>Account Info</Card.Body> */}
             {acct ? (
               <>
                 <ListGroup>
