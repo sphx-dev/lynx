@@ -1,4 +1,3 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
@@ -18,12 +17,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+<!-- [![Contributors][contributors-shield]][contributors-url] -->
+<!-- [![Forks][forks-shield]][forks-url] -->
+<!-- [![Stargazers][stars-shield]][stars-url] -->
+<!-- [![Issues][issues-shield]][issues-url] -->
+<!-- [![MIT License][license-shield]][license-url] -->
+<!-- [![LinkedIn][linkedin-shield]][linkedin-url] -->
 
 
 
@@ -31,13 +30,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="src/static/logo-dark.png" alt="Logo" height="80">
   </a>
 
 <h3 align="center">Lynx</h3>
 
   <p align="center">
-    Lynx - The Sphinx trading frontend
+    The Sphinx trading frontend
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
@@ -79,62 +78,41 @@
 </details>
 
 
-
-<!-- ABOUT THE PROJECT -->
-## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-### Built With
-
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Lynx is the trading frontend for the Sphinx protocol. It requires Osiris running as 
+a service to run. The stack is built with Vite, Typescript and React. 
+
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+To develop and build the project, you must have yarn installed. This requires NodeJS / NPM. 
+
   ```sh
-  npm install npm@latest -g
+  npm install -g yarn
   ```
+
+OR
+
+  ```sh
+  brew install yarn
+  ```
+
+**DO NOT use npm to install prerequisites, any npm lock file will ignored from the repo.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/sphx/lynx.git
    ```
 3. Install NPM packages
    ```sh
-   npm install
+   yarn install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+4. Edit appropriate keys in ENV file
+    
+    The ENV file is NEVER committed to the repository, see a team member for distribution.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
