@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState, AppThunk } from "../store"
-import { useAppDispatch } from "../hooks"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { RootState } from "../store"
 import axios from "axios"
 import { API_URL } from "../constants"
 
@@ -35,12 +34,10 @@ export const getOrder = createAsyncThunk("order/getOrders", async () => {
 export const placeLimitOrder = createAsyncThunk(
   "order/placeLimitOrder",
   async (data: any) => {
-    console.log("DATA: ")
-    console.log(data)
     const body = {
       price: data?.price,
       volume: data?.volume,
-      isBuy: true,
+      isBuy: data?.isBuy,
     }
     const opts = {
       withCredentials: true,

@@ -6,8 +6,8 @@ import AccountCard from "./account/Account"
 import OrderInput from "./order/OrderInput"
 import OrderBook from "./orderbook/OrderBook"
 import { TradingViewContainer } from "./chart/TradingViewContainer"
-import "./App.css"
 import AccountOrderHistory from "./account/AccountOrderHistory"
+import "./App.css"
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(0)

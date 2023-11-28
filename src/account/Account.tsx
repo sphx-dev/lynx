@@ -16,7 +16,7 @@ function AccountCard() {
 
   return (
     <>
-      <Card style={{ backgroundColor: "#e5e5e5" }}>
+      <Card style={{ backgroundColor: "#e5e5e5", marginBottom: "2rem" }}>
         <Card.Body>
           <Row>
             <Col>
@@ -24,7 +24,6 @@ function AccountCard() {
             </Col>
           </Row>
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-            {/* <Card.Body>Account Info</Card.Body> */}
             {acct ? (
               <>
                 <ListGroup>

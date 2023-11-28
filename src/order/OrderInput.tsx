@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react"
 import { useAppDispatch } from "../hooks"
 import { placeLimitOrder } from "./api"
 import Button from "react-bootstrap/Button"
-import ButtonGroup from "react-bootstrap/ButtonGroup"
 import Card from "react-bootstrap/Card"
 import Form from "react-bootstrap/Form"
 import Row from "react-bootstrap/Row"
@@ -13,8 +12,13 @@ function OrderInput() {
   const [price, setPrice] = useState("")
   const [volume, setVolume] = useState("")
 
-  const submitOrder = () => {
-    console.log("SUBMIT ORDER")
+  const submitBuyOrder = () => {
+    if (price && volume) {
+      dispatch(placeLimitOrder({ price, volume }))
+    }
+  }
+
+  const submitSellOrder = () => {
     if (price && volume) {
       dispatch(placeLimitOrder({ price, volume }))
     }
@@ -29,12 +33,6 @@ function OrderInput() {
               <div style={{ marginTop: "5px", marginLeft: "10px" }}>
                 Oil / USDC
               </div>
-            </Col>
-            <Col md={8}>
-              <ButtonGroup aria-label="long-short">
-                <Button variant="primary">Long</Button>
-                <Button variant="secondary">Short</Button>
-              </ButtonGroup>
             </Col>
           </Row>
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
@@ -56,9 +54,26 @@ function OrderInput() {
                     onChange={(e) => setVolume(e.target.value)}
                   />
                 </Form.Group>
-                <Button variant="primary" onClick={submitOrder}>
-                  Place my trade
-                </Button>
+                <Row>
+                  <Col md={3}>
+                    <Button
+                      variant="primary"
+                      onClick={submitBuyOrder}
+                      style={{ width: "6rem" }}
+                    >
+                      Buy
+                    </Button>
+                  </Col>
+                  <Col md={3}>
+                    <Button
+                      variant="danger"
+                      onClick={submitSellOrder}
+                      style={{ width: "6rem" }}
+                    >
+                      Sell
+                    </Button>
+                  </Col>
+                </Row>
               </Form>
             </Card.Body>
           </Card>
