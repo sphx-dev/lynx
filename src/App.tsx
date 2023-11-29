@@ -7,6 +7,7 @@ import OrderInput from "./order/OrderInput"
 import OrderBook from "./orderbook/OrderBook"
 import { TradingViewContainer } from "./chart/TradingViewContainer"
 import AccountOrderHistory from "./account/AccountOrderHistory"
+import { Toaster } from "react-hot-toast"
 import "./App.css"
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         fluid={true}
         style={{ marginTop: "2rem" }}
       >
+        <Toaster position="top-right" />
         <Row>
           <Col md={3}>
             <OrderBook windowWidth={windowWidth} />

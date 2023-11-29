@@ -21,7 +21,7 @@ function ReadMe() {
         <Modal.Header closeButton>
           <Modal.Title>Welcome to the Sphinx Demo</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Body>The Sphinx demo is designed to.....</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

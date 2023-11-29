@@ -6,20 +6,26 @@ import Card from "react-bootstrap/Card"
 import Form from "react-bootstrap/Form"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import ListGroup from "react-bootstrap/ListGroup"
+import toast, { Toaster } from "react-hot-toast"
 
 function OrderInput() {
   const dispatch = useAppDispatch()
   const [price, setPrice] = useState("")
   const [volume, setVolume] = useState("")
 
+  const notify = () => toast("Order placed")
+
   const submitBuyOrder = () => {
     if (price && volume) {
+      notify()
       dispatch(placeLimitOrder({ price, volume }))
     }
   }
 
   const submitSellOrder = () => {
     if (price && volume) {
+      notify()
       dispatch(placeLimitOrder({ price, volume }))
     }
   }
@@ -28,14 +34,7 @@ function OrderInput() {
     <>
       <Card data-bs-theme="dark">
         <Card.Body>
-          <Row>
-            <Col md={6}>
-              <div style={{ marginTop: "5px", marginLeft: "10px" }}>
-                Oil / USDC
-              </div>
-            </Col>
-          </Row>
-          <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+          <Card style={{ marginTop: "1rem" }}>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formPrice">
@@ -75,6 +74,11 @@ function OrderInput() {
                   </Col>
                 </Row>
               </Form>
+              <hr />
+              <ListGroup variant="flush">
+                <ListGroup.Item>Borrow Fee: -0.0016 / Hour</ListGroup.Item>
+                <ListGroup.Item>Funding Fee: -0.003% / Hour</ListGroup.Item>
+              </ListGroup>
             </Card.Body>
           </Card>
         </Card.Body>
