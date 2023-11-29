@@ -26,6 +26,7 @@ function AccountOrderHistory() {
                   <th>Type</th>
                   <th>Entry Price</th>
                   <th>Volume</th>
+                  <th>Timestamp</th>
                 </tr>
               </thead>
               <tbody>
@@ -39,6 +40,7 @@ function AccountOrderHistory() {
                       <td>{order["side"].toUpperCase()}</td>
                       <td>{order["price"]}</td>
                       <td>{order["quantity"]}</td>
+                      <td>{order["timestamp"]}</td>
                     </tr>
                   )
                 })}

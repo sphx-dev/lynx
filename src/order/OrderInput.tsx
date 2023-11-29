@@ -29,7 +29,7 @@ function OrderInput() {
       <Card data-bs-theme="dark">
         <Card.Body>
           <Row>
-            <Col md={3}>
+            <Col md={6}>
               <div style={{ marginTop: "5px", marginLeft: "10px" }}>
                 Oil / USDC
               </div>

@@ -65,7 +65,11 @@ export const TradingViewContainer = () => {
       library_path: defaultProps.libraryPath as string,
 
       locale: getLanguageFromURL() || "en",
-      disabled_features: ["use_localstorage_for_settings"],
+      disabled_features: [
+        "use_localstorage_for_settings",
+        "header_widget",
+        "pricescale_currency",
+      ],
       enabled_features: ["study_templates"],
       charts_storage_url: defaultProps.chartsStorageUrl,
       charts_storage_api_version: defaultProps.chartsStorageApiVersion,
