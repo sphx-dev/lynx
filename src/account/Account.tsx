@@ -5,6 +5,7 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
+import { FaEthereum, FaBitcoin, FaDollarSign } from "react-icons/fa6"
 
 function AccountCard() {
   const acct = useAppSelector(account)
@@ -18,18 +19,19 @@ function AccountCard() {
     <>
       <Card style={{ backgroundColor: "#e5e5e5", marginBottom: "2rem" }}>
         <Card.Body>
-          <Row>
-            <Col>
-              <div>Acccount Info</div>
-            </Col>
-          </Row>
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
             {acct ? (
               <>
                 <ListGroup>
-                  <ListGroup.Item>ID: {acct.id}</ListGroup.Item>
+                  <ListGroup.Item>Account ID: {acct.id}</ListGroup.Item>
                   <ListGroup.Item>
-                    USDC Balance: {acct.balance.toString()}
+                    USDC ( <FaDollarSign /> ): {acct.balance.toString()}.00
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    BTC ( <FaBitcoin /> ): 4.2849
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    ETH ( <FaEthereum /> ): 24.5963
                   </ListGroup.Item>
                 </ListGroup>
               </>
