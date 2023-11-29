@@ -17,7 +17,7 @@ function AccountCard() {
 
   return (
     <>
-      <Card style={{ backgroundColor: "#e5e5e5", marginBottom: "2rem" }}>
+      <Card data-bs-theme="dark" style={{ marginBottom: "2rem" }}>
         <Card.Body>
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
             {acct ? (

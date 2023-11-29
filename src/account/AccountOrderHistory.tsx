@@ -15,7 +15,7 @@ function AccountOrderHistory() {
 
   return (
     <>
-      <Card style={{ backgroundColor: "#e5e5e5", marginTop: "3rem" }}>
+      <Card data-bs-theme="dark" style={{ marginTop: "3rem" }}>
         <Card.Body>
           <Card style={{ marginTop: "1rem", marginBottom: "1rem" }}>
             <Table striped bordered hover>

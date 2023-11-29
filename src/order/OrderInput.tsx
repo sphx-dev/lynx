@@ -26,7 +26,7 @@ function OrderInput() {
 
   return (
     <>
-      <Card style={{ backgroundColor: "#e5e5e5" }}>
+      <Card data-bs-theme="dark">
         <Card.Body>
           <Row>
             <Col md={3}>

@@ -22,7 +22,11 @@ function App() {
 
   return (
     <>
-      <Container fluid={true} style={{ marginTop: "2rem" }}>
+      <Container
+        data-bs-theme="dark"
+        fluid={true}
+        style={{ marginTop: "2rem" }}
+      >
         <Row>
           <Col md={3}>
             <OrderBook windowWidth={windowWidth} />
