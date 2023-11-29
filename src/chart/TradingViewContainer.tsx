@@ -7,6 +7,7 @@ import {
 } from "../charting_library"
 import { TVChartContainer } from "./style"
 import * as React from "react"
+import datafeed from "./datafeed"
 
 export interface ChartContainerProps {
   symbol: ChartingLibraryWidgetOptions["symbol"]
@@ -57,7 +58,7 @@ export const TradingViewContainer = () => {
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
 
   const defaultProps: Omit<ChartContainerProps, "container"> = {
-    symbol: "EBIX",
+    symbol: "USO",
     interval: "D" as ResolutionString,
     datafeedUrl: "https://demo_feed.tradingview.com",
     libraryPath: "/charting_library/",
@@ -75,9 +76,10 @@ export const TradingViewContainer = () => {
       symbol: defaultProps.symbol as string,
       // BEWARE: no trailing slash is expected in feed URL
       // tslint:disable-next-line:no-any
-      datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(
-        defaultProps.datafeedUrl,
-      ),
+      // datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(
+      //   defaultProps.datafeedUrl,
+      // ),
+      datafeed: datafeed,
       interval:
         defaultProps.interval as ChartingLibraryWidgetOptions["interval"],
       container: chartContainerRef.current,
@@ -98,9 +100,9 @@ export const TradingViewContainer = () => {
       autosize: defaultProps.autosize,
       studies_overrides: defaultProps.studiesOverrides,
       theme: "dark",
-      onChartReady: (callback: any) => {
-        setTimeout(() => callback(configurationData))
-      },
+      // onChartReady: (callback: any) => {
+      //   setTimeout(() => callback(configurationData))
+      // },
     }
 
     const tvWidget = new widget(widgetOptions)
