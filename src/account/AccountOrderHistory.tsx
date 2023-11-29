@@ -21,19 +21,22 @@ function AccountOrderHistory() {
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>Order ID</th>
+                  <th>Instrument</th>
                   <th>Type</th>
-                  <th>Price</th>
+                  <th>Entry Price</th>
                   <th>Volume</th>
                 </tr>
               </thead>
               <tbody>
                 {acct.openOrders?.map((order, i) => {
                   // Return the element. Also pass key
+                  console.log(order)
                   return (
                     <tr key={i}>
                       <td>{order["id"]}</td>
-                      <td>BUY</td>
+                      <td>OIL / USDC</td>
+                      <td>{order["side"].toUpperCase()}</td>
                       <td>{order["price"]}</td>
                       <td>{order["quantity"]}</td>
                     </tr>
