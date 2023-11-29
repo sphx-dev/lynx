@@ -88,7 +88,7 @@ export const TradingViewContainer = () => {
       locale: getLanguageFromURL() || "en",
       disabled_features: [
         "use_localstorage_for_settings",
-        // "header_widget",
+        // "header_widget"
         // "pricescale_currency",
       ],
       enabled_features: ["study_templates"],

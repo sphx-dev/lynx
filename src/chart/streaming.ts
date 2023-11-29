@@ -102,19 +102,19 @@ function startStreaming(retries = 3, delay = 3000) {
   }
 }
 
-function getNextDailyBarTime(barTime) {
+function getNextDailyBarTime(barTime: any) {
   const date = new Date(barTime * 1000)
   date.setDate(date.getDate() + 1)
   return date.getTime() / 1000
 }
 
 export function subscribeOnStream(
-  symbolInfo,
-  resolution,
-  onRealtimeCallback,
-  subscriberUID,
-  onResetCacheNeededCallback,
-  lastDailyBar,
+  symbolInfo: any,
+  resolution: any,
+  onRealtimeCallback: any,
+  subscriberUID: any,
+  onResetCacheNeededCallback: any,
+  lastDailyBar: any,
 ) {
   const channelString = symbolInfo.ticker
   const handler = {
@@ -138,12 +138,12 @@ export function subscribeOnStream(
   startStreaming()
 }
 
-export function unsubscribeFromStream(subscriberUID) {
+export function unsubscribeFromStream(subscriberUID: any) {
   // Find a subscription with id === subscriberUID
   for (const channelString of channelToSubscription.keys()) {
     const subscriptionItem = channelToSubscription.get(channelString)
     const handlerIndex = subscriptionItem.handlers.findIndex(
-      (handler) => handler.id === subscriberUID,
+      (handler: any) => handler.id === subscriberUID,
     )
 
     if (handlerIndex !== -1) {
