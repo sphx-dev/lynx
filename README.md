@@ -114,7 +114,13 @@ OR
     
     The ENV file is NEVER committed to the repository, see a team member for distribution.
 
+5. Initialize submodules
+   ```sh
+   git submodule init
+   ```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 
 
