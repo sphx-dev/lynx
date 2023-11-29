@@ -74,6 +74,7 @@ export const TradingViewContainer = () => {
       fullscreen: defaultProps.fullscreen,
       autosize: defaultProps.autosize,
       studies_overrides: defaultProps.studiesOverrides,
+      theme: "dark",
     }
 
     const tvWidget = new widget(widgetOptions)
