@@ -13,7 +13,7 @@ function AccountCard() {
 
   useEffect(() => {
     dispatch(getAccount())
-  }, [])
+  }, [account])
 
   return (
     <>

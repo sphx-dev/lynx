@@ -7,7 +7,8 @@ import Form from "react-bootstrap/Form"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import ListGroup from "react-bootstrap/ListGroup"
-import toast, { Toaster } from "react-hot-toast"
+import toast from "react-hot-toast"
+import { getAccount } from "../account/api"
 
 function OrderInput() {
   const dispatch = useAppDispatch()
@@ -20,6 +21,7 @@ function OrderInput() {
     if (price && volume) {
       notify()
       dispatch(placeLimitOrder({ price, volume }))
+      dispatch(getAccount())
     }
   }
 
