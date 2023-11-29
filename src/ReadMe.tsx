@@ -9,8 +9,12 @@ function ReadMe() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Start here...
+      <Button
+        variant="primary"
+        onClick={handleShow}
+        style={{ marginLeft: "1rem" }}
+      >
+        Help
       </Button>
 
       <Modal show={show} onHide={handleClose}>
