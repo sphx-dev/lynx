@@ -3,6 +3,7 @@ import Navbar from "react-bootstrap/Navbar"
 import Dropdown from "react-bootstrap/Dropdown"
 import Badge from "react-bootstrap/Badge"
 import ReadMe from "./ReadMe"
+import { FaBell } from "react-icons/fa"
 import logo from "./static/logo.png"
 
 function Header() {
@@ -16,7 +17,10 @@ function Header() {
           <Navbar.Collapse className="justify-content-end">
             <Dropdown>
               <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                DemoAccount <Badge bg="danger">2</Badge>
+                Connected 0x21837adc9...
+                <Badge bg="danger" style={{ marginLeft: "1rem" }}>
+                  <FaBell /> 2
+                </Badge>
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item href="#/action-1">Wallet</Dropdown.Item>

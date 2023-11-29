@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
+import { BiSupport } from "react-icons/bi"
 
 function ReadMe() {
   const [show, setShow] = useState(false)
@@ -10,11 +11,12 @@ function ReadMe() {
   return (
     <>
       <Button
-        variant="primary"
+        variant="secondary"
         onClick={handleShow}
         style={{ marginLeft: "1rem" }}
       >
         Help
+        <BiSupport style={{ marginLeft: "0.5rem" }} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
