@@ -31,6 +31,7 @@ function AccountOrderHistory() {
               </thead>
               <tbody>
                 {acct.openOrders?.map((order, i) => {
+                  console.log(order)
                   return (
                     <tr key={i}>
                       <td>{order["id"]}</td>

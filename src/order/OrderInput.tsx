@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState } from "react"
 import { useAppDispatch } from "../hooks"
 import { placeLimitOrder } from "./api"
 import Button from "react-bootstrap/Button"
@@ -18,17 +18,19 @@ function OrderInput() {
   const notify = () => toast("Order placed")
 
   const submitBuyOrder = () => {
+    const isBuy = false
     if (price && volume) {
       notify()
-      dispatch(placeLimitOrder({ price, volume }))
+      dispatch(placeLimitOrder({ price, volume, isBuy }))
       dispatch(getAccount())
     }
   }
 
   const submitSellOrder = () => {
+    const isBuy = false
     if (price && volume) {
       notify()
-      dispatch(placeLimitOrder({ price, volume }))
+      dispatch(placeLimitOrder({ price, volume, isBuy }))
     }
   }
 

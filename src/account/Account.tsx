@@ -25,7 +25,7 @@ function AccountCard() {
                 <ListGroup>
                   <ListGroup.Item>Account ID: {acct.id}</ListGroup.Item>
                   <ListGroup.Item>
-                    USDC ( <FaDollarSign /> ): {acct.balance.toString()}.00
+                    USDC ( <FaDollarSign /> ): {acct.balance.toString()}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     BTC ( <FaBitcoin /> ): 4.2849
