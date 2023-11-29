@@ -33,12 +33,31 @@ const getLanguageFromURL = (): LanguageCode | null => {
     : (decodeURIComponent(results[1].replace(/\+/g, " ")) as LanguageCode)
 }
 
+const configurationData = {
+  supports_search: true,
+  supports_group_request: false,
+  supports_marks: true,
+  supports_timescale_marks: true,
+  supports_time: true,
+  exchanges: [
+    { value: "", name: "All Exchanges", desc: "" },
+    { value: "NasdaqNM", name: "NasdaqNM", desc: "NasdaqNM" },
+    { value: "NYSE", name: "NYSE", desc: "NYSE" },
+  ],
+  symbols_types: [
+    { name: "All types", value: "" },
+    { name: "Stock", value: "stock" },
+    { name: "Index", value: "index" },
+  ],
+  supported_resolutions: ["D", "2D", "3D", "W", "3W", "M", "6M"],
+}
+
 export const TradingViewContainer = () => {
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
 
   const defaultProps: Omit<ChartContainerProps, "container"> = {
-    symbol: "AAPL",
+    symbol: "EBIX",
     interval: "D" as ResolutionString,
     datafeedUrl: "https://demo_feed.tradingview.com",
     libraryPath: "/charting_library/",
@@ -67,8 +86,8 @@ export const TradingViewContainer = () => {
       locale: getLanguageFromURL() || "en",
       disabled_features: [
         "use_localstorage_for_settings",
-        "header_widget",
-        "pricescale_currency",
+        // "header_widget",
+        // "pricescale_currency",
       ],
       enabled_features: ["study_templates"],
       charts_storage_url: defaultProps.chartsStorageUrl,
@@ -79,6 +98,9 @@ export const TradingViewContainer = () => {
       autosize: defaultProps.autosize,
       studies_overrides: defaultProps.studiesOverrides,
       theme: "dark",
+      onChartReady: (callback: any) => {
+        setTimeout(() => callback(configurationData))
+      },
     }
 
     const tvWidget = new widget(widgetOptions)
