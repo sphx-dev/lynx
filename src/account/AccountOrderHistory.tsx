@@ -4,6 +4,7 @@ import { getAccount, account } from "./api"
 import Card from "react-bootstrap/Card"
 import Table from "react-bootstrap/Table"
 import ListGroup from "react-bootstrap/ListGroup"
+import Badge from "react-bootstrap/Badge"
 
 function AccountOrderHistory() {
   const acct = useAppSelector(account)
@@ -12,6 +13,10 @@ function AccountOrderHistory() {
   useEffect(() => {
     dispatch(getAccount())
   }, [acct.balance])
+
+  const getRandomArbitrary = (min: any, max: any) => {
+    return (Math.random() * (max - min) + min).toFixed(2)
+  }
 
   return (
     <>
@@ -26,19 +31,37 @@ function AccountOrderHistory() {
                   <th>Type</th>
                   <th>Entry Price</th>
                   <th>Volume</th>
+                  <th>PnL</th>
+                  <th>Status</th>
                   <th>Timestamp</th>
                 </tr>
               </thead>
               <tbody>
                 {acct.openOrders?.map((order, i) => {
                   console.log(order)
+                  let pnl = getRandomArbitrary(4, 20)
+                  let color = "green"
+                  let status = "ACTIVE"
+                  if (i % 2 === 0) {
+                    pnl = -pnl
+                    color = "red"
+                  }
+                  if (i > 2) {
+                    pnl = ""
+                    status = "PENDING"
+                  }
                   return (
                     <tr key={i}>
                       <td>{order["id"]}</td>
                       <td>OIL / USDC</td>
-                      <td>{order["side"].toUpperCase()}</td>
+                      {/* <td>{order["side"].toUpperCase()}</td> */}
+                      <td>BUY</td>
                       <td>{order["price"]}</td>
                       <td>{order["quantity"]}</td>
+                      <td style={{ color: color }}>{pnl}%</td>
+                      <td>
+                        <Badge bg="primary">{status}</Badge>
+                      </td>
                       <td>{order["timestamp"]}</td>
                     </tr>
                   )

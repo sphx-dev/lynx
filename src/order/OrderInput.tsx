@@ -22,7 +22,9 @@ function OrderInput() {
     if (price && volume) {
       notify()
       dispatch(placeLimitOrder({ price, volume, isBuy }))
-      dispatch(getAccount())
+      setTimeout(() => {
+        dispatch(getAccount())
+      }, 250)
     }
   }
 
@@ -31,6 +33,9 @@ function OrderInput() {
     if (price && volume) {
       notify()
       dispatch(placeLimitOrder({ price, volume, isBuy }))
+      setTimeout(() => {
+        dispatch(getAccount())
+      }, 250)
     }
   }
 
