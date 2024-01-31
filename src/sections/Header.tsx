@@ -2,9 +2,9 @@ import Container from "react-bootstrap/Container"
 import Navbar from "react-bootstrap/Navbar"
 import Dropdown from "react-bootstrap/Dropdown"
 import Badge from "react-bootstrap/Badge"
-import ReadMe from "./ReadMe"
+import ReadMe from "../ReadMe"
 import { FaBell } from "react-icons/fa"
-import logo from "./static/logo.png"
+import logo from "../static/logo.png"
 
 function Header() {
   return (
