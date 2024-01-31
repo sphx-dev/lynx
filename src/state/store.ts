@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import orderBookReducer from "./orderbook/api"
-import accountReducer from "./account/api"
+import orderBookReducer from "../orderbook/api"
+import accountReducer from "../account/api"
+import preferencesReducer from "./preferences"
 
 export const store = configureStore({
   reducer: {
-    orderBook: orderBookReducer,
     account: accountReducer,
+    preferences: preferencesReducer,
+    orderBook: orderBookReducer,
   },
 })
 

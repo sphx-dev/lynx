@@ -2,7 +2,7 @@ import { FC } from "react"
 import styled from "styled-components"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { FlexDivCol } from "../components/Flex"
-import logo from "../static/logo.png"
+import logo from "../assets/logo.png"
 // import WalletButtons from "./WalletButtons"
 
 const Header: FC = () => {
