@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useAppSelector, useAppDispatch } from "../hooks"
+import { useAppSelector, useAppDispatch } from "../../hooks"
 import { getAccount, account } from "./api"
 import Card from "react-bootstrap/Card"
 import Table from "react-bootstrap/Table"
