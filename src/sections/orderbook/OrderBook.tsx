@@ -1,5 +1,5 @@
 import { useState, useEffect, FunctionComponent } from "react"
-import { useAppSelector, useAppDispatch } from "../hooks"
+import { useAppSelector, useAppDispatch } from "../../hooks"
 import { getOrderBook, orderBook } from "./api"
 import TitleRow from "./TitleRow"
 import DepthVisualizer from "./DepthVisualizer"
@@ -8,7 +8,7 @@ import Spread from "./Spread"
 import { Container, TableContainer } from "./OrderBookStyle"
 import styles from "../features-old/counter/Counter.module.css"
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle"
-import { MOBILE_WIDTH } from "../constants"
+import { MOBILE_WIDTH } from "../../constants"
 
 export enum OrderType {
   BIDS,

@@ -4,7 +4,7 @@ import {
   ChartingLibraryWidgetOptions,
   LanguageCode,
   ResolutionString,
-} from "../charting_library"
+} from "../../charting_library"
 import { TVChartContainer } from "./style"
 import * as React from "react"
 import datafeed from "./datafeed"

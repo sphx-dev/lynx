@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react"
 import { OrderType } from "./OrderBook"
-import { MOBILE_WIDTH } from "../constants"
+import { MOBILE_WIDTH } from "../../constants"
 
 interface DepthVisualizerProps {
   depth: number

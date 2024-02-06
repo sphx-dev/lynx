@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react"
 import { PriceLevelContainer } from "./PriceLevelRowStyle"
-import { MOBILE_WIDTH } from "../constants"
+import { MOBILE_WIDTH } from "../../constants"
 
 interface PriceLevelRowProps {
   total: string

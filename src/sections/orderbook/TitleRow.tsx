@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react"
 import { Container } from "./TitleRowStyle"
-import { MOBILE_WIDTH } from "../constants"
+import { MOBILE_WIDTH } from "../../constants"
 
 interface TitleRowProps {
   reversedFieldsOrder?: boolean

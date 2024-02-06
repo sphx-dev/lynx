@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
-import { RootState, AppThunk } from "../state/store"
+import { RootState, AppThunk } from "../../state/store"
 import { update } from "../account/api"
-import { ORDERBOOK_LEVELS, API_URL } from "../constants"
+import { ORDERBOOK_LEVELS, API_URL } from "../../constants"
 
 export interface OrderBookState {
   bids: any
