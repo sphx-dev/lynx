@@ -15,7 +15,7 @@ import { ThemeProvider } from "styled-components"
 import { store } from "./state/store"
 import { selectCurrentTheme } from "./state/preferences"
 import App from "./App"
-import HeaderTwo from "./sections/HeaderTwo"
+import Header from "./sections/Header"
 import { themes } from "./theme"
 import { useAppSelector } from "./hooks"
 import "./index.css"
@@ -57,7 +57,7 @@ const InnerApp: React.FC<any> = ({ pageProps: any }) => {
       theme={currentTheme === "dark" ? darkTheme() : lightTheme()}
     >
       <ThemeProvider theme={theme}>
-        <HeaderTwo />
+        <Header />
         <App />
       </ThemeProvider>
     </RainbowKitProvider>
