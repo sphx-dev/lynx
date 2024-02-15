@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "../../hooks"
-import { getAccount, account } from "./api"
+import { getAccount, account } from "../../state/accountSlice"
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
 import { FaEthereum, FaBitcoin, FaDollarSign } from "react-icons/fa6"

@@ -1,6 +1,6 @@
 import { useState, useEffect, FunctionComponent } from "react"
 import { useAppSelector, useAppDispatch } from "../../hooks"
-import { getOrderBook, orderBook } from "./api"
+import { getOrderBook, orderBook } from "../../state/orderBookSlice"
 import TitleRow from "./TitleRow"
 import DepthVisualizer from "./DepthVisualizer"
 import PriceLevelRow from "./PriceLevelRow"

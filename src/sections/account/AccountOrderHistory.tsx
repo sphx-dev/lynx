@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "../../hooks"
-import { getAccount, account } from "./api"
+import { getAccount, account } from "../../state/accountSlice"
 import Card from "react-bootstrap/Card"
 import Table from "react-bootstrap/Table"
 import ListGroup from "react-bootstrap/ListGroup"

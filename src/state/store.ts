@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import orderBookReducer from "../sections/orderbook/api"
-import accountReducer from "../sections/account/api"
+import orderBookReducer from "./orderBookSlice"
+import accountReducer from "./accountSlice"
 import preferencesReducer from "./preferences"
 
 export const store = configureStore({

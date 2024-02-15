@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit"
 import axios from "axios"
-import { RootState } from "src/state/store"
-import { API_URL } from "../../constants"
+import { RootState } from "./store"
+import { API_URL } from "../constants"
 
 export interface AccountState {
   id: any

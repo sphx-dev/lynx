@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useAppDispatch } from "../../hooks"
-import { placeLimitOrder } from "./api"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import Form from "react-bootstrap/Form"
@@ -8,7 +7,8 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import ListGroup from "react-bootstrap/ListGroup"
 import toast from "react-hot-toast"
-import { getAccount } from "../account/api"
+import { placeLimitOrder } from "../../state/orderSlice"
+import { getAccount } from "../../state/accountSlice"
 
 function OrderInput() {
   const dispatch = useAppDispatch()

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { RootState } from "../../state/store"
+import { RootState } from "./store"
 import axios from "axios"
-import { API_URL } from "../../constants"
+import { API_URL } from "../constants"
 
 export interface OrderState {
   done: Array<any>
