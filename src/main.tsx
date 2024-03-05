@@ -40,19 +40,20 @@ const wagmiConfig = createConfig({
 })
 
 const InnerApp: React.FC<any> = ({ pageProps: any }) => {
-  const [isReady, setReady] = useState(false)
+  const [isReady, setReady] = useState(true)
 
   const currentTheme = useAppSelector(selectCurrentTheme)
   // const theme = useMemo(() => themes[currentTheme], [currentTheme])
   const theme: any = themes["dark"]
   console.log(theme)
 
-  useEffect(() => {
-    setReady(true)
-  }, [])
+  // useEffect(() => {
+  //   setReady(true)
+  // }, [])
 
   return isReady ? (
     <RainbowKitProvider
+      modalSize="compact"
       chains={chains}
       theme={currentTheme === "dark" ? darkTheme() : lightTheme()}
     >

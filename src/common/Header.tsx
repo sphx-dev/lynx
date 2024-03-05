@@ -10,7 +10,6 @@ const Header: FC = () => {
     <FlexDivCol>
       <Container>
         <LogoNav>
-          {/* <Logo /> */}
           <img src={logo} height="60" alt="header-logo" />
         </LogoNav>
         <ConnectButton />

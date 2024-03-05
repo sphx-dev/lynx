@@ -24,7 +24,7 @@ export const getOrderBook = createAsyncThunk(
       withCredentials: true,
     }
     const response = await axios.get(`${API_URL}/orderbook/`, opts)
-    // The value we return becomes the `fulfilled` action payload
+    // The value ` action payload
     return response.data
   },
 )

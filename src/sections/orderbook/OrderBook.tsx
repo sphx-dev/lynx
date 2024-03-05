@@ -6,7 +6,6 @@ import DepthVisualizer from "./DepthVisualizer"
 import PriceLevelRow from "./PriceLevelRow"
 import Spread from "./Spread"
 import { Container, TableContainer } from "./OrderBookStyle"
-import styles from "../features-old/counter/Counter.module.css"
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle"
 import { MOBILE_WIDTH } from "../../constants"
 
