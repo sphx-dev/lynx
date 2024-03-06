@@ -1,6 +1,7 @@
 import { FC } from "react"
 import styled from "styled-components"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
+// import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { ConnectWallet } from "./ConnectWallet"
 import { FlexDivCol } from "../components/Flex"
 import logo from "../assets/logo.png"
 // import WalletButtons from "./WalletButtons"
@@ -12,7 +13,7 @@ const Header: FC = () => {
         <LogoNav>
           <img src={logo} height="60" alt="header-logo" />
         </LogoNav>
-        <ConnectButton />
+        <ConnectWallet />
       </Container>
     </FlexDivCol>
   )
