@@ -118,6 +118,12 @@ OR
    ```sh
    git submodule init
    ```
+6. Run the repository
+   ```sh
+   yarn start --host 127.0.0.1
+   ```
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
