@@ -1,8 +1,9 @@
 import animations from "./animations"
 import colors, { themeColors } from "./colors"
 import fonts from "./fonts"
+import { commonTheme } from "./common"
 
-const theme = { colors, fonts, animations }
+const theme = { colors, fonts, animations, ...commonTheme }
 
 export type ThemeName = keyof typeof themeColors
 
