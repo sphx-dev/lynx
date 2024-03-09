@@ -73,6 +73,10 @@ export const palette = {
   },
   gradient: {
     gold: "linear-gradient(180deg, #BE9461 0%, #9C6C3C 100%)",
+    green:
+      "linear-gradient(90deg, hsla(190, 77%, 17%, 1) 0%, hsla(186, 91%, 13%, 1) 66%, hsla(202, 69%, 13%, 1) 100%)",
+    greenSecondary:
+      "linear-gradient(90deg, hsla(183, 78%, 18%, 1) 0%, hsla(186, 76%, 17%, 1) 66%, hsla(191, 74%, 15%, 1) 100%)",
   },
   alpha: {
     white1: "rgb(255,255,255,0.01)",
@@ -95,50 +99,30 @@ export const palette = {
 }
 
 const common = {
-  primaryWhite: "#ECE8E3",
-  primaryGold: "#C9975B",
-  primaryRed: "#EF6868",
-  primaryGreen: "#7FD482",
-  primaryGray: "#B1B1B1",
-  secondaryGray: "#515151",
-  neautralGray: "#A9A8A6",
-  tertiaryGray: "#999999",
-  secondaryGold: "#E4B378",
-  primaryYellow: "#FFB800",
-  black: "#171002",
-  darkYellow: "#3E2D00",
-  dark: {
-    white: "#ECE8E3",
-    yellow: "#FFB800",
-    red: "#EF6868",
-    green: "#7FD482",
-    background: "#131312",
-    surfaceFill: "#181818",
-    title: "#B1B1B1",
-    border: "1px solid rgba(255, 255, 255, 0.12)",
-    outlineBorder: "1px solid rgba(255, 255, 255, 0.12)",
-    orange: "#FF6B19",
-    black: "#171002",
-    gray: "#787878",
-    gray2: "#3F3F3F",
-    rewardTitle: "#ECE8E3",
-  },
-  light: {
-    white: "#F2F2F2",
-    yellow: "#6A3300",
-    background: "#F2F2F2",
-    surfaceFill: "#F2F2F2", // TODO: Update the light theme
-    title: "#171002",
-    border: "1px solid rgba(0,0,0,0.1)",
-    outlineBorder: "1px solid rgba(0,0,0,0.1)",
-    red: "#A80300",
-    green: "#1D5D1F",
-    orange: "#FF6B19",
-    black: "#171002",
-    gray: "#515151",
-    gray2: "#D2D2D2", // TODO: Update once added to designs
-    rewardTitle: "#171002",
-  },
+  white: "#ffffff",
+
+  aquaGreen: "#12CCD1", //active tab border
+  lightGreen: "#235D64", // divider, hovered border
+  green2: "#1d535b", // tab active bg
+  green3: "#9ab4bb", // pill text
+  green4: "#16555c", // button bg
+  green5: "#059a8b", // navbar text
+  greenLabel: "#4f8087",
+  greenPlaceholder: "#3e7577", // input placeholder, border
+  greenText: "#9eb8bb", //input text, active label
+  greenNeon: "#12dde0", // chart last price
+  greenPrimary: "#0c303a", //chart bg
+
+  pink: "#fe237a", // last price change
+
+  blue: "#60b7f9",
+  blue2: "#62c6ff", // active navbar, order book text
+  blue3: "#1f567b", // order list header bg
+  blue4: "#275571", // order list borders, head text
+  blueDefault: "#031a27", // body bg
+  blueDark: "#03273b", // order list bg
+  blueDark2: "#041e2f", // navbar bg
+
   palette,
 }
 
