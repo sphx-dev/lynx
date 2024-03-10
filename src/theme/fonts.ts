@@ -8,4 +8,33 @@ const fontStyles = {
   compressedMedium: `GT-America-Compressed-Medium`,
 }
 
-export default fontStyles
+const typography = {
+  default: {
+    "font-size": "14px",
+    "font-weight": "300",
+  },
+  body: {
+    "font-size": "16px",
+    "font-weight": "500",
+  },
+  sub1: {
+    "font-size": "18px",
+    "font-weight": "700",
+    "text-transform": "uppercase",
+  },
+  sub2: {
+    "font-size": "18px",
+    "font-weight": "500",
+  },
+  sub3: {
+    "font-size": "28px",
+    "font-weight": "700",
+  },
+}
+
+const fonts = {
+  fontStyles,
+  typography,
+}
+
+export default fonts
