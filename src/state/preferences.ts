@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 import { RootState } from "./store"
-import { ThemeName } from "styles/theme"
+import { ThemeName } from "../theme"
 
 export type PreferencesState = {
   currentTheme: ThemeName
