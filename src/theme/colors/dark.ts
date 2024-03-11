@@ -33,6 +33,7 @@ const darkTheme = {
     default: common.white,
     primary: common.green3,
     secondary: common.blue4,
+    error: common.palette.red.r500,
   },
 }
 

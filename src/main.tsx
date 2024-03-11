@@ -16,7 +16,7 @@ import { store } from "./state/store"
 import { selectCurrentTheme } from "./state/preferences"
 import App from "./App"
 import Header from "./common/Header"
-import { themes } from "./theme"
+import {ThemeInterface, themes} from "./theme"
 import { useAppSelector } from "./hooks"
 import "./index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -44,8 +44,7 @@ const InnerApp: React.FC<any> = ({ pageProps: any }) => {
 
   const currentTheme = useAppSelector(selectCurrentTheme)
   // const theme = useMemo(() => themes[currentTheme], [currentTheme])
-  const theme: any = themes["dark"]
-  console.log(theme)
+  const theme: ThemeInterface = themes["dark"]
 
   // useEffect(() => {
   //   setReady(true)

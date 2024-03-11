@@ -23,4 +23,7 @@ export const themes = {
   // elite: wrapTheme('elite'),
 }
 
+export const getThemeColors = (theme: ThemeInterface) =>
+  theme.colors.selectedTheme
+
 export default theme

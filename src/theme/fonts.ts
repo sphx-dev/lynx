@@ -30,6 +30,10 @@ const typography = {
     "font-size": "28px",
     "font-weight": "700",
   },
+  small: {
+    "font-size": "12px",
+    "font-weight": "300",
+  },
 }
 
 const fonts = {

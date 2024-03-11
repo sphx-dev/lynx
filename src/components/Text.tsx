@@ -2,11 +2,11 @@ import React from "react"
 import styled from "styled-components"
 
 import fonts from "../theme/fonts"
-
 type Align = "left" | "center" | "right"
 type Tag = "span" | "p"
 
-interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
+interface TextProps
+  extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color"> {
   variant?: keyof typeof fonts.typography
   align?: Align
   color?: string
