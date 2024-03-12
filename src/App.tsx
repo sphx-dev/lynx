@@ -26,20 +26,20 @@ function App() {
       <Container
         data-bs-theme="dark"
         fluid={true}
-        style={{ marginTop: "2rem" }}
+        style={{ marginTop: "2rem", minHeight: "100vh" }}
       >
         <Toaster position="top-right" />
         <Row>
           <Col md={3}>
-            <OrderBook windowWidth={windowWidth} />
+            <AccountCard />
+            <OrderInput />
+            <br></br>
           </Col>
           <Col>
             <TradingViewContainer />
           </Col>
           <Col md={3}>
-            <AccountCard />
-            <OrderInput />
-            <br></br>
+            <OrderBook windowWidth={windowWidth} />
           </Col>
           <Row>
             <Col />
