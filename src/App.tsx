@@ -9,12 +9,6 @@ import { TradingViewContainer } from "./sections/chart/TradingViewContainer"
 import AccountOrderHistory from "./sections/account/AccountOrderHistory"
 import { Toaster } from "react-hot-toast"
 import "./App.css"
-import styled from "styled-components"
-
-const StyledCol = styled(Col)`
-  background: ${({ theme }) =>
-    theme.colors.selectedTheme.background.gradientPrimary};
-`
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(0)
@@ -32,20 +26,20 @@ function App() {
       <Container
         data-bs-theme="dark"
         fluid={true}
-        style={{ marginTop: "2rem" }}
+        style={{ marginTop: "2rem", minHeight: "100vh" }}
       >
         <Toaster position="top-right" />
         <Row>
-          <StyledCol md={3}>
-            <OrderBook windowWidth={windowWidth} />
-          </StyledCol>
-          <Col>
-            <TradingViewContainer />
-          </Col>
           <Col md={3}>
             <AccountCard />
             <OrderInput />
             <br></br>
+          </Col>
+          <Col>
+            <TradingViewContainer />
+          </Col>
+          <Col md={3}>
+            <OrderBook windowWidth={windowWidth} />
           </Col>
           <Row>
             <Col />

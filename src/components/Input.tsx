@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React from "react"
 import styled from "styled-components"
 import { getThemeColors } from "../theme"
 import Stack from "./Stack"
@@ -10,6 +10,7 @@ const StyledInput = styled.input`
   border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   color: ${({ theme }) => getThemeColors(theme).text.placeholder};
+  padding: 6px 8px;
   &:focus,
   &:focus-visible {
     outline: none;
@@ -23,45 +24,16 @@ const StyledInput = styled.input`
   }
 `
 
-interface InputProps {
-  name?: string
-  register?: any
-  disabled?: boolean
+interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: string
-  icon?: string
-  value?: string
-  onChange?(value: string): void
-  placeholder?: string
-  isLarge?: boolean
-  onBlur?: () => void
 }
 
-const Input: FC<InputProps> = ({
-  onChange,
-  value,
-  placeholder = "",
-  disabled = false,
-  error,
-  name,
-  register = () => ({}),
-  onBlur,
-}) => {
+const Input = ({ error, ...restProps }: InputProps) => {
   const { themeColors } = useTheme()
   return (
     <Stack spacing={4} style={{ width: "100%", position: "relative" }}>
       <div style={{ position: "relative" }}>
-        <StyledInput
-          name={name}
-          type="text"
-          id={name}
-          value={value || value === "" ? value : undefined}
-          onChange={(e) => onChange && onChange(e.target.value)}
-          placeholder={placeholder}
-          disabled={disabled}
-          data-error={error ? "true" : "false"}
-          {...register(name)}
-          onBlur={onBlur}
-        />
+        <StyledInput data-error={error ? "true" : "false"} {...restProps} />
       </div>
       {error && (
         <Text variant="small" color={themeColors.text.error}>
