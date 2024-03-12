@@ -16,8 +16,8 @@ const darkTheme = {
     secondary: common.blue4,
   },
   border: {
-    default: common.greenPlaceholder,
-    hovered: common.lightGreen,
+    default: common.lightGreen,
+    hovered: common.greenPlaceholder,
   },
   tab: {
     activeBackground: common.green2,
