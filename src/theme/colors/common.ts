@@ -81,6 +81,7 @@ export const palette = {
   alpha: {
     white1: "rgb(255,255,255,0.01)",
     white5: "rgb(255,255,255,0.5)",
+    white8: "rgb(255,255,255,0.08)",
     white10: "rgb(255,255,255,0.1)",
     white25: "rgba(255, 255, 255, 0.25)",
     gray60: "rgba(17, 14, 9, 0.6)",
@@ -91,6 +92,7 @@ export const palette = {
     green20: "rgba(127,212,130,0.2)",
     green10: "rgba(127,212,130,0.1)",
     green5: "rgba(127,212,130,0.05)",
+    dark5: "rgba(0,0,0,0.05)",
     lightButton: "linear-gradient(180deg, #EEEEEE 0%, #E0E0E0 100%)",
     lightButtonHover: "linear-gradient(180deg, #E6E6E6 0%, #CCCCCC 100%)",
     darkButton: "linear-gradient(180deg, #282727 0%, #191818 100%)",

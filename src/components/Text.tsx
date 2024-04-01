@@ -20,6 +20,7 @@ const StyledText = styled.p<TextProps>`
   text-align: ${({ align }) => align};
   color: ${({ color, theme }) =>
     color || theme.color.selectedTheme.text.default};
+  margin-bottom: 0 !important;
 `
 
 const Text = ({

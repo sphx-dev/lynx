@@ -31,8 +31,8 @@ function App() {
         <Toaster position="top-right" />
         <Row>
           <Col md={3}>
-            <AccountCard />
             <OrderInput />
+            <AccountCard />
             <br></br>
           </Col>
           <Col>
