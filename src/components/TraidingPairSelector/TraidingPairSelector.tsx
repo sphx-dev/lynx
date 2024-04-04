@@ -1,7 +1,7 @@
 // TradingPairSelector.tsx
 import React from "react"
 import Select, { SingleValue } from "react-select"
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components"
 
 interface TradingPairOption {
   value: string
@@ -20,14 +20,12 @@ const mockOptions = [
   // ...add more trading pairs as needed
 ]
 
-
 const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
   options = mockOptions,
   onChange = () => {},
   value = { value: "wtx_usdc", label: "WTX / USDC" },
 }) => {
-
-  const appTheme = useTheme(); // Renamed to appTheme for clarity
+  const appTheme = useTheme() // Renamed to appTheme for clarity
   // Function to customize react-select's theme based on the application's theme
   const customTheme = (theme: any) => ({
     ...theme,
@@ -37,24 +35,24 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
       ...theme.colors,
       neutral80: appTheme.colors.selectedTheme.text.inputDefault,
     },
-  });
+  })
 
   const customStyles = {
     container: (provided: any) => ({
       ...provided,
-      maxHeight: "38px"
+      maxHeight: "38px",
     }),
     control: (provided: any) => ({
       ...provided,
       ...appTheme.fonts.typography.sub2,
-      border: 'none', 
-      boxShadow: 'none',
-      backgroundColor: 'transparent',
+      border: "none",
+      boxShadow: "none",
+      backgroundColor: "transparent",
     }),
     option: (provided: any) => ({
       ...provided,
       ...appTheme.fonts.typography.sub2,
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       color: appTheme.colors.selectedTheme.text.inputDefault,
     }),
     menu: (provided: any) => ({
@@ -64,14 +62,14 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
     }),
     indicatorSeparator: (provided: any) => ({
       ...provided,
-      display: 'none',
+      display: "none",
     }),
     dropdownIndicator: (provided: any) => ({
       ...provided,
       padding: 0,
     }),
     // You can add more custom styles for other parts of the select component if needed
-  };
+  }
 
   return (
     <Select

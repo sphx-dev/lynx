@@ -127,8 +127,12 @@ OR
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
+<!-- Story book -->
+## Storybook
+To see our design system in action, run the following command:
+  ```sh
+  yarn storybook
+  ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
