@@ -9,6 +9,7 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: string
   label?: string
   rightSide?: string
+  fluid?: boolean
 }
 
 const StyledInput = styled.input`
@@ -17,6 +18,7 @@ const StyledInput = styled.input`
   background: none;
   outline: none;
   flex: 1;
+  max-width: 100%;
   color: ${({ theme }) => getThemeColors(theme).text.placeholder};
   &:focus,
   &:focus-visible {
@@ -46,6 +48,7 @@ const StyledLabel = styled.label<{ isFocused: boolean }>`
     isFocused
       ? getThemeColors(theme).text.inputDefault
       : getThemeColors(theme).text.placeholder};
+  text-align: left;
 `
 
 const InputWrapper = styled.div`
@@ -61,7 +64,14 @@ const InputWrapper = styled.div`
   align-items: center;
 `
 
-const Input = ({ error, label, rightSide, ...restProps }: InputProps) => {
+const Input = ({
+  error,
+  label,
+  rightSide,
+  fluid,
+  style,
+  ...restProps
+}: InputProps) => {
   const { themeColors } = useTheme()
   const [isFocused, setIsFocused] = useState(false)
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
@@ -77,7 +87,10 @@ const Input = ({ error, label, rightSide, ...restProps }: InputProps) => {
     }
   }
   return (
-    <Stack spacing={4} style={{ width: "100%", position: "relative" }}>
+    <Stack
+      spacing={4}
+      style={{ width: fluid ? "100%" : "auto", position: "relative", ...style }}
+    >
       {label && <StyledLabel isFocused={isFocused}>{label}</StyledLabel>}
       <InputWrapper style={{ position: "relative" }}>
         <StyledInput

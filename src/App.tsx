@@ -32,7 +32,7 @@ function App() {
         <Row>
           <Col md={3}>
             <OrderInput />
-            <AccountCard />
+            {/*<AccountCard />*/}
             <br></br>
           </Col>
           <Col>
