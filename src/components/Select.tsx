@@ -1,0 +1,99 @@
+import React, { useState } from "react"
+import Select, { StylesConfig } from "react-select"
+import { useTheme } from "styled-components"
+
+interface OptionType {
+  label: string
+  value: string
+}
+
+const options: OptionType[] = [
+  { value: "takeProfit", label: "Take Profit / Stop loss" },
+  { value: "stopLoss", label: "Stop loss" },
+]
+
+const TakeProfitStopLossSelect: React.FC = () => {
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null)
+
+  const handleChange = (option: any | null) => {
+    // TODO: fix type for option
+    setSelectedOption(option)
+    console.log(`Option selected:`, option)
+  }
+  const appTheme = useTheme()
+
+  const customTheme = (theme: any) => ({
+    ...theme,
+    borderRadius: appTheme.borderRadius.md,
+    colors: {
+      ...theme.colors,
+      primary: appTheme.colors.selectedTheme.border.default,
+      neutral80: appTheme.colors.selectedTheme.text.inputDefault,
+    },
+  })
+
+  const customStyles: StylesConfig<OptionType> = {
+    container: (styles) => ({
+      ...styles,
+    }),
+    control: (styles) => ({
+      ...styles,
+      ...appTheme.fonts.typography.sub2,
+      backgroundColor: "transparent",
+      boxShadow: "none",
+      // borderRadius: "4px",
+      minHeight: "60px",
+
+      border: `2px solid ${appTheme.colors.selectedTheme.border.default}`,
+      "&:hover": {
+        border: `2px solid ${appTheme.colors.selectedTheme.border.hovered}`,
+      },
+      "&:active": {
+        borderCo: `2px solid ${appTheme.colors.selectedTheme.border.hovered}`,
+      },
+      "&:focus": {
+        border: `2px solid ${appTheme.colors.selectedTheme.border.hovered}`,
+      },
+    }),
+    menu: (styles) => ({
+      ...styles,
+      backgroundColor: appTheme.colors.selectedTheme.background.main, // Assuming a dark teal background as in your picture
+    }),
+    option: (styles, { isFocused, isSelected }) => ({
+      ...styles,
+      backgroundColor: "transparent",
+    }),
+    // singleValue: (styles) => ({
+    //   ...styles,
+    //   color: '#bbe1fa',
+    // }),
+    dropdownIndicator: (styles) => ({
+      ...styles,
+      color: "#bbe1fa",
+      display: "block",
+      border: `2px solid ${appTheme.colors.selectedTheme.border.default}`,
+      marginRight: "8px",
+      paddingLeft: "2px",
+      paddingBottom: "0px",
+      paddingTop: "0px",
+      paddingRight: "2px",
+      borderRadius: appTheme.borderRadius.sm,
+    }),
+    indicatorSeparator: () => ({
+      display: "none",
+    }),
+  }
+  return (
+    <div style={{ width: "500px", color: "white" }}>
+      <Select
+        theme={customTheme}
+        value={selectedOption || options[0]}
+        onChange={handleChange}
+        options={options}
+        styles={customStyles}
+      />
+    </div>
+  )
+}
+
+export default TakeProfitStopLossSelect
