@@ -48,6 +48,7 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
       border: "none",
       boxShadow: "none",
       backgroundColor: "transparent",
+      width: 'auto',
     }),
     option: (provided: any) => ({
       ...provided,

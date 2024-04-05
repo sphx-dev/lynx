@@ -38,11 +38,11 @@ const TakeProfitStopLossSelect: React.FC = () => {
     }),
     control: (styles) => ({
       ...styles,
-      ...appTheme.fonts.typography.sub2,
+      ...appTheme.fonts.typography.body,
       backgroundColor: "transparent",
       boxShadow: "none",
       // borderRadius: "4px",
-      minHeight: "60px",
+      // minHeight: "60px",
 
       border: `2px solid ${appTheme.colors.selectedTheme.border.default}`,
       "&:hover": {
@@ -84,7 +84,7 @@ const TakeProfitStopLossSelect: React.FC = () => {
     }),
   }
   return (
-    <div style={{ width: "500px", color: "white" }}>
+    <div>
       <Select
         theme={customTheme}
         value={selectedOption || options[0]}

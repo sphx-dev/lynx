@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { getThemeColors } from "../../theme"
 
 type Size = "xs" | "sm" | "lg"
@@ -10,20 +10,41 @@ const SIZE_MAP = {
   lg: "14px 22px",
 }
 
+type Variant = "default" | "link"
+
+const linkStyle = css`
+  background: none;
+  border: none;
+  text-decoration: underline;
+  padding: 0 0;
+`
+const defaultStyle = css<Props>`
+  background-color: ${({ theme }) => theme.colors.common.palette.alpha.dark5};
+  border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
+  padding: ${({ size }) => (size ? SIZE_MAP[size] : SIZE_MAP.sm)};
+`
+
+const STYLE_MAP = {
+  link: linkStyle,
+  default: defaultStyle,
+}
+
 interface Props extends Omit<React.HTMLProps<HTMLButtonElement>, "size"> {
   size?: Size
   pill?: boolean
   fluid?: boolean
+  variant?: Variant
 }
 
 const StyledButton = styled.button<Props>`
-  ${({ theme }) => theme.fonts.typography.default};
-  padding: ${({ size }) => (size ? SIZE_MAP[size] : SIZE_MAP.sm)};
+  ${({ variant }) => (variant ? STYLE_MAP[variant] : STYLE_MAP.default)}
+  ${({ theme, size }) =>
+    size === "xs"
+      ? theme.fonts.typography.small
+      : theme.fonts.typography.default};
   border-radius: ${({ theme, pill }) =>
     pill ? theme.borderRadius.pill : theme.borderRadius.md};
   color: ${({ theme }) => getThemeColors(theme).text.primary};
-  background-color: ${({ theme }) => theme.colors.common.palette.alpha.dark5};
-  border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
   width: ${({ fluid }) => (fluid ? "100%" : "auto")};
 `
 
