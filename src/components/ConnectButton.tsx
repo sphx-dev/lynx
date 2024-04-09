@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Button from "./Button"
 import styled from "styled-components"
+import { useTranslation } from "react-i18next"
 
 const StyledButton = styled(Button)`
   background: rgb(47, 131, 194);
@@ -12,6 +13,7 @@ const StyledButton = styled(Button)`
   color: #f6f5f5;
 `
 export const AppButton = () => {
+  const { t } = useTranslation()
   return (
     <ConnectButton.Custom>
       {({
@@ -51,7 +53,7 @@ export const AppButton = () => {
                     onClick={openConnectModal}
                     type="button"
                   >
-                    CONNECT WALLET
+                    {t("connect")}
                   </StyledButton>
                 )
               }

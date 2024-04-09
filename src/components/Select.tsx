@@ -1,20 +1,21 @@
 import React, { useState } from "react"
 import Select, { StylesConfig } from "react-select"
 import { useTheme } from "styled-components"
+import { useTranslation } from "react-i18next"
 
-interface OptionType {
+export interface OptionType {
   label: string
   value: string
 }
 
-const options: OptionType[] = [
-  { value: "takeProfit", label: "Take Profit / Stop loss" },
-  { value: "stopLoss", label: "Stop loss" },
-]
-
 const TakeProfitStopLossSelect: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null)
+  const { t } = useTranslation()
 
+  const options: OptionType[] = [
+    { value: "takeProfit", label: t("takeProfit") },
+    { value: "stopLoss", label: t("Stop loss") },
+  ]
   const handleChange = (option: any | null) => {
     // TODO: fix type for option
     setSelectedOption(option)

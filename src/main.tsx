@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react"
 import ReactDOM from "react-dom/client"
 import { Provider } from "react-redux"
+import "./i18n"
 import {
   RainbowKitProvider,
   getDefaultWallets,

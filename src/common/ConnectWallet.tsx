@@ -35,7 +35,7 @@ export const ConnectWallet = () => {
               if (!connected) {
                 return (
                   <button onClick={openConnectModal} type="button">
-                    Connect Wallet
+                    Connect Wallettt
                   </button>
                 )
               }

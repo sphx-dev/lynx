@@ -133,6 +133,23 @@ To see our design system in action, run the following command:
   ```sh
   yarn storybook
   ```
+## Localisation
+We use i18next for localisation. To add a new language, add a new JSON file in the `src/locales` directory. The file should be named after the language code, e.g. `en.json` for English. The JSON file should have the following structure:
+```json
+{
+  "key": "value",
+  "key2": "value2"
+}
+```
+Always use the key in the code, not the value. The value is the translation of the key. To use the translation in the code, use the `t` function from `react-i18next`:
+```tsx
+import { useTranslation } from 'react-i18next';
+
+const Component = () => {
+  const { t } = useTranslation();
+  return <div>{t('key')} </div>
+}
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
