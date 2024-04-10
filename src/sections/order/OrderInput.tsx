@@ -14,18 +14,25 @@ import {
   Text,
 } from "../../components"
 import TakeProfitStopLossSelect from "../../components/Select"
+import { getThemeColors } from "../../theme"
 
 const Wrapper = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.colors.common.palette.alpha.white8};
+  background: ${({ theme }) =>
+    getThemeColors(theme).background.gradientPrimary};
   padding: 20px;
+  width: 320px;
 `
 const Container = styled.div`
   padding: 8px;
 `
 const StyledButton = styled(Button)`
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 `
 
 function OrderInput() {
@@ -97,13 +104,6 @@ function OrderInput() {
             </div>
             <div style={{ position: "relative" }}>
               <Input label="Size" rightSide="USD" />
-              <Button
-                size="xs"
-                style={{ position: "absolute", top: 0, right: 0 }}
-                variant="link"
-              >
-                Max
-              </Button>
             </div>
             <div style={{ position: "relative" }}>
               <Group align="end">
@@ -115,13 +115,6 @@ function OrderInput() {
                   <StyledButton>50x</StyledButton>
                 </Group>
               </Group>
-              <Button
-                size="xs"
-                style={{ position: "absolute", top: 0, right: 0 }}
-                variant="link"
-              >
-                Slider
-              </Button>
             </div>
             <TakeProfitStopLossSelect />
           </Stack>

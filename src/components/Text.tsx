@@ -2,24 +2,28 @@ import React from "react"
 import styled from "styled-components"
 
 import fonts from "../theme/fonts"
+import { getThemeColors } from "../theme"
 type Align = "left" | "center" | "right"
 type Tag = "span" | "p"
+type Color = "primary" | "secondary" | "tertiary" | "error"
 
 interface TextProps
   extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color"> {
   variant?: keyof typeof fonts.typography
   align?: Align
-  color?: string
+  color?: Color | string
   as?: Tag
 }
 
 const StyledText = styled.p<TextProps>`
   ${({ variant, theme }) => {
-    return theme.fonts.typography[variant || "default"]
+    return theme.fonts.typography[variant || "textSm"]
   }};
   text-align: ${({ align }) => align};
   color: ${({ color, theme }) =>
-    color || theme.color.selectedTheme.text.default};
+    color
+      ? getThemeColors(theme).text[color as Color] || color
+      : getThemeColors(theme).text.primary};
   margin-bottom: 0 !important;
 `
 
