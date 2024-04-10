@@ -13,22 +13,22 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
 }
 
 const StyledInput = styled.input`
-  ${({ theme }) => theme.fonts.typography.body}
+  ${({ theme }) => theme.fonts.typography.textNumMd}
   border: none;
   background: none;
   outline: none;
   flex: 1;
   max-width: 100%;
-  color: ${({ theme }) => getThemeColors(theme).text.placeholder};
+  color: ${({ theme }) => getThemeColors(theme).text.primary};
   &:focus,
   &:focus-visible {
     outline: none;
-    color: ${({ theme }) => getThemeColors(theme).text.inputDefault};
+    color: ${({ theme }) => getThemeColors(theme).text.primary};
   }
   &::placeholder,
   &::-webkit-input-placeholder,
   &:-ms-input-placeholder {
-    color: ${({ theme }) => getThemeColors(theme).text.placeholder};
+    color: ${({ theme }) => getThemeColors(theme).text.tertiary};
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -43,11 +43,8 @@ const StyledInput = styled.input`
 `
 
 const StyledLabel = styled.label<{ isFocused: boolean }>`
-  ${({ theme }) => theme.fonts.typography.body}
-  color: ${({ theme, isFocused }) =>
-    isFocused
-      ? getThemeColors(theme).text.inputDefault
-      : getThemeColors(theme).text.placeholder};
+  ${({ theme }) => theme.fonts.typography.textSm}
+  color: ${({ theme }) => getThemeColors(theme).text.primary};
   text-align: left;
 `
 
@@ -55,8 +52,8 @@ const InputWrapper = styled.div`
   border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   width: 100%;
-  padding: 6px 8px;
-  background-color: ${({ theme }) => theme.colors.common.palette.alpha.dark5};
+  padding: 7px 12px;
+  background-color: ${({ theme }) => getThemeColors(theme).background.input};
   &:focus-within {
     border-color: ${({ theme }) => getThemeColors(theme).border.hovered};
   }
@@ -99,14 +96,10 @@ const Input = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
         />
-        {rightSide && (
-          <Text variant="body" color={themeColors.text.placeholder}>
-            {rightSide}
-          </Text>
-        )}
+        {rightSide && <Text>{rightSide}</Text>}
       </InputWrapper>
       {error && (
-        <Text variant="small" color={themeColors.text.error}>
+        <Text variant="textSm" color={themeColors.text.error}>
           {error}
         </Text>
       )}

@@ -1,53 +1,4 @@
 export const palette = {
-  yellow: {
-    y50: "#fff8e6",
-    y100: "#ff39b0",
-    y200: "#ffde8a",
-    y300: "#ffcf54",
-    y400: "#ffc633",
-    y500: "#ffb800",
-    y600: "#e8a700",
-    y700: "#b58300",
-    y800: "#8c6500",
-    y900: "#6b4d00",
-    y1000: "#3e2d00",
-  },
-  green: {
-    g50: "#f2fbf3",
-    g100: "#d7f2d8",
-    g200: "#c4ebc6",
-    g300: "#a9e2ab",
-    g400: "#99dd9b",
-    g500: "#7fd482",
-    g600: "#74c176",
-    g700: "#5a975c",
-    g800: "#467548",
-    g900: "#355937",
-  },
-  red: {
-    r50: "#fde6e6",
-    r100: "#f9b0b0",
-    r200: "#f68a8a",
-    r300: "#f25454",
-    r400: "#ef3333",
-    r500: "#eb0000",
-    r600: "#d60000",
-    r700: "#a70000",
-    r800: "#810000",
-    r900: "#630000",
-  },
-  orange: {
-    o50: "#fff0e8",
-    o100: "#ffd1b7",
-    o200: "#ffbb95",
-    o300: "#ff9c64",
-    o400: "#ff8946",
-    o500: "#ff6b18",
-    o600: "#e86116",
-    o700: "#b54c11",
-    o800: "#8c3b0d",
-    o900: "#6b2d0a",
-  },
   neutral: {
     n0: "#ffffff",
     n10: "#fafafa",
@@ -77,6 +28,8 @@ export const palette = {
       "linear-gradient(90deg, hsla(190, 77%, 17%, 1) 0%, hsla(186, 91%, 13%, 1) 66%, hsla(202, 69%, 13%, 1) 100%)",
     greenSecondary:
       "linear-gradient(90deg, hsla(183, 78%, 18%, 1) 0%, hsla(186, 76%, 17%, 1) 66%, hsla(191, 74%, 15%, 1) 100%)",
+    darkPrimary:
+      "linear-gradient(180deg, #14494f 0%, #164851 9.35%, #194957 51%, #0A2536 100%)",
   },
   alpha: {
     white1: "rgb(255,255,255,0.01)",
@@ -97,6 +50,52 @@ export const palette = {
     lightButtonHover: "linear-gradient(180deg, #E6E6E6 0%, #CCCCCC 100%)",
     darkButton: "linear-gradient(180deg, #282727 0%, #191818 100%)",
     darkButtonHover: "linear-gradient(180deg, #383838 0%, #1E1E1E 100%)",
+  },
+  primary: {
+    50: "#fbfdff",
+    100: "#EEF7FD",
+    200: "#D8EEFB",
+    300: "#BBE1F8",
+    400: "#94CFF4",
+    500: "#65BBF0",
+    600: "#2DA2EA",
+    700: "#137DBE",
+    800: "#0B486E",
+    900: "#06293E",
+    950: "#051E2E",
+  },
+  secondary: {
+    50: "#FAFFFE",
+    100: "#ECFEFD",
+    200: "#D4FCFA",
+    300: "#B3F9F6",
+    400: "#88F6F1",
+    500: "#54F2EA",
+    600: "#17EEE3",
+    700: "#0DABA3",
+    800: "#086662",
+    900: "#053D3A",
+    950: "#042F2D",
+  },
+  surface: {
+    50: "#FBFDFD",
+    100: "#EFF6F8",
+    200: "#DCECEF",
+    300: "#C0DDE2",
+    400: "#9DCAD2",
+    500: "#72B2BE",
+    600: "#48909D",
+    700: "#2D5A62",
+    800: "#143A44",
+    900: "#13272A",
+    950: "#102023",
+  },
+  error: {
+    50: "#CA363E",
+    100: "#8D252B",
+    200: "#55171A",
+    300: "#330E10",
+    400: "#280B0C",
   },
 }
 
@@ -124,7 +123,10 @@ const common = {
   blueDefault: "#031a27", // body bg
   blueDark: "#03273b", // order list bg
   blueDark2: "#041e2f", // navbar bg
-
+  negative: "#2E1515",
+  negative2: "#820000",
+  positive: "#1E4D39",
+  positive1: "#4C972E",
   palette,
 }
 

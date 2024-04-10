@@ -3,14 +3,17 @@ import styled from "styled-components"
 import { getThemeColors } from "../../theme"
 
 const StyledLabel = styled.label<{ isActive?: boolean }>`
-  ${({ theme }) => theme.fonts.typography.default};
+  ${({ theme, isActive }) =>
+    isActive
+      ? theme.fonts.typography.actionSmBold
+      : theme.fonts.typography.textSm};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   color: ${({ theme, isActive }) =>
     isActive
-      ? getThemeColors(theme).text.default
-      : getThemeColors(theme).text.primary};
+      ? getThemeColors(theme).text.primary
+      : getThemeColors(theme).text.secondary};
   background-color: ${({ theme, isActive }) =>
-    isActive ? getThemeColors(theme).tab.activeBackground : "transparent"};
+    isActive ? getThemeColors(theme).background.button : "transparent"};
   border: ${({ theme, isActive }) =>
     isActive && `1px solid ${getThemeColors(theme).border.default}`};
   padding: 5px 20px;

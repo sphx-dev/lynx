@@ -27,8 +27,9 @@ const TakeProfitStopLossSelect: React.FC = () => {
     borderRadius: appTheme.borderRadius.md,
     colors: {
       ...theme.colors,
-      primary: appTheme.colors.selectedTheme.border.default,
-      neutral80: appTheme.colors.selectedTheme.text.inputDefault,
+      primary: appTheme.colors.selectedTheme.background.button,
+      neutral80: appTheme.colors.selectedTheme.text.primary,
+      primary25: appTheme.colors.selectedTheme.background.button,
     },
   })
 
@@ -38,8 +39,8 @@ const TakeProfitStopLossSelect: React.FC = () => {
     }),
     control: (styles) => ({
       ...styles,
-      ...appTheme.fonts.typography.body,
-      backgroundColor: "transparent",
+      ...appTheme.fonts.typography.textMd,
+      backgroundColor: appTheme.colors.selectedTheme.background.input,
       boxShadow: "none",
       // borderRadius: "4px",
       // minHeight: "60px",
@@ -57,11 +58,11 @@ const TakeProfitStopLossSelect: React.FC = () => {
     }),
     menu: (styles) => ({
       ...styles,
-      backgroundColor: appTheme.colors.selectedTheme.background.main, // Assuming a dark teal background as in your picture
+      backgroundColor: appTheme.colors.selectedTheme.background.dropdown, // Assuming a dark teal background as in your picture
     }),
     option: (styles, { isFocused, isSelected }) => ({
       ...styles,
-      backgroundColor: "transparent",
+      // backgroundColor: "transparent",
     }),
     // singleValue: (styles) => ({
     //   ...styles,

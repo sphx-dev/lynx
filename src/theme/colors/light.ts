@@ -3,13 +3,11 @@ import common from "./common"
 const lightTheme = {
   ...common,
   background: {
-    main: common.blueDefault,
-    default: common.blueDark,
-    head: common.blue3,
     gradientPrimary: common.palette.gradient.green,
     gradientSecondary: common.palette.gradient.greenSecondary,
-    navbar: common.blueDark2,
-    chart: common.greenPrimary,
+    input: common.palette.surface["800"],
+    button: common.palette.surface["700"],
+    dropdown: common.palette.surface["900"],
   },
   divider: {
     primary: common.lightGreen,
@@ -28,12 +26,10 @@ const lightTheme = {
     activeText: common.blue2,
   },
   text: {
-    placeholder: common.greenPlaceholder,
-    inputDefault: common.greenText,
-    default: common.white,
-    primary: common.green3,
-    secondary: common.blue4,
-    error: common.palette.red.r500,
+    primary: "#FFFFFF",
+    secondary: "#E6E6E6",
+    tertiary: "#9D9D9D",
+    error: common.palette.error["50"],
   },
 }
 
