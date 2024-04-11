@@ -1,6 +1,6 @@
 import React, { useState, FocusEvent, ReactElement, ReactNode } from "react"
 import styled from "styled-components"
-import { getThemeColors } from "../theme"
+import { getThemeColors, ThemeColors } from "../theme"
 import Stack from "./Stack"
 import Text from "./Text"
 import useTheme from "../hooks/useTheme"
@@ -10,6 +10,12 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
   label?: string
   rightSide?: string
   fluid?: boolean
+  variant?: keyof ThemeColors["input"]
+}
+
+interface InputWrapperProps {
+  variant: keyof ThemeColors["input"]
+  disabled?: boolean
 }
 
 const StyledInput = styled.input`
@@ -48,17 +54,26 @@ const StyledLabel = styled.label<{ isFocused: boolean }>`
   text-align: left;
 `
 
-const InputWrapper = styled.div`
-  border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
+const InputWrapper = styled.div<InputWrapperProps>`
+  border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.borderRadius.md};
   width: 100%;
   padding: 7px 12px;
-  background-color: ${({ theme }) => getThemeColors(theme).background.input};
+  background-color: ${({ theme, variant, disabled }) =>
+    disabled
+      ? getThemeColors(theme).input[variant].background.disabled
+      : getThemeColors(theme).input[variant].background.default};
   &:focus-within {
-    border-color: ${({ theme }) => getThemeColors(theme).border.hovered};
+    border-color: ${({ theme, variant }) =>
+      getThemeColors(theme).input[variant].border.focused};
+  }
+  &:hover {
+    background: ${({ theme, variant }) =>
+      getThemeColors(theme).input[variant].background.hovered};
   }
   display: flex;
   align-items: center;
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
 `
 
 const Input = ({
@@ -67,6 +82,7 @@ const Input = ({
   rightSide,
   fluid,
   style,
+  variant = "primary",
   ...restProps
 }: InputProps) => {
   const { themeColors } = useTheme()
@@ -89,7 +105,7 @@ const Input = ({
       style={{ width: fluid ? "100%" : "auto", position: "relative", ...style }}
     >
       {label && <StyledLabel isFocused={isFocused}>{label}</StyledLabel>}
-      <InputWrapper style={{ position: "relative" }}>
+      <InputWrapper style={{ position: "relative" }} variant={variant} disabled={restProps.disabled}>
         <StyledInput
           data-error={error ? "true" : "false"}
           {...restProps}

@@ -3,15 +3,6 @@ import Button from "./Button"
 import styled from "styled-components"
 import { useTranslation } from "react-i18next"
 
-const StyledButton = styled(Button)`
-  background: rgb(47, 131, 194);
-  background: linear-gradient(
-    180deg,
-    rgba(47, 131, 194, 1) 0%,
-    rgba(106, 176, 229, 1) 100%
-  );
-  color: #f6f5f5;
-`
 export const AppButton = () => {
   const { t } = useTranslation()
   return (
@@ -47,14 +38,15 @@ export const AppButton = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <StyledButton
+                  <Button
                     pill
                     fluid
                     onClick={openConnectModal}
                     type="button"
+                    variant="primary"
                   >
                     {t("connect")}
-                  </StyledButton>
+                  </Button>
                 )
               }
               if (chain.unsupported) {
@@ -66,12 +58,13 @@ export const AppButton = () => {
               }
               return (
                 <div style={{ display: "flex", gap: 12, width: "100%" }}>
-                  <StyledButton
+                  <Button
                     onClick={openChainModal}
                     style={{ display: "flex", alignItems: "center" }}
                     type="button"
                     pill
                     fluid
+                    variant="primary"
                   >
                     {chain.hasIcon && (
                       <div
@@ -94,7 +87,7 @@ export const AppButton = () => {
                       </div>
                     )}
                     {chain.name}
-                  </StyledButton>
+                  </Button>
                   <button onClick={openAccountModal} type="button">
                     {account.displayName}
                     {account.displayBalance
