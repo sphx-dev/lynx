@@ -1,0 +1,44 @@
+import React, { useEffect, useState } from "react"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import OrderInput from "../sections/order/OrderInput"
+import { TradingViewContainer } from "../sections/chart/TradingViewContainer"
+import OrderBook from "../sections/orderbook/OrderBook"
+import AccountOrderHistory from "../sections/account/AccountOrderHistory"
+
+const Futures = () => {
+  const [windowWidth, setWindowWidth] = useState(0)
+
+  // Window width detection
+  useEffect(() => {
+    window.onresize = () => {
+      setWindowWidth(window.innerWidth)
+    }
+    setWindowWidth(() => window.innerWidth)
+  }, [])
+
+  return (
+    <Row>
+      <Col md={3}>
+        <OrderInput />
+        {/*<AccountCard />*/}
+        <br></br>
+      </Col>
+      <Col>
+        <TradingViewContainer />
+      </Col>
+      <Col md={3}>
+        <OrderBook windowWidth={windowWidth} />
+      </Col>
+      <Row>
+        <Col />
+        <Col md={11}>
+          <AccountOrderHistory />
+        </Col>
+        <Col />
+      </Row>
+    </Row>
+  )
+}
+
+export default Futures
