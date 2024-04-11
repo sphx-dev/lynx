@@ -98,6 +98,12 @@ const typography = {
     "font-weight": 500,
     "line-height": "18px",
   },
+  header: {
+    "font-family": fontStyles.medium,
+    "font-size": "10px",
+    "font-weight": "500",
+    "line-height": "15px",
+  },
   label: {
     "font-family": fontStyles.regular,
     "font-size": "14px",
