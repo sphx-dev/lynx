@@ -8,6 +8,7 @@ const darkTheme = {
     input: common.palette.surface["800"],
     button: common.palette.surface["700"],
     dropdown: common.palette.surface["900"],
+    primary: common.palette.primary["950"],
   },
   divider: {
     primary: common.lightGreen,
@@ -75,7 +76,9 @@ const darkTheme = {
     primary: "#FFFFFF",
     secondary: "#E6E6E6",
     tertiary: "#9D9D9D",
-    error: common.palette.error["50"],
+    error: common.negative3,
+    secondaryActive: common.palette.secondary["600"],
+    secondaryLink: common.palette.secondary["700"],
   },
 }
 

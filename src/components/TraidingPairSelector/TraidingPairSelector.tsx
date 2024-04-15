@@ -33,7 +33,7 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
     border: "none",
     colors: {
       ...theme.colors,
-      neutral80: appTheme.colors.selectedTheme.text.inputDefault,
+      neutral80: appTheme.colors.selectedTheme.text.primary,
     },
   })
 
@@ -44,22 +44,22 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
     }),
     control: (provided: any) => ({
       ...provided,
-      ...appTheme.fonts.typography.sub2,
+      ...appTheme.fonts.typography.textMd,
       border: "none",
       boxShadow: "none",
       backgroundColor: "transparent",
-      width: 'auto',
+      width: "auto",
     }),
     option: (provided: any) => ({
       ...provided,
-      ...appTheme.fonts.typography.sub2,
+      ...appTheme.fonts.typography.textMd,
       backgroundColor: "transparent",
-      color: appTheme.colors.selectedTheme.text.inputDefault,
+      color: appTheme.colors.selectedTheme.text.primary,
     }),
     menu: (provided: any) => ({
       ...provided,
       marginTop: 0,
-      backgroundColor: appTheme.colors.selectedTheme.background.main,
+      backgroundColor: appTheme.colors.selectedTheme.background.dropdown,
     }),
     indicatorSeparator: (provided: any) => ({
       ...provided,

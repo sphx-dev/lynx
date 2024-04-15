@@ -5,6 +5,8 @@ import OrderInput from "../sections/order/OrderInput"
 import { TradingViewContainer } from "../sections/chart/TradingViewContainer"
 import OrderBook from "../sections/orderbook/OrderBook"
 import AccountOrderHistory from "../sections/account/AccountOrderHistory"
+import { Stack } from "../components"
+import PriceBorder from "../sections/PriceBorder"
 
 const Futures = () => {
   const [windowWidth, setWindowWidth] = useState(0)
@@ -19,15 +21,18 @@ const Futures = () => {
 
   return (
     <Row>
-      <Col md={3}>
+      <Col md={3} style={{ maxWidth: "320px" }}>
         <OrderInput />
         {/*<AccountCard />*/}
         <br></br>
       </Col>
       <Col>
-        <TradingViewContainer />
+        <Stack>
+          <PriceBorder />
+          <TradingViewContainer />
+        </Stack>
       </Col>
-      <Col md={3}>
+      <Col md={3} style={{ maxWidth: "320px" }}>
         <OrderBook windowWidth={windowWidth} />
       </Col>
       <Row>

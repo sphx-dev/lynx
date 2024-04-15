@@ -1,4 +1,4 @@
-import React  from "react"
+import React from "react"
 import "./App.css"
 import { useRoutes } from "react-router-dom"
 import { routes } from "./routes"
@@ -12,7 +12,7 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit"
 import { ThemeProvider } from "styled-components"
-import Header from "./common/Header"
+import Header from "./components/Header"
 import { configureChains, createConfig, WagmiConfig } from "wagmi"
 import { avalanche, avalancheFuji } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"

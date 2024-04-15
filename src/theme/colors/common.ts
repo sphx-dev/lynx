@@ -127,6 +127,7 @@ const common = {
   blueDark2: "#041e2f", // navbar bg
   negative: "#2E1515",
   negative2: "#820000",
+  negative3: "#FF4848",
   positive: "#1E4D39",
   positive1: "#4C972E",
   palette,

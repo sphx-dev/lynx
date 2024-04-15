@@ -3,6 +3,8 @@ import logout from "../../assets/icons/logout.svg"
 import myAccount from "../../assets/icons/account.svg"
 import logo from "../../assets/icons/logo-dark.svg"
 import menu from "../../assets/icons/menu.svg"
+import Group from "../Group";
+import Nav from '../../sections/navbar'
 
 const StyledHeader = styled.header`
   position: relative;
@@ -50,22 +52,25 @@ const Divider = styled.div`
 `
 const Header = () => {
   return (
-    <StyledHeader>
-      <Menu src={menu} />
-      <Logo src={logo} />
-      <NavBar>
-        <Button>
-          <img src={myAccount} alt="my account" />
-          MY ACCOUNT
-        </Button>
-        <Divider />
-        <Button>
-          <img src={logout} alt="my account" />
-          LOGOUT
-        </Button>
-      </NavBar>
-      {/*<span>Logout</span>*/}
-    </StyledHeader>
+    <Group fluid spacing={0} style={{ width: '100vw' }}>
+      <StyledHeader>
+        <Menu src={menu} />
+        <Logo src={logo} />
+        <NavBar>
+          <Button>
+            <img src={myAccount} alt="my account" />
+            MY ACCOUNT
+          </Button>
+          <Divider />
+          <Button>
+            <img src={logout} alt="my account" />
+            LOGOUT
+          </Button>
+        </NavBar>
+        {/*<span>Logout</span>*/}
+      </StyledHeader>
+      <Nav />
+    </Group>
   )
 }
 export default Header
