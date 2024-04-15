@@ -1,6 +1,10 @@
 {
   "connect": "CONNECT WALLET",
   "takeProfit": "Take Profit / Stop Loss",
+  "stats": "Stats",
+  "docs": "Docs",
+  "support": "Support",
+  "takeProfit": "Take Profit / Stop Loss",
   "positions": "Positions",
   "pending": "Pending",
   "orders": "Orders",

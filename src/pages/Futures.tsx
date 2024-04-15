@@ -5,6 +5,7 @@ import OrderInput from "../sections/order/OrderInput"
 import { TradingViewContainer } from "../sections/chart/TradingViewContainer"
 import OrderBook from "../sections/orderbook/OrderBook"
 import AccountOrderHistory from "../sections/account/AccountOrderHistory"
+import Footer from "../sections/footer"
 import OrdersHistory from "../components/OrdersHistory"
 import { Stack } from "../components"
 import PriceBorder from "../sections/PriceBorder"
@@ -38,11 +39,7 @@ const Futures = () => {
         <OrderBook windowWidth={windowWidth} />
       </Col>
       <Row>
-        <Col />
-        <Col md={11}>
-          <AccountOrderHistory />
-        </Col>
-        <Col />
+        <Footer />
       </Row>
     </Row>
   )
