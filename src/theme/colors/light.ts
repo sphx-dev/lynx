@@ -22,6 +22,12 @@ const lightTheme = {
     activeBackground: common.green2,
     activeBorder: common.aquaGreen,
   },
+  tableTabs: {
+    color: common.palette.primary["700"],
+    colorActive: common.palette.primary["300"],
+    border: common.palette.primary["300"],
+    background: `linear-gradient(180deg, #133F5B 0%, #062B41 24%, #031D2C 80.5%)`,
+  },
   navbar: {
     text: common.green5,
     activeText: common.blue2,

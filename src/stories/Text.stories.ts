@@ -26,7 +26,7 @@ export const Body: Story = {
 
 export const Sub1: Story = {
   args: {
-    variant: "sub1",
+    variant: "textSm",
     children: "Text",
     color: "green",
   },

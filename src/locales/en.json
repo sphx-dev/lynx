@@ -1,4 +1,15 @@
 {
   "connect": "CONNECT WALLET",
-  "takeProfit": "Take Profit / Stop Loss"
+  "takeProfit": "Take Profit / Stop Loss",
+  "positions": "Positions",
+  "pending": "Pending",
+  "orders": "Orders",
+  "trades": "Trades",
+  "uP&L": "uP&L",
+  "market": "Market",
+  "size": "Size",
+  "slide": "Slide",
+  "avgEntry": "Avg. Entry",
+  "liqPrice": "Liq. Price",
+  "marketMargin": "Market Margin"
 }

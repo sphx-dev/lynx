@@ -4,8 +4,8 @@ import { Group } from "../../components"
 import { getThemeColors } from "../../theme"
 import { NavLink } from "react-router-dom"
 import { navLinks } from "./config"
-import Icon from "../../components/icon";
-import useTheme from "../../hooks/useTheme";
+import Icon from "../../components/Icon"
+import useTheme from "../../hooks/useTheme"
 
 const Wrapper = styled.nav`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};

@@ -5,8 +5,6 @@ import "./i18n"
 
 import { store } from "./state/store"
 import App from "./App"
-import { ThemeInterface, themes } from "./theme"
-import { useAppSelector } from "./hooks"
 import "./index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "@rainbow-me/rainbowkit/styles.css"
