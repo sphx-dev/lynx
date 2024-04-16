@@ -5,5 +5,6 @@ import Input from "./Input"
 import Button from "./Button"
 import ConnectButton from "./ConnectButton"
 import Switcher from "./Switcher"
+import Divider from "./Divider"
 
-export { Text, Stack, Group, Input, Button, ConnectButton, Switcher }
+export { Text, Stack, Group, Input, Button, ConnectButton, Switcher, Divider }

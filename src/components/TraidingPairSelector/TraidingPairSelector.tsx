@@ -1,7 +1,9 @@
 // TradingPairSelector.tsx
 import React from "react"
-import Select, { SingleValue } from "react-select"
+import Select, { SingleValue, StylesConfig } from "react-select"
 import { useTheme } from "styled-components"
+import { getThemeColors } from "../../theme"
+import { OptionType } from "../Select"
 
 interface TradingPairOption {
   value: string
@@ -37,7 +39,7 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
     },
   })
 
-  const customStyles = {
+  const customStyles: StylesConfig<OptionType> = {
     container: (provided: any) => ({
       ...provided,
       maxHeight: "38px",
@@ -50,11 +52,15 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
       backgroundColor: "transparent",
       width: "auto",
     }),
-    option: (provided: any) => ({
+    option: (provided, { isSelected, isFocused }) => ({
       ...provided,
       ...appTheme.fonts.typography.textMd,
-      backgroundColor: "transparent",
-      color: appTheme.colors.selectedTheme.text.primary,
+      color: isSelected
+        ? getThemeColors(appTheme).text.primary
+        : getThemeColors(appTheme).text.tertiary,
+      backgroundColor: isFocused
+        ? getThemeColors(appTheme).background.button
+        : "transparent",
     }),
     menu: (provided: any) => ({
       ...provided,

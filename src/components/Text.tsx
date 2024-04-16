@@ -1,11 +1,12 @@
 import React from "react"
 import styled from "styled-components"
+import { ThemeColors } from "../theme";
 
 import fonts from "../theme/fonts"
 import { getThemeColors } from "../theme"
 type Align = "left" | "center" | "right"
 type Tag = "span" | "p"
-type Color = "primary" | "secondary" | "tertiary" | "error"
+type Color = keyof ThemeColors["text"]
 
 interface TextProps
   extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color"> {
