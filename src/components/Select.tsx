@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import Select, { StylesConfig } from "react-select"
 import { useTheme } from "styled-components"
 import { useTranslation } from "react-i18next"
+import { getThemeColors } from "../theme"
 
 export interface OptionType {
   label: string
@@ -30,7 +31,7 @@ const TakeProfitStopLossSelect: React.FC = () => {
       ...theme.colors,
       primary: appTheme.colors.selectedTheme.background.button,
       neutral80: appTheme.colors.selectedTheme.text.primary,
-      primary25: appTheme.colors.selectedTheme.background.button,
+      primary25: "transparent",
     },
   })
 
@@ -64,6 +65,12 @@ const TakeProfitStopLossSelect: React.FC = () => {
     option: (styles, { isFocused, isSelected }) => ({
       ...styles,
       // backgroundColor: "transparent",
+      color: isSelected
+        ? getThemeColors(appTheme).text.primary
+        : getThemeColors(appTheme).text.tertiary,
+      backgroundColor: isFocused
+        ? getThemeColors(appTheme).background.button
+        : "transparent",
     }),
     // singleValue: (styles) => ({
     //   ...styles,

@@ -9,6 +9,7 @@ const lightTheme = {
     button: common.palette.surface["700"],
     dropdown: common.palette.surface["900"],
     primary: common.palette.primary["950"],
+    gradientSurface: common.palette.gradient.surface,
   },
   divider: {
     primary: common.lightGreen,
