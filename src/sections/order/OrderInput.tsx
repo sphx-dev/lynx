@@ -15,16 +15,16 @@ import {
 } from "../../components"
 import TakeProfitStopLossSelect from "../../components/Select"
 import { getThemeColors } from "../../theme"
+import Surface from "../../Layouts/Surface";
+import Summary from "./Summary";
+import AttributionBar from "../../components/AttributionBar";
 
 const Wrapper = styled.div`
-  height: 100%;
-  background: ${({ theme }) =>
-    getThemeColors(theme).background.gradientPrimary};
+  background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
   padding: 20px;
-  width: 320px;
 `
 const Container = styled.div`
-  padding: 8px;
+  padding: 0 16px;
 `
 const StyledButton = styled(Button)`
   width: 38px;
@@ -80,48 +80,56 @@ function OrderInput() {
   ]
 
   return (
-    <Wrapper>
-      <Stack spacing={20}>
-        <form>
+    <Surface>
+      <Stack justify="apart" fullHeight style={{ paddingBottom: '32px' }}>
+        <Wrapper>
           <Stack spacing={20}>
-            <Switcher options={options} name="orderType" />
-            <div style={{ position: "relative" }}>
-              <Input label="Margin" />
-              <Group style={{ position: "absolute", top: 0, right: 0 }}>
-                <Button size="xs" pill>
-                  10%
-                </Button>
-                <Button size="xs" pill>
-                  20%
-                </Button>
-                <Button size="xs" pill>
-                  50%
-                </Button>
-                <Button size="xs" pill>
-                  100%
-                </Button>
-              </Group>
-            </div>
-            <div style={{ position: "relative" }}>
-              <Input label="Size" rightSide="USD" />
-            </div>
-            <div style={{ position: "relative" }}>
-              <Group align="end">
-                <Input style={{ minWidth: "60px" }} label="Leverage" />
-                <Group align="end" style={{ flex: 1 }}>
-                  <StyledButton>2x</StyledButton>
-                  <StyledButton>5x</StyledButton>
-                  <StyledButton>25x</StyledButton>
-                  <StyledButton>50x</StyledButton>
-                </Group>
-              </Group>
-            </div>
-            <TakeProfitStopLossSelect />
+            <form>
+              <Stack spacing={20}>
+                <Switcher options={options} name="orderType" />
+                <div style={{ position: "relative" }}>
+                  <Input label="Margin" />
+                  <Group style={{ position: "absolute", top: 0, right: 0 }}>
+                    <Button size="xs" pill>
+                      10%
+                    </Button>
+                    <Button size="xs" pill>
+                      20%
+                    </Button>
+                    <Button size="xs" pill>
+                      50%
+                    </Button>
+                    <Button size="xs" pill>
+                      100%
+                    </Button>
+                  </Group>
+                </div>
+                <div style={{ position: "relative" }}>
+                  <Input label="Size" rightSide="USD" />
+                </div>
+                <div style={{ position: "relative" }}>
+                  <Group align="end">
+                    <Input style={{ minWidth: "60px" }} label="Leverage" />
+                    <Group align="end" style={{ flex: 1 }}>
+                      <StyledButton>2x</StyledButton>
+                      <StyledButton>5x</StyledButton>
+                      <StyledButton>25x</StyledButton>
+                      <StyledButton>50x</StyledButton>
+                    </Group>
+                  </Group>
+                </div>
+                <TakeProfitStopLossSelect />
+              </Stack>
+            </form>
+            <ConnectButton />
+            <Summary />
           </Stack>
-        </form>
-        <ConnectButton />
+        </Wrapper>
+        <Container>
+          <AttributionBar />
+        </Container>
       </Stack>
-    </Wrapper>
+    </Surface>
   )
 }
 

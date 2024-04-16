@@ -32,10 +32,11 @@ export const palette = {
       "linear-gradient(180deg, #14494f 0%, #164851 9.35%, #194957 51%, #0A2536 100%)",
     primaryBlue: "linear-gradient(180deg, #3185C3 0%, #68AEE4 100%)",
     primaryBlueDark: "linear-gradient(180deg, #3185C3 0%, #68AEE4 100%)",
+    surface: 'linear-gradient(180deg, #032C33 0%, #093F46 9.35%, #0E3F4E 51%, #0A2536 100%)',
 },
   alpha: {
     white1: "rgb(255,255,255,0.01)",
-    white5: "rgb(255,255,255,0.5)",
+    white5: "rgb(255,255,255,0.05)",
     white8: "rgb(255,255,255,0.08)",
     white10: "rgb(255,255,255,0.1)",
     white25: "rgba(255, 255, 255, 0.25)",

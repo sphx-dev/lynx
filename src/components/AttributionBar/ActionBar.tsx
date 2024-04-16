@@ -19,7 +19,6 @@ const ActionBarContainer = styled(Group)`
   font-size: 10px;
   font-weight: 600;
   height: var(--height);
-  width: 288px;
 `
 const Divider = styled.div`
   border-left: 1px solid #071c27;
