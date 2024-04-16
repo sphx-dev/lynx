@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   padding: 8px 16px;
   gap: 24px;
   width: 100%;
+  margin-top: -50px;
 `
 const Divider = styled.div`
   width: 1px;
