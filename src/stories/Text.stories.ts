@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Body: Story = {
   args: {
-    variant: "body",
+    variant: "textMd",
     children: "Text",
     color: "red",
   },
@@ -26,7 +26,7 @@ export const Body: Story = {
 
 export const Sub1: Story = {
   args: {
-    variant: "sub1",
+    variant: "textSm",
     children: "Text",
     color: "green",
   },

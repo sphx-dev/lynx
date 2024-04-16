@@ -5,7 +5,7 @@
 }
 
 body {
-  max-height: 100vh;
+  /*min-height: 100vh;*/
   overflow: hidden;
   background: center / cover no-repeat url("assets/glow-up.png"), #031a28 35% !important
 }
@@ -27,7 +27,7 @@ body {
 }
 
 .App-header {
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   display: flex;
   flex-direction: column;
   align-items: center;

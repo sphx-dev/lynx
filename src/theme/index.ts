@@ -25,4 +25,6 @@ export const themes = {
 export const getThemeColors = (theme: ThemeInterface) =>
   theme.colors.selectedTheme
 
+export type ThemeColors = ReturnType<typeof getThemeColors>
+
 export default theme
