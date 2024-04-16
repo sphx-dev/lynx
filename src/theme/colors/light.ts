@@ -12,12 +12,13 @@ const lightTheme = {
     gradientSurface: common.palette.gradient.surface,
   },
   divider: {
-    primary: common.lightGreen,
+    primary: common.palette.surface["700"],
     secondary: common.blue4,
   },
   border: {
     default: common.greenPlaceholder,
     hovered: common.lightGreen,
+    active: '#13DCDE',
   },
   tab: {
     activeBackground: common.green2,
@@ -86,6 +87,7 @@ const lightTheme = {
     error: common.palette.error["50"],
     secondaryActive: common.palette.secondary["600"],
     secondaryLink: common.palette.secondary["700"],
+    primaryLink: common.palette.primary["500"],
   },
 }
 

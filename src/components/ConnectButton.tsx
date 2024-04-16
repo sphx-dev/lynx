@@ -2,8 +2,11 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Button from "./Button"
 import styled from "styled-components"
 import { useTranslation } from "react-i18next"
+import { PropsWithChildren } from "react"
 
-export const AppButton = () => {
+type Size = "small" | "large"
+
+export const AppButton = ({ size = "large" }: { size?: Size }) => {
   const { t } = useTranslation()
   return (
     <ConnectButton.Custom>
@@ -45,7 +48,7 @@ export const AppButton = () => {
                     type="button"
                     variant="primary"
                   >
-                    {t("connect")}
+                    {t(size === "large" ? "connectWallet" : "connect")}
                   </Button>
                 )
               }

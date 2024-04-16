@@ -12,12 +12,13 @@ const darkTheme = {
     gradientSurface: common.palette.gradient.surface,
   },
   divider: {
-    primary: common.lightGreen,
+    primary: common.palette.surface["700"],
     secondary: common.blue4,
   },
   border: {
-    default: common.lightGreen,
+    default: common.palette.surface["700"],
     hovered: common.greenPlaceholder,
+    active: '#13DCDE',
   },
   tab: {
     activeBackground: common.green2,
@@ -86,6 +87,7 @@ const darkTheme = {
     error: common.negative3,
     secondaryActive: common.palette.secondary["600"],
     secondaryLink: common.palette.secondary["700"],
+    primaryLink: common.palette.primary["500"],
   },
 }
 

@@ -13,7 +13,7 @@ interface Props {
   children?: React.ReactNode
 }
 const StyledTab = styled.button<Props>`
-  ${({ theme }) => theme.fonts.typography.sub1}
+  ${({ theme }) => theme.fonts.typography.textMd}
   background-color: ${({ isSelected, theme }) =>
     isSelected
       ? theme.colors.selectedTheme.tab.activeBackground
@@ -26,7 +26,8 @@ const StyledTab = styled.button<Props>`
       : `3px solid ${theme.colors.common.palette.alpha.dark5}`};
   outline: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.selectedTheme.text.default};
+  color: ${({ theme }) => theme.colors.selectedTheme.text.primary};
+    flex: 1;
 `
 const Tab = ({ isSelected, onClick, children }: Props) => {
   return (

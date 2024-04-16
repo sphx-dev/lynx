@@ -1,5 +1,5 @@
 {
-  "connect": "CONNECT WALLET",
+  "connect": "CONNECT",
   "takeProfit": "Take Profit / Stop Loss",
   "makeWithHonor": "made with honor",
   "stats": "Stats",
@@ -15,5 +15,6 @@
   "slide": "Slide",
   "avgEntry": "Avg. Entry",
   "liqPrice": "Liq. Price",
-  "marketMargin": "Market Margin"
+  "marketMargin": "Market Margin",
+  "connectWallet": "CONNECT WALLET"
 }
