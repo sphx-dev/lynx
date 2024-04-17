@@ -8,6 +8,9 @@ body {
   /*min-height: 100vh;*/
   overflow: hidden;
   background: center / cover no-repeat url("assets/glow-up.png"), #031a28 35% !important
+  /* Landing */
+  /*background: #031A28;*/
+
 }
 
 .App {
@@ -58,4 +61,4 @@ body {
 }
 
 html { height: 100%; }
-body { min-height: 100%; overflow-y: auto }
+body {height: 100%; overflow-y: auto }

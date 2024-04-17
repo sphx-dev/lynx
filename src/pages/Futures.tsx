@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
+import styled from "styled-components"
 import OrderInput from "../sections/order/OrderInput"
 import { TradingViewContainer } from "../sections/chart/TradingViewContainer"
 import OrderBook from "../sections/orderbook/OrderBook"
@@ -9,39 +8,28 @@ import Footer from "../sections/footer"
 import OrdersHistory from "../components/OrdersHistory"
 import { Stack } from "../components"
 import PriceBorder from "../sections/PriceBorder"
+import Group from "../components/Group"
 
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  min-height: calc(100vh - 28px - 95px);
+`
 const Futures = () => {
-  const [windowWidth, setWindowWidth] = useState(0)
-
-  // Window width detection
-  useEffect(() => {
-    window.onresize = () => {
-      setWindowWidth(window.innerWidth)
-    }
-    setWindowWidth(() => window.innerWidth)
-  }, [])
-
   return (
-    <Row>
-      <Col md={3} style={{ maxWidth: "320px" }}>
-        <OrderInput />
-        {/*<AccountCard />*/}
-        <br></br>
-      </Col>
-      <Col>
-        <Stack>
-          <PriceBorder />
-          <TradingViewContainer />
-          <OrdersHistory />
-        </Stack>
-      </Col>
-      <Col md={3} style={{ maxWidth: "320px" }}>
-        <OrderBook windowWidth={windowWidth} />
-      </Col>
-      <Row>
-        <Footer />
-      </Row>
-    </Row>
+    <Wrapper>
+      <OrderInput />
+      <Stack style={{ marginTop: "-50px", paddingLeft: "16px" }}>
+        <PriceBorder />
+        <Group style={{ flex: 1 }}>
+          <Stack style={{ flex: 1, height: "100%" }}>
+            <TradingViewContainer />
+            <OrdersHistory />
+          </Stack>
+          <OrderBook windowWidth={2000} />
+        </Group>
+      </Stack>
+    </Wrapper>
   )
 }
 
