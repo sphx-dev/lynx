@@ -8,6 +8,7 @@ import Spread from "./Spread"
 import { Container, TableContainer } from "./OrderBookStyle"
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle"
 import { MOBILE_WIDTH } from "../../constants"
+import Surface from "../../Layouts/Surface"
 
 export enum OrderType {
   BIDS,
@@ -74,27 +75,32 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   }
 
   return (
-    <Container>
-      {book.bids.length && book.asks.length ? (
-        <>
-          <TableContainer>
-            {windowWidth > MOBILE_WIDTH && (
-              <TitleRow windowWidth={windowWidth} reversedFieldsOrder={false} />
-            )}
-            <div>{buildPriceLevels(book.bids, OrderType.BIDS)}</div>
-          </TableContainer>
-          {/* <Spread bids={book.bids} asks={book.asks} /> */}
-          <TableContainer>
-            <TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />
-            <div>{buildPriceLevels(book.asks, OrderType.ASKS)}</div>
-          </TableContainer>
-        </>
-      ) : (
-        <div>
-          <h1>NO DATA</h1>
-        </div>
-      )}
-    </Container>
+    <Surface style={{ width: "320px" }}>
+      <Container>
+        {book.bids.length && book.asks.length ? (
+          <>
+            <TableContainer>
+              {windowWidth > MOBILE_WIDTH && (
+                <TitleRow
+                  windowWidth={windowWidth}
+                  reversedFieldsOrder={false}
+                />
+              )}
+              <div>{buildPriceLevels(book.bids, OrderType.BIDS)}</div>
+            </TableContainer>
+            {/* <Spread bids={book.bids} asks={book.asks} /> */}
+            <TableContainer>
+              <TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />
+              <div>{buildPriceLevels(book.asks, OrderType.ASKS)}</div>
+            </TableContainer>
+          </>
+        ) : (
+          <div>
+            <h1>NO DATA</h1>
+          </div>
+        )}
+      </Container>
+    </Surface>
   )
 }
 
