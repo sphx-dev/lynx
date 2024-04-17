@@ -26,6 +26,7 @@ import useTheme from "../../hooks/useTheme"
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
   padding: 16px 0;
+  width: 320px;
 `
 const Container = styled.div`
   padding: 0px 16px;

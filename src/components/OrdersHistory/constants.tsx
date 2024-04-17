@@ -47,4 +47,22 @@ export const mockData = [
     marketMargin: "0.001",
     "u&pl": "0.001",
   },
+  {
+    market: "BTC/USDT",
+    size: "0.001",
+    slide: "0.001",
+    avgEntry: "0.001",
+    liqPrice: "0.001",
+    marketMargin: "0.001",
+    "u&pl": "0.001",
+  },
+  {
+    market: "BTC/USDT",
+    size: "0.001",
+    slide: "0.001",
+    avgEntry: "0.001",
+    liqPrice: "0.001",
+    marketMargin: "0.001",
+    "u&pl": "0.001",
+  },
 ]

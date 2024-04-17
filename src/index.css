@@ -12,10 +12,6 @@ code {
     monospace;
 }
 
-html {
-  background-color: white;
-}
-
 @font-face {
   font-family: "Poppins-Regular";
   src: local("Poppins-Regular"), url("./assets/fonts/Poppins-Regular.ttf") format('truetype');

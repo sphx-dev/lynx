@@ -13,6 +13,7 @@ import {
 } from "@rainbow-me/rainbowkit"
 import { ThemeProvider } from "styled-components"
 import Header from "./components/Header"
+import Footer from "./sections/footer"
 import { configureChains, createConfig, WagmiConfig } from "wagmi"
 import { avalanche, avalancheFuji } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
@@ -49,6 +50,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <Header />
           {content}
+          <Footer />
         </ThemeProvider>
       </RainbowKitProvider>
     </WagmiConfig>
