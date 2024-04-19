@@ -12,7 +12,6 @@ const StyledHeader = styled.header`
   background-position: top;
   width: 320px;
   height: 100px;
-  margin-left: 10px;
   margin-top: -5px;
 `
 
@@ -27,6 +26,7 @@ const Button = styled.div`
   color: ${({ theme }) => theme.colors.common.palette.secondary["700"]};
   ${({ theme }) => theme.fonts.typography.header};
   cursor: pointer;
+  display: flex;
   img {
     margin-right: 4px;
     margin-bottom: 2px;

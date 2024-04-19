@@ -14,6 +14,7 @@ const Wrapper = styled.nav`
   padding: 8px 30px;
   gap: 20px;
   flex: 1;
+  box-shadow: 0px 4px 8px 0px #00000040;
 `
 const StyledLink = styled(NavLink)`
   ${({ theme }) => theme.fonts.typography.navigation}

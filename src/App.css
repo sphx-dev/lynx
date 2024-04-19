@@ -53,6 +53,9 @@ body {
 html { height: 100%; }
 body {height: 100%; overflow-y: auto }
 
+::-webkit-scrollbar {
+  display: none;
+}
 .custom-tab-list {
   display: flex;
   width: 100%;
@@ -65,4 +68,3 @@ body {height: 100%; overflow-y: auto }
 .custom-tab__active {
   background: none;
 }
-

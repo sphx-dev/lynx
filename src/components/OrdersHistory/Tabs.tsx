@@ -60,7 +60,7 @@ const TableTabs = () => {
   const { themeColors } = useTheme()
 
   return (
-    <Stack style={{ flex: "0 1 auto" }}>
+    <Stack spacing={0} style={{ flex: "0 1 auto", paddingBottom: "40px" }}>
       <Tabs>
         {tabsContent.map(({ icon, title }, index) => (
           <Tab

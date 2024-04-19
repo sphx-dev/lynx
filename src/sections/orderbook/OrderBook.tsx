@@ -34,8 +34,9 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
     levels: number[][],
     orderType: OrderType = OrderType.BIDS,
   ): React.ReactNode => {
-    const sortedLevelsByPrice: number[][] = [...levels].sort(
-      (currentLevel: number[], nextLevel: number[]): number => {
+    const sortedLevelsByPrice: number[][] = levels
+      .slice(0, 12)
+      .sort((currentLevel: number[], nextLevel: number[]): number => {
         let result: number = 0
         if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
           result = nextLevel[0] - currentLevel[0]
@@ -43,8 +44,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
           result = currentLevel[0] - nextLevel[0]
         }
         return result
-      },
-    )
+      })
 
     return sortedLevelsByPrice.map((level, idx) => {
       const calculatedTotal: number = level[2]

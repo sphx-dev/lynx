@@ -80,7 +80,6 @@ const TakeProfitStopLossSelect: React.FC = () => {
       ...styles,
       color: "#bbe1fa",
       display: "block",
-      border: `2px solid ${appTheme.colors.selectedTheme.border.default}`,
       marginRight: "8px",
       paddingLeft: "2px",
       paddingBottom: "0px",
