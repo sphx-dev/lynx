@@ -23,9 +23,9 @@ export const getOrderBook = createAsyncThunk(
     const opts = {
       withCredentials: true,
     }
-    // const response = await axios.get(`${API_URL}/orderbook/`, opts)
+    const response = await axios.get(`${API_URL}/orderbook/`, opts)
     // The value ` action payload
-    // return response.data
+    return response.data
   },
 )
 
@@ -48,6 +48,7 @@ export const orderBookSlice = createSlice({
       })
       .addCase(getOrderBook.fulfilled, (state, action) => {
         state.status = "idle"
+        console.log(action.payload)
         let bids = action.payload.bids
         bids = ordersToArray(bids)
         bids = bids.reverse()

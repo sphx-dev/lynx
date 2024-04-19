@@ -7,11 +7,12 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   border-color: #263946;
+    padding: 10px;
 
-  @media only screen and (min-width: 800px) {
-    flex-direction: row;
-    justify-content: center;
-  }
+  //@media only screen and (min-width: 800px) {
+  //  flex-direction: row;
+  //  justify-content: center;
+  //}
 `
 
 export const TableContainer = styled.div`
@@ -20,7 +21,7 @@ export const TableContainer = styled.div`
   flex-direction: column;
   color: #bfc1c8;
 
-  @media only screen and (min-width: 800px) {
-    width: 50%;
-  }
+  //@media only screen and (min-width: 800px) {
+  //  width: 50%;
+  //}
 `

@@ -1,11 +1,17 @@
 import React, { FunctionComponent } from "react"
 import { Container } from "./TitleRowStyle"
 import { MOBILE_WIDTH } from "../../constants"
+import { Text } from "../../components"
+import styled from "styled-components"
 
 interface TitleRowProps {
   reversedFieldsOrder?: boolean
   windowWidth: number
 }
+
+const Label = styled.div`
+  flex: 1;
+`
 
 const TitleRow: FunctionComponent<TitleRowProps> = ({
   reversedFieldsOrder = false,
@@ -13,19 +19,16 @@ const TitleRow: FunctionComponent<TitleRowProps> = ({
 }) => {
   return (
     <Container data-testid="title-row">
-      {reversedFieldsOrder || windowWidth < MOBILE_WIDTH ? (
-        <>
-          <span>PRICE</span>
-          <span>SIZE</span>
-          {/* <span>TOTAL</span> */}
-        </>
-      ) : (
-        <>
-          {/* <span>TOTAL</span> */}
-          <span>SIZE</span>
-          <span>PRICE</span>
-        </>
-      )}
+      <Label>
+        <Text variant="textXs" color="secondaryLink">
+          PRICE ETH
+        </Text>
+      </Label>
+      <Label>
+        <Text variant="textXs" color="secondaryLink">
+          AMOUNT
+        </Text>
+      </Label>
     </Container>
   )
 }

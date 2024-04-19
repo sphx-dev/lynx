@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from "react"
 import { PriceLevelContainer } from "./PriceLevelRowStyle"
 import { MOBILE_WIDTH } from "../../constants"
+import { Text } from "../../components"
+import styled from "styled-components"
 
 interface PriceLevelRowProps {
   total: string
@@ -9,6 +11,10 @@ interface PriceLevelRowProps {
   reversedFieldsOrder: boolean
   windowWidth: number
 }
+
+const Label = styled.div`
+  flex: 1;
+`
 
 const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
   total,
@@ -23,19 +29,14 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
       $isRight={!reversedFieldsOrder}
       $windowWidth={windowWidth}
     >
-      {reversedFieldsOrder || windowWidth < MOBILE_WIDTH ? (
-        <>
-          <span className="price">{price}</span>
-          <span>{size}</span>
-          {/* <span>{total}</span> */}
-        </>
-      ) : (
-        <>
-          {/* <span>{total}</span> */}
-          <span>{size}</span>
-          <span className="price">{price}</span>
-        </>
-      )}
+      <>
+        <Label>
+          <Text variant="textNumMd">${size}</Text>
+        </Label>
+        <Label>
+          <Text variant="textNumMd">{price}</Text>
+        </Label>
+      </>
     </PriceLevelContainer>
   )
 }

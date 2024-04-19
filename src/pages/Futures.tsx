@@ -9,12 +9,25 @@ import OrdersHistory from "../components/OrdersHistory"
 import { Stack } from "../components"
 import PriceBorder from "../sections/PriceBorder"
 import Group from "../components/Group"
+import TabComponent from "../components/Tab/Tab";
+import Surface from "../Layouts/Surface";
 
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   min-height: calc(100vh - 28px - 95px);
 `
+
+const tabs = [
+  {
+    title: "Order book",
+    content: <OrderBook windowWidth={2000} />,
+  },
+  {
+    title: "Trades",
+    content: <h1>No Data</h1>,
+  },
+]
 const Futures = () => {
   return (
     <Wrapper>
@@ -26,7 +39,9 @@ const Futures = () => {
             <TradingViewContainer />
             <OrdersHistory />
           </Stack>
-          <OrderBook windowWidth={2000} />
+          <Surface style={{ width: "320px" }}>
+            <TabComponent tabs={tabs} />
+          </Surface>
         </Group>
       </Stack>
     </Wrapper>

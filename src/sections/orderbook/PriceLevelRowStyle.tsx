@@ -7,8 +7,6 @@ interface PriceLevelContainerProps {
 
 export const PriceLevelContainer = styled.div<PriceLevelContainerProps>`
   display: flex;
-  justify-content: space-around;
-  background-color: #121723;
   position: relative;
 
   &:after {
@@ -40,5 +38,5 @@ export const PriceLevelContainer = styled.div<PriceLevelContainerProps>`
 `
 
 export const PriceLevelRowContainer = styled.div`
-  margin: 0.155em 0;
+  padding: 5px 0;
 `

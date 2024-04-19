@@ -8352,7 +8352,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:2.1.0":
+"clsx@npm:2.1.0, clsx@npm:^2.0.0":
   version: 2.1.0
   resolution: "clsx@npm:2.1.0"
   checksum: 10c0/c09c00ad14f638366ca814097e6cab533dfa1972a358da5b557be487168acbb25b4c1395e89ffa842a8a61ba87a462d2b4885bc9d4f8410b598f3cb339599cdb
@@ -12948,6 +12948,7 @@ __metadata:
     react-redux: "npm:^8.0.1"
     react-router-dom: "npm:^6.22.3"
     react-select: "npm:^5.8.0"
+    react-tabs: "npm:^6.0.2"
     storybook: "npm:^8.0.5"
     styled-components: "npm:^6.0.7"
     typescript: "npm:^5.0.2"
@@ -14478,7 +14479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.0, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -15087,6 +15088,18 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/6d66f3bdb65e1ec79089f80314da97c9a005087a04ee034255a5de129a4c0d9fd0bf99fa7bf642781ac2dc745ca687aae3de082bd8afdd0d117bc953241e15ad
+  languageName: node
+  linkType: hard
+
+"react-tabs@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "react-tabs@npm:6.0.2"
+  dependencies:
+    clsx: "npm:^2.0.0"
+    prop-types: "npm:^15.5.0"
+  peerDependencies:
+    react: ^18.0.0
+  checksum: 10c0/caa17465d1482b07dd9c59d27caf7f4b8e4025f17a22ba49dee373faee6f05955de9400e02053cf8295e6ac05351633641e49cbc988d5a56e6e91f1930f8d94a
   languageName: node
   linkType: hard
 
