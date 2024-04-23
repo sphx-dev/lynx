@@ -1,7 +1,6 @@
 import React, { FC } from "react"
 import IconWrapper, { IIconWrapperProps, TSize } from "./IconWrapper"
 import { icons } from "../../assets/icons"
-import useTheme from "../../hooks/useTheme";
 
 interface IIconProps extends Omit<IIconWrapperProps, "size"> {
   icon: keyof typeof icons
@@ -19,7 +18,6 @@ const Icon: FC<IIconProps> = ({
   onClick,
   ...props
 }) => {
-  const { themeColors } = useTheme()
   if (!icon) {
     return null
   }
@@ -30,7 +28,7 @@ const Icon: FC<IIconProps> = ({
       onClick={onClick}
       size={size}
       fill={fill}
-      stroke={stroke || themeColors.text.primary}
+      stroke={stroke}
       strokeWidth={strokeWidth}
       hoverColor={hoverColor}
       {...props}
