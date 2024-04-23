@@ -1,9 +1,9 @@
 import React, { useState, FocusEvent, ReactElement, ReactNode } from "react"
 import styled from "styled-components"
-import { getThemeColors, ThemeColors } from "../theme"
-import Stack from "./Stack"
-import Text from "./Text"
-import useTheme from "../hooks/useTheme"
+import { getThemeColors, ThemeColors } from "../../theme"
+import Stack from "../Stack"
+import Text from "../Text"
+import useTheme from "../../hooks/useTheme"
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: string
