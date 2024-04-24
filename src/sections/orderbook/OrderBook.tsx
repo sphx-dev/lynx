@@ -41,7 +41,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
         if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
           result = nextLevel.price - currentLevel.price
         } else {
-          result = currentLevel.price - nextLevel.price
+          result = nextLevel.price - currentLevel.price
         }
         return result
       })
@@ -82,13 +82,13 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
             {windowWidth > MOBILE_WIDTH && (
               <TitleRow windowWidth={windowWidth} reversedFieldsOrder={false} />
             )}
-            <div>{buildPriceLevels(book.bids, OrderType.BIDS)}</div>
+            <div>{buildPriceLevels(book.asks, OrderType.ASKS)}</div>
           </TableContainer>
           <Divider />
           {/*<Spread bids={book.bids} asks={book.asks} />*/}
           <TableContainer>
             {/*<TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />*/}
-            <div>{buildPriceLevels(book.asks, OrderType.ASKS)}</div>
+            <div>{buildPriceLevels(book.bids, OrderType.BIDS)}</div>
           </TableContainer>
         </Stack>
       ) : (
