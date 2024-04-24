@@ -18,7 +18,7 @@ const darkTheme = {
   border: {
     default: common.palette.surface["700"],
     hovered: common.greenPlaceholder,
-    active: '#13DCDE',
+    active: "#13DCDE",
   },
   tab: {
     activeBackground: common.green2,
@@ -88,6 +88,9 @@ const darkTheme = {
     secondaryActive: common.palette.secondary["600"],
     secondaryLink: common.palette.secondary["700"],
     primaryLink: common.palette.primary["500"],
+  },
+  actionBar: {
+    text: common.gray,
   },
 }
 

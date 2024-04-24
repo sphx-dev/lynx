@@ -60,7 +60,21 @@ const StyledButton = styled.button<CssProps>`
       : getThemeColors(theme).text.primary};
   width: ${({ fluid }) => (fluid ? "100%" : "auto")};
   outline: none;
+  cursor: pointer;
 `
+const StyledWrapper = styled.span`
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: inline-block;
+  padding: 2px;
+  border-radius: 1000px;
+  width: 100%;
+  align-self: center;
+`
+
+const Wrapper = ({ variant, children }: PropsWithChildren<Props>) => {
+  if (variant === "primary") return <StyledWrapper>{children}</StyledWrapper>
+  return <>{children}</>
+}
 
 const Button = ({
   children,
@@ -68,9 +82,11 @@ const Button = ({
   ...props
 }: PropsWithChildren<Props>) => {
   return (
-    <StyledButton {...props} variant={variant}>
-      {children}
-    </StyledButton>
+    <Wrapper variant={variant}>
+      <StyledButton {...props} variant={variant}>
+        {children}
+      </StyledButton>
+    </Wrapper>
   )
 }
 

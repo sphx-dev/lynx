@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   border-width: 1px 0px 1px 0px;
   border-style: solid;
   border-color: #2d5a62;
+  margin-bottom: 12px;
 `
 const Divider = styled.div`
   width: 1px;

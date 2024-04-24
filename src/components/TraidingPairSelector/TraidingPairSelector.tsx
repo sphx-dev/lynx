@@ -1,9 +1,19 @@
 // TradingPairSelector.tsx
 import React from "react"
-import Select, { SingleValue, StylesConfig } from "react-select"
+import Select, { SingleValue, StylesConfig, components } from "react-select"
 import { useTheme } from "styled-components"
 import { getThemeColors } from "../../theme"
 import { OptionType } from "../Select"
+import Icon from "../Icon"
+
+const { Control } = components
+
+const IconControl = ({ children, ...props }: any) => (
+  <Control {...props}>
+    <Icon icon="PairSelectIcon" stroke="none" size="medium" />
+    {children}
+  </Control>
+)
 
 interface TradingPairOption {
   value: string
@@ -89,6 +99,7 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
       classNamePrefix="select"
       placeholder="Select trading pair..."
       isSearchable={false}
+      components={{ Control: IconControl }}
     />
   )
 }

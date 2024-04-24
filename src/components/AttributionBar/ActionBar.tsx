@@ -8,7 +8,7 @@ import Group from "../Group"
 import { useTranslation } from "react-i18next"
 
 // Define styled components for the action bar and icons
-const ActionBarContainer = styled(Group)`
+export const ActionBarContainer = styled(Group)`
   --height: 52px;
   border-radius: calc(var(--height) / 2); /* Rounded corners */
   padding: 0 24px; /* Spacing around the icons */

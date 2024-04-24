@@ -18,7 +18,7 @@ const lightTheme = {
   border: {
     default: common.greenPlaceholder,
     hovered: common.lightGreen,
-    active: '#13DCDE',
+    active: "#13DCDE",
   },
   tab: {
     activeBackground: common.green2,
@@ -88,6 +88,9 @@ const lightTheme = {
     secondaryActive: common.palette.secondary["600"],
     secondaryLink: common.palette.secondary["700"],
     primaryLink: common.palette.primary["500"],
+  },
+  actionBar: {
+    text: common.gray,
   },
 }
 
