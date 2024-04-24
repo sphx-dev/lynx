@@ -4,6 +4,13 @@ import { RootState, AppThunk } from "./store"
 import { update } from "./accountSlice"
 import { ORDERBOOK_LEVELS, API_URL } from "../constants"
 
+export interface Order {
+  quantity: number
+  price: number
+  totalSum: number
+  depth: number
+}
+
 export interface OrderBookState {
   bids: any
   asks: any
@@ -50,16 +57,13 @@ export const orderBookSlice = createSlice({
         state.status = "idle"
         console.log(action.payload)
         let bids = action.payload.bids
-        bids = ordersToArray(bids)
         bids = bids.reverse()
         bids = bids.slice(0, ORDERBOOK_LEVELS)
         bids = addTotalSums(bids)
         bids = addDepths(bids)
 
         let asks = action.payload.asks
-        asks = ordersToArray(asks)
         asks = asks.slice(0, ORDERBOOK_LEVELS)
-
         asks = addTotalSums(asks)
         asks = addDepths(asks)
 
@@ -84,34 +88,34 @@ const ordersToArray = (orders: any): any => {
   return orderArray
 }
 
-const addTotalSums = (orders: number[][]): number[][] => {
+const addTotalSums = (orders: Order[]): Order[] => {
   const totalSums: number[] = []
 
-  return orders.map((order: number[], idx) => {
-    const size: number = order[1]
-    if (typeof order[2] !== "undefined") {
+  return orders.map((order, idx) => {
+    const { quantity } = order
+    if (typeof order.totalSum !== "undefined") {
       return order
     } else {
-      const updatedLevel = [...order]
-      const totalSum: number = idx === 0 ? size : size + totalSums[idx - 1]
-      updatedLevel[2] = totalSum
+      const updatedLevel = { ...order }
+      const totalSum: number = idx === 0 ? quantity : quantity + totalSums[idx - 1]
+      updatedLevel.totalSum = totalSum
       totalSums.push(totalSum)
       return updatedLevel
     }
   })
 }
 
-const addDepths = (orders: number[][]): number[][] => {
-  const totalSums: number[] = orders.map((order) => order[2])
+const addDepths = (orders: Order[]) => {
+  const totalSums: number[] = orders.map((order) => order.totalSum)
   const maxTotal = Math.max.apply(Math, totalSums)
   return orders.map((order) => {
-    if (typeof order[3] !== "undefined") {
+    if (typeof order.depth !== "undefined") {
       return order
     } else {
-      const calculatedTotal: number = order[2]
+      const calculatedTotal: number = order.totalSum
       const depth = (calculatedTotal / maxTotal) * 100
-      const updatedOrder = [...order]
-      updatedOrder[3] = depth
+      const updatedOrder = { ...order }
+      updatedOrder.depth = depth
       return updatedOrder
     }
   })

@@ -31,10 +31,13 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
     >
       <>
         <Label>
-          <Text variant="textNumMd">${size}</Text>
+          <Text variant="textNumMd">${price}</Text>
         </Label>
         <Label>
-          <Text variant="textNumMd">{price}</Text>
+          <Text variant="textNumMd">{size}</Text>
+        </Label>
+        <Label>
+          <Text variant="textNumMd">${total}</Text>
         </Label>
       </>
     </PriceLevelContainer>
