@@ -57,13 +57,14 @@ export const orderBookSlice = createSlice({
         state.status = "idle"
         console.log(action.payload)
         let bids = action.payload.bids
-        bids = bids.reverse()
+        // bids = bids.reverse()
         bids = bids.slice(0, ORDERBOOK_LEVELS)
         bids = addTotalSums(bids)
         bids = addDepths(bids)
 
         let asks = action.payload.asks
         asks = asks.slice(0, ORDERBOOK_LEVELS)
+        asks = asks.reverse()
         asks = addTotalSums(asks)
         asks = addDepths(asks)
 
