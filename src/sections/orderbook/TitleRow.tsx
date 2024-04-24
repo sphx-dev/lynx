@@ -29,6 +29,11 @@ const TitleRow: FunctionComponent<TitleRowProps> = ({
           AMOUNT
         </Text>
       </Label>
+      <Label>
+        <Text variant="textXs" color="secondaryLink">
+          TOTAL
+        </Text>
+      </Label>
     </Container>
   )
 }

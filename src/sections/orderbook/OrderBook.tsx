@@ -1,6 +1,6 @@
 import { useState, useEffect, FunctionComponent } from "react"
 import { useAppSelector, useAppDispatch } from "../../hooks"
-import { getOrderBook, orderBook } from "../../state/orderBookSlice"
+import {getOrderBook, Order, orderBook} from "../../state/orderBookSlice"
 import TitleRow from "./TitleRow"
 import DepthVisualizer from "./DepthVisualizer"
 import PriceLevelRow from "./PriceLevelRow"
@@ -31,27 +31,27 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   }, [])
 
   const buildPriceLevels = (
-    levels: number[][],
+    levels: Order[],
     orderType: OrderType = OrderType.BIDS,
   ): React.ReactNode => {
-    const sortedLevelsByPrice: number[][] = levels
+    const sortedLevelsByPrice = levels
       .slice(0, 12)
-      .sort((currentLevel: number[], nextLevel: number[]): number => {
+      .sort((currentLevel: Order, nextLevel: Order): number => {
         let result: number = 0
         if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
-          result = nextLevel[0] - currentLevel[0]
+          result = nextLevel.price - currentLevel.price
         } else {
-          result = currentLevel[0] - nextLevel[0]
+          result = currentLevel.price - nextLevel.price
         }
         return result
       })
 
     return sortedLevelsByPrice.map((level, idx) => {
-      const calculatedTotal: number = level[2]
+      const calculatedTotal: number = level.totalSum
       const total: string = formatNumber(calculatedTotal)
-      const depth = level[3]
-      const size: string = formatNumber(level[1])
-      const price: string = formatPrice(level[0])
+      const depth = level.depth
+      const size: string = formatNumber(level.quantity)
+      const price: string = formatPrice(level.price)
 
       return (
         <PriceLevelRowContainer key={idx + depth}>

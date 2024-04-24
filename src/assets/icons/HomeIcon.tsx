@@ -6,16 +6,16 @@ const HomeIcon = (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clip-path="url(#clip0_10_244)">
+    <g clipPath="url(#clip0_10_244)">
       <path
         d="M11.7391 6.72921L5.99999 0.770874L0.260864 6.72921"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M1.30432 5.64587V13.2292H4.43476V8.35421H7.56519V13.2292H10.6956V5.64587"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
     <defs>
