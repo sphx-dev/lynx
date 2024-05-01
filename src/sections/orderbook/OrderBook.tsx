@@ -1,14 +1,18 @@
-import { useState, useEffect, FunctionComponent } from "react"
-import { useAppSelector, useAppDispatch } from "../../hooks"
-import { getOrderBook, Order, orderBook } from "../../state/orderBookSlice"
-import TitleRow from "./TitleRow"
-import DepthVisualizer from "./DepthVisualizer"
-import PriceLevelRow from "./PriceLevelRow"
-import { Container, TableContainer } from "./OrderBookStyle"
-import { PriceLevelRowContainer } from "./PriceLevelRowStyle"
-import { MOBILE_WIDTH } from "../../constants"
-import { Stack } from "../../components"
-import Divider from "./Divider"
+import { useEffect, FunctionComponent } from "react";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import {
+  getOrderBook,
+  orderBook,
+  OrderWithDepth,
+} from "../../state/orderBookSlice";
+import TitleRow from "./TitleRow";
+import DepthVisualizer from "./DepthVisualizer";
+import PriceLevelRow from "./PriceLevelRow";
+import { Container, TableContainer } from "./OrderBookStyle";
+import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
+import { MOBILE_WIDTH } from "../../constants";
+import { Stack } from "../../components";
+import Divider from "./Divider";
 
 export enum OrderType {
   BIDS,
@@ -16,42 +20,43 @@ export enum OrderType {
 }
 
 interface OrderBookProps {
-  windowWidth: number
+  windowWidth: number;
 }
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
-  const book = useAppSelector(orderBook)
-  const dispatch = useAppDispatch()
-  const [orderbook, setOrderBook] = useState([])
+  const book = useAppSelector(orderBook);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setInterval(() => {
-      dispatch(getOrderBook())
-    }, 1000)
-  }, [])
+      dispatch(getOrderBook());
+    }, 1000);
+  }, []);
 
   const buildPriceLevels = (
-    levels: Order[],
-    orderType: OrderType = OrderType.BIDS,
+    levels: OrderWithDepth[],
+    orderType: OrderType = OrderType.BIDS
   ): React.ReactNode => {
     const sortedLevelsByPrice = levels
       .slice(0, 12)
-      .sort((currentLevel: Order, nextLevel: Order): number => {
-        let result: number = 0
-        if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
-          result = nextLevel.price - currentLevel.price
-        } else {
-          result = nextLevel.price - currentLevel.price
+      .sort(
+        (currentLevel: OrderWithDepth, nextLevel: OrderWithDepth): number => {
+          let result: number = 0;
+          if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
+            result = nextLevel.price - currentLevel.price;
+          } else {
+            result = nextLevel.price - currentLevel.price;
+          }
+          return result;
         }
-        return result
-      })
+      );
 
     return sortedLevelsByPrice.map((level, idx) => {
-      const calculatedTotal: number = level.totalSum
-      const total: string = formatNumber(calculatedTotal)
-      const depth = level.depth
-      const size: string = formatNumber(level.quantity)
-      const price: string = formatPrice(level.price)
+      const calculatedTotal: number = level.totalSum;
+      const total: string = formatNumber(calculatedTotal);
+      const depth = level.depth;
+      const size: string = formatNumber(level.quantity);
+      const price: string = formatPrice(level.price);
 
       return (
         <PriceLevelRowContainer key={idx + depth}>
@@ -70,9 +75,9 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
             windowWidth={windowWidth}
           />
         </PriceLevelRowContainer>
-      )
-    })
-  }
+      );
+    });
+  };
 
   return (
     <Container>
@@ -97,18 +102,18 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
         </div>
       )}
     </Container>
-  )
-}
+  );
+};
 
 const formatPrice = (arg: number): string => {
   return arg.toLocaleString("en", {
     useGrouping: true,
     minimumFractionDigits: 2,
-  })
-}
+  });
+};
 
 const formatNumber = (arg: number): string => {
-  return new Intl.NumberFormat("en-US").format(arg)
-}
+  return new Intl.NumberFormat("en-US").format(arg);
+};
 
-export default OrderBook
+export default OrderBook;

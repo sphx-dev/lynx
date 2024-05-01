@@ -12,7 +12,7 @@ interface Order<T> {
 interface OrderWithTotal extends Order<number> {
   totalSum: number;
 }
-interface OrderWithDepth extends OrderWithTotal {
+export interface OrderWithDepth extends OrderWithTotal {
   depth: number;
 }
 
