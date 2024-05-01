@@ -1,27 +1,32 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import axios from "axios"
-import { RootState, AppThunk } from "./store"
-import { update } from "./accountSlice"
-import { ORDERBOOK_LEVELS, API_URL } from "../constants"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { RootState } from "./store";
+import { update } from "./accountSlice";
+import { ORDERBOOK_LEVELS, API_URL } from "../constants";
 
-export interface Order {
-  quantity: number
-  price: number
-  totalSum: number
-  depth: number
+interface Order<T> {
+  quantity: T;
+  price: T;
+}
+
+interface OrderWithTotal extends Order<number> {
+  totalSum: number;
+}
+interface OrderWithDepth extends OrderWithTotal {
+  depth: number;
 }
 
 export interface OrderBookState {
-  bids: any
-  asks: any
-  status: "idle" | "loading" | "failed"
+  bids: OrderWithDepth[];
+  asks: OrderWithDepth[];
+  status: "idle" | "loading" | "failed";
 }
 
 const initialState: OrderBookState = {
   bids: [],
   asks: [],
   status: "idle",
-}
+};
 
 // dispatch(getOrderBook())
 export const getOrderBook = createAsyncThunk(
@@ -29,20 +34,20 @@ export const getOrderBook = createAsyncThunk(
   async () => {
     const opts = {
       withCredentials: true,
-    }
-    const response = await axios.get(`${API_URL}/orderbook/`, opts)
+    };
+    const response = await axios.get(`${API_URL}/orderbook?ticker=BTCUSDT.P`);
     // The value ` action payload
-    return response.data
-  },
-)
+    return response.data;
+  }
+);
 
 export const orderBookSlice = createSlice({
   name: "orderbook",
   initialState,
   reducers: {
     clear: (state) => {
-      state.bids = []
-      state.asks = []
+      state.bids = [];
+      state.asks = [];
     },
   },
 
@@ -51,77 +56,65 @@ export const orderBookSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getOrderBook.pending, (state) => {
-        state.status = "loading"
+        state.status = "loading";
       })
       .addCase(getOrderBook.fulfilled, (state, action) => {
-        state.status = "idle"
-        console.log(action.payload)
-        let bids = action.payload.bids
-        // bids = bids.reverse()
-        bids = bids.slice(0, ORDERBOOK_LEVELS)
-        bids = addTotalSums(bids)
-        bids = addDepths(bids)
+        state.status = "idle";
+        let bids = action.payload.bids;
+        bids = bids.slice(0, ORDERBOOK_LEVELS);
+        bids = formatToNumbers(bids);
+        bids = addTotalSums(bids);
+        bids = addDepths(bids);
 
-        let asks = action.payload.asks
-        asks = asks.slice(0, ORDERBOOK_LEVELS)
-        asks = asks.reverse()
-        asks = addTotalSums(asks)
-        asks = addDepths(asks)
+        let asks = action.payload.asks;
+        asks = asks.slice(0, ORDERBOOK_LEVELS);
+        asks = asks.reverse();
+        asks = formatToNumbers(asks);
+        asks = addTotalSums(asks);
+        asks = addDepths(asks);
 
-        state.bids = bids
-        state.asks = asks
-
-        // const sumBids = addTotalSums(state.bids)
-        // console.log(sumBids)
-        update(action)
+        state.bids = bids;
+        state.asks = asks;
+        update(action);
       })
       .addCase(getOrderBook.rejected, (state) => {
-        state.status = "failed"
-      })
+        state.status = "failed";
+      });
   },
-})
+});
 
-const ordersToArray = (orders: any): any => {
-  const orderArray: any = []
-  for (const [key, value] of Object.entries(orders)) {
-    orderArray.push([Number(key), Number(value)])
-  }
-  return orderArray
-}
-
-const addTotalSums = (orders: Order[]): Order[] => {
-  const totalSums: number[] = []
+const addTotalSums = (orders: Order<number>[]): OrderWithTotal[] => {
+  const totalSums: number[] = [];
 
   return orders.map((order, idx) => {
-    const { quantity } = order
-    if (typeof order.totalSum !== "undefined") {
-      return order
-    } else {
-      const updatedLevel = { ...order }
-      const totalSum: number = idx === 0 ? quantity : quantity + totalSums[idx - 1]
-      updatedLevel.totalSum = totalSum
-      totalSums.push(totalSum)
-      return updatedLevel
-    }
-  })
-}
+    const { quantity } = order;
+    const updatedLevel: OrderWithTotal = { ...order, totalSum: 0 };
+    const totalSum: number =
+      idx === 0 ? quantity : quantity + totalSums[idx - 1];
+    updatedLevel.totalSum = totalSum;
+    totalSums.push(totalSum);
+    return updatedLevel;
+  });
+};
 
-const addDepths = (orders: Order[]) => {
-  const totalSums: number[] = orders.map((order) => order.totalSum)
-  const maxTotal = Math.max.apply(Math, totalSums)
+const addDepths = (orders: OrderWithTotal[]): OrderWithDepth[] => {
+  const totalSums: number[] = orders.map((order) => order.totalSum);
+  const maxTotal = Math.max.apply(Math, totalSums);
   return orders.map((order) => {
-    if (typeof order.depth !== "undefined") {
-      return order
-    } else {
-      const calculatedTotal: number = order.totalSum
-      const depth = (calculatedTotal / maxTotal) * 100
-      const updatedOrder = { ...order }
-      updatedOrder.depth = depth
-      return updatedOrder
-    }
-  })
-}
+    const calculatedTotal: number = order.totalSum;
+    const depth = (calculatedTotal / maxTotal) * 100;
+    const updatedOrder: OrderWithDepth = { ...order, depth: 0 };
+    updatedOrder.depth = depth;
+    return updatedOrder;
+  });
+};
 
-export const { clear } = orderBookSlice.actions
-export const orderBook = (state: RootState) => state.orderBook
-export default orderBookSlice.reducer
+const formatToNumbers = (orders: Order<string>[]): Order<number>[] =>
+  orders.map((bind) => ({
+    quantity: +bind.quantity,
+    price: +bind.price,
+  }));
+
+export const { clear } = orderBookSlice.actions;
+export const orderBook = (state: RootState) => state.orderBook;
+export default orderBookSlice.reducer;
