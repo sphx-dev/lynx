@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import toast from "react-hot-toast";
 import { placeLimitOrder, placeMarketOrder } from "../../state/orderSlice";
@@ -22,6 +22,7 @@ import TabButton from "../../components/TabButton";
 import useTheme from "../../hooks/useTheme";
 import { useAccount } from "wagmi";
 import { useForm } from "react-hook-form";
+import Colors from "../../theme/colors";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -40,23 +41,24 @@ const StyledButton = styled(Button)`
   padding: 0;
 `;
 
-enum PositionType {
-  LONG = "LONG",
-  SHORT = "SHORT",
+enum OrderType {
+  MARKET = "MARKET",
+  LIMIT = "LIMIT",
+  STOP = "STOP",
 }
 
 const options = [
   {
     label: "Market",
-    value: "market",
+    value: OrderType.MARKET,
   },
   {
     label: "Limit",
-    value: "limit",
+    value: OrderType.LIMIT,
   },
   {
     label: "Stop",
-    value: "stop",
+    value: OrderType.STOP,
   },
 ];
 
@@ -64,22 +66,26 @@ export interface MarketOrderForm {
   volume: number;
   isBuy: boolean;
   leverage: number;
+  price: number | null;
 }
 
 const defaultValues: MarketOrderForm = {
   volume: 0,
   isBuy: false,
   leverage: 1,
+  price: null,
 };
 
 function OrderInput() {
   const dispatch = useAppDispatch();
   const { themeColors } = useTheme();
   const { isConnected } = useAccount();
+  const [orderType, setOrderType] = useState(OrderType.MARKET);
   const { handleSubmit, register, setValue, watch } = useForm({
     defaultValues,
   });
   const notify = () => toast("Order placed");
+  const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
 
   // const submitBuyOrder = () => {
   //   const isBuy = false;
@@ -104,11 +110,13 @@ function OrderInput() {
   // };
   const isBuyPosition = watch("isBuy");
 
-  const handleChangeOrderType = (value: boolean) => setValue("isBuy", value);
+  const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
 
   const placeOrder = (values: MarketOrderForm) => {
-    dispatch(placeMarketOrder(values));
+    const handler =
+      orderType === OrderType.MARKET ? placeMarketOrder : placeLimitOrder;
+    dispatch(handler(values));
   };
 
   return (
@@ -141,7 +149,7 @@ function OrderInput() {
                 <Group spacing={0}>
                   <TabButton
                     active={isBuyPosition}
-                    onClick={() => handleChangeOrderType(true)}
+                    onClick={() => handleChangeOrderSide(true)}
                     type="button"
                     style={{ flex: 1 }}
                   >
@@ -149,7 +157,7 @@ function OrderInput() {
                   </TabButton>
                   <TabButton
                     active={!isBuyPosition}
-                    onClick={() => handleChangeOrderType(false)}
+                    onClick={() => handleChangeOrderSide(false)}
                     type="button"
                     style={{ flex: 1 }}
                   >
@@ -158,7 +166,11 @@ function OrderInput() {
                 </Group>
                 <Container>
                   <Stack spacing={20}>
-                    <Switcher options={options} name="orderType" />
+                    <Switcher
+                      onChange={handleSwitchOrderType}
+                      options={options}
+                      name="orderType"
+                    />
                     {/*<div style={{ position: "relative" }}>*/}
                     {/*  <Input label="Margin" />*/}
                     {/*  <Group style={{ position: "absolute", top: 0, right: 0 }}>*/}
@@ -176,13 +188,18 @@ function OrderInput() {
                     {/*    </Button>*/}
                     {/*  </Group>*/}
                     {/*</div>*/}
-                    <div style={{ position: "relative" }}>
+                    {orderType !== OrderType.MARKET && (
                       <Input
-                        {...register("volume")}
-                        label="Size"
+                        {...register("price")}
+                        label="Price"
                         rightSide="USD"
                       />
-                    </div>
+                    )}
+                    <Input
+                      {...register("volume")}
+                      label="Size"
+                      rightSide="USD"
+                    />
                     <div style={{ position: "relative" }}>
                       <Group align="end">
                         <Input
@@ -220,7 +237,17 @@ function OrderInput() {
                     </div>
                     <TakeProfitStopLossSelect />
                     {!isConnected && <ConnectButton />}
-                    {isConnected && <Button>Place Order</Button>}
+                    {isConnected && (
+                      <Button
+                        style={{
+                          backgroundColor: isBuyPosition
+                            ? Colors.common.positive1
+                            : Colors.common.negative3,
+                        }}
+                      >
+                        Place Order
+                      </Button>
+                    )}
                     <Summary />
                   </Stack>
                 </Container>

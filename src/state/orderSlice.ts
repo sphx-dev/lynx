@@ -3,6 +3,7 @@ import { RootState } from "./store";
 import axios from "axios";
 import { API_URL } from "../constants";
 import { MarketOrderForm } from "../sections/order/OrderInput";
+import {baseAxios} from "../utils/axios";
 
 export interface OrderState {
   done: Array<any>;
@@ -38,12 +39,12 @@ export const placeLimitOrder = createAsyncThunk(
     const body = {
       price: data?.price,
       volume: data?.volume,
-      isBuy: data?.isBuy,
+      is_buy: data?.isBuy,
     };
-    const opts = {
-      withCredentials: true,
-    };
-    const response = await axios.post(`${API_URL}/order/limit`, body, opts);
+    const response = await baseAxios.post(
+      `${API_URL}/order/limit?ticker=BTCUSDT.P`,
+      body
+    );
     return response.data;
   }
 );
