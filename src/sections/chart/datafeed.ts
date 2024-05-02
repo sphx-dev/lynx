@@ -6,7 +6,7 @@ const API_ENDPOINT = "https://benchmarks.pyth.network/v1/shims/tradingview"
 const lastBarsCache = new Map()
 
 const datafeed = {
-  onReady: (callback) => {
+  onReady: (callback: any) => {
     console.log("[onReady]: Method call")
     fetch(`${API_ENDPOINT}/config`).then((response) => {
       response.json().then((configurationData) => {
@@ -14,7 +14,12 @@ const datafeed = {
       })
     })
   },
-  searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
+  searchSymbols: (
+    userInput: any,
+    exchange: any,
+    symbolType: any,
+    onResultReadyCallback: any,
+  ) => {
     console.log("[searchSymbols]: Method call")
     fetch(`${API_ENDPOINT}/search?query=${userInput}`).then((response) => {
       response.json().then((data) => {
@@ -23,9 +28,9 @@ const datafeed = {
     })
   },
   resolveSymbol: (
-    symbolName,
-    onSymbolResolvedCallback,
-    onResolveErrorCallback,
+    symbolName: any,
+    onSymbolResolvedCallback: any,
+    onResolveErrorCallback: any,
   ) => {
     console.log("[resolveSymbol]: Method call", symbolName)
     fetch(`${API_ENDPOINT}/symbols?symbol=${symbolName}`).then((response) => {
@@ -42,11 +47,11 @@ const datafeed = {
     })
   },
   getBars: (
-    symbolInfo,
-    resolution,
-    periodParams,
-    onHistoryCallback,
-    onErrorCallback,
+    symbolInfo: any,
+    resolution: any,
+    periodParams: any,
+    onHistoryCallback: any,
+    onErrorCallback: any,
   ) => {
     const { from, to, firstDataRequest } = periodParams
     console.log("[getBars]: Method call", symbolInfo, resolution, from, to)
@@ -84,11 +89,11 @@ const datafeed = {
     })
   },
   subscribeBars: (
-    symbolInfo,
-    resolution,
-    onRealtimeCallback,
-    subscriberUID,
-    onResetCacheNeededCallback,
+    symbolInfo: any,
+    resolution: any,
+    onRealtimeCallback: any,
+    subscriberUID: string,
+    onResetCacheNeededCallback: any,
   ) => {
     console.log(
       "[subscribeBars]: Method call with subscriberUID:",
@@ -103,7 +108,7 @@ const datafeed = {
       lastBarsCache.get(symbolInfo.ticker),
     )
   },
-  unsubscribeBars: (subscriberUID) => {
+  unsubscribeBars: (subscriberUID: string) => {
     console.log(
       "[unsubscribeBars]: Method call with subscriberUID:",
       subscriberUID,

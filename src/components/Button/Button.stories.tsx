@@ -17,7 +17,7 @@ type Story = StoryObj<typeof Button>
 
 export const Primary: Story = {
   render: (args) => (
-    <Button {...args} variant="primary">
+    <Button {...args} pill variant="primary">
       Button
     </Button>
   ),

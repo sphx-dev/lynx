@@ -40,7 +40,7 @@ const Table = ({ data = mockData, columns = mockColumns }: ITableProps) => {
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
+            {headerGroup.headers.map((header: any) => (
               <th>{header.column.columnDef.header}</th>
             ))}
           </tr>

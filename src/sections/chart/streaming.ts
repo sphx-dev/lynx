@@ -53,7 +53,7 @@ function startStreaming(retries = 3, delay = 3000) {
 
       function streamData() {
         reader
-          .read()
+          ?.read()
           .then(({ value, done }) => {
             if (done) {
               console.error("[stream] Streaming ended.")
@@ -138,12 +138,12 @@ export function subscribeOnStream(
   startStreaming()
 }
 
-export function unsubscribeFromStream(subscriberUID: any) {
+export function unsubscribeFromStream(subscriberUID: string) {
   // Find a subscription with id === subscriberUID
   for (const channelString of channelToSubscription.keys()) {
     const subscriptionItem = channelToSubscription.get(channelString)
     const handlerIndex = subscriptionItem.handlers.findIndex(
-      (handler: any) => handler.id === subscriberUID,
+      (handler: { id: string }) => handler.id === subscriberUID,
     )
 
     if (handlerIndex !== -1) {

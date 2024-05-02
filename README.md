@@ -133,6 +133,18 @@ To see our design system in action, run the following command:
   ```sh
   yarn storybook
   ```
+## UI tests
+You can test success rendering all you components from the storybook stories automatically.\
+We are using test-storybook/test-runner & playwright-chromatic packages for it.\
+#### How to run ui-tests:
+Start storybook
+   ```sh
+      yarn storybook
+   ```
+In another terminal run tests:
+```sh
+      yarn test-storybook
+   ```
 ## Localisation
 We use i18next for localisation. To add a new language, add a new JSON file in the `src/locales` directory. The file should be named after the language code, e.g. `en.json` for English. The JSON file should have the following structure:
 ```json

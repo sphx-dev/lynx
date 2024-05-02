@@ -62,17 +62,18 @@ const StyledButton = styled.button<CssProps>`
   outline: none;
   cursor: pointer;
 `
-const StyledWrapper = styled.span`
+const StyledWrapper = styled.span<Partial<CssProps>>`
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: inline-block;
   padding: 2px;
   border-radius: 1000px;
-  width: 100%;
+  width: ${({ fluid }) => (fluid ? "100%" : "auto")};
   align-self: center;
 `
 
-const Wrapper = ({ variant, children }: PropsWithChildren<Props>) => {
-  if (variant === "primary") return <StyledWrapper>{children}</StyledWrapper>
+const Wrapper = ({ variant, children, ...props }: PropsWithChildren<Props>) => {
+  if (variant === "primary")
+    return <StyledWrapper {...props}>{children}</StyledWrapper>
   return <>{children}</>
 }
 
@@ -82,7 +83,7 @@ const Button = ({
   ...props
 }: PropsWithChildren<Props>) => {
   return (
-    <Wrapper variant={variant}>
+    <Wrapper variant={variant} {...props}>
       <StyledButton {...props} variant={variant}>
         {children}
       </StyledButton>

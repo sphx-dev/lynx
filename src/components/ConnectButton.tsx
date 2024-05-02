@@ -1,8 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Button from "./Button"
-import styled from "styled-components"
 import { useTranslation } from "react-i18next"
-import { PropsWithChildren } from "react"
 
 type Size = "small" | "large"
 
