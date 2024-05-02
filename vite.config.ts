@@ -7,6 +7,13 @@ export default defineConfig({
   plugins: [svgr(), react()],
   server: {
     open: true,
+    proxy: {
+      "/orderbook*": {
+        target: "http://127.0.0.1:3110", // Your backend URL
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   build: {
     outDir: "build",

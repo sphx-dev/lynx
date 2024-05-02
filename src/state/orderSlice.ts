@@ -1,14 +1,16 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { RootState } from "./store"
-import axios from "axios"
-import { API_URL } from "../constants"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "./store";
+import axios from "axios";
+import { API_URL } from "../constants";
+import { MarketOrderForm } from "../sections/order/OrderInput";
+import {baseAxios} from "../utils/axios";
 
 export interface OrderState {
-  done: Array<any>
-  order: Object
-  partialOrder: Object
-  quantityProcessed: Number | null
-  status: "idle" | "loading" | "failed"
+  done: Array<any>;
+  order: Object;
+  partialOrder: Object;
+  quantityProcessed: Number | null;
+  status: "idle" | "loading" | "failed";
 }
 
 const initialState: OrderState = {
@@ -17,7 +19,7 @@ const initialState: OrderState = {
   partialOrder: {},
   quantityProcessed: null,
   status: "idle",
-}
+};
 
 // dispatch(getOrder())
 export const getOrder = createAsyncThunk("order/getOrders", async () => {
@@ -26,10 +28,10 @@ export const getOrder = createAsyncThunk("order/getOrders", async () => {
       "Content-Type": "application/json",
     },
     withCredentials: true,
-  }
-  const response = await axios.get(`${API_URL}/orders/current`, opts)
-  return response.data
-})
+  };
+  const response = await axios.get(`${API_URL}/orders/current`, opts);
+  return response.data;
+});
 
 export const placeLimitOrder = createAsyncThunk(
   "order/placeLimitOrder",
@@ -37,26 +39,41 @@ export const placeLimitOrder = createAsyncThunk(
     const body = {
       price: data?.price,
       volume: data?.volume,
-      isBuy: data?.isBuy,
-    }
-    const opts = {
-      withCredentials: true,
-    }
-    const response = await axios.post(`${API_URL}/order/limit`, body, opts)
-    console.log(response.data)
-    return response.data
-  },
-)
+      is_buy: data?.isBuy,
+    };
+    const response = await baseAxios.post(
+      `${API_URL}/order/limit?ticker=BTCUSDT.P`,
+      body
+    );
+    return response.data;
+  }
+);
+
+export const placeMarketOrder = createAsyncThunk(
+  "order/placeMarketOrder",
+  async (payload: MarketOrderForm) => {
+    const { isBuy, ...rest } = payload;
+    const payloadToSend = {
+      ...rest,
+      is_buy: payload.isBuy,
+    };
+    const response = await axios.post(
+      `${API_URL}/order/market?ticker=BTCUSDT.P`,
+      payloadToSend
+    );
+    return response.data;
+  }
+);
 
 export const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
     clear: (state) => {
-      state.done = []
-      state.order = {}
-      state.partialOrder = {}
-      state.quantityProcessed = null
+      state.done = [];
+      state.order = {};
+      state.partialOrder = {};
+      state.quantityProcessed = null;
     },
   },
 
@@ -65,21 +82,21 @@ export const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(placeLimitOrder.pending, (state) => {
-        state.status = "loading"
+        state.status = "loading";
       })
       .addCase(placeLimitOrder.fulfilled, (state, action) => {
-        state.done = action.payload.done
-        state.order = action.payload.order
-        state.partialOrder = action.payload.partialOrder
-        state.quantityProcessed = action.payload.quantityProcessed
-        state.status = "idle"
+        state.done = action.payload.done;
+        state.order = action.payload.order;
+        state.partialOrder = action.payload.partial_order;
+        state.quantityProcessed = action.payload.quantity_processed;
+        state.status = "idle";
       })
       .addCase(placeLimitOrder.rejected, (state) => {
-        state.status = "failed"
-      })
+        state.status = "failed";
+      });
   },
-})
+});
 
-export const { clear } = orderSlice.actions
-export const order = (state: RootState) => state.account
-export default orderSlice.reducer
+export const { clear } = orderSlice.actions;
+export const order = (state: RootState) => state.account;
+export default orderSlice.reducer;

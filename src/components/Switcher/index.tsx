@@ -1,6 +1,6 @@
-import React, { useState } from "react"
-import styled from "styled-components"
-import { getThemeColors } from "../../theme"
+import React, { useState } from "react";
+import styled from "styled-components";
+import { getThemeColors } from "../../theme";
 
 const StyledLabel = styled.label<{ isActive?: boolean }>`
   ${({ theme, isActive }) =>
@@ -20,7 +20,7 @@ const StyledLabel = styled.label<{ isActive?: boolean }>`
   flex: 1;
   text-align: center;
   cursor: pointer;
-`
+`;
 
 const Radio = (props: any) => {
   return (
@@ -36,8 +36,8 @@ const Radio = (props: any) => {
         value={props.value}
       />
     </StyledLabel>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
@@ -48,27 +48,27 @@ const Container = styled.div`
   border-color: ${({ theme }) => getThemeColors(theme).border.hovered};
   display: flex;
   align-items: center;
-`
+`;
 
-interface Option {
-  label: string
-  value: string
+interface Option<T> {
+  label: string;
+  value: T;
 }
 
-interface Props {
-  options: Option[]
-  name: string
-  onChange?: (value: string) => void
+interface Props<T> {
+  options: Option<T>[];
+  name: string;
+  onChange?: (value: T) => void;
 }
 
-const Switcher = ({ options, name, onChange }: Props) => {
-  const [value, setValue] = useState(options[0].value)
-  const handleChange = (value: string) => {
-    setValue(value)
+const Switcher = <T extends string>({ options, name, onChange }: Props<T>) => {
+  const [value, setValue] = useState<T>(options[0].value);
+  const handleChange = (value: T) => {
+    setValue(value);
     if (onChange) {
-      onChange(value)
+      onChange(value);
     }
-  }
+  };
   return (
     <Container>
       {options.map((option) => (
@@ -81,7 +81,7 @@ const Switcher = ({ options, name, onChange }: Props) => {
         />
       ))}
     </Container>
-  )
-}
+  );
+};
 
-export default Switcher
+export default Switcher;

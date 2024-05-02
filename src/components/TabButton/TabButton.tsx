@@ -1,7 +1,7 @@
-import styled from "styled-components"
-import { getThemeColors } from "../../theme"
+import styled from "styled-components";
+import { getThemeColors } from "../../theme";
 interface Props {
-  active?: boolean
+  active?: boolean;
 }
 
 export const TabButton = styled.button<Props>`
@@ -18,6 +18,7 @@ export const TabButton = styled.button<Props>`
       : `1px solid ${getThemeColors(theme).border.default}`};
   padding: 14px 20px;
   color: ${({ theme }) => getThemeColors(theme).text.primary};
-`
+  cursor: pointer;
+`;
 
-export default TabButton
+export default TabButton;

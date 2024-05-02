@@ -1,21 +1,23 @@
-import React, { useState, FocusEvent, ReactElement, ReactNode } from "react"
-import styled from "styled-components"
-import { getThemeColors, ThemeColors } from "../../theme"
-import Stack from "../Stack"
-import Text from "../Text"
-import useTheme from "../../hooks/useTheme"
+import React, { useState, FocusEvent, forwardRef } from "react";
+import styled from "styled-components";
+import { getThemeColors, ThemeColors } from "../../theme";
+import Stack from "../Stack";
+import Text from "../Text";
+import useTheme from "../../hooks/useTheme";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
-  error?: string
-  label?: string
-  rightSide?: string
-  fluid?: boolean
-  variant?: keyof ThemeColors["input"]
+  error?: string;
+  label?: string;
+  rightSide?: string;
+  fluid?: boolean;
+  variant?: keyof ThemeColors["input"];
 }
 
+type Ref = HTMLInputElement;
+
 interface InputWrapperProps {
-  variant: keyof ThemeColors["input"]
-  disabled?: boolean
+  variant: keyof ThemeColors["input"];
+  disabled?: boolean;
 }
 
 const StyledInput = styled.input`
@@ -46,13 +48,13 @@ const StyledInput = styled.input`
   &[type="number"] {
     -moz-appearance: textfield;
   }
-`
+`;
 
 const StyledLabel = styled.label<{ isFocused: boolean }>`
   ${({ theme }) => theme.fonts.typography.textSm}
   color: ${({ theme }) => getThemeColors(theme).text.primary};
   text-align: left;
-`
+`;
 
 const InputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid transparent;
@@ -74,53 +76,67 @@ const InputWrapper = styled.div<InputWrapperProps>`
   display: flex;
   align-items: center;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
-`
+`;
 
-const Input = ({
-  error,
-  label,
-  rightSide,
-  fluid,
-  style,
-  variant = "primary",
-  ...restProps
-}: InputProps) => {
-  const { themeColors } = useTheme()
-  const [isFocused, setIsFocused] = useState(false)
-  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
-    setIsFocused(true)
-    if (restProps?.onFocus) {
-      restProps.onFocus(e)
-    }
+const Input = forwardRef<Ref, InputProps>(
+  (
+    {
+      error,
+      label,
+      rightSide,
+      fluid,
+      style,
+      variant = "primary",
+      ...restProps
+    },
+    ref
+  ) => {
+    const { themeColors } = useTheme();
+    const [isFocused, setIsFocused] = useState(false);
+    const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
+      setIsFocused(true);
+      if (restProps?.onFocus) {
+        restProps.onFocus(e);
+      }
+    };
+    const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+      setIsFocused(false);
+      if (restProps?.onBlur) {
+        restProps.onBlur(e);
+      }
+    };
+    return (
+      <Stack
+        spacing={4}
+        style={{
+          width: fluid ? "100%" : "auto",
+          position: "relative",
+          ...style,
+        }}
+      >
+        {label && <StyledLabel isFocused={isFocused}>{label}</StyledLabel>}
+        <InputWrapper
+          style={{ position: "relative" }}
+          variant={variant}
+          disabled={restProps.disabled}
+        >
+          <StyledInput
+            data-error={error ? "true" : "false"}
+            ref={ref}
+            {...restProps}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          />
+          {rightSide && <Text>{rightSide}</Text>}
+        </InputWrapper>
+        {error && (
+          <Text variant="textSm" color={themeColors.text.error}>
+            {error}
+          </Text>
+        )}
+      </Stack>
+    );
   }
-  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    setIsFocused(false)
-    if (restProps?.onBlur) {
-      restProps.onBlur(e)
-    }
-  }
-  return (
-    <Stack
-      spacing={4}
-      style={{ width: fluid ? "100%" : "auto", position: "relative", ...style }}
-    >
-      {label && <StyledLabel isFocused={isFocused}>{label}</StyledLabel>}
-      <InputWrapper style={{ position: "relative" }} variant={variant} disabled={restProps.disabled}>
-        <StyledInput
-          data-error={error ? "true" : "false"}
-          {...restProps}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-        {rightSide && <Text>{rightSide}</Text>}
-      </InputWrapper>
-      {error && (
-        <Text variant="textSm" color={themeColors.text.error}>
-          {error}
-        </Text>
-      )}
-    </Stack>
-  )
-}
+);
 
-export default Input
+export default Input;
