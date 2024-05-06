@@ -8,6 +8,7 @@ import useTheme from "../../hooks/useTheme";
 import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
 import PendingOrders from "./PendingOrders";
+import ClosedOrders from "./ClosedOrders";
 interface TabProps {
   isActive?: boolean;
 }
@@ -32,19 +33,25 @@ const Tab = styled.button<TabProps>`
   }
 `;
 
+const ScrollContent = styled.div`
+  height: 300px;
+  overflow-y: auto;
+  width: 100%;
+`;
+
 const Tabs = styled.div`
   display: flex;
   background: ${({ theme }) => theme.colors.selectedTheme.tableTabs.background};
   width: 100%;
   min-width: 400px;
 `;
-const CONTENT = [Table, PendingOrders, Table, Table];
+const CONTENT = [Table, PendingOrders, ClosedOrders, Table];
 
 const TableTabs = () => {
   const [active, setActive] = useState(0);
   const { t } = useTranslation();
   const { themeColors } = useTheme();
-  const { openOrders } = useAppSelector(account);
+  const { openOrders, closedOrders } = useAppSelector(account);
   const Content = useMemo(() => CONTENT[active], [active]);
 
   const tabs = useMemo(
@@ -61,17 +68,18 @@ const TableTabs = () => {
       {
         title: "orders",
         icon: "OrdersIcon",
+        count: closedOrders?.length,
       },
       {
         title: "trades",
         icon: "TradesIcon",
       },
     ],
-    [openOrders]
+    [openOrders, closedOrders]
   );
 
   return (
-    <Stack spacing={0} style={{ flex: "0 1 auto", paddingBottom: "40px" }}>
+    <Stack spacing={0} style={{ flex: "0 1 auto" }}>
       <Tabs>
         {tabs.map(({ icon, title, count }, index) => (
           <Tab
@@ -95,7 +103,9 @@ const TableTabs = () => {
           </Tab>
         ))}
       </Tabs>
-      <Content key={active} />
+      <ScrollContent>
+        <Content key={active} />
+      </ScrollContent>
     </Stack>
   );
 };

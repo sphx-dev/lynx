@@ -61,7 +61,7 @@ const Futures = () => {
       >
         <PriceBorder />
         <Group style={{ flex: 1 }}>
-          <Stack style={{ flex: 1, height: "100%" }}>
+          <Stack style={{ flex: 1 }} fullHeight>
             <TradingViewContainer />
             <OrdersHistory />
           </Stack>
