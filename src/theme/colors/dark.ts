@@ -79,6 +79,17 @@ const darkTheme = {
         focused: common.palette.secondary["500"],
       },
     },
+    error: {
+      background: {
+        default: common.palette.error["50"],
+        hovered: common.palette.error["100"],
+        disabled: common.palette.error["300"],
+        pressed: common.palette.error["200"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
+    },
   },
   text: {
     primary: "#FFFFFF",

@@ -3,7 +3,8 @@ import { RootState } from "./store";
 import axios from "axios";
 import { API_URL } from "../constants";
 import { MarketOrderForm } from "../sections/order/OrderInput";
-import {baseAxios} from "../utils/axios";
+import { baseAxios } from "../utils/axios";
+import { update } from "./accountSlice";
 
 export interface OrderState {
   done: Array<any>;
@@ -35,33 +36,44 @@ export const getOrder = createAsyncThunk("order/getOrders", async () => {
 
 export const placeLimitOrder = createAsyncThunk(
   "order/placeLimitOrder",
-  async (data: any) => {
+  async (data: any, { dispatch }) => {
     const body = {
       price: data?.price,
       volume: data?.volume,
-      is_buy: data?.isBuy,
+      isBuy: data?.isBuy,
     };
-    const response = await baseAxios.post(
-      `${API_URL}/order/limit?ticker=BTCUSDT.P`,
-      body
-    );
-    return response.data;
+    try {
+      const response = await baseAxios.post(
+        `/order/limit?ticker=BTCUSDT.P`,
+        body
+      );
+      dispatch(update(response.data.account));
+      return response.data;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   }
 );
 
 export const placeMarketOrder = createAsyncThunk(
   "order/placeMarketOrder",
-  async (payload: MarketOrderForm) => {
+  async (payload: MarketOrderForm, { dispatch }) => {
     const { isBuy, ...rest } = payload;
     const payloadToSend = {
       ...rest,
       is_buy: payload.isBuy,
     };
-    const response = await axios.post(
-      `${API_URL}/order/market?ticker=BTCUSDT.P`,
-      payloadToSend
-    );
-    return response.data;
+    try {
+      const response = await baseAxios.post(
+        `/order/market?ticker=BTCUSDT.P`,
+        payloadToSend
+      );
+      dispatch(update(response.data.account));
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 

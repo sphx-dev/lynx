@@ -2,5 +2,6 @@ import axios from "axios";
 import { config } from "./config";
 
 export const baseAxios = axios.create({
-  baseURL: config.apiHost,
+  baseURL: "/api",
+  withCredentials: true,
 });

@@ -1,54 +1,72 @@
-import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit"
-import axios from "axios"
-import { RootState } from "./store"
-import { API_URL } from "../constants"
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
+import { RootState } from "./store";
+import { baseAxios } from "../utils/axios";
+import {AccountResponse, Order, OrderResponse} from "../types/order";
+import axios from "axios";
+import {API_URL} from "../constants";
 
 export interface AccountState {
-  id: any
-  balance: Number
-  closedOrders: []
-  openOrders: []
-  status: "idle" | "loading" | "failed"
+  id: string | null;
+  balance: String;
+  closedOrders: Order[];
+  openOrders: Order[];
+  status: "idle" | "loading" | "failed";
 }
 
 const initialState: AccountState = {
   id: null,
-  balance: 0,
+  balance: "0",
   closedOrders: [],
   openOrders: [],
   status: "idle",
-}
+};
+
+export const removeOrder = createAsyncThunk(
+  "account/removeOrder",
+  async (orderId: string) => {
+    try {
+      const response = await baseAxios.delete(
+        `/order/${orderId}?ticker=BTCUSDT.P`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 // dispatch(getAccount())
 export const getAccount = createAsyncThunk("account/getAccount", async () => {
-  const opts = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  }
-  const response = await axios.get(`${API_URL}/accounts/current`, opts)
-  return response.data
-})
+  const response = await baseAxios("/accounts/current");
+  return response.data;
+});
 
-export const updateAccount = createAction<any>("account/updateAccount")
+const updateAccount = (
+  state: AccountState,
+  action: PayloadAction<OrderResponse>
+) => {
+  state.id = action.payload.account.id;
+  state.balance = action.payload.account.balance;
+  state.openOrders = action.payload.account.open_orders || [];
+  state.closedOrders = action.payload.account.closed_orders || [];
+};
 
 export const accountSlice = createSlice({
   name: "account",
   initialState,
   reducers: {
     clear: (state) => {
-      state.id = null
-      state.balance = 0
-      state.closedOrders = []
-      state.openOrders = []
+      state = initialState;
     },
     update: (state, action) => {
-      console.log("ACTION: ", action)
-      state.id = action.payload.account.Id
-      state.balance = action.payload.account.Balance
-      state.openOrders = action.payload.account.OpenOrders
-      state.closedOrders = action.payload.account.ClosedOrders
+      state.id = action.payload.id;
+      state.balance = action.payload.balance;
+      state.openOrders = action.payload.open_orders || [];
+      state.closedOrders = action.payload.closed_orders || [];
     },
   },
 
@@ -57,21 +75,22 @@ export const accountSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getAccount.pending, (state) => {
-        state.status = "loading"
+        state.status = "loading";
       })
       .addCase(getAccount.fulfilled, (state, action) => {
-        state.id = action.payload.account.Id
-        state.balance = action.payload.account.Balance
-        state.openOrders = action.payload.account.OpenOrders
-        state.closedOrders = action.payload.account.ClosedOrders
-        state.status = "idle"
+        state.id = action.payload.account.id;
+        state.balance = action.payload.account.balance;
+        state.openOrders = action.payload.account.open_orders || [];
+        state.closedOrders = action.payload.account.closed_orders || [];
+        state.status = "idle";
       })
       .addCase(getAccount.rejected, (state) => {
-        state.status = "failed"
+        state.status = "failed";
       })
+      .addCase(removeOrder.fulfilled, updateAccount);
   },
-})
+});
 
-export const { clear, update } = accountSlice.actions
-export const account = (state: RootState) => state.account
-export default accountSlice.reducer
+export const { clear, update } = accountSlice.actions;
+export const account = (state: RootState) => state.account;
+export default accountSlice.reducer;
