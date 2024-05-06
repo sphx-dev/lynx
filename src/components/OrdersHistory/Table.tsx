@@ -15,14 +15,20 @@ const StyledTable = styled.table`
   ${({ theme }) => theme.fonts.typography.textSm};
   color: ${({ theme }) => getThemeColors(theme).text.tertiary};
   border-collapse: collapse;
+  width: 100%;
   thead {
-    border-top: ${({ theme }) =>
-      `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
-    border-bottom: ${({ theme }) =>
-      `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
+    background: #031a28;
+    position: sticky;
+    top: -1px;
+    border: none;
     tr th {
       padding: 8px 25px;
       text-align: left;
+      border: none;
+      border-top: ${({ theme }) =>
+        `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
+      border-bottom: ${({ theme }) =>
+        `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
     }
   }
   tbody {

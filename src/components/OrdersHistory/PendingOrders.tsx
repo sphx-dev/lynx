@@ -6,11 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { account, removeOrder } from "../../state/accountSlice";
 import Button from "../Button";
 import { errorAlert, successAlert } from "../../utils/alerts";
-import { Side } from "../../types/order";
-import Colors from "../../theme/colors";
-
-const getSideColor = (side: Side) =>
-  side === Side.Buy ? Colors.common.positive1 : Colors.common.negative3;
+import { getSideColor } from "./helpers";
 
 const PendingOrders = () => {
   const { openOrders } = useAppSelector(account);
