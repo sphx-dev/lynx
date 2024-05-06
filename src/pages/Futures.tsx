@@ -1,27 +1,29 @@
-import React from "react"
-import styled from "styled-components"
-import OrderInput from "../sections/order/OrderInput"
-import { TradingViewContainer } from "../sections/chart/TradingViewContainer"
-import OrderBook from "../sections/orderbook/OrderBook"
-import OrdersHistory from "../components/OrdersHistory"
-import { Stack } from "../components"
-import PriceBorder from "../sections/PriceBorder"
-import Group from "../components/Group"
-import TabComponent from "../components/Tab/Tab"
-import Surface from "../Layouts/Surface"
-import { ActionBarContainer } from "../components/AttributionBar/ActionBar"
-import Text from "../components/Text"
-import Icon from "../components/Icon"
-import logo from "../assets/icons/logo-small.svg"
-import useTheme from "../hooks/useTheme"
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import OrderInput from "../sections/order/OrderInput";
+import { TradingViewContainer } from "../sections/chart/TradingViewContainer";
+import OrderBook from "../sections/orderbook/OrderBook";
+import OrdersHistory from "../components/OrdersHistory";
+import { Stack } from "../components";
+import PriceBorder from "../sections/PriceBorder";
+import Group from "../components/Group";
+import TabComponent from "../components/Tab/Tab";
+import Surface from "../Layouts/Surface";
+import { ActionBarContainer } from "../components/AttributionBar/ActionBar";
+import Text from "../components/Text";
+import Icon from "../components/Icon";
+import logo from "../assets/icons/logo-small.svg";
+import useTheme from "../hooks/useTheme";
+import { getAccount } from "../state/accountSlice";
+import { useAppDispatch } from "../hooks";
 
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   min-height: calc(100vh - 28px - 95px);
-`
+`;
 const Logo = () => {
-  const { themeColors } = useTheme()
+  const { themeColors } = useTheme();
   return (
     <ActionBarContainer
       align="center"
@@ -31,8 +33,8 @@ const Logo = () => {
       <img src={logo} />
       <Text color={themeColors.actionBar.text}>ORDER BOOK</Text>
     </ActionBarContainer>
-  )
-}
+  );
+};
 const tabs = [
   {
     title: "Order book",
@@ -42,8 +44,14 @@ const tabs = [
     title: "Trades",
     content: <h1>No Data</h1>,
   },
-]
+];
 const Futures = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getAccount());
+  }, []);
+
   return (
     <Wrapper>
       <OrderInput />
@@ -72,7 +80,7 @@ const Futures = () => {
         </Group>
       </Stack>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default Futures
+export default Futures;

@@ -23,6 +23,7 @@ import useTheme from "../../hooks/useTheme";
 import { useAccount } from "wagmi";
 import { useForm } from "react-hook-form";
 import Colors from "../../theme/colors";
+import { errorAlert, successAlert } from "../../utils/alerts";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -84,30 +85,8 @@ function OrderInput() {
   const { handleSubmit, register, setValue, watch } = useForm({
     defaultValues,
   });
-  const notify = () => toast("Order placed");
   const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
 
-  // const submitBuyOrder = () => {
-  //   const isBuy = false;
-  //   if (price && volume) {
-  //     notify();
-  //     dispatch(placeLimitOrder({ price, volume, isBuy }));
-  //     setTimeout(() => {
-  //       dispatch(getAccount());
-  //     }, 250);
-  //   }
-  // };
-  //
-  // const submitSellOrder = () => {
-  //   const isBuy = false;
-  //   if (price && volume) {
-  //     notify();
-  //     dispatch(placeLimitOrder({ price, volume, isBuy }));
-  //     setTimeout(() => {
-  //       dispatch(getAccount());
-  //     }, 250);
-  //   }
-  // };
   const isBuyPosition = watch("isBuy");
 
   const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
@@ -116,7 +95,10 @@ function OrderInput() {
   const placeOrder = (values: MarketOrderForm) => {
     const handler =
       orderType === OrderType.MARKET ? placeMarketOrder : placeLimitOrder;
-    dispatch(handler(values));
+    dispatch(handler(values))
+      .unwrap()
+      .then(() => successAlert("Order placed"))
+      .catch(() => errorAlert("Something went wrong"));
   };
 
   return (
@@ -134,12 +116,14 @@ function OrderInput() {
           <Divider />
           <Container style={{ padding: "10px 16px" }}>
             <Group align="center" position="apart">
-              <Stack spacing={2}>
-                <Text variant="text2Xs">No wallet connected</Text>
-                <Text variant="text2Xs" color="primaryLink">
-                  Connect wallet to deposit margin
-                </Text>
-              </Stack>
+              {!isConnected && (
+                <Stack spacing={2}>
+                  <Text variant="text2Xs">No wallet connected</Text>
+                  <Text variant="text2Xs" color="primaryLink">
+                    Connect wallet to deposit margin
+                  </Text>
+                </Stack>
+              )}
               <ConnectButton size="small" />
             </Group>
           </Container>

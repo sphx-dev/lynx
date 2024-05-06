@@ -1,18 +1,18 @@
-import React, { PropsWithChildren } from "react"
-import styled, { css } from "styled-components"
-import { getThemeColors, ThemeColors } from "../../theme"
+import React, { PropsWithChildren } from "react";
+import styled, { css } from "styled-components";
+import { getThemeColors, ThemeColors } from "../../theme";
 
-type Size = "xs" | "sm" | "lg"
+type Size = "xs" | "sm" | "lg";
 
 const SIZE_MAP = {
   xs: "0 8px",
   sm: "7px 12px",
   lg: "14px 22px",
-}
+};
 
-type Variant = keyof ThemeColors["button"]
+type Variant = keyof ThemeColors["button"];
 interface CssProps extends Props {
-  variant: Variant
+  variant: Variant;
 }
 
 const styleByVariant = css<CssProps>`
@@ -37,13 +37,13 @@ const styleByVariant = css<CssProps>`
       getThemeColors(theme).button[variant].background.pressed};
   }
   border: 1px solid transparent;
-`
+`;
 
 interface Props extends Omit<React.HTMLProps<HTMLButtonElement>, "size"> {
-  size?: Size
-  pill?: boolean
-  fluid?: boolean
-  variant?: Variant
+  size?: Size;
+  pill?: boolean;
+  fluid?: boolean;
+  variant?: Variant;
 }
 
 const StyledButton = styled.button<CssProps>`
@@ -61,7 +61,7 @@ const StyledButton = styled.button<CssProps>`
   width: ${({ fluid }) => (fluid ? "100%" : "auto")};
   outline: none;
   cursor: pointer;
-`
+`;
 const StyledWrapper = styled.span<Partial<CssProps>>`
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: inline-block;
@@ -69,13 +69,13 @@ const StyledWrapper = styled.span<Partial<CssProps>>`
   border-radius: 1000px;
   width: ${({ fluid }) => (fluid ? "100%" : "auto")};
   align-self: center;
-`
+`;
 
 const Wrapper = ({ variant, children, ...props }: PropsWithChildren<Props>) => {
   if (variant === "primary")
-    return <StyledWrapper {...props}>{children}</StyledWrapper>
-  return <>{children}</>
-}
+    return <StyledWrapper {...props}>{children}</StyledWrapper>;
+  return <>{children}</>;
+};
 
 const Button = ({
   children,
@@ -88,7 +88,7 @@ const Button = ({
         {children}
       </StyledButton>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

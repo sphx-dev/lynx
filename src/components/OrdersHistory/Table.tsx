@@ -2,14 +2,14 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { mockColumns, mockData } from "./constants"
-import styled from "styled-components"
-import { getThemeColors } from "../../theme"
+import { mockColumns, mockData } from "./constants";
+import styled from "styled-components";
+import { getThemeColors } from "../../theme";
 interface ITableProps {
-  data?: any
-  columns?: any
+  data?: any;
+  columns?: any;
 }
 const StyledTable = styled.table`
   ${({ theme }) => theme.fonts.typography.textSm};
@@ -21,19 +21,22 @@ const StyledTable = styled.table`
     border-bottom: ${({ theme }) =>
       `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
     tr th {
-      padding:  8px 25px;
+      padding: 8px 25px;
+      text-align: left;
     }
-    
   }
-;
+  tbody {
+    tr td {
+      padding: 8px 25px;
+    }
   }
-`
-const Table = ({ data = mockData, columns = mockColumns }: ITableProps) => {
+`;
+const Table = ({ data = [], columns = mockColumns }: ITableProps) => {
   const table = useReactTable<any>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
   return (
     <StyledTable>
@@ -46,17 +49,19 @@ const Table = ({ data = mockData, columns = mockColumns }: ITableProps) => {
           </tr>
         ))}
       </thead>
-      {/*{table.getRowModel().rows.map((row) => (*/}
-      {/*  <tr key={row.id}>*/}
-      {/*    {row.getVisibleCells().map((cell) => (*/}
-      {/*      <td>*/}
-      {/*        {flexRender(cell.column.columnDef.cell, cell.getContext())}*/}
-      {/*      </td>*/}
-      {/*    ))}*/}
-      {/*  </tr>*/}
-      {/*))}*/}
+      <tbody>
+        {table.getRowModel().rows.map((row) => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <td>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
     </StyledTable>
-  )
-}
+  );
+};
 
-export default Table
+export default Table;

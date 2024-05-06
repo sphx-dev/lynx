@@ -3,6 +3,7 @@ import axios from "axios";
 import { RootState } from "./store";
 import { update } from "./accountSlice";
 import { ORDERBOOK_LEVELS, API_URL } from "../constants";
+import {baseAxios} from "../utils/axios";
 
 interface Order<T> {
   quantity: T;
@@ -32,10 +33,7 @@ const initialState: OrderBookState = {
 export const getOrderBook = createAsyncThunk(
   "orderbook/getOrderBook",
   async () => {
-    const opts = {
-      withCredentials: true,
-    };
-    const response = await axios.get(`${API_URL}/orderbook?ticker=BTCUSDT.P`);
+    const response = await baseAxios.get(`/orderbook?ticker=BTCUSDT.P`);
     // The value ` action payload
     return response.data;
   }
