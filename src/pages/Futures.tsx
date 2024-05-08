@@ -48,9 +48,9 @@ const tabs = [
 const Futures = () => {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getAccount());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAccount());
+  // }, []);
 
   return (
     <Wrapper>

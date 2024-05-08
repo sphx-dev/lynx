@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "../../hooks";
-import { placeLimitOrder, placeMarketOrder } from "../../state/orderSlice";
 import styled from "styled-components";
 import {
   Button,
@@ -22,6 +21,11 @@ import { useAccount } from "wagmi";
 import { useForm } from "react-hook-form";
 import Colors from "../../theme/colors";
 import { errorAlert, successAlert } from "../../utils/alerts";
+import {
+  usePlaceLimitOrderMutation,
+  usePlaceMarketOrderMutation,
+} from "../../utils/api/orderApi";
+import { handleApiCall } from "../../utils/handleApiCall";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -83,6 +87,8 @@ function OrderInput() {
   const { handleSubmit, register, setValue, watch } = useForm({
     defaultValues,
   });
+  const [placeMarketOrder] = usePlaceMarketOrderMutation();
+  const [placeLimitOrder] = usePlaceLimitOrderMutation();
   const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
 
   const isBuyPosition = watch("isBuy");
@@ -90,13 +96,16 @@ function OrderInput() {
   const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
 
-  const placeOrder = (values: MarketOrderForm) => {
+  const placeOrder = async (values: MarketOrderForm) => {
     const handler =
       orderType === OrderType.MARKET ? placeMarketOrder : placeLimitOrder;
-    dispatch(handler(values))
-      .unwrap()
-      .then(() => successAlert("Order placed"))
-      .catch(() => errorAlert("Something went wrong"));
+    // @ts-ignore
+    const response = await handler(values);
+    handleApiCall(
+      response,
+      () => errorAlert("Something went wrong"),
+      () => successAlert("Order placed")
+    );
   };
 
   return (

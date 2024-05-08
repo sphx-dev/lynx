@@ -1,45 +1,47 @@
-import React from "react"
-import "./App.css"
-import { useRoutes } from "react-router-dom"
-import { routes } from "./routes"
-import { useAppSelector } from "./hooks"
-import { selectCurrentTheme } from "./state/preferences"
-import { ThemeInterface, themes } from "./theme"
+import React from "react";
+import "./App.css";
+import { useRoutes } from "react-router-dom";
+import { routes } from "./routes";
+import { useAppSelector } from "./hooks";
+import { selectCurrentTheme } from "./state/preferences";
+import { ThemeInterface, themes } from "./theme";
 import {
   darkTheme,
   getDefaultWallets,
   lightTheme,
   RainbowKitProvider,
-} from "@rainbow-me/rainbowkit"
-import { ThemeProvider } from "styled-components"
-import Header from "./components/Header"
-import Footer from "./sections/footer"
-import { configureChains, createConfig, WagmiConfig } from "wagmi"
-import { avalanche, avalancheFuji } from "wagmi/chains"
-import { publicProvider } from "wagmi/providers/public"
-import {Toaster} from "react-hot-toast";
+} from "@rainbow-me/rainbowkit";
+import { ThemeProvider } from "styled-components";
+import Header from "./components/Header";
+import Footer from "./sections/footer";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { avalanche, avalancheFuji } from "wagmi/chains";
+import { publicProvider } from "wagmi/providers/public";
+import { Toaster } from "react-hot-toast";
+import { useGetAccountQuery } from "./utils/api/accountApi";
 
 const { chains, publicClient } = configureChains(
   [avalanche, avalancheFuji],
-  [publicProvider()],
-)
+  [publicProvider()]
+);
 
 const { connectors } = getDefaultWallets({
   appName: "My RainbowKit App",
   projectId: "YOUR_PROJECT_ID",
   chains,
-})
+});
 
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
   publicClient,
-})
+});
 
 function App() {
-  const content = useRoutes(routes)
-  const currentTheme = useAppSelector(selectCurrentTheme)
-  const theme: ThemeInterface = themes["dark"]
+  const content = useRoutes(routes);
+  const currentTheme = useAppSelector(selectCurrentTheme);
+  const theme: ThemeInterface = themes["dark"];
+  useGetAccountQuery();
 
   return (
     <WagmiConfig config={wagmiConfig}>
@@ -56,7 +58,7 @@ function App() {
         </ThemeProvider>
       </RainbowKitProvider>
     </WagmiConfig>
-  )
+  );
 }
 
-export default App
+export default App;
