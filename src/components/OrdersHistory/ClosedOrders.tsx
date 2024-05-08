@@ -5,6 +5,7 @@ import Table from "./Table";
 import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
 import {getSideColor} from "./helpers";
+import PlaceHolder from "./PlaceHolder";
 
 const ClosedOrders = () => {
   const { closedOrders } = useAppSelector(account);
@@ -34,6 +35,9 @@ const ClosedOrders = () => {
       ),
     },
   ];
+  if (!closedOrders.length) {
+    return <PlaceHolder>No Orders yet</PlaceHolder>;
+  }
   return <Table columns={columns} data={closedOrders} />;
 };
 

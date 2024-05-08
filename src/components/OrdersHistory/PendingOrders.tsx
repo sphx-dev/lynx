@@ -7,6 +7,7 @@ import { account, removeOrder } from "../../state/accountSlice";
 import Button from "../Button";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import { getSideColor } from "./helpers";
+import PlaceHolder from "./PlaceHolder";
 
 const PendingOrders = () => {
   const { openOrders } = useAppSelector(account);
@@ -51,6 +52,10 @@ const PendingOrders = () => {
       ),
     },
   ];
+
+  if (!openOrders.length) {
+    return <PlaceHolder>No Orders yet</PlaceHolder>;
+  }
   return <Table columns={columns} data={openOrders} />;
 };
 

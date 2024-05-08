@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "../../hooks";
-import toast from "react-hot-toast";
 import { placeLimitOrder, placeMarketOrder } from "../../state/orderSlice";
 import styled from "styled-components";
 import {
@@ -13,7 +12,6 @@ import {
   Switcher,
   Text,
 } from "../../components";
-import TakeProfitStopLossSelect from "../../components/Select";
 import Surface from "../../Layouts/Surface";
 import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
@@ -57,10 +55,6 @@ const options = [
     label: "Limit",
     value: OrderType.LIMIT,
   },
-  {
-    label: "Stop",
-    value: OrderType.STOP,
-  },
 ];
 
 export interface MarketOrderForm {
@@ -68,6 +62,8 @@ export interface MarketOrderForm {
   isBuy: boolean;
   leverage: number;
   price: number | null;
+  takeProfit: number | null;
+  stopLoss: number | null;
 }
 
 const defaultValues: MarketOrderForm = {
@@ -75,6 +71,8 @@ const defaultValues: MarketOrderForm = {
   isBuy: false,
   leverage: 1,
   price: null,
+  takeProfit: null,
+  stopLoss: null,
 };
 
 function OrderInput() {
@@ -155,23 +153,6 @@ function OrderInput() {
                       options={options}
                       name="orderType"
                     />
-                    {/*<div style={{ position: "relative" }}>*/}
-                    {/*  <Input label="Margin" />*/}
-                    {/*  <Group style={{ position: "absolute", top: 0, right: 0 }}>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      10%*/}
-                    {/*    </Button>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      20%*/}
-                    {/*    </Button>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      50%*/}
-                    {/*    </Button>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      100%*/}
-                    {/*    </Button>*/}
-                    {/*  </Group>*/}
-                    {/*</div>*/}
                     {orderType !== OrderType.MARKET && (
                       <Input
                         {...register("price")}
@@ -219,7 +200,16 @@ function OrderInput() {
                         </Group>
                       </Group>
                     </div>
-                    <TakeProfitStopLossSelect />
+                    <Input
+                      {...register("takeProfit")}
+                      label="Take Profit"
+                      rightSide="USD"
+                    />
+                    <Input
+                      {...register("stopLoss")}
+                      label="Stop Loss"
+                      rightSide="USD"
+                    />
                     {!isConnected && <ConnectButton />}
                     {isConnected && (
                       <Button
