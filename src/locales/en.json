@@ -16,5 +16,8 @@
   "avgEntry": "Avg. Entry",
   "liqPrice": "Liq. Price",
   "marketMargin": "Market Margin",
-  "connectWallet": "CONNECT WALLET"
+  "connectWallet": "CONNECT WALLET",
+  "placeOrder": "Place order",
+  "online": "ONLINE",
+  "offline": "OFFLINE"
 }

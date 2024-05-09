@@ -23,6 +23,7 @@ import useTheme from "../../hooks/useTheme";
 import { useAccount } from "wagmi";
 import { useForm } from "react-hook-form";
 import Colors from "../../theme/colors";
+import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "../../utils/alerts";
 
 const Wrapper = styled.div`
@@ -81,6 +82,7 @@ function OrderInput() {
   const dispatch = useAppDispatch();
   const { themeColors } = useTheme();
   const { isConnected } = useAccount();
+  const { t } = useTranslation();
   const [orderType, setOrderType] = useState(OrderType.MARKET);
   const { handleSubmit, register, setValue, watch } = useForm({
     defaultValues,
@@ -114,19 +116,21 @@ function OrderInput() {
             <TradingPairSelector />
           </Container>
           <Divider />
-          <Container style={{ padding: "10px 16px" }}>
-            <Group align="center" position="apart">
-              {!isConnected && (
-                <Stack spacing={2}>
-                  <Text variant="text2Xs">No wallet connected</Text>
-                  <Text variant="text2Xs" color="primaryLink">
-                    Connect wallet to deposit margin
-                  </Text>
-                </Stack>
-              )}
-              <ConnectButton size="small" />
-            </Group>
-          </Container>
+          {!isConnected && (
+            <Container style={{ padding: "10px 16px" }}>
+              <Group align="center" position="apart">
+                {!isConnected && (
+                  <Stack spacing={2}>
+                    <Text variant="text2Xs">No wallet connected</Text>
+                    <Text variant="text2Xs" color="primaryLink">
+                      Connect wallet to deposit margin
+                    </Text>
+                  </Stack>
+                )}
+                <ConnectButton size="small" />
+              </Group>
+            </Container>
+          )}
           <Stack spacing={20}>
             <form onSubmit={handleSubmit(placeOrder)}>
               <Stack spacing={20}>
@@ -229,7 +233,7 @@ function OrderInput() {
                             : Colors.common.negative3,
                         }}
                       >
-                        Place Order
+                        {t("placeOrder")}
                       </Button>
                     )}
                     <Summary />

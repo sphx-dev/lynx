@@ -1,11 +1,11 @@
-import React from "react"
-import styled from "styled-components"
-import { Group } from "../../components"
-import { getThemeColors } from "../../theme"
-import { NavLink } from "react-router-dom"
-import { navLinks } from "./config"
-import Icon from "../../components/Icon"
-import useTheme from "../../hooks/useTheme"
+import React from "react";
+import styled from "styled-components";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { getThemeColors } from "../../theme";
+import { NavLink } from "react-router-dom";
+import { navLinks } from "./config";
+import Icon from "../../components/Icon";
+import useTheme from "../../hooks/useTheme";
 
 const Wrapper = styled.nav`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
@@ -15,7 +15,7 @@ const Wrapper = styled.nav`
   gap: 20px;
   flex: 1;
   box-shadow: 0px 4px 8px 0px #00000040;
-`
+`;
 const StyledLink = styled(NavLink)`
   ${({ theme }) => theme.fonts.typography.navigation}
   color: ${({ theme }) => getThemeColors(theme).text.secondaryLink};
@@ -24,10 +24,10 @@ const StyledLink = styled(NavLink)`
   }
   text-transform: uppercase;
   text-decoration: none;
-`
+`;
 
 const Navbar = () => {
-  const { themeColors } = useTheme()
+  const { themeColors } = useTheme();
   return (
     <Wrapper>
       <Icon icon="HomeIcon" stroke={themeColors.text.secondaryLink} />
@@ -36,8 +36,18 @@ const Navbar = () => {
           {title}
         </StyledLink>
       ))}
+      <ConnectButton.Custom>
+        {({ openAccountModal, account }) =>
+          account && (
+            <button onClick={openAccountModal} type="button">
+              {account.displayName}
+              {account.displayBalance ? ` (${account.displayBalance})` : ""}
+            </button>
+          )
+        }
+      </ConnectButton.Custom>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
