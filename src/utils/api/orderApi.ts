@@ -32,7 +32,17 @@ export const orderApi = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    removeOrder: build.mutation<unknown, string>({
+      query: (orderId) => ({
+        url: `${BASE_URL}/${orderId}?ticker=${TICKER}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["user"],
+    }),
   }),
 });
-
-export const { usePlaceMarketOrderMutation, usePlaceLimitOrderMutation } = orderApi;
+export const {
+  usePlaceMarketOrderMutation,
+  usePlaceLimitOrderMutation,
+  useRemoveOrderMutation,
+} = orderApi;

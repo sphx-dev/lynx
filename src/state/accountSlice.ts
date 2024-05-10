@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { baseAxios } from "../utils/axios";
-import { Account, Order, OrderResponse } from "../types/order";
-import axios from "axios";
-import { API_URL } from "../constants";
+import { Account } from "../types/order";
 import { accountApi, AccountResponse } from "../utils/api/accountApi";
 
 export interface AccountState extends Omit<Account, "id"> {
@@ -19,21 +17,6 @@ const initialState: AccountState = {
   status: "idle",
 };
 
-export const removeOrder = createAsyncThunk(
-  "account/removeOrder",
-  async (orderId: string) => {
-    try {
-      const response = await baseAxios.delete(
-        `/order/${orderId}?ticker=BTCUSDT.P`
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
-
-// dispatch(getAccount())
 export const getAccount = createAsyncThunk("account/getAccount", async () => {
   const response = await baseAxios("/accounts/current");
   return response.data;
@@ -45,12 +28,6 @@ export const accountSlice = createSlice({
   reducers: {
     clear: (state) => {
       state = initialState;
-    },
-    update: (state, action) => {
-      state.id = action.payload.id;
-      state.balance = action.payload.balance;
-      state.openOrders = action.payload.open_orders || [];
-      state.closedOrders = action.payload.closed_orders || [];
     },
   },
 
@@ -74,6 +51,6 @@ export const accountSlice = createSlice({
   },
 });
 
-export const { clear, update } = accountSlice.actions;
+export const { clear } = accountSlice.actions;
 export const account = (state: RootState) => state.account;
 export default accountSlice.reducer;

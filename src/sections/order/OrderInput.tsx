@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../../hooks";
 import styled from "styled-components";
 import {
   Button,
@@ -65,7 +64,7 @@ export interface MarketOrderForm {
   volume: number;
   isBuy: boolean;
   leverage: number;
-  price: number | null;
+  price: number;
   takeProfit: number | null;
   stopLoss: number | null;
 }
@@ -74,13 +73,12 @@ const defaultValues: MarketOrderForm = {
   volume: 0,
   isBuy: false,
   leverage: 1,
-  price: null,
+  price: 0,
   takeProfit: null,
   stopLoss: null,
 };
 
 function OrderInput() {
-  const dispatch = useAppDispatch();
   const { themeColors } = useTheme();
   const { isConnected } = useAccount();
   const [orderType, setOrderType] = useState(OrderType.MARKET);
@@ -99,7 +97,6 @@ function OrderInput() {
   const placeOrder = async (values: MarketOrderForm) => {
     const handler =
       orderType === OrderType.MARKET ? placeMarketOrder : placeLimitOrder;
-    // @ts-ignore
     const response = await handler(values);
     handleApiCall(
       response,

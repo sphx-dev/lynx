@@ -1,10 +1,6 @@
-import { useEffect, FunctionComponent } from "react";
-import { useAppSelector, useAppDispatch } from "../../hooks";
-import {
-  getOrderBook,
-  orderBook,
-  OrderWithDepth,
-} from "../../state/orderBookSlice";
+import { FunctionComponent } from "react";
+import { useAppSelector } from "../../hooks";
+import { orderBook } from "../../state/orderBookSlice";
 import TitleRow from "./TitleRow";
 import DepthVisualizer from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
@@ -13,6 +9,8 @@ import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
 import { MOBILE_WIDTH } from "../../constants";
 import { Stack } from "../../components";
 import Divider from "./Divider";
+import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
+import { OrderWithDepth } from "../../types/orderBook";
 
 export enum OrderType {
   BIDS,
@@ -25,13 +23,9 @@ interface OrderBookProps {
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const book = useAppSelector(orderBook);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    setInterval(() => {
-      dispatch(getOrderBook());
-    }, 1000);
-  }, []);
+  useGetOrderBookQuery(undefined, {
+    pollingInterval: 1000,
+  });
 
   const buildPriceLevels = (
     levels: OrderWithDepth[],
