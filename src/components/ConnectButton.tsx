@@ -1,11 +1,11 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit"
-import Button from "./Button"
-import { useTranslation } from "react-i18next"
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Button from "./Button";
+import { useTranslation } from "react-i18next";
 
-type Size = "small" | "large"
+type Size = "small" | "large";
 
 export const AppButton = ({ size = "large" }: { size?: Size }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <ConnectButton.Custom>
       {({
@@ -19,12 +19,12 @@ export const AppButton = ({ size = "large" }: { size?: Size }) => {
       }) => {
         // Note: If your app doesn't use authentication, you
         // can remove all 'authenticationStatus' checks
-        const ready = mounted && authenticationStatus !== "loading"
+        const ready = mounted && authenticationStatus !== "loading";
         const connected =
           ready &&
           account &&
           chain &&
-          (!authenticationStatus || authenticationStatus === "authenticated")
+          (!authenticationStatus || authenticationStatus === "authenticated");
         return (
           <div
             {...(!ready && {
@@ -48,14 +48,14 @@ export const AppButton = ({ size = "large" }: { size?: Size }) => {
                   >
                     {t(size === "large" ? "connectWallet" : "connect")}
                   </Button>
-                )
+                );
               }
               if (chain.unsupported) {
                 return (
                   <button onClick={openChainModal} type="button">
                     Wrong network
                   </button>
-                )
+                );
               }
               return (
                 <div style={{ display: "flex", gap: 12, width: "100%" }}>
@@ -96,13 +96,13 @@ export const AppButton = ({ size = "large" }: { size?: Size }) => {
                       : ""}
                   </button>
                 </div>
-              )
+              );
             })()}
           </div>
-        )
+        );
       }}
     </ConnectButton.Custom>
-  )
-}
+  );
+};
 
-export default AppButton
+export default AppButton;

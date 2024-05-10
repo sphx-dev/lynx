@@ -1,10 +1,10 @@
-import styled from "styled-components"
-import logout from "../../assets/icons/logout.svg"
-import myAccount from "../../assets/icons/account.svg"
-import logo from "../../assets/icons/logo-dark.svg"
-import menu from "../../assets/icons/menu.svg"
-import Group from "../Group"
-import Nav from "../../sections/navbar"
+import styled from "styled-components";
+import logout from "../../assets/icons/logout.svg";
+import myAccount from "../../assets/icons/account.svg";
+import logo from "../../assets/icons/logo-dark.svg";
+import menu from "../../assets/icons/menu.svg";
+import Group from "../Group";
+import Nav from "../../sections/navbar";
 
 const StyledHeader = styled.header`
   position: relative;
@@ -13,7 +13,7 @@ const StyledHeader = styled.header`
   width: 320px;
   height: 100px;
   margin-top: -5px;
-`
+`;
 
 const NavBar = styled.nav`
   position: absolute;
@@ -21,7 +21,7 @@ const NavBar = styled.nav`
   display: flex;
   justify-content: space-evenly;
   width: 80%;
-`
+`;
 const Button = styled.div`
   color: ${({ theme }) => theme.colors.common.palette.secondary["700"]};
   ${({ theme }) => theme.fonts.typography.header};
@@ -35,26 +35,26 @@ const Button = styled.div`
   &:hover {
     color: ${({ theme }) => theme.colors.common.palette.secondary["100"]};
   }
-`
+`;
 
 const Logo = styled.img`
   padding-top: 12px;
-  margin-left: 34px;
-`
+  margin-left: 64px;
+`;
 
 const Menu = styled.img`
   padding-top: 16px;
   margin-left: 16px;
-`
+`;
 
 const Divider = styled.div`
   border-left: 1px solid #173d46;
-`
+`;
 const Header = () => {
   return (
     <Group fluid spacing={0} style={{ width: "100vw" }}>
       <StyledHeader>
-        <Menu src={menu} />
+        {/*<Menu src={menu} />*/}
         <Logo src={logo} />
         <NavBar>
           <Button>
@@ -71,6 +71,6 @@ const Header = () => {
       </StyledHeader>
       <Nav />
     </Group>
-  )
-}
-export default Header
+  );
+};
+export default Header;
