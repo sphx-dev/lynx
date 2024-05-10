@@ -134,6 +134,7 @@ const common = {
   positive1: "#4C972E",
   gray: "#416075", //action bar, order book logo
   palette,
+  tertiary: "#9D9D9D",
 }
 
 export default common

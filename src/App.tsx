@@ -18,6 +18,7 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { avalanche, avalancheFuji } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { Toaster } from "react-hot-toast";
+import { useGetAccountQuery } from "./utils/api/accountApi";
 
 const { chains, publicClient } = configureChains(
   [avalanche, avalancheFuji],
@@ -40,6 +41,7 @@ function App() {
   const content = useRoutes(routes);
   const currentTheme = useAppSelector(selectCurrentTheme);
   const theme: ThemeInterface = themes["dark"];
+  useGetAccountQuery();
 
   return (
     <WagmiConfig config={wagmiConfig}>

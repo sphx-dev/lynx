@@ -94,7 +94,7 @@ const darkTheme = {
   text: {
     primary: "#FFFFFF",
     secondary: "#E6E6E6",
-    tertiary: "#9D9D9D",
+    tertiary: common.tertiary,
     error: common.negative3,
     secondaryActive: common.palette.secondary["600"],
     secondaryLink: common.palette.secondary["700"],

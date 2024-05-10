@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const sizeMap = {
   extraTiny: "6px",
@@ -8,7 +8,8 @@ export const sizeMap = {
   normal: "20px",
   medium: "24px",
   large: "36px",
-}
+  extraLarge: "56px",
+};
 
 export type TSize =
   | "extraTiny"
@@ -18,16 +19,17 @@ export type TSize =
   | "normal"
   | "medium"
   | "large"
+  | "extraLarge";
 
 export interface IIconWrapperProps {
-  size: TSize
-  fill?: string
-  stroke?: string
-  strokeWidth?: number
-  hoverColor?: string
-  color?: string
-  onClick?: () => void
-  rotate?: "45deg" | "90deg" | "180deg" | "360deg"
+  size: TSize;
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+  hoverColor?: string;
+  color?: string;
+  onClick?: () => void;
+  rotate?: "45deg" | "90deg" | "180deg" | "360deg";
 }
 
 const IconWrapper = styled.div<IIconWrapperProps>`
@@ -55,6 +57,6 @@ const IconWrapper = styled.div<IIconWrapperProps>`
       fill: ${({ stroke, hoverColor }) => (stroke ? hoverColor : "")};
     }
   }
-`
+`;
 
-export default IconWrapper
+export default IconWrapper;

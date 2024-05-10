@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../../hooks";
-import toast from "react-hot-toast";
-import { placeLimitOrder, placeMarketOrder } from "../../state/orderSlice";
 import styled from "styled-components";
 import {
   Button,
@@ -13,7 +10,6 @@ import {
   Switcher,
   Text,
 } from "../../components";
-import TakeProfitStopLossSelect from "../../components/Select";
 import Surface from "../../Layouts/Surface";
 import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
@@ -25,6 +21,11 @@ import { useForm } from "react-hook-form";
 import Colors from "../../theme/colors";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "../../utils/alerts";
+import {
+  usePlaceLimitOrderMutation,
+  usePlaceMarketOrderMutation,
+} from "../../utils/api/orderApi";
+import { handleApiCall } from "../../utils/handleApiCall";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -58,28 +59,27 @@ const options = [
     label: "Limit",
     value: OrderType.LIMIT,
   },
-  {
-    label: "Stop",
-    value: OrderType.STOP,
-  },
 ];
 
 export interface MarketOrderForm {
   volume: number;
   isBuy: boolean;
   leverage: number;
-  price: number | null;
+  price: number;
+  takeProfit: number | null;
+  stopLoss: number | null;
 }
 
 const defaultValues: MarketOrderForm = {
   volume: 0,
   isBuy: false,
   leverage: 1,
-  price: null,
+  price: 0,
+  takeProfit: null,
+  stopLoss: null,
 };
 
 function OrderInput() {
-  const dispatch = useAppDispatch();
   const { themeColors } = useTheme();
   const { isConnected } = useAccount();
   const { t } = useTranslation();
@@ -87,6 +87,8 @@ function OrderInput() {
   const { handleSubmit, register, setValue, watch } = useForm({
     defaultValues,
   });
+  const [placeMarketOrder] = usePlaceMarketOrderMutation();
+  const [placeLimitOrder] = usePlaceLimitOrderMutation();
   const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
 
   const isBuyPosition = watch("isBuy");
@@ -94,13 +96,15 @@ function OrderInput() {
   const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
 
-  const placeOrder = (values: MarketOrderForm) => {
+  const placeOrder = async (values: MarketOrderForm) => {
     const handler =
       orderType === OrderType.MARKET ? placeMarketOrder : placeLimitOrder;
-    dispatch(handler(values))
-      .unwrap()
-      .then(() => successAlert("Order placed"))
-      .catch(() => errorAlert("Something went wrong"));
+    const response = await handler(values);
+    handleApiCall(
+      response,
+      () => errorAlert("Something went wrong"),
+      () => successAlert("Order placed")
+    );
   };
 
   return (
@@ -159,23 +163,6 @@ function OrderInput() {
                       options={options}
                       name="orderType"
                     />
-                    {/*<div style={{ position: "relative" }}>*/}
-                    {/*  <Input label="Margin" />*/}
-                    {/*  <Group style={{ position: "absolute", top: 0, right: 0 }}>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      10%*/}
-                    {/*    </Button>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      20%*/}
-                    {/*    </Button>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      50%*/}
-                    {/*    </Button>*/}
-                    {/*    <Button size="xs" pill>*/}
-                    {/*      100%*/}
-                    {/*    </Button>*/}
-                    {/*  </Group>*/}
-                    {/*</div>*/}
                     {orderType !== OrderType.MARKET && (
                       <Input
                         {...register("price")}
@@ -223,7 +210,16 @@ function OrderInput() {
                         </Group>
                       </Group>
                     </div>
-                    <TakeProfitStopLossSelect />
+                    <Input
+                      {...register("takeProfit")}
+                      label="Take Profit"
+                      rightSide="USD"
+                    />
+                    <Input
+                      {...register("stopLoss")}
+                      label="Stop Loss"
+                      rightSide="USD"
+                    />
                     {!isConnected && <ConnectButton />}
                     {isConnected && (
                       <Button

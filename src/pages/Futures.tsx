@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import OrderInput from "../sections/order/OrderInput";
 import { TradingViewContainer } from "../sections/chart/TradingViewContainer";
@@ -11,11 +11,8 @@ import TabComponent from "../components/Tab/Tab";
 import Surface from "../Layouts/Surface";
 import { ActionBarContainer } from "../components/AttributionBar/ActionBar";
 import Text from "../components/Text";
-import Icon from "../components/Icon";
 import logo from "../assets/icons/logo-small.svg";
 import useTheme from "../hooks/useTheme";
-import { getAccount } from "../state/accountSlice";
-import { useAppDispatch } from "../hooks";
 
 const Wrapper = styled.div`
   display: grid;
@@ -46,11 +43,6 @@ const tabs = [
   },
 ];
 const Futures = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getAccount());
-  }, []);
 
   return (
     <Wrapper>

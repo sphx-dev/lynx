@@ -2,20 +2,26 @@ import React from "react";
 import { dateToDisplay } from "../../utils/date";
 import Text from "../Text";
 import Table from "./Table";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { account, removeOrder } from "../../state/accountSlice";
+import { useAppSelector } from "../../hooks";
+import { account } from "../../state/accountSlice";
 import Button from "../Button";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import { getSideColor } from "./helpers";
+import PlaceHolder from "./PlaceHolder";
+import { useRemoveOrderMutation } from "../../utils/api/orderApi";
+import { handleApiCall } from "../../utils/handleApiCall";
 
 const PendingOrders = () => {
   const { openOrders } = useAppSelector(account);
-  const dispatch = useAppDispatch();
-  const canselOrder = (orderId: string) =>
-    dispatch(removeOrder(orderId))
-      .unwrap()
-      .then(() => successAlert("Order canceled"))
-      .catch(() => errorAlert("Can not cancel the order"));
+  const [removeOrder] = useRemoveOrderMutation();
+  const canselOrder = async (orderId: string) => {
+    const response = await removeOrder(orderId);
+    handleApiCall(
+      response,
+      () => errorAlert("Can not cancel the order"),
+      () => successAlert("Order canceled")
+    );
+  };
   const columns = [
     {
       accessorKey: "timestamp",
@@ -51,6 +57,10 @@ const PendingOrders = () => {
       ),
     },
   ];
+
+  if (!openOrders.length) {
+    return <PlaceHolder>No Orders yet</PlaceHolder>;
+  }
   return <Table columns={columns} data={openOrders} />;
 };
 

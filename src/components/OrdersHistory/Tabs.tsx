@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -109,4 +110,5 @@ const TableTabs = () => {
     </Stack>
   );
 };
+
 export default TableTabs;

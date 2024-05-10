@@ -4,26 +4,36 @@ export enum Side {
 }
 export interface Order {
   id: string;
-  account_id: string;
+  accountId: string;
   timestamp: string;
   quantity: string;
   price: string;
   sile: Side;
 }
 
-export interface AccountResponse {
+export interface Account {
   id: string;
   balance: string;
-  open_orders: Order[];
-  closed_orders: Order[];
+  openOrders: Order[];
+  closedOrders: Order[];
 }
 
 export interface OrderResponse {
-  account: AccountResponse;
+  account: Account;
   done: Order[] | null;
-  partial_order: Order[] | null;
+  partialOrder: Order[] | null;
 }
 
 export interface LimitOrderResponse extends OrderResponse {
   order: Order[];
+}
+
+export interface OrderMutation {
+  isBuy: boolean;
+  volume: number;
+}
+
+export interface LimitOrderMutation extends OrderMutation {
+  price: number;
+  leverage: number;
 }
