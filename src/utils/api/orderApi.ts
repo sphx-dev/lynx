@@ -17,7 +17,7 @@ export const orderApi = api.injectEndpoints({
         method: "POST",
         body: { is_buy: payload.isBuy, volume: payload.volume },
       }),
-      invalidatesTags: ["user"],
+      invalidatesTags: ["account"],
     }),
     placeLimitOrder: build.mutation<LimitOrderResponse, LimitOrderMutation>({
       query: (payload) => ({
@@ -30,14 +30,14 @@ export const orderApi = api.injectEndpoints({
           leverage: payload.leverage,
         },
       }),
-      invalidatesTags: ["user"],
+      invalidatesTags: ["account"],
     }),
     removeOrder: build.mutation<unknown, string>({
       query: (orderId) => ({
         url: `${BASE_URL}/${orderId}?ticker=${TICKER}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["user"],
+      invalidatesTags: ["account"],
     }),
   }),
 });

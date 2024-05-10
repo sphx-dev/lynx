@@ -11,7 +11,7 @@ export const accountApi = api.injectEndpoints({
   endpoints: (build) => ({
     getAccount: build.query<AccountResponse, void>({
       query: () => `${BASE_URL}/current`,
-      providesTags: ["user"],
+      providesTags: ["account"],
       transformResponse: ({ account }: AccountResponse) => ({
         account: {
           ...account,
