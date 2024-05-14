@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { baseAxios } from "../utils/axios";
-import { Account } from "../types/order";
+import {Account, Position} from "../types/order";
 import { accountApi, AccountResponse } from "../utils/api/accountApi";
 
 export interface AccountState extends Omit<Account, "id"> {
   id: string | null;
   status: "idle" | "loading" | "failed";
+  positions: Position[]
 }
 
 const initialState: AccountState = {
@@ -15,6 +16,7 @@ const initialState: AccountState = {
   closedOrders: [],
   openOrders: [],
   status: "idle",
+  positions: [],
 };
 
 export const getAccount = createAsyncThunk("account/getAccount", async () => {
@@ -45,6 +47,7 @@ export const accountSlice = createSlice({
             ...state,
             status: "idle",
             ...payload.account,
+            positions: payload.positions,
           };
         }
       );

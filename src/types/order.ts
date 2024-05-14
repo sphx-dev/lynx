@@ -37,3 +37,14 @@ export interface LimitOrderMutation extends OrderMutation {
   price: number;
   leverage: number;
 }
+
+export interface Position {
+  accountId: string;
+  currentPrice: string;
+  entryPrice: string;
+  id: string;
+  leverage: number;
+  size: string;
+  ticker: string;
+  unrealizedPl: string;
+}

@@ -4,8 +4,9 @@ import Text from "../Text";
 import Table from "./Table";
 import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
-import {getSideColor} from "./helpers";
+import { getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
+import { formatNumber } from "../../utils/format";
 
 const ClosedOrders = () => {
   const { closedOrders } = useAppSelector(account);
@@ -25,7 +26,11 @@ const ClosedOrders = () => {
     {
       accessorKey: "price",
       header: "Price",
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      cell: (props: any) => (
+        <Text color="tertiary">
+          {formatNumber({ value: +props.getValue(), fixed: 2 })}
+        </Text>
+      ),
     },
     {
       accessorKey: "side",

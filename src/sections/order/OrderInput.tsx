@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
 import {
   Button,
   ConnectButton,
@@ -26,6 +29,7 @@ import {
   usePlaceMarketOrderMutation,
 } from "../../utils/api/orderApi";
 import { handleApiCall } from "../../utils/handleApiCall";
+import { MESSAGE } from "../../constants/validation";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -79,13 +83,24 @@ const defaultValues: MarketOrderForm = {
   stopLoss: null,
 };
 
+const schema = yup.object().shape({
+  volume: yup.number().typeError(MESSAGE.number).required(MESSAGE.required),
+});
+
 function OrderInput() {
   const { themeColors } = useTheme();
   const { isConnected } = useAccount();
   const { t } = useTranslation();
   const [orderType, setOrderType] = useState(OrderType.MARKET);
-  const { handleSubmit, register, setValue, watch } = useForm({
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<MarketOrderForm>({
     defaultValues,
+    resolver: yupResolver<any>(schema),
   });
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
   const [placeLimitOrder] = usePlaceLimitOrderMutation();
@@ -172,6 +187,7 @@ function OrderInput() {
                     )}
                     <Input
                       {...register("volume")}
+                      error={errors.volume?.message}
                       label="Size"
                       rightSide="USD"
                     />

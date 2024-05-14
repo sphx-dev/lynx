@@ -1,5 +1,5 @@
 import React, { useState, FocusEvent, forwardRef } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { getThemeColors, ThemeColors } from "../../theme";
 import Stack from "../Stack";
 import Text from "../Text";
@@ -18,6 +18,7 @@ type Ref = HTMLInputElement;
 interface InputWrapperProps {
   variant: keyof ThemeColors["input"];
   disabled?: boolean;
+  error?: boolean;
 }
 
 const StyledInput = styled.input`
@@ -56,6 +57,10 @@ const StyledLabel = styled.label<{ isFocused: boolean }>`
   text-align: left;
 `;
 
+const errorStyle = css`
+  border: ${({ theme }) => `1px solid ${getThemeColors(theme).text.error}`};
+`;
+
 const InputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.borderRadius.md};
@@ -76,6 +81,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
   display: flex;
   align-items: center;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
+  ${({ error }) => error && errorStyle}
 `;
 
 const Input = forwardRef<Ref, InputProps>(
@@ -119,6 +125,7 @@ const Input = forwardRef<Ref, InputProps>(
           style={{ position: "relative" }}
           variant={variant}
           disabled={restProps.disabled}
+          error={!!error}
         >
           <StyledInput
             data-error={error ? "true" : "false"}
