@@ -1,38 +1,38 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 import {
   widget,
   ChartingLibraryWidgetOptions,
   LanguageCode,
   ResolutionString,
-} from "../../charting_library"
-import { TVChartContainer } from "./style"
-import * as React from "react"
-import datafeed from "./datafeed"
-
+} from "../../charting_library";
+import { TVChartContainer } from "./style";
+import * as React from "react";
+import datafeed from "./datafeed";
 export interface ChartContainerProps {
-  symbol: ChartingLibraryWidgetOptions["symbol"]
-  interval: ChartingLibraryWidgetOptions["interval"]
+  symbol: ChartingLibraryWidgetOptions["symbol"];
+  interval: ChartingLibraryWidgetOptions["interval"];
 
   // BEWARE: no trailing slash is expected in feed URL
-  datafeedUrl: string
-  libraryPath: ChartingLibraryWidgetOptions["library_path"]
-  chartsStorageUrl: ChartingLibraryWidgetOptions["charts_storage_url"]
-  chartsStorageApiVersion: ChartingLibraryWidgetOptions["charts_storage_api_version"]
-  clientId: ChartingLibraryWidgetOptions["client_id"]
-  userId: ChartingLibraryWidgetOptions["user_id"]
-  fullscreen: ChartingLibraryWidgetOptions["fullscreen"]
-  autosize: ChartingLibraryWidgetOptions["autosize"]
-  studiesOverrides: ChartingLibraryWidgetOptions["studies_overrides"]
-  container: ChartingLibraryWidgetOptions["container"]
+  datafeedUrl: string;
+  libraryPath: ChartingLibraryWidgetOptions["library_path"];
+  chartsStorageUrl: ChartingLibraryWidgetOptions["charts_storage_url"];
+  chartsStorageApiVersion: ChartingLibraryWidgetOptions["charts_storage_api_version"];
+  clientId: ChartingLibraryWidgetOptions["client_id"];
+  userId: ChartingLibraryWidgetOptions["user_id"];
+  fullscreen: ChartingLibraryWidgetOptions["fullscreen"];
+  autosize: ChartingLibraryWidgetOptions["autosize"];
+  studiesOverrides: ChartingLibraryWidgetOptions["studies_overrides"];
+  container: ChartingLibraryWidgetOptions["container"];
 }
 
 const getLanguageFromURL = (): LanguageCode | null => {
-  const regex = new RegExp("[\\?&]lang=([^&#]*)")
-  const results = regex.exec(location.search)
+  const regex = new RegExp("[\\?&]lang=([^&#]*)");
+  // eslint-disable-next-line no-restricted-globals
+  const results = regex.exec(location.search);
   return results === null
     ? null
-    : (decodeURIComponent(results[1].replace(/\+/g, " ")) as LanguageCode)
-}
+    : (decodeURIComponent(results[1].replace(/\+/g, " ")) as LanguageCode);
+};
 
 const configurationData = {
   supports_search: true,
@@ -51,11 +51,11 @@ const configurationData = {
     { name: "Index", value: "index" },
   ],
   supported_resolutions: ["D", "2D", "3D", "W", "3W", "M", "6M"],
-}
+};
 
 export const TradingViewContainer = () => {
   const chartContainerRef =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
   const defaultProps: Omit<ChartContainerProps, "container"> = {
     symbol: "USO",
@@ -69,7 +69,7 @@ export const TradingViewContainer = () => {
     fullscreen: false,
     autosize: true,
     studiesOverrides: {},
-  }
+  };
 
   useEffect(() => {
     const widgetOptions: ChartingLibraryWidgetOptions = {
@@ -80,6 +80,11 @@ export const TradingViewContainer = () => {
       //   defaultProps.datafeedUrl,
       // ),
       datafeed: datafeed,
+      overrides: {
+        "paneProperties.backgroundGradientStartColor": "#0E2836",
+        "paneProperties.backgroundGradientEndColor": "#0B202D",
+        "scalesProperties.textColor": "#95FFF5",
+      },
       interval:
         defaultProps.interval as ChartingLibraryWidgetOptions["interval"],
       container: chartContainerRef.current,
@@ -100,37 +105,38 @@ export const TradingViewContainer = () => {
       autosize: defaultProps.autosize,
       studies_overrides: defaultProps.studiesOverrides,
       theme: "dark",
+      custom_css_url: "../tv-public.css",
       // onChartReady: (callback: any) => {
       //   setTimeout(() => callback(configurationData))
       // },
-    }
+    };
 
-    const tvWidget = new widget(widgetOptions)
+    const tvWidget = new widget(widgetOptions);
 
     tvWidget.onChartReady(() => {
       tvWidget.headerReady().then(() => {
-        const button = tvWidget.createButton()
-        button.setAttribute("title", "Click to show a notification popup")
-        button.classList.add("apply-common-tooltip")
+        const button = tvWidget.createButton();
+        button.setAttribute("title", "Click to show a notification popup");
+        button.classList.add("apply-common-tooltip");
         button.addEventListener("click", () =>
           tvWidget.showNoticeDialog({
             title: "Notification",
             body: "TradingView Charting Library API works correctly",
             callback: () => {
-              console.log("Noticed!")
+              console.log("Noticed!");
             },
-          }),
-        )
-        button.innerHTML = "Check API"
-      })
-    })
+          })
+        );
+        button.innerHTML = "Check API";
+      });
+    });
 
     return () => {
-      tvWidget.remove()
-    }
-  })
+      tvWidget.remove();
+    };
+  });
 
   return (
     <TVChartContainer ref={chartContainerRef} className={"TVChartContainer"} />
-  )
-}
+  );
+};
