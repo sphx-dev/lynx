@@ -24,7 +24,7 @@ interface OrderBookProps {
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const book = useAppSelector(orderBook);
   useGetOrderBookQuery(undefined, {
-    pollingInterval: 10000,
+    pollingInterval: 1000,
   });
 
   const buildPriceLevels = (
