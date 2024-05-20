@@ -1,19 +1,24 @@
-import React, { ReactNode, useState } from "react"
-import { TabList, Tabs as BaseTabs, Tab as BaseTab, TabPanel } from "react-tabs"
-import TabButton from "../TabButton"
-import "react-tabs/style/react-tabs.css"
+import React, { ReactNode, useState } from "react";
+import {
+  TabList,
+  Tabs as BaseTabs,
+  Tab as BaseTab,
+  TabPanel,
+} from "react-tabs";
+import TabButton from "../TabButton";
+import "react-tabs/style/react-tabs.css";
 
 interface TabsProps {
-  title: string
-  content: ReactNode
+  title: string;
+  content: ReactNode;
 }
 
 interface Props {
-  tabs: TabsProps[]
+  tabs: TabsProps[];
 }
 
 const Tabs = ({ tabs }: Props) => {
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <BaseTabs selectedIndex={selectedIndex} onSelect={setSelectedIndex}>
       <TabList className="custom-tab-list">
@@ -21,6 +26,7 @@ const Tabs = ({ tabs }: Props) => {
           <BaseTab
             className="custom-tab"
             selectedClassName="custom-tab__active"
+            key={tab.title}
           >
             <TabButton
               active={selectedIndex === index}
@@ -35,7 +41,7 @@ const Tabs = ({ tabs }: Props) => {
         <TabPanel key={title}>{content}</TabPanel>
       ))}
     </BaseTabs>
-  )
-}
+  );
+};
 
-export default Tabs
+export default Tabs;

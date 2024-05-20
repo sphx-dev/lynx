@@ -20,7 +20,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { Toaster } from "react-hot-toast";
 import { useGetAccountQuery } from "./utils/api/accountApi";
 
-const { chains, publicClient } = configureChains(
+export const { chains, publicClient } = configureChains(
   [avalanche, avalancheFuji],
   [publicProvider()]
 );
@@ -31,7 +31,7 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-const wagmiConfig = createConfig({
+export const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
   publicClient,

@@ -1,6 +1,6 @@
-import React, { FC, ReactNode, CSSProperties, MouseEvent } from "react"
-import styled from "styled-components"
-import { AlignItems, DEFAULT_SPACING, JustifyContent } from "./types"
+import React, { FC, ReactNode, CSSProperties, MouseEvent } from "react";
+import styled from "styled-components";
+import { AlignItems, DEFAULT_SPACING, JustifyContent } from "./types";
 
 const GroupFlex = styled.div<GroupProps>`
   display: flex;
@@ -8,29 +8,29 @@ const GroupFlex = styled.div<GroupProps>`
   flex-wrap: ${(props) => (props.wrap ? "wrap" : "nowrap")};
 
   align-items: ${(props) => {
-    return AlignItems[props.align || "start"]
+    return AlignItems[props.align || "start"];
   }};
   justify-content: ${(props) => {
-    return JustifyContent[props.position || "left"]
+    return JustifyContent[props.position || "left"];
   }};
   column-gap: ${(props) => {
-    return `${props.spacing}px`
+    return `${props.spacing}px`;
   }};
   row-gap: ${(props) => {
-    return `${props.spacing}px`
+    return `${props.spacing}px`;
   }};
-`
+`;
 
 interface GroupProps {
-  children: ReactNode
-  align?: keyof typeof AlignItems
-  position?: keyof typeof JustifyContent
-  spacing?: number
-  fluid?: boolean
-  style?: CSSProperties | undefined
-  onClick?(event: MouseEvent<HTMLDivElement>): void
-  wrap?: boolean
-  className?: any
+  children: ReactNode;
+  align?: keyof typeof AlignItems;
+  position?: keyof typeof JustifyContent;
+  spacing?: number;
+  fluid?: boolean;
+  style?: CSSProperties | undefined;
+  onClick?(event: MouseEvent<HTMLDivElement>): void;
+  wrap?: boolean;
+  className?: any;
 }
 
 const Group: FC<GroupProps> = ({
@@ -55,7 +55,7 @@ const Group: FC<GroupProps> = ({
     >
       {children}
     </GroupFlex>
-  )
-}
+  );
+};
 
-export default Group
+export default Group;
