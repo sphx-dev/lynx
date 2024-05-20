@@ -14022,7 +14022,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest@npm:^29.6.4":
+"jest@npm:^29.6.4, jest@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest@npm:29.7.0"
   dependencies:
@@ -14773,6 +14773,7 @@ __metadata:
     eslint-plugin-storybook: "npm:^0.8.0"
     i18next: "npm:^23.10.1"
     i18next-browser-languagedetector: "npm:^7.2.1"
+    jest: "npm:^29.7.0"
     jsdom: "npm:^21.1.0"
     playwright-chromium: "npm:^1.43.1"
     prettier: "npm:^2.7.1"

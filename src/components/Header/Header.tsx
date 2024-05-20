@@ -2,13 +2,13 @@ import styled from "styled-components";
 import logout from "../../assets/icons/logout.svg";
 import myAccount from "../../assets/icons/account.svg";
 import logo from "../../assets/icons/logo-dark.svg";
-import menu from "../../assets/icons/menu.svg";
 import Group from "../Group";
 import Nav from "../../sections/navbar";
+import headerBg from "../../assets/images/header-bg.png";
 
 const StyledHeader = styled.header`
   position: relative;
-  background-image: url("/src/assets/images/header-bg.png");
+  background-image: url(${headerBg});
   background-position: top;
   width: 320px;
   height: 100px;

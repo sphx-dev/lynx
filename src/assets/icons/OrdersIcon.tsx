@@ -14,6 +14,6 @@ const OrdersIcon = (
     <path d="M11 6.5L7 10.5" strokeLinecap="round" strokeLinejoin="round" />
     <path d="M5 8.5L7 10.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
-)
+);
 
-export default OrdersIcon
+export default OrdersIcon;

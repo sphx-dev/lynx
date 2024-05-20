@@ -1,6 +1,6 @@
-import React, { FC, ReactNode, CSSProperties } from "react"
-import styled from "styled-components"
-import { AlignItems, DEFAULT_SPACING, JustifyContent } from "./types"
+import React, { FC, ReactNode, CSSProperties } from "react";
+import styled from "styled-components";
+import { AlignItems, DEFAULT_SPACING, JustifyContent } from "./types";
 
 const StackFlex = styled.div<StackProps>`
   display: flex;
@@ -8,29 +8,29 @@ const StackFlex = styled.div<StackProps>`
   flex-wrap: ${(props: StackProps) => (props.wrap ? "wrap" : "nowrap")};
 
   align-items: ${(props: StackProps) => {
-    return AlignItems[props.align || "stretch"]
+    return AlignItems[props.align || "stretch"];
   }};
   justify-content: ${(props: StackProps) => {
-    return JustifyContent[props.justify || "left"]
+    return JustifyContent[props.justify || "left"];
   }};
   row-gap: ${(props: StackProps) => {
-    return `${props.spacing}px`
+    return `${props.spacing}px`;
   }};
   height: ${(props: StackProps) => {
-    return props.fullHeight ? "100%" : "auto"
+    return props.fullHeight ? "100%" : "auto";
   }};
-`
+`;
 
 interface StackProps {
-  children: ReactNode
-  align?: keyof typeof AlignItems
-  justify?: keyof typeof JustifyContent
-  spacing?: number
-  fullHeight?: boolean
-  wrap?: boolean
-  style?: CSSProperties | undefined
-  onClick?(): void
-  className?: string
+  children: ReactNode;
+  align?: keyof typeof AlignItems;
+  justify?: keyof typeof JustifyContent;
+  spacing?: number;
+  fullHeight?: boolean;
+  wrap?: boolean;
+  style?: CSSProperties | undefined;
+  onClick?(): void;
+  className?: string;
 }
 
 const Stack: FC<StackProps> = ({
@@ -57,7 +57,7 @@ const Stack: FC<StackProps> = ({
     >
       {children}
     </StackFlex>
-  )
-}
+  );
+};
 
-export default Stack
+export default Stack;

@@ -1,11 +1,11 @@
-import React, { FC } from "react"
-import IconWrapper, { IIconWrapperProps, TSize } from "./IconWrapper"
-import { icons } from "../../assets/icons"
+import React, { FC } from "react";
+import IconWrapper, { IIconWrapperProps, TSize } from "./IconWrapper";
+import { icons } from "../../assets/icons";
 
 interface IIconProps extends Omit<IIconWrapperProps, "size"> {
-  icon: keyof typeof icons
-  onClick?: () => void
-  size?: TSize
+  icon: keyof typeof icons;
+  onClick?: () => void;
+  size?: TSize;
 }
 
 const Icon: FC<IIconProps> = ({
@@ -19,10 +19,10 @@ const Icon: FC<IIconProps> = ({
   ...props
 }) => {
   if (!icon) {
-    return null
+    return null;
   }
 
-  const IconComponent = () => icons[icon]
+  const IconComponent = () => icons[icon];
   return (
     <IconWrapper
       onClick={onClick}
@@ -35,7 +35,7 @@ const Icon: FC<IIconProps> = ({
     >
       <IconComponent />
     </IconWrapper>
-  )
-}
+  );
+};
 
-export default Icon
+export default Icon;

@@ -27,6 +27,7 @@ const Tabs = ({ tabs }: Props) => {
             key={index}
             className="custom-tab"
             selectedClassName="custom-tab__active"
+            key={tab.title}
           >
             <TabButton
               active={selectedIndex === index}
