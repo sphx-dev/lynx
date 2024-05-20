@@ -11,8 +11,8 @@ interface Label {
 const Label = ({ label, value }: Label) => {
   return (
     <Group position="apart">
-      <Text variant="textXs">{label}:</Text>
-      <Text variant="textXs">{value || "-"}</Text>
+      <Text variant="textSm">{label}:</Text>
+      <Text variant="textSm">{value || "-"}</Text>
     </Group>
   );
 };

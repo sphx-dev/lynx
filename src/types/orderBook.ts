@@ -3,6 +3,7 @@ import { Account } from "./order";
 export interface Order<T> {
   quantity: T;
   price: T;
+  leverage: number;
 }
 
 export interface OrderWithTotal extends Order<number> {

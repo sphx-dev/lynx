@@ -8,6 +8,12 @@ const fontStyles = {
 }
 
 const typography = {
+  textXl: {
+    "font-family": fontStyles.bold,
+    "font-size": "2rem",
+    "font-weight": 700,
+    "line-height": "18px",
+  },
   textMd: {
     "font-family": fontStyles.regular,
     "font-size": "14px",

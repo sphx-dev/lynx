@@ -7,7 +7,7 @@ import PriceLevelRow from "./PriceLevelRow";
 import { Container, TableContainer } from "./OrderBookStyle";
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
 import { MOBILE_WIDTH } from "../../constants";
-import { Stack } from "../../components";
+import {Stack, Text} from "../../components";
 import Divider from "./Divider";
 import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
 import { OrderWithDepth } from "../../types/orderBook";
@@ -24,7 +24,7 @@ interface OrderBookProps {
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const book = useAppSelector(orderBook);
   useGetOrderBookQuery(undefined, {
-    pollingInterval: 1000,
+    pollingInterval: 10000,
   });
 
   const buildPriceLevels = (
@@ -91,9 +91,9 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
           </TableContainer>
         </Stack>
       ) : (
-        <div>
-          <h1>NO DATA</h1>
-        </div>
+        <Stack fullHeight justify="center" align="center">
+          <Text variant="textXl" color="tertiary">NO DATA</Text>
+        </Stack>
       )}
     </Container>
   );

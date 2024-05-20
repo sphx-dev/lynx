@@ -95,7 +95,8 @@
       "prettier/prettier": [
         "error",
         {
-          "endOfLine": "auto"
+          "endOfLine": "auto",
+          "arrowParens": "avoid"
         }
       ],
       "react/jsx-no-target-blank": "off"

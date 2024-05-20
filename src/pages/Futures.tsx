@@ -39,11 +39,16 @@ const tabs = [
   },
   {
     title: "Trades",
-    content: <h1>No Data</h1>,
+    content: (
+      <Stack fullHeight justify="center" align="center">
+        <Text variant="textXl" color="tertiary">
+          NO DATA
+        </Text>
+      </Stack>
+    ),
   },
 ];
 const Futures = () => {
-
   return (
     <Wrapper>
       <OrderInput />
@@ -65,7 +70,9 @@ const Futures = () => {
             }}
           >
             <Stack justify="apart" fullHeight>
-              <TabComponent tabs={tabs} />
+              <div style={{ flex: 1 }}>
+                <TabComponent tabs={tabs} />
+              </div>
               <Logo />
             </Stack>
           </Surface>
