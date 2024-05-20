@@ -10,6 +10,7 @@ import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
 import PendingOrders from "./PendingOrders";
 import ClosedOrders from "./ClosedOrders";
+import Positions from "./Positions";
 interface TabProps {
   isActive?: boolean;
 }
@@ -46,7 +47,7 @@ const Tabs = styled.div`
   width: 100%;
   min-width: 400px;
 `;
-const CONTENT = [Table, PendingOrders, ClosedOrders, Table];
+const CONTENT = [Positions, PendingOrders, ClosedOrders, Table];
 
 const TableTabs = () => {
   const [active, setActive] = useState(0);

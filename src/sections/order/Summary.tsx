@@ -1,21 +1,24 @@
-import React from "react"
-import { Group, Stack, Text } from "../../components"
-import { formatNumber } from "../../utils/format"
+import React from "react";
+import { Group, Stack, Text } from "../../components";
+import { formatNumber } from "../../utils/format";
+import { useSelector } from "react-redux";
+import { account } from "../../state/accountSlice";
 
 interface Label {
-  label: string
-  value?: string
+  label: string;
+  value?: string;
 }
 const Label = ({ label, value }: Label) => {
   return (
     <Group position="apart">
-      <Text variant="textXs">{label}:</Text>
-      <Text variant="textXs">{value || "-"}</Text>
+      <Text variant="textSm">{label}:</Text>
+      <Text variant="textSm">{value || "-"}</Text>
     </Group>
-  )
-}
+  );
+};
 
 const Summary = () => {
+  const { balance } = useSelector(account);
   return (
     <Stack>
       <Label
@@ -25,8 +28,12 @@ const Summary = () => {
       <Label label="Liquidation Price" />
       <Label label="Fill Price" />
       <Label label="Price Impact" />
+      <Label
+        label="Balance"
+        value={formatNumber({ value: +balance, fixed: 2, before: "$" })}
+      />
     </Stack>
-  )
-}
+  );
+};
 
-export default Summary
+export default Summary;

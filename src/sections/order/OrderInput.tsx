@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
 import {
   Button,
   ConnectButton,
@@ -26,6 +29,7 @@ import {
   usePlaceMarketOrderMutation,
 } from "../../utils/api/orderApi";
 import { handleApiCall } from "../../utils/handleApiCall";
+import { MESSAGE } from "../../constants/validation";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -79,13 +83,59 @@ const defaultValues: MarketOrderForm = {
   stopLoss: null,
 };
 
+const schema = (orderType: OrderType, markPrice: number) =>
+  yup.object().shape({
+    volume: yup
+      .number()
+      .typeError(MESSAGE.number)
+      .moreThan(0)
+      .required(MESSAGE.required),
+    price:
+      orderType === OrderType.LIMIT
+        ? yup
+            .number()
+            .typeError(MESSAGE.required)
+            .moreThan(0)
+            .required(MESSAGE.required)
+        : yup.number().nullable(),
+    takeProfit: yup
+      .number()
+      .nullable()
+      .transform(value => {
+        return value || null;
+      })
+      .when("isBuy", {
+        is: true,
+        then: schema => schema.moreThan(markPrice, MESSAGE.moreThan),
+        otherwise: schema => schema.lessThan(markPrice, MESSAGE.lessThan),
+      }),
+    stopLoss: yup
+      .number()
+      .nullable()
+      .transform(value => {
+        return value || null;
+      })
+      .when("isBuy", {
+        is: true,
+        then: schema => schema.lessThan(markPrice, MESSAGE.lessThan),
+        otherwise: schema => schema.moreThan(markPrice, MESSAGE.moreThan),
+      }),
+  });
+
 function OrderInput() {
   const { themeColors } = useTheme();
   const { isConnected } = useAccount();
   const { t } = useTranslation();
   const [orderType, setOrderType] = useState(OrderType.MARKET);
-  const { handleSubmit, register, setValue, watch } = useForm({
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<MarketOrderForm>({
     defaultValues,
+    resolver: yupResolver<any>(schema(orderType, 90)),
   });
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
   const [placeLimitOrder] = usePlaceLimitOrderMutation();
@@ -168,12 +218,18 @@ function OrderInput() {
                         {...register("price")}
                         label="Price"
                         rightSide="USD"
+                        type="number"
+                        value={watch("price")}
+                        error={errors.price?.message}
                       />
                     )}
                     <Input
                       {...register("volume")}
+                      error={errors.volume?.message}
+                      value={watch("volume")}
+                      type="number"
                       label="Size"
-                      rightSide="USD"
+                      rightSide="WTX"
                     />
                     <div style={{ position: "relative" }}>
                       <Group align="end">
@@ -181,8 +237,15 @@ function OrderInput() {
                           {...register("leverage")}
                           style={{ minWidth: "60px" }}
                           label="Leverage"
+                          readOnly
                         />
                         <Group align="end" style={{ flex: 1 }}>
+                          <StyledButton
+                            type="button"
+                            onClick={() => handleChangeLeverage(1)}
+                          >
+                            1x
+                          </StyledButton>
                           <StyledButton
                             type="button"
                             onClick={() => handleChangeLeverage(2)}
@@ -214,11 +277,17 @@ function OrderInput() {
                       {...register("takeProfit")}
                       label="Take Profit"
                       rightSide="USD"
+                      error={errors.takeProfit?.message}
+                      type="number"
+                      value={watch("takeProfit") || ""}
                     />
                     <Input
                       {...register("stopLoss")}
                       label="Stop Loss"
                       rightSide="USD"
+                      error={errors.stopLoss?.message}
+                      type="number"
+                      value={watch("stopLoss") || ""}
                     />
                     {!isConnected && <ConnectButton />}
                     {isConnected && (

@@ -68,3 +68,11 @@ body {height: 100%; overflow-y: auto }
 .custom-tab__active {
   background: none;
 }
+.react-tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.tabs-content__active {
+  flex: 1;
+}

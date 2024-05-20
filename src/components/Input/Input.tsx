@@ -1,5 +1,5 @@
-import React, { useState, FocusEvent, forwardRef } from "react";
-import styled from "styled-components";
+import React, { useState, FocusEvent, forwardRef, ChangeEvent } from "react";
+import styled, { css } from "styled-components";
 import { getThemeColors, ThemeColors } from "../../theme";
 import Stack from "../Stack";
 import Text from "../Text";
@@ -18,7 +18,10 @@ type Ref = HTMLInputElement;
 interface InputWrapperProps {
   variant: keyof ThemeColors["input"];
   disabled?: boolean;
+  error?: boolean;
 }
+
+const numberRegex = /^\d*\.?\d*$/;
 
 const StyledInput = styled.input`
   ${({ theme }) => theme.fonts.typography.textNumMd}
@@ -56,6 +59,10 @@ const StyledLabel = styled.label<{ isFocused: boolean }>`
   text-align: left;
 `;
 
+const errorStyle = css`
+  border: ${({ theme }) => `1px solid ${getThemeColors(theme).text.error}`};
+`;
+
 const InputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.borderRadius.md};
@@ -76,6 +83,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
   display: flex;
   align-items: center;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
+  ${({ error }) => error && errorStyle}
 `;
 
 const Input = forwardRef<Ref, InputProps>(
@@ -87,6 +95,10 @@ const Input = forwardRef<Ref, InputProps>(
       fluid,
       style,
       variant = "primary",
+      onChange,
+      type,
+      onFocus,
+      onBlur,
       ...restProps
     },
     ref
@@ -95,16 +107,26 @@ const Input = forwardRef<Ref, InputProps>(
     const [isFocused, setIsFocused] = useState(false);
     const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
-      if (restProps?.onFocus) {
-        restProps.onFocus(e);
+      if (onFocus) {
+        onFocus(e);
       }
     };
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
       setIsFocused(false);
-      if (restProps?.onBlur) {
-        restProps.onBlur(e);
+      if (onBlur) {
+        onBlur(e);
       }
     };
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      if (type === "number") {
+        if (numberRegex.test(event.target.value)) {
+          return onChange && onChange(event);
+        }
+        return;
+      }
+      onChange && onChange(event);
+    };
+
     return (
       <Stack
         spacing={4}
@@ -119,6 +141,7 @@ const Input = forwardRef<Ref, InputProps>(
           style={{ position: "relative" }}
           variant={variant}
           disabled={restProps.disabled}
+          error={!!error}
         >
           <StyledInput
             data-error={error ? "true" : "false"}
@@ -126,6 +149,7 @@ const Input = forwardRef<Ref, InputProps>(
             {...restProps}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            onChange={handleChange}
           />
           {rightSide && <Text>{rightSide}</Text>}
         </InputWrapper>

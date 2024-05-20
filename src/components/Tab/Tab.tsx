@@ -24,6 +24,7 @@ const Tabs = ({ tabs }: Props) => {
       <TabList className="custom-tab-list">
         {tabs.map((tab, index) => (
           <BaseTab
+            key={index}
             className="custom-tab"
             selectedClassName="custom-tab__active"
             key={tab.title}
@@ -37,8 +38,15 @@ const Tabs = ({ tabs }: Props) => {
           </BaseTab>
         ))}
       </TabList>
-      {tabs.map(({ title, content }) => (
-        <TabPanel key={title}>{content}</TabPanel>
+      {tabs.map(({ title, content }, index) => (
+        <TabPanel
+          className={
+            selectedIndex === index ? "tabs-content__active" : undefined
+          }
+          key={title}
+        >
+          {content}
+        </TabPanel>
       ))}
     </BaseTabs>
   );

@@ -47,19 +47,19 @@ const Table = ({ data = [], columns = mockColumns }: ITableProps) => {
   return (
     <StyledTable>
       <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
+        {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header: any) => (
-              <th>{header.column.columnDef.header}</th>
+              <th key={header.column?.id}>{header.column.columnDef.header}</th>
             ))}
           </tr>
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.map((row) => (
+        {table.getRowModel().rows.map(row => (
           <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td>
+            {row.getVisibleCells().map(cell => (
+              <td key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}
