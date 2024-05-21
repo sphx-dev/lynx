@@ -1,4 +1,4 @@
-import common from "./common"
+import common from "./common";
 
 const lightTheme = {
   ...common,
@@ -55,17 +55,6 @@ const lightTheme = {
         focused: common.palette.error["100"],
       },
     },
-    link: {
-      background: {
-        default: 'none',
-        hovered: 'none',
-        disabled: 'none',
-        pressed: 'none',
-      },
-      border: {
-        focused: 'none',
-      },
-    },
   },
   button: {
     primary: {
@@ -101,6 +90,17 @@ const lightTheme = {
         focused: common.palette.secondary["500"],
       },
     },
+    link: {
+      background: {
+        default: "none",
+        hovered: "none",
+        disabled: "none",
+        pressed: "none",
+      },
+      border: {
+        focused: "none",
+      },
+    },
   },
   text: {
     primary: "#FFFFFF",
@@ -114,6 +114,6 @@ const lightTheme = {
   actionBar: {
     text: common.gray,
   },
-}
+};
 
-export default lightTheme
+export default lightTheme;
