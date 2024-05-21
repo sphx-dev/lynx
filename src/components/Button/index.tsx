@@ -54,10 +54,10 @@ const StyledButton = styled.button<CssProps>`
       : theme.fonts.typography.actionSmBold};
   border-radius: ${({ theme, pill }) =>
     pill ? theme.borderRadius.pill : theme.borderRadius.md};
-  color: ${({ theme, disabled }) =>
+  color: ${({ theme, disabled, color }) =>
     disabled
       ? getThemeColors(theme).text.tertiary
-      : getThemeColors(theme).text.primary};
+      : color || getThemeColors(theme).text.primary};
   width: ${({ fluid }) => (fluid ? "100%" : "auto")};
   outline: none;
   cursor: pointer;

@@ -55,6 +55,17 @@ const lightTheme = {
         focused: common.palette.error["100"],
       },
     },
+    link: {
+      background: {
+        default: 'none',
+        hovered: 'none',
+        disabled: 'none',
+        pressed: 'none',
+      },
+      border: {
+        focused: 'none',
+      },
+    },
   },
   button: {
     primary: {

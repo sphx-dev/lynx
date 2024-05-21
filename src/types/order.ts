@@ -48,3 +48,8 @@ export interface Position {
   ticker: string;
   unrealizedPl: string;
 }
+
+export enum OrderSide {
+  buy = 'buy',
+  sell = 'sell'
+}
