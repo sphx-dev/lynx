@@ -90,6 +90,17 @@ const darkTheme = {
         focused: common.palette.secondary["500"],
       },
     },
+    link: {
+      background: {
+        default: 'none',
+        hovered: 'none',
+        disabled: 'none',
+        pressed: 'none',
+      },
+      border: {
+        focused: 'none',
+      },
+    },
   },
   text: {
     primary: "#FFFFFF",
