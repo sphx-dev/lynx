@@ -53,7 +53,7 @@ const StyledInput = styled.input`
   }
 `;
 
-const StyledLabel = styled.label<{ isFocused: boolean }>`
+const StyledLabel = styled.label<{ $isFocused: boolean }>`
   ${({ theme }) => theme.fonts.typography.textSm}
   color: ${({ theme }) => getThemeColors(theme).text.primary};
   text-align: left;
@@ -136,7 +136,7 @@ const Input = forwardRef<Ref, InputProps>(
           ...style,
         }}
       >
-        {label && <StyledLabel isFocused={isFocused}>{label}</StyledLabel>}
+        {label && <StyledLabel $isFocused={isFocused}>{label}</StyledLabel>}
         <InputWrapper
           style={{ position: "relative" }}
           variant={variant}

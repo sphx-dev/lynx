@@ -13,6 +13,8 @@ const SIZE_MAP = {
 type Variant = keyof ThemeColors["button"];
 interface CssProps extends Props {
   variant: Variant;
+  $pill?: boolean;
+  $fluid?: boolean;
 }
 
 const styleByVariant = css<CssProps>`
@@ -52,13 +54,13 @@ const StyledButton = styled.button<CssProps>`
     size === "xs"
       ? theme.fonts.typography.text2Xs
       : theme.fonts.typography.actionSmBold};
-  border-radius: ${({ theme, pill }) =>
-    pill ? theme.borderRadius.pill : theme.borderRadius.md};
+  border-radius: ${({ theme, $pill }) =>
+    $pill ? theme.borderRadius.pill : theme.borderRadius.md};
   color: ${({ theme, disabled, color }) =>
     disabled
       ? getThemeColors(theme).text.tertiary
       : color || getThemeColors(theme).text.primary};
-  width: ${({ fluid }) => (fluid ? "100%" : "auto")};
+  width: ${({ $fluid }) => ($fluid ? "100%" : "auto")};
   outline: none;
   cursor: pointer;
 `;
@@ -67,24 +69,35 @@ const StyledWrapper = styled.span<Partial<CssProps>>`
   display: inline-block;
   padding: 2px;
   border-radius: 1000px;
-  width: ${({ fluid }) => (fluid ? "100%" : "auto")};
+  width: ${({ $fluid }) => ($fluid ? "100%" : "auto")};
   align-self: center;
 `;
 
-const Wrapper = ({ variant, children, ...props }: PropsWithChildren<Props>) => {
+const Wrapper = ({
+  variant,
+  children,
+  fluid,
+  ...props
+}: PropsWithChildren<Props>) => {
   if (variant === "primary")
-    return <StyledWrapper {...props}>{children}</StyledWrapper>;
+    return (
+      <StyledWrapper $fluid={fluid} {...props}>
+        {children}
+      </StyledWrapper>
+    );
   return <>{children}</>;
 };
 
 const Button = ({
   children,
   variant = "secondary",
+  pill,
+  fluid,
   ...props
 }: PropsWithChildren<Props>) => {
   return (
-    <Wrapper variant={variant} {...props}>
-      <StyledButton {...props} variant={variant}>
+    <Wrapper variant={variant} fluid={fluid} {...props}>
+      <StyledButton $pill={pill} $fluid={fluid} variant={variant} {...props}>
         {children}
       </StyledButton>
     </Wrapper>

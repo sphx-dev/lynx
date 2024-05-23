@@ -12,18 +12,18 @@ import PendingOrders from "./PendingOrders";
 import ClosedOrders from "./ClosedOrders";
 import Positions from "./Positions";
 interface TabProps {
-  isActive?: boolean;
+  $isActive?: boolean;
 }
 const Tab = styled.button<TabProps>`
-  ${({ theme, isActive }) =>
-    isActive
+  ${({ theme, $isActive }) =>
+    $isActive
       ? theme.fonts.typography.actionMdBold
       : theme.fonts.typography.actionMd};
   padding: 14px 34px;
   background: none;
   border: none;
-  color: ${({ theme, isActive }) =>
-    isActive
+  color: ${({ theme, $isActive }) =>
+    $isActive
       ? theme.colors.selectedTheme.tableTabs.colorActive
       : theme.colors.selectedTheme.tableTabs.color};
   border-right: ${({ theme }) =>
@@ -86,7 +86,7 @@ const TableTabs = () => {
         {tabs.map(({ icon, title, count }, index) => (
           <Tab
             key={index}
-            isActive={active === index}
+            $isActive={active === index}
             onClick={() => setActive(index)}
           >
             <>

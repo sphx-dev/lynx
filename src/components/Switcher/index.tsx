@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 
-const StyledLabel = styled.label<{ isActive?: boolean }>`
-  ${({ theme, isActive }) =>
-    isActive
+const StyledLabel = styled.label<{ $isActive?: boolean }>`
+  ${({ theme, $isActive }) =>
+    $isActive
       ? theme.fonts.typography.actionSmBold
       : theme.fonts.typography.textSm};
   border-radius: ${({ theme }) => theme.borderRadius.md};
-  color: ${({ theme, isActive }) =>
-    isActive
+  color: ${({ theme, $isActive }) =>
+    $isActive
       ? getThemeColors(theme).text.primary
       : getThemeColors(theme).text.secondary};
-  background-color: ${({ theme, isActive }) =>
-    isActive ? getThemeColors(theme).background.button : "transparent"};
-  border: ${({ theme, isActive }) =>
-    isActive && `1px solid ${getThemeColors(theme).border.default}`};
+  background-color: ${({ theme, $isActive }) =>
+    $isActive ? getThemeColors(theme).background.button : "transparent"};
+  border: ${({ theme, $isActive }) =>
+    $isActive && `1px solid ${getThemeColors(theme).border.default}`};
   padding: 5px 20px;
   flex: 1;
   text-align: center;
@@ -24,7 +24,7 @@ const StyledLabel = styled.label<{ isActive?: boolean }>`
 
 const Radio = (props: any) => {
   return (
-    <StyledLabel htmlFor={props.label} isActive={props.isActive}>
+    <StyledLabel htmlFor={props.label} $isActive={props.isActive}>
       {props.label}
       <input
         id={props.label}

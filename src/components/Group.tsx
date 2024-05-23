@@ -5,7 +5,7 @@ import { AlignItems, DEFAULT_SPACING, JustifyContent } from "./types";
 const GroupFlex = styled.div<GroupProps>`
   display: flex;
   flex-direction: row;
-  flex-wrap: ${(props) => (props.wrap ? "wrap" : "nowrap")};
+  flex-wrap: ${(props) => (props.$wrap ? "wrap" : "nowrap")};
 
   align-items: ${(props) => {
     return AlignItems[props.align || "start"];
@@ -16,11 +16,7 @@ const GroupFlex = styled.div<GroupProps>`
   column-gap: ${(props) => {
     return `${props.spacing}px`;
   }};
-  row-gap: ${(props) => {
-    return `${props.spacing}px`;
-  }};
 `;
-
 interface GroupProps {
   children: ReactNode;
   align?: keyof typeof AlignItems;
@@ -29,7 +25,7 @@ interface GroupProps {
   fluid?: boolean;
   style?: CSSProperties | undefined;
   onClick?(event: MouseEvent<HTMLDivElement>): void;
-  wrap?: boolean;
+  $wrap?: boolean;
   className?: any;
 }
 
@@ -40,7 +36,7 @@ const Group: FC<GroupProps> = ({
   spacing = DEFAULT_SPACING,
   style,
   onClick,
-  wrap = false,
+  $wrap = false,
   className,
 }) => {
   return (
@@ -51,7 +47,7 @@ const Group: FC<GroupProps> = ({
       align={align}
       position={position}
       spacing={spacing}
-      wrap={wrap}
+      $wrap={$wrap}
     >
       {children}
     </GroupFlex>

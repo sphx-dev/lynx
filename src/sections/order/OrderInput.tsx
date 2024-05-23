@@ -37,7 +37,7 @@ const Wrapper = styled.div`
   width: 320px;
 `;
 const Container = styled.div`
-  padding: 0px 16px;
+  padding: 0 16px;
 `;
 const StyledButton = styled(Button)`
   width: 38px;
@@ -190,7 +190,7 @@ function OrderInput() {
               <Stack spacing={20}>
                 <Group spacing={0}>
                   <TabButton
-                    active={isBuyPosition}
+                    $active={isBuyPosition}
                     onClick={() => handleChangeOrderSide(true)}
                     type="button"
                     style={{ flex: 1 }}
@@ -198,7 +198,7 @@ function OrderInput() {
                     LONG
                   </TabButton>
                   <TabButton
-                    active={!isBuyPosition}
+                    $active={!isBuyPosition}
                     onClick={() => handleChangeOrderSide(false)}
                     type="button"
                     style={{ flex: 1 }}

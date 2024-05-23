@@ -30,7 +30,7 @@ const Tabs = ({ tabs }: Props) => {
             key={tab.title}
           >
             <TabButton
-              active={selectedIndex === index}
+              $active={selectedIndex === index}
               style={{ width: "100%" }}
             >
               {tab.title}
