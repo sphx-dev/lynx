@@ -21,7 +21,7 @@ export const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    clear: (state) => {
+    clear: state => {
       state.done = [];
       state.order = {};
       state.partialOrder = {};

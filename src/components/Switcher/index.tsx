@@ -71,7 +71,7 @@ const Switcher = <T extends string>({ options, name, onChange }: Props<T>) => {
   };
   return (
     <Container>
-      {options.map((option) => (
+      {options.map(option => (
         <Radio
           name={name}
           key={option.label}

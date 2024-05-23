@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import Icon from "./index"
+import type { Meta, StoryObj } from "@storybook/react";
+import Icon from "./index";
 
 const meta: Meta<typeof Icon> = {
   component: Icon,
@@ -11,13 +11,13 @@ const meta: Meta<typeof Icon> = {
     stroke: "#000000",
     icon: "HomeIcon",
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof Icon>
+type Story = StoryObj<typeof Icon>;
 
 export const HomeIcon: Story = {
   name: "Icons",
-  render: (args) => <Icon {...args} />,
-}
+  render: args => <Icon {...args} />,
+};

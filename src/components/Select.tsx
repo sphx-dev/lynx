@@ -1,28 +1,28 @@
-import React, { useState } from "react"
-import Select, { StylesConfig } from "react-select"
-import { useTheme } from "styled-components"
-import { useTranslation } from "react-i18next"
-import { getThemeColors } from "../theme"
+import React, { useState } from "react";
+import Select, { StylesConfig } from "react-select";
+import { useTheme } from "styled-components";
+import { useTranslation } from "react-i18next";
+import { getThemeColors } from "../theme";
 
 export interface OptionType {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
 const TakeProfitStopLossSelect: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null)
-  const { t } = useTranslation()
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const { t } = useTranslation();
 
   const options: OptionType[] = [
     { value: "takeProfit", label: t("takeProfit") },
     { value: "stopLoss", label: t("Stop loss") },
-  ]
+  ];
   const handleChange = (option: any | null) => {
     // TODO: fix type for option
-    setSelectedOption(option)
-    console.log(`Option selected:`, option)
-  }
-  const appTheme = useTheme()
+    setSelectedOption(option);
+    console.log(`Option selected:`, option);
+  };
+  const appTheme = useTheme();
 
   const customTheme = (theme: any) => ({
     ...theme,
@@ -33,13 +33,13 @@ const TakeProfitStopLossSelect: React.FC = () => {
       neutral80: appTheme.colors.selectedTheme.text.primary,
       primary25: "transparent",
     },
-  })
+  });
 
   const customStyles: StylesConfig<OptionType> = {
-    container: (styles) => ({
+    container: styles => ({
       ...styles,
     }),
-    control: (styles) => ({
+    control: styles => ({
       ...styles,
       ...appTheme.fonts.typography.textMd,
       backgroundColor: appTheme.colors.selectedTheme.background.input,
@@ -58,7 +58,7 @@ const TakeProfitStopLossSelect: React.FC = () => {
         border: `2px solid ${appTheme.colors.selectedTheme.border.hovered}`,
       },
     }),
-    menu: (styles) => ({
+    menu: styles => ({
       ...styles,
       backgroundColor: appTheme.colors.selectedTheme.background.dropdown, // Assuming a dark teal background as in your picture
     }),
@@ -76,7 +76,7 @@ const TakeProfitStopLossSelect: React.FC = () => {
     //   ...styles,
     //   color: '#bbe1fa',
     // }),
-    dropdownIndicator: (styles) => ({
+    dropdownIndicator: styles => ({
       ...styles,
       color: "#bbe1fa",
       display: "block",
@@ -90,7 +90,7 @@ const TakeProfitStopLossSelect: React.FC = () => {
     indicatorSeparator: () => ({
       display: "none",
     }),
-  }
+  };
   return (
     <div>
       <Select
@@ -101,7 +101,7 @@ const TakeProfitStopLossSelect: React.FC = () => {
         styles={customStyles}
       />
     </div>
-  )
-}
+  );
+};
 
-export default TakeProfitStopLossSelect
+export default TakeProfitStopLossSelect;

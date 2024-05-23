@@ -1,8 +1,8 @@
-import React from "react"
-import { Outlet } from "react-router-dom"
+import React from "react";
+import { Outlet } from "react-router-dom";
 
 const BaseTemplate = () => {
-  return <Outlet />
-}
+  return <Outlet />;
+};
 
-export default BaseTemplate
+export default BaseTemplate;

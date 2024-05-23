@@ -32,7 +32,6 @@ const Status = styled.div<IStatusProps>`
     border-radius: 50%;
   }
 `;
-const StyledLink = styled.a``;
 
 const Nav = styled.nav`
   display: flex;

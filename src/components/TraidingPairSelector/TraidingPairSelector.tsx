@@ -1,28 +1,28 @@
 // TradingPairSelector.tsx
-import React from "react"
-import Select, { SingleValue, StylesConfig, components } from "react-select"
-import { useTheme } from "styled-components"
-import { getThemeColors } from "../../theme"
-import { OptionType } from "../Select"
-import Icon from "../Icon"
+import React from "react";
+import Select, { StylesConfig, components } from "react-select";
+import { useTheme } from "styled-components";
+import { getThemeColors } from "../../theme";
+import { OptionType } from "../Select";
+import Icon from "../Icon";
 
-const { Control } = components
+const { Control } = components;
 
 const IconControl = ({ children, ...props }: any) => (
   <Control {...props}>
     <Icon icon="PairSelectIcon" stroke="none" size="medium" />
     {children}
   </Control>
-)
+);
 
 interface TradingPairOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 interface TradingPairSelectorProps {
-  options?: TradingPairOption[]
-  onChange?: any
-  value?: TradingPairOption | null
+  options?: TradingPairOption[];
+  onChange?: any;
+  value?: TradingPairOption | null;
 }
 
 const mockOptions = [
@@ -30,14 +30,14 @@ const mockOptions = [
   { value: "eth_usdc", label: "ETH / USDC" },
   { value: "wtx_usdc", label: "WTX / USDC" },
   // ...add more trading pairs as needed
-]
+];
 
 const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
   options = mockOptions,
   onChange = () => {},
   value = { value: "wtx_usdc", label: "WTX / USDC" },
 }) => {
-  const appTheme = useTheme() // Renamed to appTheme for clarity
+  const appTheme = useTheme(); // Renamed to appTheme for clarity
   // Function to customize react-select's theme based on the application's theme
   const customTheme = (theme: any) => ({
     ...theme,
@@ -47,7 +47,7 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
       ...theme.colors,
       neutral80: appTheme.colors.selectedTheme.text.primary,
     },
-  })
+  });
 
   const customStyles: StylesConfig<OptionType> = {
     container: (provided: any) => ({
@@ -86,7 +86,7 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
       padding: 0,
     }),
     // You can add more custom styles for other parts of the select component if needed
-  }
+  };
 
   return (
     <Select
@@ -101,7 +101,7 @@ const TradingPairSelector: React.FC<TradingPairSelectorProps> = ({
       isSearchable={false}
       components={{ Control: IconControl }}
     />
-  )
-}
+  );
+};
 
-export default TradingPairSelector
+export default TradingPairSelector;

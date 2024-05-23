@@ -4,7 +4,7 @@ import { api } from "../app/api";
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({ serializableCheck: false }).concat(api.middleware),
 });
 

@@ -4,8 +4,8 @@ const borderRadius = {
   md: "8px",
   pill: "40px",
   circle: "50%",
-}
+};
 
 export const commonTheme = {
   borderRadius,
-}
+};

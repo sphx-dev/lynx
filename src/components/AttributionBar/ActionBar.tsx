@@ -1,11 +1,11 @@
 // Import React and styled-components
-import React from "react"
-import styled from "styled-components"
-import heart from "../../assets/icons/heart.svg"
-import graph from "../../assets/icons/graph.svg"
-import settings from "../../assets/icons/setting.svg"
-import Group from "../Group"
-import { useTranslation } from "react-i18next"
+import React from "react";
+import styled from "styled-components";
+import heart from "../../assets/icons/heart.svg";
+import graph from "../../assets/icons/graph.svg";
+import settings from "../../assets/icons/setting.svg";
+import Group from "../Group";
+import { useTranslation } from "react-i18next";
 
 // Define styled components for the action bar and icons
 export const ActionBarContainer = styled(Group)`
@@ -19,12 +19,12 @@ export const ActionBarContainer = styled(Group)`
   font-size: 10px;
   font-weight: 600;
   height: var(--height);
-`
+`;
 const Divider = styled.div`
   border-left: 1px solid #071c27;
   height: 100%;
   box-shadow: 1px 0px 0px 0px rgba(13, 47, 69, 0.99);
-`
+`;
 const Icon = styled.img`
   width: 16px; /* Icon size */
   height: 16px;
@@ -32,16 +32,16 @@ const Icon = styled.img`
   &:hover {
     opacity: 0.7; /* Slight transparency on hover */
   }
-`
+`;
 const Button = styled.div`
   height: 100%;
   cursor: pointer;
   display: flex;
   align-items: center;
-`
+`;
 // The React component that uses the styled components
 const ActionBar = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <ActionBarContainer spacing={10}>
       {/* You can replace these with the actual icons you need */}
@@ -58,7 +58,7 @@ const ActionBar = () => {
         <Icon src={settings} alt="Settings Icon" />
       </Button>
     </ActionBarContainer>
-  )
-}
+  );
+};
 
-export default ActionBar
+export default ActionBar;

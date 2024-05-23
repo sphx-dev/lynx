@@ -1,11 +1,11 @@
-import animations from "./animations"
-import colors, { themeColors } from "./colors"
-import fonts from "./fonts"
-import { commonTheme } from "./common"
+import animations from "./animations";
+import colors, { themeColors } from "./colors";
+import fonts from "./fonts";
+import { commonTheme } from "./common";
 
-const theme = { colors, fonts, animations, ...commonTheme }
+const theme = { colors, fonts, animations, ...commonTheme };
 
-export type ThemeName = keyof typeof themeColors
+export type ThemeName = keyof typeof themeColors;
 
 export const wrapTheme = (name: ThemeName) => ({
   ...theme,
@@ -13,18 +13,18 @@ export const wrapTheme = (name: ThemeName) => ({
     ...theme.colors,
     selectedTheme: themeColors[name],
   },
-})
+});
 
-export type ThemeInterface = ReturnType<typeof wrapTheme>
+export type ThemeInterface = ReturnType<typeof wrapTheme>;
 
 export const themes = {
   light: wrapTheme("light"),
   dark: wrapTheme("dark"),
-}
+};
 
 export const getThemeColors = (theme: ThemeInterface) =>
-  theme.colors.selectedTheme
+  theme.colors.selectedTheme;
 
-export type ThemeColors = ReturnType<typeof getThemeColors>
+export type ThemeColors = ReturnType<typeof getThemeColors>;
 
-export default theme
+export default theme;

@@ -22,7 +22,9 @@ const baseQueryWithCamelize: BaseQueryFn<
 > = async (args, api, extraOptions = {}) => {
   const result = await baseQueryWithRetry(args, api, extraOptions);
   if (result.data) {
-    result.data = camelcaseKeys(result.data as Record<string, any>, { deep: true });
+    result.data = camelcaseKeys(result.data as Record<string, any>, {
+      deep: true,
+    });
   }
   return result;
 };

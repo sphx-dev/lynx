@@ -8,6 +8,8 @@ interface Label {
   label: string;
   value?: string;
 }
+
+// eslint-disable-next-line
 const Label = ({ label, value }: Label) => {
   return (
     <Group position="apart">

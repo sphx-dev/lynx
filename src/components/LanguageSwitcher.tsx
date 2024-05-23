@@ -1,24 +1,24 @@
-import Select from "react-select"
+import Select from "react-select";
 
-import { useTranslation } from "react-i18next"
-import { OptionType } from "./Select"
-import { useState } from "react"
+import { useTranslation } from "react-i18next";
+import { OptionType } from "./Select";
+import { useState } from "react";
 
 const LanguageSwitcher = () => {
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null)
-  const { i18n } = useTranslation()
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const { i18n } = useTranslation();
 
   const changeLanguage = (option: OptionType | null) => {
-    if (!option) return
+    if (!option) return;
 
-    i18n.changeLanguage(option.value)
-    setSelectedOption(option)
-  }
+    i18n.changeLanguage(option.value);
+    setSelectedOption(option);
+  };
 
   const options: OptionType[] = [
     { value: "en", label: "English" },
     { value: "es", label: "Español" },
-  ]
+  ];
 
   return (
     <Select
@@ -26,7 +26,7 @@ const LanguageSwitcher = () => {
       value={selectedOption || options[0]}
       onChange={changeLanguage}
     />
-  )
-}
+  );
+};
 
-export default LanguageSwitcher
+export default LanguageSwitcher;

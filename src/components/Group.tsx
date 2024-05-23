@@ -5,15 +5,15 @@ import { AlignItems, DEFAULT_SPACING, JustifyContent } from "./types";
 const GroupFlex = styled.div<GroupProps>`
   display: flex;
   flex-direction: row;
-  flex-wrap: ${(props) => (props.$wrap ? "wrap" : "nowrap")};
+  flex-wrap: ${props => (props.$wrap ? "wrap" : "nowrap")};
 
-  align-items: ${(props) => {
+  align-items: ${props => {
     return AlignItems[props.align || "start"];
   }};
-  justify-content: ${(props) => {
+  justify-content: ${props => {
     return JustifyContent[props.position || "left"];
   }};
-  column-gap: ${(props) => {
+  column-gap: ${props => {
     return `${props.spacing}px`;
   }};
 `;

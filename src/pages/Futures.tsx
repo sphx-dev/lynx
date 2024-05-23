@@ -27,7 +27,7 @@ const Logo = () => {
       style={{ width: "290px", margin: "0 auto", padding: "0 32px" }}
     >
       <Text color={themeColors.actionBar.text}>SPHINX OFFICIAL</Text>
-      <img src={logo} />
+      <img alt="lynx logo" src={logo} />
       <Text color={themeColors.actionBar.text}>ORDER BOOK</Text>
     </ActionBarContainer>
   );

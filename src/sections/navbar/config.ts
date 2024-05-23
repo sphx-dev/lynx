@@ -1,4 +1,4 @@
-import { ROUTES } from "../../routes"
+import { ROUTES } from "../../routes";
 
 export const navLinks = [
   {
@@ -26,4 +26,4 @@ export const navLinks = [
     path: ROUTES.referrals,
     icon: null,
   },
-]
+];

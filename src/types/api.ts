@@ -1,5 +1,5 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import {AsyncThunkAction, SerializedError} from "@reduxjs/toolkit";
+import { AsyncThunkAction, SerializedError } from "@reduxjs/toolkit";
 
 export interface Error {
   error: FetchBaseQueryError;

@@ -1,5 +1,4 @@
 import toast from "react-hot-toast";
-import SuccessIcon from "./success.svg";
 
 const config = {
   style: {

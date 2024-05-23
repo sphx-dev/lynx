@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import Button from "./index"
+import type { Meta, StoryObj } from "@storybook/react";
+import Button from "./index";
 
 const meta: Meta<typeof Button> = {
   component: Button,
@@ -9,31 +9,31 @@ const meta: Meta<typeof Button> = {
       control: "radio",
     },
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof Button>
+type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
-  render: (args) => (
+  render: args => (
     <Button {...args} pill variant="primary">
       Button
     </Button>
   ),
-}
+};
 export const Secondary: Story = {
-  render: (args) => (
+  render: args => (
     <Button {...args} variant="secondary">
       Button
     </Button>
   ),
-}
+};
 
 export const Pill: Story = {
-  render: (args) => (
+  render: args => (
     <Button {...args} variant="secondary" pill>
       Button
     </Button>
   ),
-}
+};

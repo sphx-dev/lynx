@@ -31,7 +31,6 @@ jobs:
       run: yarn type-check
     - name: Lint
       run: yarn lint
-      continue-on-error: true
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 3
@@ -46,5 +45,4 @@ jobs:
       run: yarn
     - name: Test
       run: yarn test
-      continue-on-error: true
 

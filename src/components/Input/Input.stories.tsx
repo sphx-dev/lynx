@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import Input from "./index"
-import { themes } from "../../theme"
-import { ThemeProvider } from "styled-components"
-import { store } from "../../state/store"
-import { Provider } from "react-redux"
+import type { Meta, StoryObj } from "@storybook/react";
+import Input from "./index";
+import { themes } from "../../theme";
+import { ThemeProvider } from "styled-components";
+import { store } from "../../state/store";
+import { Provider } from "react-redux";
 
 const meta: Meta<typeof Input> = {
   component: Input,
@@ -13,18 +13,18 @@ const meta: Meta<typeof Input> = {
   args: {
     label: "Name",
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof Input>
+type Story = StoryObj<typeof Input>;
 
 export const TextInput: Story = {
-  render: (args) => (
+  render: args => (
     <Provider store={store}>
       <ThemeProvider theme={themes["dark"]}>
         <Input {...args} />
       </ThemeProvider>
     </Provider>
   ),
-}
+};

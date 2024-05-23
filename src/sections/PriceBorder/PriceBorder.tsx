@@ -1,9 +1,9 @@
-import React from "react"
-import styled from "styled-components"
-import TradingPairSelector from "../../components/TraidingPairSelector"
-import { Stack, Text } from "../../components"
-import useTheme from "../../hooks/useTheme"
-import { formatNumber } from "../../utils/format"
+import React from "react";
+import styled from "styled-components";
+import TradingPairSelector from "../../components/TraidingPairSelector";
+import { Stack, Text } from "../../components";
+import useTheme from "../../hooks/useTheme";
+import { formatNumber } from "../../utils/format";
 
 const Wrapper = styled.div`
   background: linear-gradient(180deg, #16353c 0%, #17484e 100%);
@@ -15,11 +15,11 @@ const Wrapper = styled.div`
   border-style: solid;
   border-color: #2d5a62;
   margin-bottom: 12px;
-`
+`;
 const Divider = styled.div`
   width: 1px;
   background-color: rgba(255, 255, 255, 0.1);
-`
+`;
 
 enum ValueType {
   ERROR = "ERROR",
@@ -27,17 +27,19 @@ enum ValueType {
   DEFAULT = "DEFAULT",
 }
 interface PriceView {
-  label: string
-  value: string | number
-  type?: ValueType
+  label: string;
+  value: string | number;
+  type?: ValueType;
 }
+
+// eslint-disable-next-line
 const PriceView = ({ label, value, type = ValueType.DEFAULT }: PriceView) => {
-  const { themeColors } = useTheme()
+  const { themeColors } = useTheme();
   const colorsByType = {
     [ValueType.ACTIVE]: themeColors.text.secondaryActive,
     [ValueType.ERROR]: themeColors.text.error,
     [ValueType.DEFAULT]: themeColors.text.primary,
-  }
+  };
   return (
     <Stack>
       <Text color="tertiary">{label}</Text>
@@ -45,11 +47,11 @@ const PriceView = ({ label, value, type = ValueType.DEFAULT }: PriceView) => {
         {value}
       </Text>
     </Stack>
-  )
-}
+  );
+};
 
 const PriceBorder = () => {
-  const unit = "$"
+  const unit = "$";
   return (
     <Wrapper>
       <TradingPairSelector />
@@ -86,7 +88,7 @@ const PriceBorder = () => {
         type={ValueType.ACTIVE}
       />
     </Wrapper>
-  )
-}
+  );
+};
 
-export default PriceBorder
+export default PriceBorder;

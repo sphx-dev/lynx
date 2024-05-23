@@ -1,1 +1,1 @@
-export { default } from "./TabButton"
+export { default } from "./TabButton";

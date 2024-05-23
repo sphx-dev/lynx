@@ -1,17 +1,16 @@
-import React, { FunctionComponent } from "react"
-import { Container } from "./TitleRowStyle"
-import { MOBILE_WIDTH } from "../../constants"
-import { Text } from "../../components"
-import styled from "styled-components"
+import React, { FunctionComponent } from "react";
+import { Container } from "./TitleRowStyle";
+import { Text } from "../../components";
+import styled from "styled-components";
 
 interface TitleRowProps {
-  reversedFieldsOrder?: boolean
-  windowWidth: number
+  reversedFieldsOrder?: boolean;
+  windowWidth: number;
 }
 
 const Label = styled.div`
   flex: 1;
-`
+`;
 
 const TitleRow: FunctionComponent<TitleRowProps> = ({
   reversedFieldsOrder = false,
@@ -35,7 +34,7 @@ const TitleRow: FunctionComponent<TitleRowProps> = ({
         </Text>
       </Label>
     </Container>
-  )
-}
+  );
+};
 
-export default TitleRow
+export default TitleRow;

@@ -4,11 +4,11 @@ export const JustifyContent = {
   center: "center",
   apart: "space-between",
   around: "space-around",
-}
+};
 export const AlignItems = {
   start: "flex-start",
   end: "flex-end",
   center: "center",
   stretch: "stretch",
-}
-export const DEFAULT_SPACING = 8
+};
+export const DEFAULT_SPACING = 8;

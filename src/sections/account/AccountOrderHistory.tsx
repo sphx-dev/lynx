@@ -1,22 +1,21 @@
-import { useState, useEffect } from "react"
-import { useAppSelector, useAppDispatch } from "../../hooks"
-import { getAccount, account } from "../../state/accountSlice"
-import Card from "react-bootstrap/Card"
-import Table from "react-bootstrap/Table"
-import ListGroup from "react-bootstrap/ListGroup"
-import Badge from "react-bootstrap/Badge"
+import { useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import { getAccount, account } from "../../state/accountSlice";
+import Card from "react-bootstrap/Card";
+import Table from "react-bootstrap/Table";
+import Badge from "react-bootstrap/Badge";
 
 function AccountOrderHistory() {
-  const acct = useAppSelector(account)
-  const dispatch = useAppDispatch()
+  const acct = useAppSelector(account);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getAccount())
-  }, [acct.balance])
+    dispatch(getAccount());
+  }, [acct.balance, dispatch]);
 
   const getRandomArbitrary = (min: any, max: any) => {
-    return (Math.random() * (max - min) + min).toFixed(2)
-  }
+    return (Math.random() * (max - min) + min).toFixed(2);
+  };
 
   return (
     <>
@@ -38,17 +37,17 @@ function AccountOrderHistory() {
               </thead>
               <tbody>
                 {acct.openOrders?.map((order, i) => {
-                  console.log(order)
-                  let pnl = getRandomArbitrary(4, 20)
-                  let color = "green"
-                  let status = "ACTIVE"
+                  console.log(order);
+                  let pnl = getRandomArbitrary(4, 20);
+                  let color = "green";
+                  let status = "ACTIVE";
                   if (i % 2 === 0) {
-                    pnl = -pnl
-                    color = "red"
+                    pnl = -pnl;
+                    color = "red";
                   }
                   if (i > 2) {
-                    pnl = ""
-                    status = "PENDING"
+                    pnl = "";
+                    status = "PENDING";
                   }
                   return (
                     <tr key={i}>
@@ -64,7 +63,7 @@ function AccountOrderHistory() {
                       </td>
                       <td>{order["timestamp"]}</td>
                     </tr>
-                  )
+                  );
                 })}
               </tbody>
             </Table>
@@ -72,7 +71,7 @@ function AccountOrderHistory() {
         </Card.Body>
       </Card>
     </>
-  )
+  );
 }
 
-export default AccountOrderHistory
+export default AccountOrderHistory;

@@ -101,7 +101,7 @@ export const palette = {
     300: "#330E10",
     400: "#280B0C",
   },
-}
+};
 
 const common = {
   white: "#ffffff",
@@ -135,6 +135,6 @@ const common = {
   gray: "#416075", //action bar, order book logo
   palette,
   tertiary: "#9D9D9D",
-}
+};
 
-export default common
+export default common;

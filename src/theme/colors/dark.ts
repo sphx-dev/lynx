@@ -1,4 +1,4 @@
-import common from "./common"
+import common from "./common";
 
 const darkTheme = {
   ...common,
@@ -92,13 +92,13 @@ const darkTheme = {
     },
     link: {
       background: {
-        default: 'none',
-        hovered: 'none',
-        disabled: 'none',
-        pressed: 'none',
+        default: "none",
+        hovered: "none",
+        disabled: "none",
+        pressed: "none",
       },
       border: {
-        focused: 'none',
+        focused: "none",
       },
     },
   },
@@ -114,6 +114,6 @@ const darkTheme = {
   actionBar: {
     text: common.gray,
   },
-}
+};
 
-export default darkTheme
+export default darkTheme;

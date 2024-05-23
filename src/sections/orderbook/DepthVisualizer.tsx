@@ -1,12 +1,11 @@
-import React, { FunctionComponent } from "react"
-import { OrderType } from "./OrderBook"
-import { MOBILE_WIDTH } from "../../constants"
-import useTheme from "../../hooks/useTheme"
+import React, { FunctionComponent } from "react";
+import { OrderType } from "./OrderBook";
+import useTheme from "../../hooks/useTheme";
 
 interface DepthVisualizerProps {
-  depth: number
-  orderType: OrderType
-  windowWidth: number
+  depth: number;
+  orderType: OrderType;
+  windowWidth: number;
 }
 
 const DepthVisualizer: FunctionComponent<DepthVisualizerProps> = ({
@@ -14,7 +13,7 @@ const DepthVisualizer: FunctionComponent<DepthVisualizerProps> = ({
   depth,
   orderType,
 }) => {
-  const { themeColors } = useTheme()
+  const { themeColors } = useTheme();
   return (
     <div
       data-testid="depth-visualizer"
@@ -33,7 +32,7 @@ const DepthVisualizer: FunctionComponent<DepthVisualizerProps> = ({
         zIndex: 0,
       }}
     />
-  )
-}
+  );
+};
 
-export default DepthVisualizer
+export default DepthVisualizer;

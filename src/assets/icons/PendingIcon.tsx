@@ -11,6 +11,6 @@ const PendingIcon = (
     <circle cx="8" cy="8.5" r="0.5" />
     <circle cx="11" cy="8.5" r="0.5" />
   </svg>
-)
+);
 
-export default PendingIcon
+export default PendingIcon;

@@ -10,9 +10,9 @@ const BASE_URL = "/order";
 // FIXME temporary hardcoded
 const TICKER = "BTCUSDT.P";
 export const orderApi = api.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: build => ({
     placeMarketOrder: build.mutation<OrderResponse, OrderMutation>({
-      query: (payload) => ({
+      query: payload => ({
         url: `${BASE_URL}/market?ticker=${TICKER}`,
         method: "POST",
         body: { is_buy: payload.isBuy, volume: payload.volume },
@@ -20,7 +20,7 @@ export const orderApi = api.injectEndpoints({
       invalidatesTags: ["account"],
     }),
     placeLimitOrder: build.mutation<LimitOrderResponse, LimitOrderMutation>({
-      query: (payload) => ({
+      query: payload => ({
         url: `${BASE_URL}/limit?ticker=${TICKER}`,
         method: "POST",
         body: {
@@ -33,7 +33,7 @@ export const orderApi = api.injectEndpoints({
       invalidatesTags: ["account"],
     }),
     removeOrder: build.mutation<unknown, string>({
-      query: (orderId) => ({
+      query: orderId => ({
         url: `${BASE_URL}/${orderId}?ticker=${TICKER}`,
         method: "DELETE",
       }),

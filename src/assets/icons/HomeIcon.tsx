@@ -29,6 +29,6 @@ const HomeIcon = (
       </clipPath>
     </defs>
   </svg>
-)
+);
 
-export default HomeIcon
+export default HomeIcon;

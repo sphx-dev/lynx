@@ -50,6 +50,6 @@ export interface Position {
 }
 
 export enum OrderSide {
-  buy = 'buy',
-  sell = 'sell'
+  buy = "buy",
+  sell = "sell",
 }

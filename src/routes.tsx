@@ -1,6 +1,6 @@
-import Futures from "./pages/Futures"
-import BaseTemplate from "./Layouts/BaseTemplate"
-import Page404 from "./pages/404"
+import Futures from "./pages/Futures";
+import BaseTemplate from "./Layouts/BaseTemplate";
+import Page404 from "./pages/404";
 import Dashboard from "./pages/Dashboard";
 
 export const ROUTES = {
@@ -8,7 +8,7 @@ export const ROUTES = {
   exchange: "exchange",
   leaderBoard: "leaderboard",
   referrals: "referrals",
-}
+};
 
 export const routes = [
   {
@@ -16,7 +16,7 @@ export const routes = [
     element: <BaseTemplate />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <Dashboard />,
       },
       {
@@ -29,4 +29,4 @@ export const routes = [
     path: "*",
     element: <Page404 />,
   },
-]
+];

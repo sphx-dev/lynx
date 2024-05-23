@@ -35,7 +35,7 @@ export const mockColumns = [
     header: "U&PL",
     cell: (props: any) => <span>{props.getValue()}</span>,
   },
-]
+];
 
 export const mockData = [
   {
@@ -65,4 +65,4 @@ export const mockData = [
     marketMargin: "0.001",
     "u&pl": "0.001",
   },
-]
+];

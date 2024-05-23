@@ -1,10 +1,10 @@
-import styled from "styled-components"
-import { getThemeColors } from "../theme"
+import styled from "styled-components";
+import { getThemeColors } from "../theme";
 
 const Surface = styled.div`
   background: ${({ theme }) =>
     getThemeColors(theme).background.gradientSurface};
-    height: 100%;
-`
+  height: 100%;
+`;
 
-export default Surface
+export default Surface;

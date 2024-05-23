@@ -1,20 +1,19 @@
-import React, { FunctionComponent } from "react"
-import { PriceLevelContainer } from "./PriceLevelRowStyle"
-import { MOBILE_WIDTH } from "../../constants"
-import { Text } from "../../components"
-import styled from "styled-components"
+import React, { FunctionComponent } from "react";
+import { PriceLevelContainer } from "./PriceLevelRowStyle";
+import { Text } from "../../components";
+import styled from "styled-components";
 
 interface PriceLevelRowProps {
-  total: string
-  size: string
-  price: string
-  reversedFieldsOrder: boolean
-  windowWidth: number
+  total: string;
+  size: string;
+  price: string;
+  reversedFieldsOrder: boolean;
+  windowWidth: number;
 }
 
 const Label = styled.div`
   flex: 1;
-`
+`;
 
 const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
   total,
@@ -41,7 +40,7 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
         </Label>
       </>
     </PriceLevelContainer>
-  )
-}
+  );
+};
 
-export default PriceLevelRow
+export default PriceLevelRow;

@@ -25,6 +25,6 @@ const PairSelectIcon = (
       />
     </defs>
   </svg>
-)
+);
 
-export default PairSelectIcon
+export default PairSelectIcon;

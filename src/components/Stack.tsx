@@ -5,18 +5,18 @@ import { AlignItems, DEFAULT_SPACING, JustifyContent } from "./types";
 const StackFlex = styled.div<StackFlexProps>`
   display: flex;
   flex-direction: column;
-  flex-wrap: ${(props) => (props.$wrap ? "wrap" : "nowrap")};
+  flex-wrap: ${props => (props.$wrap ? "wrap" : "nowrap")};
 
-  align-items: ${(props) => {
+  align-items: ${props => {
     return AlignItems[props.$align || "stretch"];
   }};
-  justify-content: ${(props) => {
+  justify-content: ${props => {
     return JustifyContent[props.$justify || "left"];
   }};
-  row-gap: ${(props) => {
+  row-gap: ${props => {
     return `${props.$spacing}px`;
   }};
-  height: ${(props) => {
+  height: ${props => {
     return props.$fullHeight ? "100%" : "auto";
   }};
 `;

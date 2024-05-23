@@ -4,7 +4,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { mockColumns, mockData } from "./constants";
+import { mockColumns } from "./constants";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 interface ITableProps {

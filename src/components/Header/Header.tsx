@@ -42,11 +42,6 @@ const Logo = styled.img`
   margin-left: 64px;
 `;
 
-const Menu = styled.img`
-  padding-top: 16px;
-  margin-left: 16px;
-`;
-
 const Divider = styled.div`
   border-left: 1px solid #173d46;
 `;
@@ -54,7 +49,6 @@ const Header = () => {
   return (
     <Group fluid spacing={0} style={{ width: "100vw" }}>
       <StyledHeader>
-        {/*<Menu src={menu} />*/}
         <Logo src={logo} />
         <NavBar>
           <Button>
