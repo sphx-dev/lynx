@@ -10,11 +10,15 @@
     "preview": "vite preview",
     "test": "vitest",
     "format": "prettier --write .",
-    "lint": "eslint .",
+    "lint": "eslint --ext .ts,.tsx ./src",
+    "lint_debug": "eslint --debug --ext .ts,.tsx ./src",
+    "lint:fix": "eslint --fix --ext .ts,.tsx ./src",
     "type-check": "tsc",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test-storybook": "test-storybook"
+    "test-storybook": "test-storybook",
+    "build_server": "node --max_old_space_size=8192 ./scripts/build.server.js",
+    "server": "node ./server-comp.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -27,8 +31,11 @@
     "axios": "^1.5.0",
     "bootstrap": "^5.3.1",
     "camelcase-keys": "^9.1.3",
+    "connect-timeout": "^1.9.0",
     "dayjs": "^1.11.11",
     "decamelize-keys": "^2.0.1",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
     "i18next": "^23.10.1",
     "i18next-browser-languagedetector": "^7.2.1",
     "playwright-chromium": "^1.43.1",
@@ -47,6 +54,7 @@
     "viem": "1",
     "vite-plugin-svgr": "^4.2.0",
     "wagmi": "1",
+    "webpack": "^5.75.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

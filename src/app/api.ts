@@ -7,14 +7,14 @@ import {
   retry,
 } from "@reduxjs/toolkit/query/react";
 import camelcaseKeys from "camelcase-keys";
-import { config } from "../utils/config";
+import config from "../config";
 
-const BASE_API = config.isProd ? config.apiHost : "/api";
+const BASE_API = config.VITE_API_URL;
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_API,
 });
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 0 });
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 5 });
 const baseQueryWithCamelize: BaseQueryFn<
   string | FetchArgs,
   unknown,
