@@ -47,7 +47,7 @@ const IconWrapper = styled.div<IIconWrapperProps>`
     height: 100%;
     fill: ${({ fill, color }) => !color && fill};
     stroke: ${({ stroke }) => stroke};
-    strokewidth: ${({ strokeWidth }) => strokeWidth};
+    stroke-width: ${({ strokeWidth }) => strokeWidth};
 
     & path {
       fill: ${({ color }) => color};

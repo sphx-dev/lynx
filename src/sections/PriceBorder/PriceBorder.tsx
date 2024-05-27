@@ -1,14 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import TradingPairSelector from "../../components/TraidingPairSelector";
 import { Stack, Text } from "../../components";
 import useTheme from "../../hooks/useTheme";
 import { formatNumber } from "../../utils/format";
+import { useAppSelector } from "../../hooks";
+import { selectCurrentPair } from "../../state/futuresSlice";
+import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 
 const Wrapper = styled.div`
   background: linear-gradient(180deg, #16353c 0%, #17484e 100%);
   display: flex;
   padding: 8px 16px;
+  align-items: center;
   gap: 24px;
   width: 100%;
   border-width: 1px 0px 1px 0px;
@@ -52,27 +55,28 @@ const PriceView = ({ label, value, type = ValueType.DEFAULT }: PriceView) => {
 
 const PriceBorder = () => {
   const unit = "$";
+  const { price, volume, changeLastDay } = useAppSelector(selectCurrentPair);
   return (
     <Wrapper>
-      <TradingPairSelector />
+      <SymbolSelect />
       <Divider />
       <PriceView
         label="Last Price"
-        value={formatNumber({ value: 22987, before: unit })}
+        value={formatNumber({ value: +price, before: unit })}
         type={ValueType.ACTIVE}
       />
       <PriceView
         label="Mark Price"
-        value={formatNumber({ value: 22987.43, before: unit })}
+        value={formatNumber({ value: +price, before: unit })}
       />
       <PriceView
         label="Spot Oracle Price"
-        value={formatNumber({ value: 22987.09, before: unit })}
+        value={formatNumber({ value: +price, before: unit })}
       />
       <PriceView
         label="24h Change"
-        value={formatNumber({ value: -23, after: "%" })}
-        type={ValueType.ERROR}
+        value={formatNumber({ value: +changeLastDay, after: "%" })}
+        type={+changeLastDay > 0 ? ValueType.ACTIVE : ValueType.ERROR}
       />
       <PriceView
         label="Open Interest"
@@ -80,7 +84,7 @@ const PriceBorder = () => {
       />
       <PriceView
         label="24h Volume"
-        value={formatNumber({ value: 2298736274, before: unit })}
+        value={formatNumber({ value: +volume, before: unit })}
       />
       <PriceView
         label="8h Funding"

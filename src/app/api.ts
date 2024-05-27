@@ -12,6 +12,7 @@ import config from "../config";
 const BASE_API = config.VITE_API_URL;
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_API,
+  credentials: "include",
 });
 
 const baseQueryWithRetry = retry(baseQuery, { maxRetries: 5 });

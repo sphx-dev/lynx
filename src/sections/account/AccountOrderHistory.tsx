@@ -1,18 +1,11 @@
-import { useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "../../hooks";
-import { getAccount, account } from "../../state/accountSlice";
+import { useAppSelector } from "../../hooks";
+import { account } from "../../state/accountSlice";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Badge from "react-bootstrap/Badge";
 
 function AccountOrderHistory() {
   const acct = useAppSelector(account);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getAccount());
-  }, [acct.balance, dispatch]);
-
   const getRandomArbitrary = (min: any, max: any) => {
     return (Math.random() * (max - min) + min).toFixed(2);
   };

@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { baseAxios } from "../utils/axios";
 import { Account, Position } from "../types/order";
 import { accountApi, AccountResponse } from "../utils/api/accountApi";
 
@@ -18,11 +17,6 @@ const initialState: AccountState = {
   status: "idle",
   positions: [],
 };
-
-export const getAccount = createAsyncThunk("account/getAccount", async () => {
-  const response = await baseAxios("/accounts/current");
-  return response.data;
-});
 
 export const accountSlice = createSlice({
   name: "account",

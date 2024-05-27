@@ -2,6 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import accountReducer from "./accountSlice";
 import preferencesReducer from "./preferences";
 import orderBookReducer from "./orderBookSlice";
+import futures from "./futuresSlice";
 import { api } from "../app/api";
 
 export const rootReducer = combineReducers({
@@ -9,4 +10,5 @@ export const rootReducer = combineReducers({
   preferences: preferencesReducer,
   orderBook: orderBookReducer,
   [api.reducerPath]: api.reducer,
+  futures,
 });
