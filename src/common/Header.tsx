@@ -1,9 +1,9 @@
-import { FC } from "react"
-import styled from "styled-components"
+import { FC } from "react";
+import styled from "styled-components";
 // import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { ConnectWallet } from "./ConnectWallet"
-import { FlexDivCol } from "../components/Flex"
-import logo from "../assets/logo.png"
+import { ConnectWallet } from "./ConnectWallet";
+import { FlexDivCol } from "../components/Flex";
+import logo from "../assets/logo.png";
 // import WalletButtons from "./WalletButtons"
 
 const Header: FC = () => {
@@ -16,18 +16,18 @@ const Header: FC = () => {
         <ConnectWallet />
       </Container>
     </FlexDivCol>
-  )
-}
+  );
+};
 
 const Container = styled.header`
   display: flex;
   justify-content: space-between;
   padding: 15px;
-`
+`;
 
 const LogoNav = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
-export default Header
+export default Header;

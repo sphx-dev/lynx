@@ -1,99 +1,324 @@
-import React, { useState } from "react"
-import { useAppDispatch } from "../../hooks"
-import Button from "react-bootstrap/Button"
-import Card from "react-bootstrap/Card"
-import Form from "react-bootstrap/Form"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
-import ListGroup from "react-bootstrap/ListGroup"
-import toast from "react-hot-toast"
-import { placeLimitOrder } from "../../state/orderSlice"
-import { getAccount } from "../../state/accountSlice"
+import React, { useState } from "react";
+import styled from "styled-components";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-function OrderInput() {
-  const dispatch = useAppDispatch()
-  const [price, setPrice] = useState("")
-  const [volume, setVolume] = useState("")
+import {
+  Button,
+  ConnectButton,
+  Divider,
+  Group,
+  Input,
+  Stack,
+  Switcher,
+  Text,
+} from "../../components";
+import Surface from "../../Layouts/Surface";
+import Summary from "./Summary";
+import AttributionBar from "../../components/AttributionBar";
+import TradingPairSelector from "../../components/TraidingPairSelector";
+import TabButton from "../../components/TabButton";
+import useTheme from "../../hooks/useTheme";
+import { useAccount } from "wagmi";
+import { useForm } from "react-hook-form";
+import Colors from "../../theme/colors";
+import { useTranslation } from "react-i18next";
+import { errorAlert, successAlert } from "../../utils/alerts";
+import {
+  usePlaceLimitOrderMutation,
+  usePlaceMarketOrderMutation,
+} from "../../utils/api/orderApi";
+import { handleApiCall } from "../../utils/handleApiCall";
+import { MESSAGE } from "../../constants/validation";
+import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
+import { useAppSelector } from "../../hooks";
+import { selectCurrentPair } from "../../state/futuresSlice";
 
-  const notify = () => toast("Order placed")
+const Wrapper = styled.div`
+  background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
+  padding: 16px 0;
+  width: 320px;
+`;
+const Container = styled.div`
+  padding: 0 16px;
+`;
+const StyledButton = styled(Button)`
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+`;
 
-  const submitBuyOrder = () => {
-    const isBuy = false
-    if (price && volume) {
-      notify()
-      dispatch(placeLimitOrder({ price, volume, isBuy }))
-      setTimeout(() => {
-        dispatch(getAccount())
-      }, 250)
-    }
-  }
-
-  const submitSellOrder = () => {
-    const isBuy = false
-    if (price && volume) {
-      notify()
-      dispatch(placeLimitOrder({ price, volume, isBuy }))
-      setTimeout(() => {
-        dispatch(getAccount())
-      }, 250)
-    }
-  }
-
-  return (
-    <>
-      <Card data-bs-theme="dark">
-        <Card.Body>
-          <Card style={{ marginTop: "1rem" }}>
-            <Card.Body>
-              <Form>
-                <Form.Group className="mb-3" controlId="formPrice">
-                  <Form.Label>Price</Form.Label>
-                  <Form.Control
-                    type="float"
-                    placeholder="0.00"
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formVolume">
-                  <Form.Label>Amount</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Amount"
-                    onChange={(e) => setVolume(e.target.value)}
-                  />
-                </Form.Group>
-                <Row>
-                  <Col md={3}>
-                    <Button
-                      variant="primary"
-                      onClick={submitBuyOrder}
-                      style={{ width: "6rem" }}
-                    >
-                      Buy
-                    </Button>
-                  </Col>
-                  <Col md={3}>
-                    <Button
-                      variant="danger"
-                      onClick={submitSellOrder}
-                      style={{ width: "6rem" }}
-                    >
-                      Sell
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-              <hr />
-              <ListGroup variant="flush">
-                <ListGroup.Item>Borrow Fee: -0.0016 / Hour</ListGroup.Item>
-                <ListGroup.Item>Funding Fee: -0.003% / Hour</ListGroup.Item>
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        </Card.Body>
-      </Card>
-    </>
-  )
+enum OrderType {
+  MARKET = "MARKET",
+  LIMIT = "LIMIT",
+  STOP = "STOP",
 }
 
-export default OrderInput
+const options = [
+  {
+    label: "Market",
+    value: OrderType.MARKET,
+  },
+  {
+    label: "Limit",
+    value: OrderType.LIMIT,
+  },
+];
+
+export interface MarketOrderForm {
+  volume: number;
+  isBuy: boolean;
+  leverage: number;
+  price: number;
+  takeProfit: number | null;
+  stopLoss: number | null;
+}
+
+const defaultValues: MarketOrderForm = {
+  volume: 0,
+  isBuy: false,
+  leverage: 1,
+  price: 0,
+  takeProfit: null,
+  stopLoss: null,
+};
+
+const schema = (orderType: OrderType, markPrice: number) =>
+  yup.object().shape({
+    volume: yup
+      .number()
+      .typeError(MESSAGE.number)
+      .moreThan(0)
+      .required(MESSAGE.required),
+    price:
+      orderType === OrderType.LIMIT
+        ? yup
+            .number()
+            .typeError(MESSAGE.required)
+            .moreThan(0)
+            .required(MESSAGE.required)
+        : yup.number().nullable(),
+    takeProfit: yup
+      .number()
+      .nullable()
+      .transform(value => {
+        return value || null;
+      })
+      .when("isBuy", {
+        is: true,
+        then: schema => schema.moreThan(markPrice, MESSAGE.moreThan),
+        otherwise: schema => schema.lessThan(markPrice, MESSAGE.lessThan),
+      }),
+    stopLoss: yup
+      .number()
+      .nullable()
+      .transform(value => {
+        return value || null;
+      })
+      .when("isBuy", {
+        is: true,
+        then: schema => schema.lessThan(markPrice, MESSAGE.lessThan),
+        otherwise: schema => schema.moreThan(markPrice, MESSAGE.moreThan),
+      }),
+  });
+
+function OrderInput() {
+  const { themeColors } = useTheme();
+  const { isConnected } = useAccount();
+  const { t } = useTranslation();
+  const [orderType, setOrderType] = useState(OrderType.MARKET);
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<MarketOrderForm>({
+    defaultValues,
+    resolver: yupResolver<any>(schema(orderType, 90)),
+  });
+  const [placeMarketOrder] = usePlaceMarketOrderMutation();
+  const [placeLimitOrder] = usePlaceLimitOrderMutation();
+  const currentPair = useAppSelector(selectCurrentPair);
+  const asset = currentPair.symbol.replace(/\/\w+/, "");
+  const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
+
+  const isBuyPosition = watch("isBuy");
+
+  const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
+  const handleChangeLeverage = (value: number) => setValue("leverage", value);
+
+  const placeOrder = async (values: MarketOrderForm) => {
+    const handler =
+      orderType === OrderType.MARKET ? placeMarketOrder : placeLimitOrder;
+    const response = await handler(values);
+    handleApiCall(
+      response,
+      () => errorAlert("Something went wrong"),
+      () => successAlert("Order placed")
+    );
+  };
+
+  return (
+    <Surface
+      style={{
+        paddingBottom: "32px",
+        borderTop: `1px solid ${themeColors.border.default}`,
+      }}
+    >
+      <Stack justify="apart" fullHeight>
+        <Wrapper>
+          <Container style={{ paddingBottom: "16px" }}>
+            <SymbolSelect />
+          </Container>
+          <Divider />
+          {!isConnected && (
+            <Container style={{ padding: "10px 16px" }}>
+              <Group align="center" position="apart">
+                {!isConnected && (
+                  <Stack spacing={2}>
+                    <Text variant="text2Xs">No wallet connected</Text>
+                    <Text variant="text2Xs" color="primaryLink">
+                      Connect wallet to deposit margin
+                    </Text>
+                  </Stack>
+                )}
+                <ConnectButton size="small" />
+              </Group>
+            </Container>
+          )}
+          <Stack spacing={20}>
+            <form onSubmit={handleSubmit(placeOrder)}>
+              <Stack spacing={20}>
+                <Group spacing={0}>
+                  <TabButton
+                    $active={isBuyPosition}
+                    onClick={() => handleChangeOrderSide(true)}
+                    type="button"
+                    style={{ flex: 1 }}
+                  >
+                    LONG
+                  </TabButton>
+                  <TabButton
+                    $active={!isBuyPosition}
+                    onClick={() => handleChangeOrderSide(false)}
+                    type="button"
+                    style={{ flex: 1 }}
+                  >
+                    SHORT
+                  </TabButton>
+                </Group>
+                <Container>
+                  <Stack spacing={20}>
+                    <Switcher
+                      onChange={handleSwitchOrderType}
+                      options={options}
+                      name="orderType"
+                    />
+                    {orderType !== OrderType.MARKET && (
+                      <Input
+                        {...register("price")}
+                        label="Price"
+                        rightSide="USD"
+                        type="number"
+                        value={watch("price")}
+                        error={errors.price?.message}
+                      />
+                    )}
+                    <Input
+                      {...register("volume")}
+                      error={errors.volume?.message}
+                      value={watch("volume")}
+                      type="number"
+                      label="Size"
+                      rightSide={asset}
+                    />
+                    <div style={{ position: "relative" }}>
+                      <Group align="end">
+                        <Input
+                          {...register("leverage")}
+                          style={{ minWidth: "60px" }}
+                          label="Leverage"
+                          readOnly
+                        />
+                        <Group align="end" style={{ flex: 1 }}>
+                          <StyledButton
+                            type="button"
+                            onClick={() => handleChangeLeverage(1)}
+                          >
+                            1x
+                          </StyledButton>
+                          <StyledButton
+                            type="button"
+                            onClick={() => handleChangeLeverage(2)}
+                          >
+                            2x
+                          </StyledButton>
+                          <StyledButton
+                            type="button"
+                            onClick={() => handleChangeLeverage(5)}
+                          >
+                            5x
+                          </StyledButton>
+                          <StyledButton
+                            type="button"
+                            onClick={() => handleChangeLeverage(25)}
+                          >
+                            25x
+                          </StyledButton>
+                          <StyledButton
+                            type="button"
+                            onClick={() => handleChangeLeverage(50)}
+                          >
+                            50x
+                          </StyledButton>
+                        </Group>
+                      </Group>
+                    </div>
+                    <Input
+                      {...register("takeProfit")}
+                      label="Take Profit"
+                      rightSide="USD"
+                      error={errors.takeProfit?.message}
+                      type="number"
+                      value={watch("takeProfit") || ""}
+                    />
+                    <Input
+                      {...register("stopLoss")}
+                      label="Stop Loss"
+                      rightSide="USD"
+                      error={errors.stopLoss?.message}
+                      type="number"
+                      value={watch("stopLoss") || ""}
+                    />
+                    {!isConnected && <ConnectButton />}
+                    {isConnected && (
+                      <Button
+                        style={{
+                          backgroundColor: isBuyPosition
+                            ? Colors.common.positive1
+                            : Colors.common.negative3,
+                        }}
+                      >
+                        {t("placeOrder")}
+                      </Button>
+                    )}
+                    <Summary />
+                  </Stack>
+                </Container>
+              </Stack>
+            </form>
+          </Stack>
+        </Wrapper>
+        <Container>
+          <AttributionBar />
+        </Container>
+      </Stack>
+    </Surface>
+  );
+}
+
+export default OrderInput;

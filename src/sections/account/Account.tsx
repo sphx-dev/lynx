@@ -1,17 +1,11 @@
-import { useEffect } from "react"
-import { useAppSelector, useAppDispatch } from "../../hooks"
-import { getAccount, account } from "../../state/accountSlice"
-import Card from "react-bootstrap/Card"
-import ListGroup from "react-bootstrap/ListGroup"
-import { FaEthereum, FaBitcoin, FaDollarSign } from "react-icons/fa6"
+import { useAppSelector } from "../../hooks";
+import { account } from "../../state/accountSlice";
+import Card from "react-bootstrap/Card";
+import ListGroup from "react-bootstrap/ListGroup";
+import { FaEthereum, FaBitcoin, FaDollarSign } from "react-icons/fa6";
 
 function AccountCard() {
-  const acct = useAppSelector(account)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(getAccount())
-  }, [account])
+  const acct = useAppSelector(account);
 
   return (
     <>
@@ -40,7 +34,7 @@ function AccountCard() {
         </Card.Body>
       </Card>
     </>
-  )
+  );
 }
 
-export default AccountCard
+export default AccountCard;

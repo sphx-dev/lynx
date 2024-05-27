@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const Container = styled.div`
   color: #98a6af;
@@ -11,4 +11,4 @@ export const Container = styled.div`
     position: absolute;
     top: 5px;
   }
-`
+`;

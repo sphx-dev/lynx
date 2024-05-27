@@ -1,388 +1,119 @@
-import common from "./common"
-
-const newTheme = {
-  containers: {
-    primary: {
-      background: common.palette.neutral.n1000,
-      overlay: {
-        background: common.palette.alpha.gray60,
-      },
-    },
-    secondary: {
-      background: common.palette.neutral.n900,
-    },
-    cards: {
-      background: common.palette.neutral.n900,
-    },
-  },
-  border: {
-    color: common.palette.neutral.n700,
-    yellow: common.palette.yellow.y900,
-    style: `1px solid ${common.palette.neutral.n700}`,
-  },
-  button: {
-    default: {
-      border: `1px solid ${common.palette.neutral.n700}`,
-      borderColor: common.palette.neutral.n700,
-      background: common.palette.neutral.n800,
-      color: common.palette.neutral.n0,
-      hover: {
-        background: common.palette.neutral.n700,
-      },
-    },
-    tab: {
-      active: common.palette.neutral.n0,
-      inactive: common.palette.neutral.n500,
-    },
-    position: {
-      long: {
-        active: {
-          background: common.palette.green.g500,
-          border: common.palette.green.g600,
-          color: common.palette.neutral.n900,
-        },
-        hover: {
-          background: common.palette.green.g600,
-          border: common.palette.green.g700,
-          color: common.palette.neutral.n900,
-        },
-      },
-      short: {
-        active: {
-          background: common.palette.red.r300,
-          border: common.palette.red.r300,
-          color: common.palette.neutral.n900,
-        },
-        hover: {
-          background: common.palette.red.r400,
-          border: common.palette.red.r400,
-          color: common.palette.neutral.n900,
-        },
-      },
-    },
-    cell: {
-      background: "transparent",
-      hover: {
-        background: common.palette.neutral.n800,
-      },
-    },
-  },
-  text: {
-    primary: common.palette.neutral.n0,
-    secondary: common.palette.neutral.n70,
-    tertiary: common.palette.neutral.n100,
-    disabled: common.palette.neutral.n200,
-    positive: common.palette.green.g500,
-    negative: common.palette.red.r300,
-    preview: common.palette.yellow.y500,
-    warning: common.palette.yellow.y500,
-    sectionHeader: common.palette.yellow.y500,
-  },
-  banner: {
-    yellow: {
-      text: common.palette.yellow.y500,
-      background: common.palette.yellow.y1000,
-    },
-  },
-  badge: {
-    yellow: {
-      text: common.palette.neutral.n900,
-      background: common.palette.yellow.y500,
-      dark: {
-        background: common.palette.yellow.y1000,
-        text: common.palette.yellow.y500,
-        border: common.palette.alpha.white10,
-      },
-    },
-    primary: {
-      text: common.palette.neutral.n900,
-      background: common.palette.yellow.y500,
-      dark: {
-        background: common.palette.yellow.y1000,
-        text: common.palette.neutral.n0,
-        border: common.palette.alpha.white10,
-      },
-    },
-    gray: {
-      text: common.palette.neutral.n900,
-      background: common.palette.neutral.n50,
-      dark: {
-        background: common.palette.neutral.n100,
-        text: common.palette.neutral.n900,
-        border: common.palette.alpha.white10,
-      },
-    },
-    red: {
-      text: common.palette.neutral.n900,
-      background: common.palette.red.r300,
-      dark: {
-        background: common.palette.alpha.red10,
-        text: common.palette.red.r300,
-        border: common.palette.alpha.white10,
-      },
-    },
-  },
-  pill: {
-    yellow: {
-      text: common.palette.yellow.y500,
-      background: common.palette.yellow.y1000,
-      border: common.palette.alpha.white10,
-      outline: {
-        background: "transparent",
-        text: common.palette.yellow.y500,
-        border: common.palette.yellow.y500,
-      },
-      hover: {
-        background: common.palette.yellow.y500,
-        border: common.palette.alpha.white10,
-        text: common.palette.neutral.n900,
-      },
-    },
-    gray: {
-      text: common.palette.neutral.n70,
-      background: common.palette.neutral.n800,
-      border: common.palette.neutral.n600,
-      outline: {
-        text: common.palette.neutral.n900,
-        background: common.palette.neutral.n20,
-        border: common.palette.alpha.white10,
-      },
-      hover: {
-        background: common.palette.neutral.n700,
-        border: common.palette.alpha.white10,
-        text: common.palette.neutral.n30,
-      },
-    },
-    red: {
-      text: common.palette.red.r300,
-      background: common.palette.alpha.red10,
-      border: common.palette.red.r300,
-      outline: {
-        background: "transparent",
-        text: common.palette.red.r300,
-        border: common.palette.red.r300,
-      },
-      hover: {
-        background: common.palette.red.r500,
-        border: common.palette.alpha.white10,
-        text: common.palette.neutral.n900,
-      },
-    },
-    redGray: {
-      text: common.palette.red.r300,
-      background: common.palette.neutral.n800,
-      border: common.palette.neutral.n600,
-      outline: {
-        background: common.palette.neutral.n20,
-        text: common.palette.red.r300,
-        border: common.palette.alpha.white10,
-      },
-      hover: {
-        background: common.palette.neutral.n700,
-        border: common.palette.alpha.white10,
-        text: common.palette.neutral.n30,
-      },
-    },
-  },
-  checkBox: {
-    default: {
-      text: common.palette.neutral.n70,
-      border: common.palette.neutral.n500,
-      background: common.palette.neutral.n700,
-      checked: common.palette.yellow.y500,
-    },
-    yellow: {
-      text: common.palette.yellow.y500,
-      border: common.palette.yellow.y500,
-      background: common.palette.neutral.n700,
-      checked: common.palette.yellow.y500,
-    },
-  },
-  tabs: {
-    position: {
-      background: common.palette.neutral.n1100,
-      color: common.palette.neutral.n70,
-      long: {
-        color: common.palette.green.g600,
-        background: common.palette.alpha.green5,
-      },
-      short: {
-        color: common.palette.red.r300,
-        background: common.palette.alpha.red5,
-      },
-    },
-  },
-  pencilIcon: {
-    color: common.palette.yellow.y500,
-    hover: {
-      color: common.palette.yellow.y900,
-    },
-  },
-  fundingChart: {
-    tooltip: {
-      background: common.palette.neutral.n700,
-      border: common.palette.neutral.n600,
-    },
-  },
-  exchange: {
-    card: common.palette.neutral.n900,
-    ratioSelect: {
-      background: common.palette.neutral.n700,
-    },
-  },
-  disclaimer: {
-    background: common.palette.yellow.y1000,
-    color: common.palette.yellow.y500,
-  },
-}
+import common from "./common";
 
 const darkTheme = {
-  ...common.dark,
-  red: common.dark.red,
-  green: common.dark.green,
-  black: common.dark.black,
-  white: common.dark.white,
-  yellow: common.primaryYellow,
-  table: {
-    fill: "rgba(255, 255, 255, 0.01)",
-    hover: "rgba(255, 255, 255, 0.05)",
+  ...common,
+  background: {
+    gradientPrimary: common.palette.gradient.darkPrimary,
+    gradientSecondary: common.palette.gradient.greenSecondary,
+    input: common.palette.surface["800"],
+    button: common.palette.surface["700"],
+    dropdown: common.palette.surface["900"],
+    primary: common.palette.primary["950"],
+    gradientSurface: common.palette.gradient.surface,
   },
-  gold: "#E4B378",
-  badge: {
-    red: { background: common.dark.red, text: "black" },
-    yellow: { background: common.primaryYellow, text: "black" },
-    gray: { background: common.primaryGray, text: "black" },
+  divider: {
+    primary: common.palette.surface["700"],
+    secondary: common.blue4,
   },
-  tab: { background: { active: "#252525", inactive: "transparent" } },
-  button: {
-    border: "rgb(255 255 255 / 10%)",
-    fill: "#252525",
-    fillHover: "#2B2A2A",
-    background: "linear-gradient(180deg, #282727 0%, #191818 100%)",
-    hover: "linear-gradient(180deg, #383838 0%, #383838 0.01%, #1E1E1E 100%)",
-    shadow:
-      "rgb(0 0 0 / 25%) 0px 2px 2px, rgb(255 255 255 / 10%) 0px 1px 0px inset, rgb(255 255 255 / 3%) 0px 0px 20px inset",
-    text: {
-      primary: common.primaryWhite,
-      yellow: common.primaryYellow,
-    },
-    primary: {
-      background: "linear-gradient(180deg, #BE9461 0%, #9C6C3C 100%)",
-      hover: "linear-gradient(180deg, #E4B378 0%, #B98C55 100%)",
-      textShadow: "0px 1px 2px rgba(0, 0, 0, 0.5)",
-    },
-    secondary: { text: "#E4B378" },
-    danger: { text: common.dark.red },
-    active: {
-      shadow: "inset 0px 0px 20px rgba(255, 255, 255, 0.03)",
-      textShadow: "0px 1px 2px rgba(0, 0, 0, 0.4)",
-      hover: {
-        successBackground:
-          "linear-gradient(180deg, rgba(127, 212, 130, 0.2) 0%, rgba(71, 122, 73, 0.2) 100%)",
-        dangerBackground:
-          "linear-gradient(180deg, rgba(239, 104, 104, 0.2) 0%, rgba(116, 56, 56, 0.2) 100%)",
-        successBorder: "rgba(127, 212, 130, 0.2)",
-        dangerBorder: "rgba(239, 104, 104, 0.2)",
-      },
-    },
-    disabled: { text: "#555555", background: "transparent" },
-    tab: {
-      disabled: { border: "1px solid #353333", text: "#353333" },
-    },
-    pill: {
-      background: common.dark.yellow,
-      text: common.dark.yellow,
-      hover: common.black,
-    },
-    yellow: {
-      fill: "#3E2D00",
-      fillHover: "#513C05",
-      border: "#514219",
-      text: common.dark.yellow,
-    },
-    red: {
-      fill: common.palette.alpha.red15,
-      text: common.palette.red.r200,
-    },
+  border: {
+    default: common.palette.surface["700"],
+    hovered: common.greenPlaceholder,
+    active: "#13DCDE",
+  },
+  tab: {
+    activeBackground: common.green2,
+    activeBorder: common.aquaGreen,
+  },
+  tableTabs: {
+    color: common.palette.primary["700"],
+    colorActive: common.palette.primary["300"],
+    border: common.palette.primary["800"],
+    background: `linear-gradient(180deg, #133F5B 0%, #062B41 24%, #031D2C 80.5%)`,
+  },
+  navbar: {
+    text: common.green5,
+    activeText: common.blue2,
   },
   input: {
-    background: common.palette.neutral.n1100,
-    border: `1px solid ${common.palette.neutral.n700}`,
-    borderColor: common.palette.neutral.n700,
+    primary: {
+      background: {
+        default: common.palette.surface["800"],
+        hovered: common.palette.surface["700"],
+        disabled: common.palette.surface["900"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
+    },
+    error: {
+      background: {
+        default: common.palette.error["300"],
+        hovered: common.palette.error["200"],
+        disabled: common.palette.error["400"],
+      },
+      border: {
+        focused: common.palette.error["100"],
+      },
+    },
+  },
+  button: {
+    primary: {
+      background: {
+        default: common.palette.gradient.primaryBlue,
+        hovered: common.palette.primary["500"],
+        disabled: common.palette.gradient.primaryBlueDark,
+        pressed: common.palette.primary["700"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
+    },
     secondary: {
-      background: "#0b0b0b",
+      background: {
+        default: common.palette.surface["700"],
+        hovered: common.palette.surface["600"],
+        disabled: common.palette.surface["800"],
+        pressed: common.palette.surface["700"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
     },
-    placeholder: "#787878",
-    shadow: "0px 0.5px 0px rgba(255, 255, 255, 0.08)",
-    hover: common.dark.white,
-  },
-  segmentedControl: {
-    background: common.palette.neutral.n1100,
-    button: {
-      background: common.palette.neutral.n800,
-      inactive: { color: "#787878" },
+    error: {
+      background: {
+        default: common.palette.error["50"],
+        hovered: common.palette.error["100"],
+        disabled: common.palette.error["300"],
+        pressed: common.palette.error["200"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
     },
-  },
-  slider: {
-    label: "#787878",
-    thumb: {
-      border: "3px solid rgba(43, 42, 42, 0.5)",
-      shadow: "inset 0px 1px 0px rgba(255, 255, 255, 0.5)",
+    link: {
+      background: {
+        default: "none",
+        hovered: "none",
+        disabled: "none",
+        pressed: "none",
+      },
+      border: {
+        focused: "none",
+      },
     },
-    rail: {
-      background: "rgba(255, 255, 255, 0.2)",
-    },
-    track: {
-      background: "rgba(255, 255, 255, 0.2)",
-      shadow: "inset 0px 0.5px 0px rgba(255, 255, 255, 0.5)",
-    },
-  },
-  select: {
-    control: {
-      shadow:
-        "0px 2px 2px rgba(0, 0, 0, 0.2), inset 0px 1px 0px rgba(255, 255, 255, 0.08), inset 0px 0px 20px rgba(255, 255, 255, 0.03)",
-    },
-  },
-  cell: {
-    fill: "#1E1D1D;",
-    gradient: "linear-gradient(180deg, #1E1D1D 0%, #1b1a1a 100%)",
-    hover: "#222222",
-    outline: "#2B2A2A",
   },
   text: {
-    header: "#B1B1B1",
-    value: common.primaryWhite,
-    label: common.neautralGray,
-    body: common.dark.gray,
+    primary: "#FFFFFF",
+    secondary: "#E6E6E6",
+    tertiary: common.tertiary,
+    error: common.negative3,
+    secondaryActive: common.palette.secondary["600"],
+    secondaryLink: common.palette.secondary["700"],
+    primaryLink: common.palette.primary["500"],
   },
-  icon: {
-    fill: "#787878",
-    hover: "#ECE8E3",
-    hoverReverse: common.dark.black,
+  actionBar: {
+    text: common.gray,
   },
-  openInterestBar: {
-    border: "1px solid #2b2a2a",
-  },
-  modal: {
-    background: "#252525",
-  },
-  competitionBanner: {
-    border: "1px solid #2b2a2a",
-    state: {
-      text: common.primaryWhite,
-    },
-    bg: "#fff",
-  },
-  chartLine: {
-    long: common.palette.green.g700,
-    short: common.palette.red.r600,
-    default: "#4094E8",
-  },
-  socket: {
-    accent: `#252525`,
-  },
-  newTheme,
-  imageInvert: { value: "0" },
-}
+};
 
-export default darkTheme
+export default darkTheme;

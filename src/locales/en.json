@@ -1,0 +1,23 @@
+{
+  "connect": "CONNECT",
+  "takeProfit": "Take Profit / Stop Loss",
+  "makeWithHonor": "made with honor",
+  "stats": "Stats",
+  "docs": "Docs",
+  "support": "Support",
+  "positions": "Positions",
+  "pending": "Pending",
+  "orders": "Orders",
+  "trades": "Trades",
+  "uP&L": "uP&L",
+  "market": "Market",
+  "size": "Size",
+  "slide": "Slide",
+  "avgEntry": "Avg. Entry",
+  "liqPrice": "Liq. Price",
+  "marketMargin": "Market Margin",
+  "connectWallet": "CONNECT WALLET",
+  "placeOrder": "Place order",
+  "online": "ONLINE",
+  "offline": "OFFLINE"
+}

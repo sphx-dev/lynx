@@ -1,57 +1,64 @@
-import React, { useState, useEffect } from "react"
-import Container from "react-bootstrap/Container"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
-import AccountCard from "./sections/account/Account"
-import OrderInput from "./sections/order/OrderInput"
-import OrderBook from "./sections/orderbook/OrderBook"
-import { TradingViewContainer } from "./sections/chart/TradingViewContainer"
-import AccountOrderHistory from "./sections/account/AccountOrderHistory"
-import { Toaster } from "react-hot-toast"
-import "./App.css"
+import React from "react";
+import "./App.css";
+import { useRoutes } from "react-router-dom";
+import { routes } from "./routes";
+import { useAppSelector } from "./hooks";
+import { selectCurrentTheme } from "./state/preferences";
+import { ThemeInterface, themes } from "./theme";
+import {
+  darkTheme,
+  getDefaultWallets,
+  lightTheme,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
+import { ThemeProvider } from "styled-components";
+import Header from "./components/Header";
+import Footer from "./sections/footer";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { avalanche, avalancheFuji } from "wagmi/chains";
+import { publicProvider } from "wagmi/providers/public";
+import { Toaster } from "react-hot-toast";
+import { useGetAccountQuery } from "./utils/api/accountApi";
+
+export const { chains, publicClient } = configureChains(
+  [avalanche, avalancheFuji],
+  [publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: "My RainbowKit App",
+  projectId: "YOUR_PROJECT_ID",
+  chains,
+});
+
+export const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+});
 
 function App() {
-  const [windowWidth, setWindowWidth] = useState(0)
-
-  // Window width detection
-  useEffect(() => {
-    window.onresize = () => {
-      setWindowWidth(window.innerWidth)
-    }
-    setWindowWidth(() => window.innerWidth)
-  }, [])
+  const content = useRoutes(routes);
+  const currentTheme = useAppSelector(selectCurrentTheme);
+  const theme: ThemeInterface = themes["dark"];
+  useGetAccountQuery();
 
   return (
-    <>
-      <Container
-        data-bs-theme="dark"
-        fluid={true}
-        style={{ marginTop: "2rem" }}
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider
+        modalSize="compact"
+        chains={chains}
+        theme={currentTheme === "dark" ? darkTheme() : lightTheme()}
       >
-        <Toaster position="top-right" />
-        <Row>
-          <Col md={3}>
-            <OrderBook windowWidth={windowWidth} />
-          </Col>
-          <Col>
-            <TradingViewContainer />
-          </Col>
-          <Col md={3}>
-            <AccountCard />
-            <OrderInput />
-            <br></br>
-          </Col>
-          <Row>
-            <Col />
-            <Col md={11}>
-              <AccountOrderHistory />
-            </Col>
-            <Col />
-          </Row>
-        </Row>
-      </Container>
-    </>
-  )
+        <ThemeProvider theme={theme}>
+          <Header />
+          {content}
+          <Footer />
+          <Toaster />
+        </ThemeProvider>
+      </RainbowKitProvider>
+    </WagmiConfig>
+  );
 }
 
-export default App
+export default App;
