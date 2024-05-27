@@ -9,7 +9,7 @@ export const formatNumber = ({
   fixed = 2,
   before = "",
   after = "",
-}: FormatNumber) => {
+}: FormatNumber): string => {
   const formattedValue = value.toFixed(fixed);
   const localeValue = Number(formattedValue).toLocaleString("en-GB");
   return String(before || "") + localeValue + String(after || "");
