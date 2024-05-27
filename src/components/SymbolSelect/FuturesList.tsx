@@ -92,7 +92,14 @@ const FuturesList = ({ list }: Props) => {
     ],
     [list, getColor]
   );
-  return <Table enableSorting columns={columns} data={list} onClick={handleRowClick} />;
+  return (
+    <Table
+      enableSorting
+      columns={columns}
+      data={list}
+      onClick={handleRowClick}
+    />
+  );
 };
 
 export default FuturesList;

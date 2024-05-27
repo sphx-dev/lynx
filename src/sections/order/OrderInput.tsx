@@ -30,10 +30,9 @@ import {
 } from "../../utils/api/orderApi";
 import { handleApiCall } from "../../utils/handleApiCall";
 import { MESSAGE } from "../../constants/validation";
-import Popup from "../../components/Popup/Popup";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
-import {useAppSelector} from "../../hooks";
-import {selectCurrentPair} from "../../state/futuresSlice";
+import { useAppSelector } from "../../hooks";
+import { selectCurrentPair } from "../../state/futuresSlice";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};

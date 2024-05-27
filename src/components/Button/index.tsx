@@ -11,7 +11,7 @@ const SIZE_MAP = {
 };
 
 type Variant = keyof ThemeColors["button"];
-type Color = keyof ThemeColors["text"]
+type Color = keyof ThemeColors["text"];
 interface CssProps extends Props {
   variant: Variant;
   $pill?: boolean;
