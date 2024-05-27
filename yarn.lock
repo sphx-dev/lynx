@@ -4310,7 +4310,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.11.6":
+"@popperjs/core@npm:^2.11.6, @popperjs/core@npm:^2.11.8":
   version: 2.11.8
   resolution: "@popperjs/core@npm:2.11.8"
   checksum: 10c0/4681e682abc006d25eb380d0cf3efc7557043f53b6aea7a5057d0d1e7df849a00e281cd8ea79c902a35a414d7919621fc2ba293ecec05f413598e0b23d5a1e63
@@ -15039,6 +15039,7 @@ __metadata:
     "@chromatic-com/storybook": "npm:^1.2.26"
     "@hookform/resolvers": "npm:^3.3.4"
     "@metamask/sdk-react": "npm:^0.14.1"
+    "@popperjs/core": "npm:^2.11.8"
     "@rainbow-me/rainbowkit": "npm:^1.3.3"
     "@reduxjs/toolkit": "npm:^1.8.1"
     "@storybook/addon-essentials": "npm:^8.0.5"
@@ -15088,6 +15089,7 @@ __metadata:
     react-hot-toast: "npm:^2.4.1"
     react-i18next: "npm:^14.1.0"
     react-icons: "npm:^4.12.0"
+    react-popper: "npm:^2.3.0"
     react-redux: "npm:^8.0.1"
     react-router-dom: "npm:^6.22.3"
     react-select: "npm:^5.8.0"
@@ -17181,6 +17183,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^3.0.1":
+  version: 3.2.2
+  resolution: "react-fast-compare@npm:3.2.2"
+  checksum: 10c0/0bbd2f3eb41ab2ff7380daaa55105db698d965c396df73e6874831dbafec8c4b5b08ba36ff09df01526caa3c61595247e3269558c284e37646241cba2b90a367
+  languageName: node
+  linkType: hard
+
 "react-hook-form@npm:^7.51.3":
   version: 7.51.3
   resolution: "react-hook-form@npm:7.51.3"
@@ -17292,6 +17301,20 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/9399929f2b598a66634c4663fa7703144eeab10c7027f72de7e9af6da6d96f12ead1cc2fdbb09b9aab4d1410b0578d11aa5b7c3db70ffa92fb0329cf181099a5
+  languageName: node
+  linkType: hard
+
+"react-popper@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "react-popper@npm:2.3.0"
+  dependencies:
+    react-fast-compare: "npm:^3.0.1"
+    warning: "npm:^4.0.2"
+  peerDependencies:
+    "@popperjs/core": ^2.0.0
+    react: ^16.8.0 || ^17 || ^18
+    react-dom: ^16.8.0 || ^17 || ^18
+  checksum: 10c0/23f93540537ca4c035425bb8d5e51b11131fbc921d7ac1d041d0ae557feac8c877f3a012d36b94df8787803f52ed81e6df9257ac9e58719875f7805518d6db3f
   languageName: node
   linkType: hard
 
@@ -20290,7 +20313,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"warning@npm:^4.0.0, warning@npm:^4.0.3":
+"warning@npm:^4.0.0, warning@npm:^4.0.2, warning@npm:^4.0.3":
   version: 4.0.3
   resolution: "warning@npm:4.0.3"
   dependencies:

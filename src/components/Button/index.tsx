@@ -11,6 +11,7 @@ const SIZE_MAP = {
 };
 
 type Variant = keyof ThemeColors["button"];
+type Color = keyof ThemeColors["text"]
 interface CssProps extends Props {
   variant: Variant;
   $pill?: boolean;
@@ -56,10 +57,10 @@ const StyledButton = styled.button<CssProps>`
       : theme.fonts.typography.actionSmBold};
   border-radius: ${({ theme, $pill }) =>
     $pill ? theme.borderRadius.pill : theme.borderRadius.md};
-  color: ${({ theme, disabled, color }) =>
+  color: ${({ theme, disabled, color = "primary" }) =>
     disabled
       ? getThemeColors(theme).text.tertiary
-      : color || getThemeColors(theme).text.primary};
+      : getThemeColors(theme).text[color as Color] || color};
   width: ${({ $fluid }) => ($fluid ? "100%" : "auto")};
   outline: none;
   cursor: pointer;

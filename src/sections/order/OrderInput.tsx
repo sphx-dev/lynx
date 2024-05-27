@@ -30,6 +30,10 @@ import {
 } from "../../utils/api/orderApi";
 import { handleApiCall } from "../../utils/handleApiCall";
 import { MESSAGE } from "../../constants/validation";
+import Popup from "../../components/Popup/Popup";
+import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
+import {useAppSelector} from "../../hooks";
+import {selectCurrentPair} from "../../state/futuresSlice";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -139,6 +143,8 @@ function OrderInput() {
   });
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
   const [placeLimitOrder] = usePlaceLimitOrderMutation();
+  const currentPair = useAppSelector(selectCurrentPair);
+  const asset = currentPair.symbol.replace(/\/\w+/, "");
   const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
 
   const isBuyPosition = watch("isBuy");
@@ -167,7 +173,7 @@ function OrderInput() {
       <Stack justify="apart" fullHeight>
         <Wrapper>
           <Container style={{ paddingBottom: "16px" }}>
-            <TradingPairSelector />
+            <SymbolSelect />
           </Container>
           <Divider />
           {!isConnected && (
@@ -229,7 +235,7 @@ function OrderInput() {
                       value={watch("volume")}
                       type="number"
                       label="Size"
-                      rightSide="WTX"
+                      rightSide={asset}
                     />
                     <div style={{ position: "relative" }}>
                       <Group align="end">

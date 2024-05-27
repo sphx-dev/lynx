@@ -15,10 +15,7 @@ interface TabProps {
   $isActive?: boolean;
 }
 const Tab = styled.button<TabProps>`
-  ${({ theme, $isActive }) =>
-    $isActive
-      ? theme.fonts.typography.actionMdBold
-      : theme.fonts.typography.actionMd};
+  ${({ theme, $isActive }) => theme.fonts.typography.actionMd};
   padding: 14px 34px;
   background: none;
   border: none;
