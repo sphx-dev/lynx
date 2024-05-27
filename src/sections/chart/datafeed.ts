@@ -56,7 +56,7 @@ const datafeed = {
     const { from, to, firstDataRequest } = periodParams;
     console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
     fetch(
-      `${API_ENDPOINT}/history?symbol=${symbolInfo.ticker}&from=${periodParams.from}&to=${periodParams.to}&resolution=${resolution}`
+      `${API_ENDPOINT}/history?symbol=${symbolInfo.ticker}&from=1706808728&to=${periodParams.to}&resolution=${resolution}`
     ).then(response => {
       response
         .json()
