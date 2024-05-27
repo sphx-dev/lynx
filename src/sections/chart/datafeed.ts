@@ -55,8 +55,13 @@ const datafeed = {
   ) => {
     const { from, to, firstDataRequest } = periodParams;
     console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
+    const lastYear = new Date();
+    lastYear.setMonth(lastYear.getMonth() - 10);
+
+    const lastYearUnixSeconds = Math.floor(lastYear.getTime() / 1000);
+    const fetchFrom = Math.max(from, lastYearUnixSeconds);
     fetch(
-      `${API_ENDPOINT}/history?symbol=${symbolInfo.ticker}&from=1706808728&to=${periodParams.to}&resolution=${resolution}`
+      `${API_ENDPOINT}/history?symbol=${symbolInfo.ticker}&from=${fetchFrom}&to=${periodParams.to}&resolution=${resolution}`
     ).then(response => {
       response
         .json()
