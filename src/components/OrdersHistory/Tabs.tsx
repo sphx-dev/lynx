@@ -50,7 +50,7 @@ const TableTabs = () => {
   const [active, setActive] = useState(0);
   const { t } = useTranslation();
   const { themeColors } = useTheme();
-  const { openOrders, closedOrders } = useAppSelector(account);
+  const { openOrders, closedOrders, positions } = useAppSelector(account);
   const Content = useMemo(() => CONTENT[active], [active]);
 
   const tabs = useMemo(
@@ -58,6 +58,7 @@ const TableTabs = () => {
       {
         title: "positions",
         icon: "PositionsIcon",
+        count: positions.length,
       },
       {
         title: "pending",
@@ -74,7 +75,7 @@ const TableTabs = () => {
         icon: "TradesIcon",
       },
     ],
-    [openOrders, closedOrders]
+    [openOrders.length, closedOrders.length, positions.length]
   );
 
   return (

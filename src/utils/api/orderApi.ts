@@ -15,7 +15,11 @@ export const orderApi = api.injectEndpoints({
       query: payload => ({
         url: `${BASE_URL}/market?ticker=${TICKER}`,
         method: "POST",
-        body: { is_buy: payload.isBuy, volume: payload.volume },
+        body: {
+          is_buy: payload.isBuy,
+          volume: payload.volume,
+          leverage: payload.leverage,
+        },
       }),
       invalidatesTags: ["account"],
     }),

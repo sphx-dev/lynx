@@ -31,6 +31,7 @@ export interface LimitOrderResponse extends OrderResponse {
 export interface OrderMutation {
   isBuy: boolean;
   volume: number;
+  leverage: number;
 }
 
 export interface LimitOrderMutation extends OrderMutation {

@@ -16,10 +16,19 @@ const Positions = () => {
   const { positions } = useAppSelector(account);
   const { themeColors } = useTheme();
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
-  const closePosition = ({ size, side }: { size: string; side: OrderSide }) => {
+  const closePosition = ({
+    size,
+    side,
+    leverage,
+  }: {
+    size: string;
+    side: OrderSide;
+    leverage: number;
+  }) => {
     placeMarketOrder({
       isBuy: side !== OrderSide.buy,
       volume: Math.abs(+size),
+      leverage: leverage || 1,
     });
   };
   const columns = [
@@ -64,11 +73,11 @@ const Positions = () => {
       header: "Close position",
       cell: (props: any) => {
         console.log(props);
-        const { size, side } = props.row.original;
+        const { size, side, leverage } = props.row.original;
         return (
           <Button
             variant="link"
-            onClick={() => closePosition({ size, side })}
+            onClick={() => closePosition({ size, side, leverage })}
             color={themeColors.text.secondaryLink}
           >
             Market
