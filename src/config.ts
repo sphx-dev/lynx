@@ -9,6 +9,11 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     config.VITE_API_PORT = 3010;
     config.VITE_API_URL = "//localhost:3010";
   }
+  if (location.hostname.indexOf("demo.sphx.dev") > -1) {
+    config.VITE_API_HOST = "apidemo.sphx.dev";
+    config.VITE_API_PORT = 443;
+    config.VITE_API_URL = "//apidemo.sphx.dev";
+  }
   return config;
 }
 
