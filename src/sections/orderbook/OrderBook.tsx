@@ -6,7 +6,7 @@ import DepthVisualizer from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
 import { Container, TableContainer } from "./OrderBookStyle";
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
-import { MOBILE_WIDTH } from "../../constants";
+import { MOBILE_WIDTH, ORDERBOOK_LEVELS } from "../../constants";
 import { Stack, Text } from "../../components";
 import Divider from "./Divider";
 import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
@@ -32,7 +32,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
     orderType: OrderType = OrderType.BIDS
   ): React.ReactNode => {
     const sortedLevelsByPrice = levels
-      .slice(0, 12)
+      .slice(0, ORDERBOOK_LEVELS)
       .sort(
         (currentLevel: OrderWithDepth, nextLevel: OrderWithDepth): number => {
           let result: number = 0;

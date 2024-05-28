@@ -6,7 +6,7 @@ interface FormatNumber {
 }
 export const formatNumber = ({
   value,
-  fixed = 2,
+  fixed = 4,
   before = "",
   after = "",
 }: FormatNumber): string => {

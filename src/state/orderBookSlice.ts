@@ -48,7 +48,7 @@ export const orderBookSlice = createSlice({
             : [];
           const asks = payload.asks
             ? pipe(
-                payload.asks.slice(0, ORDERBOOK_LEVELS),
+                payload.asks.slice(0, ORDERBOOK_LEVELS).reverse(),
                 formatToNumbers,
                 addTotalSums,
                 addDepths
