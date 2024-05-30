@@ -6,7 +6,6 @@ import { useAppSelector } from "./hooks";
 import { selectCurrentTheme } from "./state/preferences";
 import { ThemeInterface, themes } from "./theme";
 import {
-  darkTheme,
   getDefaultWallets,
   lightTheme,
   RainbowKitProvider,
@@ -19,7 +18,7 @@ import { avalanche, avalancheFuji } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { Toaster } from "react-hot-toast";
 import { useGetAccountQuery } from "./utils/api/accountApi";
-
+import { useRainbowKitDarkTheme } from "./hooks/useRainbowKitDarkTheme";
 export const { chains, publicClient } = configureChains(
   [avalanche, avalancheFuji],
   [publicProvider()]
@@ -41,6 +40,9 @@ function App() {
   const content = useRoutes(routes);
   const currentTheme = useAppSelector(selectCurrentTheme);
   const theme: ThemeInterface = themes["dark"];
+
+  const { rainbowDarkTheme } = useRainbowKitDarkTheme();
+
   useGetAccountQuery();
 
   return (
@@ -48,7 +50,7 @@ function App() {
       <RainbowKitProvider
         modalSize="compact"
         chains={chains}
-        theme={currentTheme === "dark" ? darkTheme() : lightTheme()}
+        theme={currentTheme === "dark" ? rainbowDarkTheme : lightTheme()}
       >
         <ThemeProvider theme={theme}>
           <Header />
