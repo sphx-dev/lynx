@@ -1,8 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import Stack from "../Stack";
-import Icon from "../Icon";
+import { Stack, Icon, Text } from "../../components";
 import Common from "../../theme/colors/common";
-import Text from "../Text";
 
 const PlaceHolder = ({ children }: PropsWithChildren) => {
   return (

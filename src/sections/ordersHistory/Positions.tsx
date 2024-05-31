@@ -1,21 +1,23 @@
 import React from "react";
 import { dateToDisplay } from "../../utils/date";
-import Text from "../Text";
-import Table from "./Table";
+import { Text, Table, Button } from "../../components";
 import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
 import { getColorByPl } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { formatNumber } from "../../utils/format";
-import Button from "../Button";
 import useTheme from "../../hooks/useTheme";
 import { usePlaceMarketOrderMutation } from "../../utils/api/orderApi";
 import { OrderSide } from "../../types/order";
+import { useGetAccountQuery } from "../../utils/api/accountApi";
 
 const Positions = () => {
   const { positions } = useAppSelector(account);
   const { themeColors } = useTheme();
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
+  useGetAccountQuery(undefined, {
+    pollingInterval: 5000,
+  });
   const closePosition = ({
     size,
     side,
@@ -68,9 +70,10 @@ const Positions = () => {
           {formatNumber({ value: +props.getValue(), fixed: 2 })}
         </Text>
       ),
+      width: "100px",
     },
     {
-      header: "Close position",
+      header: "Close",
       cell: (props: any) => {
         console.log(props);
         const { size, side, leverage } = props.row.original;

@@ -5,7 +5,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 
-import { mockColumns } from "./constants";
+import { mockColumns } from "../../sections/ordersHistory/constants";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { CSSProperties } from "react";
@@ -98,7 +98,7 @@ const Table = <T extends object>({
         {table.getRowModel().rows.map(row => (
           <StyledRow
             key={row.id}
-            onClick={() => (onClick ? onClick(row.original) : undefined)}
+            onClick={onClick && (() => onClick(row.original))}
           >
             {row.getVisibleCells().map(cell => (
               <td key={cell.id}>

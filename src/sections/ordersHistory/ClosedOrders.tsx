@@ -1,7 +1,6 @@
 import React from "react";
 import { dateToDisplay } from "../../utils/date";
-import Text from "../Text";
-import Table from "./Table";
+import { Text, Table } from "../../components";
 import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
 import { getSideColor } from "./helpers";

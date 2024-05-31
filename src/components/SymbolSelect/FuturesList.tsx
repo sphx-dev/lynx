@@ -3,7 +3,7 @@ import { TradePair } from "../../types/futures";
 import Text from "../Text";
 import Group from "../Group";
 import { formatNumber } from "../../utils/format";
-import Table from "../OrdersHistory/Table";
+import Table from "../Table/Table";
 import Icon from "../Icon";
 import useTheme from "../../hooks/useTheme";
 import styled from "styled-components";
@@ -98,6 +98,7 @@ const FuturesList = ({ list }: Props) => {
       columns={columns}
       data={list}
       onClick={handleRowClick}
+      headerStyle={{ backgroundColor: themeColors.background.dropdown }}
     />
   );
 };

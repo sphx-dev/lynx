@@ -7,6 +7,8 @@ import ConnectButton from "./ConnectButton";
 import Switcher from "./Switcher";
 import Divider from "./Divider";
 import Tabs from "./Tab";
+import Table from "./Table";
+import Icon from "./Icon";
 
 export {
   Text,
@@ -18,4 +20,6 @@ export {
   Switcher,
   Divider,
   Tabs,
+  Table,
+  Icon,
 };

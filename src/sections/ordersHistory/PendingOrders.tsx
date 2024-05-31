@@ -1,10 +1,8 @@
 import React from "react";
 import { dateToDisplay } from "../../utils/date";
-import Text from "../Text";
-import Table from "./Table";
+import { Table, Text, Button } from "../../components/";
 import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
-import Button from "../Button";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import { getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
@@ -24,6 +22,7 @@ const PendingOrders = () => {
   };
   const columns = [
     {
+      flex: 1,
       accessorKey: "timestamp",
       header: "Date",
       cell: (props: any) => (
@@ -48,6 +47,7 @@ const PendingOrders = () => {
       ),
     },
     {
+      flex: 1,
       accessorKey: "id",
       header: "Cancel",
       cell: (props: any) => (
@@ -61,7 +61,13 @@ const PendingOrders = () => {
   if (!openOrders.length) {
     return <PlaceHolder>No Orders yet</PlaceHolder>;
   }
-  return <Table columns={columns} data={openOrders} />;
+  return (
+    <Table
+      columns={columns}
+      data={openOrders}
+      headerStyle={{ backgroundColor: "#031a28" }}
+    />
+  );
 };
 
 export default PendingOrders;
