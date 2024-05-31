@@ -16,7 +16,6 @@ import {
 import Surface from "../../Layouts/Surface";
 import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
-import TradingPairSelector from "../../components/TraidingPairSelector";
 import TabButton from "../../components/TabButton";
 import useTheme from "../../hooks/useTheme";
 import { useAccount } from "wagmi";
@@ -32,7 +31,7 @@ import { handleApiCall } from "../../utils/handleApiCall";
 import { MESSAGE } from "../../constants/validation";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useAppSelector } from "../../hooks";
-import { selectCurrentPair } from "../../state/futuresSlice";
+import { selectMarketId } from "../../state/futuresSlice";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -142,8 +141,7 @@ function OrderInput() {
   });
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
   const [placeLimitOrder] = usePlaceLimitOrderMutation();
-  const currentPair = useAppSelector(selectCurrentPair);
-  const asset = currentPair.symbol.replace(/\/\w+/, "");
+  const marketId = useAppSelector(selectMarketId);
   const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
 
   const isBuyPosition = watch("isBuy");
@@ -234,7 +232,7 @@ function OrderInput() {
                       value={watch("volume")}
                       type="number"
                       label="Size"
-                      rightSide={asset}
+                      rightSide={marketId}
                     />
                     <div style={{ position: "relative" }}>
                       <Group align="end">

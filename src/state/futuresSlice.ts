@@ -3,16 +3,20 @@ import { TradePair } from "../types/futures";
 import { RootState } from "./store";
 import { mockFutures } from "../constants/mock";
 
+const getMarketId = (symbol: string) => symbol.split("/")[0];
+
 interface FuturesState {
   currentPair: TradePair;
   availableList: TradePair[];
   favorite: string[];
+  marketId: string;
 }
 
 const initialState: FuturesState = {
   currentPair: mockFutures[0],
   availableList: mockFutures,
   favorite: [],
+  marketId: getMarketId(mockFutures[0].symbol),
 };
 
 const futuresSlice = createSlice({
@@ -30,6 +34,7 @@ const futuresSlice = createSlice({
     },
     setCurrentPair: (state, { payload }: PayloadAction<TradePair>) => {
       state.currentPair = payload;
+      state.marketId = getMarketId(payload.symbol);
     },
   },
 });
@@ -41,6 +46,8 @@ export const selectFuturesList = (state: RootState) =>
 
 export const selectFavoriteSymbols = (state: RootState) =>
   state.futures.favorite;
+
+export const selectMarketId = (state: RootState) => state.futures.marketId;
 
 export const { toggleFavorite, setCurrentPair } = futuresSlice.actions;
 

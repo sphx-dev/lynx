@@ -27,6 +27,7 @@ const datafeed = {
       });
     });
   },
+  // TODO use static config when price API ready
   resolveSymbol: (
     symbolName: any,
     onSymbolResolvedCallback: any,
@@ -55,7 +56,8 @@ const datafeed = {
   ) => {
     const { from, to, firstDataRequest } = periodParams;
     console.log("[getBars]: Method call", symbolInfo, resolution, from, to);
-    const lastYear = new Date();
+    const lastYear = new Date(to * 1000);
+    // max date range is 10 month
     lastYear.setMonth(lastYear.getMonth() - 10);
 
     const lastYearUnixSeconds = Math.floor(lastYear.getTime() / 1000);
