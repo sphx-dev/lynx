@@ -18,7 +18,7 @@ type Ref = HTMLInputElement;
 interface InputWrapperProps {
   variant: keyof ThemeColors["input"];
   disabled?: boolean;
-  error?: boolean;
+  $error?: boolean;
 }
 
 const numberRegex = /^\d*\.?\d*$/;
@@ -83,7 +83,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
   display: flex;
   align-items: center;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
-  ${({ error }) => error && errorStyle}
+  ${({ $error }) => $error && errorStyle}
 `;
 
 const Input = forwardRef<Ref, InputProps>(
@@ -141,7 +141,7 @@ const Input = forwardRef<Ref, InputProps>(
           style={{ position: "relative" }}
           variant={variant}
           disabled={restProps.disabled}
-          error={!!error}
+          $error={!!error}
         >
           <StyledInput
             data-error={error ? "true" : "false"}

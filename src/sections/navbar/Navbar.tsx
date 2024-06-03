@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { navLinks } from "./config";
 import Icon from "../../components/Icon";
 import useTheme from "../../hooks/useTheme";
+import Button from "../../components/Button";
 
 const Wrapper = styled.nav`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
@@ -39,10 +40,15 @@ const Navbar = () => {
       <ConnectButton.Custom>
         {({ openAccountModal, account }) =>
           account && (
-            <button onClick={openAccountModal} type="button">
+            <Button
+              size="xs"
+              onClick={openAccountModal}
+              type="button"
+              style={{ marginLeft: "auto" }}
+            >
               {account.displayName}
               {account.displayBalance ? ` (${account.displayBalance})` : ""}
-            </button>
+            </Button>
           )
         }
       </ConnectButton.Custom>
