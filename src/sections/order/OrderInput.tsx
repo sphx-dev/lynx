@@ -78,7 +78,7 @@ export interface MarketOrderForm {
 
 const defaultValues: MarketOrderForm = {
   volume: 0,
-  isBuy: false,
+  isBuy: true,
   leverage: 1,
   price: 0,
   takeProfit: null,
