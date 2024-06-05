@@ -19,5 +19,6 @@
   "connectWallet": "CONNECT WALLET",
   "placeOrder": "Place order",
   "online": "ONLINE",
-  "offline": "OFFLINE"
+  "offline": "OFFLINE",
+  "onlyDesktopScreen": "Dear Users, \n\n Our app is currently available only in the desktop version. \n Mobile versions are in development and will be available soon. \nThank you for your patience! \n\nBest regards,\n Sphinx team."
 }
