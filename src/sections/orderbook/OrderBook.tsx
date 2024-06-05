@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo, useRef } from "react";
 import { useAppSelector } from "../../hooks";
 import { orderBook } from "../../state/orderBookSlice";
 import TitleRow from "./TitleRow";
@@ -6,11 +6,13 @@ import DepthVisualizer from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
 import { Container, TableContainer } from "./OrderBookStyle";
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
-import { MOBILE_WIDTH, ORDERBOOK_LEVELS } from "../../constants";
+import { MOBILE_WIDTH } from "../../constants";
 import { Stack, Text } from "../../components";
 import Divider from "./Divider";
 import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
 import { OrderWithDepth } from "../../types/orderBook";
+import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
+import { getOrderBookRecords } from "../../utils/helpers";
 
 export enum OrderType {
   BIDS,
@@ -23,8 +25,20 @@ interface OrderBookProps {
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const book = useAppSelector(orderBook);
-  useGetOrderBookQuery(undefined, {
+  const containerRef = useRef(null);
+
+  const height = useMemo(
+    () =>
+      containerRef.current
+        ? getBoundingClientRect(containerRef.current).height
+        : 0,
+    [containerRef.current, window.innerWidth]
+  );
+
+  const records = getOrderBookRecords(height);
+  useGetOrderBookQuery(records, {
     pollingInterval: 1000,
+    skip: !records,
   });
 
   const buildPriceLevels = (
@@ -32,7 +46,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
     orderType: OrderType = OrderType.BIDS
   ): React.ReactNode => {
     const sortedLevelsByPrice = levels
-      .slice(0, ORDERBOOK_LEVELS)
+      .slice(0)
       .sort(
         (currentLevel: OrderWithDepth, nextLevel: OrderWithDepth): number => {
           let result: number = 0;
@@ -74,7 +88,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   };
 
   return (
-    <Container>
+    <Container ref={containerRef}>
       {book.bids.length && book.asks.length ? (
         <Stack style={{ width: "100%" }}>
           <TableContainer>

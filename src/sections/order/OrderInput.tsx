@@ -167,7 +167,7 @@ function OrderInput() {
         borderTop: `1px solid ${themeColors.border.default}`,
       }}
     >
-      <Stack justify="apart" fullHeight>
+      <Stack justify="apart" fullHeight spacing={40}>
         <Wrapper>
           <Container style={{ paddingBottom: "16px" }}>
             <SymbolSelect />
