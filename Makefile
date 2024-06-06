@@ -28,4 +28,7 @@ start:
 server:
 	yarn server
 
+server_auth:
+	BASIC_AUTH_ENABLED=true yarn server
+
 .PHONY: lint clean

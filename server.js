@@ -2,12 +2,22 @@ import express from "express";
 import timeout from "connect-timeout";
 import helmet from "helmet";
 import path from "path";
+import basicAuth from "express-basic-auth";
 import { fileURLToPath } from "url";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = parseInt(process.env.PORT || "3000");
 const dev = process.env.NODE_ENV !== "production";
+const BASIC_AUTH_ENABLED = process.env.BASIC_AUTH_ENABLED === "true";
+const password = process.env.PASSWORD || "pass";
+const authorizedUsers = [
+  {
+    username: "admin",
+    password: password,
+  },
+];
 
 const server = express();
 
@@ -16,6 +26,17 @@ server.disable("x-powered-by");
 
 //set timeout for all requests 30s
 server.use(timeout(30000));
+
+if (BASIC_AUTH_ENABLED) {
+  server.use(
+    basicAuth({
+      authorizer: myAsyncAuthorizer,
+      unauthorizedResponse: getUnauthorizedResponse,
+      authorizeAsync: true,
+      challenge: true,
+    })
+  );
+}
 
 server.get("/healthcheck", (req, res) => {
   res.send({ status: "ok" });
@@ -85,3 +106,30 @@ Object.keys(signals).forEach(signal => {
     shutdown(signal, signals[signal]);
   });
 });
+
+function getUnauthorizedResponse(req) {
+  return req.auth
+    ? "Credentials " + req.auth.user + ":" + req.auth.password + " rejected"
+    : "No credentials provided";
+}
+
+function myAsyncAuthorizer(username, password, cb) {
+  let found = false;
+  for (let i = 0; i < authorizedUsers.length; i++) {
+    const u = authorizedUsers[i]["username"];
+    const p = authorizedUsers[i]["password"];
+
+    const userMatches = basicAuth.safeCompare(username, u);
+    const passwordMatches = basicAuth.safeCompare(password, p);
+    if (userMatches && passwordMatches) {
+      found = true;
+      break;
+    }
+  }
+
+  if (found) {
+    return cb(null, true);
+  } else {
+    return cb(null, false);
+  }
+}

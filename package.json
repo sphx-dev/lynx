@@ -36,6 +36,7 @@
     "dayjs": "^1.11.11",
     "decamelize-keys": "^2.0.1",
     "express": "^4.18.2",
+    "express-basic-auth": "^1.2.1",
     "helmet": "^7.0.0",
     "i18next": "^23.10.1",
     "i18next-browser-languagedetector": "^7.2.1",
