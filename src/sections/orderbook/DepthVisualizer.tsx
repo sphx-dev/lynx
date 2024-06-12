@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { OrderType } from "./OrderBook";
 import useTheme from "../../hooks/useTheme";
+import { OrderType } from "../../types/orderBook";
 
 interface DepthVisualizerProps {
   depth: number;

@@ -18,3 +18,8 @@ export interface OrderBookResponse {
   asks: Order<string>[];
   bids: Order<string>[];
 }
+
+export enum OrderType {
+  BIDS,
+  ASKS,
+}

@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { Text } from "../../components";
+import { useAppSelector } from "../../hooks";
+import { orderBook } from "../../state/orderBookSlice";
+import { formatNumber } from "../../utils/format";
 
 const Container = styled.div`
   display: flex;
@@ -13,13 +16,14 @@ const Container = styled.div`
 `;
 
 const Divider = () => {
+  const { spread, percentage } = useAppSelector(orderBook);
   return (
     <Container>
       <Text variant="textNumMdBold" color="secondaryActive">
-        $2.00
+        {formatNumber({ value: spread, before: "$" })}
       </Text>
       <Text variant="textNumMdBold" color="secondaryActive">
-        0.14%
+        {formatNumber({ value: percentage, after: "%" })}
       </Text>
     </Container>
   );

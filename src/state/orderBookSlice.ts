@@ -1,12 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { orderBookApi } from "../utils/api/orderBookApi";
-import { Order, OrderWithDepth, OrderWithTotal } from "../types/orderBook";
+import { OrderWithDepth } from "../types/orderBook";
 import { pipe } from "../utils/pipe";
+import {
+  addDepths,
+  addTotalSums,
+  formatToNumbers,
+  getPercentage,
+  getSpread,
+  sortByPrice,
+} from "../sections/orderbook/helpers";
 
 export interface OrderBookState {
   bids: OrderWithDepth[];
   asks: OrderWithDepth[];
+  spread: number;
+  percentage: number;
   status: "idle" | "loading" | "failed";
 }
 
@@ -14,6 +24,8 @@ const initialState: OrderBookState = {
   bids: [],
   asks: [],
   status: "idle",
+  spread: 0,
+  percentage: 0,
 };
 
 export const orderBookSlice = createSlice({
@@ -41,17 +53,22 @@ export const orderBookSlice = createSlice({
             payload.bids,
             formatToNumbers,
             addTotalSums,
-            addDepths
+            addDepths,
+            sortByPrice
           );
           const asks = pipe(
-            payload.asks.reverse(),
+            payload.asks,
             formatToNumbers,
             addTotalSums,
-            addDepths
+            addDepths,
+            sortByPrice
           );
 
           state.bids = bids;
           state.asks = asks;
+          const spread = getSpread(bids, asks);
+          state.spread = spread;
+          state.percentage = getPercentage(bids, asks, spread);
         }
       )
       .addMatcher(orderBookApi.endpoints.getOrderBook.matchRejected, state => {
@@ -59,39 +76,6 @@ export const orderBookSlice = createSlice({
       });
   },
 });
-
-const addTotalSums = (orders: Order<number>[]): OrderWithTotal[] => {
-  const totalSums: number[] = [];
-
-  return orders.map((order, idx) => {
-    const { quantity } = order;
-    const updatedLevel: OrderWithTotal = { ...order, totalSum: 0 };
-    const totalSum: number =
-      idx === 0 ? quantity : quantity + totalSums[idx - 1];
-    updatedLevel.totalSum = totalSum;
-    totalSums.push(totalSum);
-    return updatedLevel;
-  });
-};
-
-const addDepths = (orders: OrderWithTotal[]): OrderWithDepth[] => {
-  const totalSums: number[] = orders.map(order => order.totalSum);
-  const maxTotal = Math.max.apply(Math, totalSums);
-  return orders.map(order => {
-    const calculatedTotal: number = order.totalSum;
-    const depth = (calculatedTotal / maxTotal) * 100;
-    const updatedOrder: OrderWithDepth = { ...order, depth: 0 };
-    updatedOrder.depth = depth;
-    return updatedOrder;
-  });
-};
-
-const formatToNumbers = (orders: Order<string>[]): Order<number>[] =>
-  orders.map(bind => ({
-    quantity: +bind.quantity,
-    price: +bind.price,
-    leverage: bind.leverage,
-  }));
 
 export const { clear } = orderBookSlice.actions;
 export const orderBook = (state: RootState) => state.orderBook;

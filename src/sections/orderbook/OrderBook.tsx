@@ -10,14 +10,9 @@ import { MOBILE_WIDTH } from "../../constants";
 import { Stack, Text } from "../../components";
 import Divider from "./Divider";
 import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
-import { OrderWithDepth } from "../../types/orderBook";
+import { OrderType, OrderWithDepth } from "../../types/orderBook";
 import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
 import { getOrderBookRecords } from "../../utils/helpers";
-
-export enum OrderType {
-  BIDS,
-  ASKS,
-}
 
 interface OrderBookProps {
   windowWidth: number;
@@ -45,21 +40,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
     levels: OrderWithDepth[],
     orderType: OrderType = OrderType.BIDS
   ): React.ReactNode => {
-    const sortedLevelsByPrice = levels
-      .slice(0)
-      .sort(
-        (currentLevel: OrderWithDepth, nextLevel: OrderWithDepth): number => {
-          let result: number = 0;
-          if (orderType === OrderType.BIDS || windowWidth < MOBILE_WIDTH) {
-            result = nextLevel.price - currentLevel.price;
-          } else {
-            result = nextLevel.price - currentLevel.price;
-          }
-          return result;
-        }
-      );
-
-    return sortedLevelsByPrice.map((level, idx) => {
+    return levels.map((level, idx) => {
       const calculatedTotal: number = level.totalSum;
       const total: string = formatNumber(calculatedTotal);
       const depth = level.depth;
