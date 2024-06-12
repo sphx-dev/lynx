@@ -1,12 +1,5 @@
 export const mockFutures = [
   {
-    symbol: "WTX / USDC",
-    price: "75.36",
-    changeLastDay: "23.45",
-    volume: "2394823",
-    icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/black/etn.svg",
-  },
-  {
     symbol: "BTC / USDC",
     price: "9256.78",
     changeLastDay: "-45.67",
@@ -35,11 +28,11 @@ export const mockFutures = [
     icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/dash.svg",
   },
   {
-    symbol: "DCR / USDC",
+    symbol: "AVAX / USDC",
     price: "123.45",
     changeLastDay: "-2.34",
     volume: "129348",
-    icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/dcr.svg",
+    icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/128/color/avax.png",
   },
   {
     symbol: "DOGE / USDC",
@@ -61,19 +54,5 @@ export const mockFutures = [
     changeLastDay: "23.45",
     volume: "2398475",
     icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/fida.svg",
-  },
-  {
-    symbol: "GAS / USDC",
-    price: "123.67",
-    changeLastDay: "12.34",
-    volume: "489237",
-    icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/gas.svg",
-  },
-  {
-    symbol: "GRC / USDC",
-    price: "345.78",
-    changeLastDay: "-23.45",
-    volume: "348927",
-    icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/grc.svg",
   },
 ];

@@ -18,7 +18,11 @@ enum List {
   All = "all",
   Favorite = "favorite",
 }
-const SymbolContent = () => {
+
+interface SymbolContentProps {
+  close: Function;
+}
+const SymbolContent = ({ close }: SymbolContentProps) => {
   const futures = useAppSelector(selectFuturesList);
   const favorites = useAppSelector(selectFavoriteSymbols);
   const [search, setSearch] = useState("");
@@ -63,7 +67,7 @@ const SymbolContent = () => {
             Favorite
           </Button>
         </Group>
-        <FuturesList list={filteredList} />
+        <FuturesList list={filteredList} closePopup={close} />
       </div>
     </Stack>
   );
@@ -72,7 +76,10 @@ const SymbolContent = () => {
 const SymbolSelect = () => {
   const { symbol, icon } = useAppSelector(selectCurrentPair);
   return (
-    <Popup content={<SymbolContent />} placement="bottom-start">
+    <Popup
+      content={closePopup => <SymbolContent close={closePopup} />}
+      placement="bottom-start"
+    >
       <Group
         style={{ cursor: "pointer" }}
         fluid

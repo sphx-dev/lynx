@@ -1,15 +1,16 @@
+import * as React from "react";
 import { useEffect, useRef } from "react";
 import {
-  widget,
   ChartingLibraryWidgetOptions,
   LanguageCode,
+  widget,
 } from "../../charting_library";
 import { TVChartContainer } from "./style";
-import * as React from "react";
 import datafeed from "./datafeed";
 import { CHART_DEFAULT_OPTIONS, DEFAULT_INTERVAL } from "./constants";
 import { useAppSelector } from "../../hooks";
 import { selectMarketId } from "../../state/futuresSlice";
+
 export interface ChartContainerProps {
   symbol: ChartingLibraryWidgetOptions["symbol"];
   interval: ChartingLibraryWidgetOptions["interval"];
@@ -45,7 +46,7 @@ export const TradingViewContainer = () => {
     const widgetOptions: ChartingLibraryWidgetOptions = {
       ...CHART_DEFAULT_OPTIONS,
       // FIXME use marketId when price API ready
-      symbol: CHART_DEFAULT_OPTIONS.symbol,
+      symbol: marketId,
       datafeed,
       overrides: {
         "paneProperties.backgroundGradientStartColor": "#0E2836",
@@ -58,29 +59,10 @@ export const TradingViewContainer = () => {
     };
 
     const tvWidget = new widget(widgetOptions);
-
-    tvWidget.onChartReady(() => {
-      tvWidget.headerReady().then(() => {
-        const button = tvWidget.createButton();
-        button.setAttribute("title", "Click to show a notification popup");
-        button.classList.add("apply-common-tooltip");
-        button.addEventListener("click", () =>
-          tvWidget.showNoticeDialog({
-            title: "Notification",
-            body: "TradingView Charting Library API works correctly",
-            callback: () => {
-              console.log("Noticed!");
-            },
-          })
-        );
-        button.innerHTML = "Check API";
-      });
-    });
-
     return () => {
       tvWidget.remove();
     };
-  }, [chartContainerRef.current]);
+  }, [chartContainerRef.current, marketId]);
 
   return (
     <TVChartContainer ref={chartContainerRef} className={"TVChartContainer"} />

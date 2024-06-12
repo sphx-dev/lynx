@@ -3,7 +3,7 @@ import { TradePair } from "../types/futures";
 import { RootState } from "./store";
 import { mockFutures } from "../constants/mock";
 
-const getMarketId = (symbol: string) => symbol.split("/")[0];
+const getMarketId = (symbol: string) => symbol.split("/")[0].trim();
 
 interface FuturesState {
   currentPair: TradePair;

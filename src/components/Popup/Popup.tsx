@@ -7,7 +7,7 @@ import useClickOutside from "../../hooks/useClickOutside";
 
 interface CustomPopoverProps {
   children: ReactNode;
-  content: ReactNode;
+  content: ((fn: Function) => ReactNode) | ReactNode;
   placement?: Placement;
 }
 
@@ -51,6 +51,8 @@ const Popup: React.FC<CustomPopoverProps> = ({
     setShowPopover(!showPopover);
   };
 
+  const closePopover = () => setShowPopover(false);
+
   useClickOutside([popperRef, referenceRef], handleTogglePopover);
 
   return (
@@ -66,7 +68,9 @@ const Popup: React.FC<CustomPopoverProps> = ({
           style={{ ...styles.popper, zIndex: "100", marginTop: "5px" }}
           {...attributes.popper}
         >
-          <Content>{content}</Content>
+          <Content>
+            {content instanceof Function ? content(closePopover) : content}
+          </Content>
         </div>
       )}
     </div>

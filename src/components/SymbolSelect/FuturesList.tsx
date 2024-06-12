@@ -23,8 +23,9 @@ const IconButton = styled.button`
 
 interface Props {
   list: TradePair[];
+  closePopup: Function;
 }
-const FuturesList = ({ list }: Props) => {
+const FuturesList = ({ list, closePopup }: Props) => {
   const { themeColors } = useTheme();
   const dispatch = useAppDispatch();
   const favorites = useAppSelector(selectFavoriteSymbols);
@@ -38,7 +39,10 @@ const FuturesList = ({ list }: Props) => {
     [favorites]
   );
 
-  const handleRowClick = (row: TradePair) => dispatch(setCurrentPair(row));
+  const handleRowClick = (row: TradePair) => {
+    dispatch(setCurrentPair(row));
+    closePopup();
+  };
 
   const handleToggleFavorite =
     (value: string) => (event: MouseEvent<HTMLButtonElement>) => {
