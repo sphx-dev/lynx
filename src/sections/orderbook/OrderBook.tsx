@@ -1,4 +1,4 @@
-import { FunctionComponent, useMemo, useRef } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../hooks";
 import { orderBook } from "../../state/orderBookSlice";
 import TitleRow from "./TitleRow";
@@ -21,19 +21,18 @@ interface OrderBookProps {
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const book = useAppSelector(orderBook);
   const containerRef = useRef(null);
+  const [height, setHeight] = useState(0);
 
-  const height = useMemo(
-    () =>
-      containerRef.current
-        ? getBoundingClientRect(containerRef.current).height
-        : 0,
-    [containerRef.current, window.innerWidth]
-  );
+  useEffect(() => {
+    if (containerRef.current) {
+      setHeight(getBoundingClientRect(containerRef.current).height);
+    }
+  }, [containerRef.current]);
 
   const records = getOrderBookRecords(height);
   useGetOrderBookQuery(records, {
     pollingInterval: 1000,
-    skip: !records,
+    skip: records <= 0,
   });
 
   const buildPriceLevels = (

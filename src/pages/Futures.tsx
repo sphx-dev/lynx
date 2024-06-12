@@ -17,7 +17,7 @@ import useTheme from "../hooks/useTheme";
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
-  min-height: calc(100vh - 28px - 95px);
+  min-height: calc(100vh - 28px - 100px);
 `;
 const Logo = () => {
   const { themeColors } = useTheme();
