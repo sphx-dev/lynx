@@ -10,13 +10,18 @@ import useTheme from "../../hooks/useTheme";
 import { usePlaceMarketOrderMutation } from "../../utils/api/orderApi";
 import { OrderSide } from "../../types/order";
 import { useGetAccountQuery } from "../../utils/api/accountApi";
+import { useAccount } from "wagmi";
 
 const Positions = () => {
   const { positions } = useAppSelector(account);
   const { themeColors } = useTheme();
+  const { isConnected } = useAccount();
+
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
+
   useGetAccountQuery(undefined, {
     pollingInterval: 5000,
+    skip: !isConnected,
   });
   const closePosition = ({
     size,
@@ -89,7 +94,7 @@ const Positions = () => {
       },
     },
   ];
-  if (!positions.length) {
+  if (!positions.length || !isConnected) {
     return <PlaceHolder>No Orders yet</PlaceHolder>;
   }
   return <Table columns={columns} data={positions} />;

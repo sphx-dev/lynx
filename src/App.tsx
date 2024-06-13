@@ -13,7 +13,7 @@ import {
 import { ThemeProvider } from "styled-components";
 import Header from "./components/Header";
 import Footer from "./sections/footer";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, useAccount, WagmiConfig } from "wagmi";
 import { avalanche, avalancheFuji } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { Toaster } from "react-hot-toast";
@@ -51,14 +51,19 @@ export const wagmiConfig = createConfig({
   publicClient,
 });
 
+const AppInitializtion = ({ children }: PropsWithChildren) => {
+  const { isConnected } = useAccount();
+
+  useGetAccountQuery(undefined, { skip: !isConnected });
+
+  return children;
+};
 function App() {
   const content = useRoutes(routes);
   const currentTheme = useAppSelector(selectCurrentTheme);
   const theme: ThemeInterface = themes["dark"];
 
   const { rainbowDarkTheme } = useRainbowKitDarkTheme();
-
-  useGetAccountQuery();
 
   return (
     <WagmiConfig config={wagmiConfig}>
@@ -68,15 +73,17 @@ function App() {
         theme={currentTheme === "dark" ? rainbowDarkTheme : lightTheme()}
       >
         <ThemeProvider theme={theme}>
-          <Desktop>
-            <Header />
-            {content}
-            <Footer />
-            <Toaster />
-          </Desktop>
-          <AnotherDevices>
-            <OnlyDesktopMessage />
-          </AnotherDevices>
+          <AppInitializtion>
+            <Desktop>
+              <Header />
+              {content}
+              <Footer />
+              <Toaster />
+            </Desktop>
+            <AnotherDevices>
+              <OnlyDesktopMessage />
+            </AnotherDevices>
+          </AppInitializtion>
         </ThemeProvider>
       </RainbowKitProvider>
     </WagmiConfig>
