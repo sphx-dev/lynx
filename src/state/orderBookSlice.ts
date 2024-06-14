@@ -57,7 +57,7 @@ export const orderBookSlice = createSlice({
             sortByPrice
           );
           const asks = pipe(
-            payload.asks,
+            payload.asks.reverse(),
             formatToNumbers,
             addTotalSums,
             addDepths,
