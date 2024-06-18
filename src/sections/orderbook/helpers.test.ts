@@ -1,50 +1,26 @@
-import { getPercentage, getSpread } from "./helpers";
-
-const mockOrderBookWithIntPrice = {
-  asks: [
-    {
-      quantity: 527262,
-      price: 91,
-      leverage: 0,
-      totalSum: 527262,
-      depth: 5.293079870933105,
-    },
-  ],
-  bids: [
-    {
-      quantity: 79,
-      price: 81,
-      leverage: 0,
-      totalSum: 79,
-      depth: 0.0009724814822291935,
-    },
-  ],
-};
-
-const mockOrderBookWithDecimalsPrice = {
-  asks: [
-    {
-      quantity: 527262,
-      price: 0.000005,
-      leverage: 0,
-      totalSum: 527262,
-      depth: 5.293079870933105,
-    },
-  ],
-  bids: [
-    {
-      quantity: 79,
-      price: 0.0000045,
-      leverage: 0,
-      totalSum: 79,
-      depth: 0.0009724814822291935,
-    },
-  ],
-};
-const SPREAD_FOR_INTEGERS = 91 - 81;
-const SPREAD_FOR_DECIMALS = 0.0000005;
-const PERCENTAGE_FOR_INTEGERS = 11.628;
-const PERCENTAGE_FOR_DECIMALS = 10.526;
+import {
+  addDepths,
+  addTotalSums,
+  asksToState,
+  getPercentage,
+  getSpread,
+  orderToState,
+} from "./helpers";
+import {
+  ASKS,
+  BIDS,
+  mockOrderBookWithDecimalsPrice,
+  mockOrderBookWithIntPrice,
+  ORDERS,
+  ORDERS_WITH_DEPTH,
+  ORDERS_WITH_TOTAL,
+  PERCENTAGE_FOR_DECIMALS,
+  PERCENTAGE_FOR_INTEGERS,
+  SPREAD_FOR_DECIMALS,
+  SPREAD_FOR_INTEGERS,
+  STATE_ASKS,
+  STATE_BIDS,
+} from "./mocks";
 
 describe("Order book helpers", () => {
   describe("getSpread", () => {
@@ -92,6 +68,30 @@ describe("Order book helpers", () => {
           spread
         )
       ).toBe(PERCENTAGE_FOR_DECIMALS);
+    });
+  });
+
+  describe("addTotalSums", () => {
+    it("Should add correct sums", () => {
+      expect(addTotalSums(ORDERS)).toEqual(ORDERS_WITH_TOTAL);
+    });
+  });
+
+  describe("addDepth", () => {
+    it("Should add correct depth", () => {
+      expect(addDepths(ORDERS_WITH_TOTAL)).toEqual(ORDERS_WITH_DEPTH);
+    });
+  });
+
+  describe("orderToState", () => {
+    it("Should correctly format bids response to state", () => {
+      expect(orderToState(BIDS)).toEqual(STATE_BIDS);
+    });
+  });
+
+  describe("aksToState", () => {
+    it("Should correctly format asks response to state", () => {
+      expect(asksToState(ASKS)).toEqual(STATE_ASKS);
     });
   });
 });

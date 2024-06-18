@@ -2,14 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { orderBookApi } from "../utils/api/orderBookApi";
 import { OrderWithDepth } from "../types/orderBook";
-import { pipe } from "../utils/pipe";
 import {
-  addDepths,
-  addTotalSums,
-  formatToNumbers,
+  asksToState,
   getPercentage,
   getSpread,
-  sortByPrice,
+  orderToState,
 } from "../sections/orderbook/helpers";
 
 export interface OrderBookState {
@@ -49,20 +46,8 @@ export const orderBookSlice = createSlice({
         orderBookApi.endpoints.getOrderBook.matchFulfilled,
         (state, { payload }) => {
           state.status = "idle";
-          const bids = pipe(
-            payload.bids,
-            formatToNumbers,
-            addTotalSums,
-            addDepths,
-            sortByPrice
-          );
-          const asks = pipe(
-            payload.asks.reverse(),
-            formatToNumbers,
-            addTotalSums,
-            addDepths,
-            sortByPrice
-          );
+          const bids = orderToState(payload.bids);
+          const asks = asksToState(payload.asks);
 
           state.bids = bids;
           state.asks = asks;

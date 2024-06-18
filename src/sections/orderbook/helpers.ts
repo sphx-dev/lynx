@@ -1,5 +1,6 @@
 import { Order, OrderWithDepth, OrderWithTotal } from "../../types/orderBook";
 import Decimal from "decimal.js";
+import { pipe } from "../../utils/pipe";
 export const addTotalSums = (orders: Order<number>[]): OrderWithTotal[] => {
   const totalSums: number[] = [];
 
@@ -65,3 +66,10 @@ export const sortByPrice = (orders: OrderWithDepth[]) => {
       nextLevel.price - currentLevel.price
   );
 };
+
+export const orderToState = (orders: Order<string>[]) =>
+  pipe(orders, formatToNumbers, addTotalSums, addDepths, sortByPrice);
+
+export const asksToState = (orders: Order<string>[]) =>
+  // expect orders to be sorted 9-0 by price
+  orderToState(orders.reverse());
