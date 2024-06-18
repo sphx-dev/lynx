@@ -19,6 +19,10 @@ export const orderApi = api.injectEndpoints({
           is_buy: payload.isBuy,
           volume: payload.volume,
           leverage: payload.leverage,
+          order_type: payload.orderType,
+          ...(payload.triggerPrice
+            ? { trigger_price: payload.triggerPrice }
+            : {}),
         },
       }),
       invalidatesTags: ["account"],
@@ -32,6 +36,7 @@ export const orderApi = api.injectEndpoints({
           volume: payload.volume,
           price: payload.price,
           leverage: payload.leverage,
+          order_type: payload.orderType,
         },
       }),
       invalidatesTags: ["account"],

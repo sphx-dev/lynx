@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,6 +32,7 @@ import { MESSAGE } from "../../constants/validation";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useAppSelector } from "../../hooks";
 import { selectMarketId } from "../../state/futuresSlice";
+import { OrderType } from "../../types/order";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -50,13 +51,23 @@ const StyledButton = styled(Button)`
   padding: 0;
 `;
 
-enum OrderType {
-  MARKET = "MARKET",
-  LIMIT = "LIMIT",
-  STOP = "STOP",
-}
+const TP_SL_TYPES_MAP = {
+  [OrderType.MARKET]: {
+    takeProfit: OrderType.TAKE_PROFIT_MARKET,
+    stopLoss: OrderType.STOP_LOSS_MARKET,
+  },
+  [OrderType.LIMIT]: {
+    takeProfit: OrderType.TAKE_PROFIT_LIMIT,
+    stopLoss: OrderType.STOP_LOSS_LIMIT,
+  },
+};
 
-const options = [
+type MainOrderType = OrderType.MARKET | OrderType.LIMIT;
+
+const options: [
+  { label: string; value: OrderType.MARKET },
+  { label: string; value: OrderType.LIMIT }
+] = [
   {
     label: "Market",
     value: OrderType.MARKET,
@@ -74,6 +85,7 @@ export interface MarketOrderForm {
   price: number;
   takeProfit: number | null;
   stopLoss: number | null;
+  orderType: MainOrderType;
 }
 
 const defaultValues: MarketOrderForm = {
@@ -83,23 +95,25 @@ const defaultValues: MarketOrderForm = {
   price: 0,
   takeProfit: null,
   stopLoss: null,
+  orderType: OrderType.MARKET,
 };
 
-const schema = (orderType: OrderType, markPrice: number) =>
+const schema = (markPrice: number) =>
   yup.object().shape({
     volume: yup
       .number()
       .typeError(MESSAGE.number)
       .moreThan(0)
       .required(MESSAGE.required),
-    price:
-      orderType === OrderType.LIMIT
-        ? yup
-            .number()
-            .typeError(MESSAGE.required)
-            .moreThan(0)
-            .required(MESSAGE.required)
-        : yup.number().nullable(),
+    price: yup.number().when("orderType", {
+      is: OrderType.LIMIT,
+      then: schema1 =>
+        schema1
+          .typeError(MESSAGE.required)
+          .moreThan(0)
+          .required(MESSAGE.required),
+      otherwise: schema1 => schema1.nullable(),
+    }),
     takeProfit: yup
       .number()
       .nullable()
@@ -128,7 +142,6 @@ function OrderInput() {
   const { themeColors } = useTheme();
   const { isConnected } = useAccount();
   const { t } = useTranslation();
-  const [orderType, setOrderType] = useState(OrderType.MARKET);
   const {
     handleSubmit,
     register,
@@ -137,26 +150,53 @@ function OrderInput() {
     formState: { errors },
   } = useForm<MarketOrderForm>({
     defaultValues,
-    resolver: yupResolver<any>(schema(orderType, 90)),
+    resolver: yupResolver<any>(schema(90)),
   });
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
   const [placeLimitOrder] = usePlaceLimitOrderMutation();
   const marketId = useAppSelector(selectMarketId);
-  const handleSwitchOrderType = (type: OrderType) => setOrderType(type);
+
+  const orderHandlers = useMemo(
+    () => ({
+      [OrderType.MARKET]: placeMarketOrder,
+      [OrderType.LIMIT]: placeLimitOrder,
+    }),
+    []
+  );
+  const handleSwitchOrderType = (type: MainOrderType) =>
+    setValue("orderType", type);
 
   const isBuyPosition = watch("isBuy");
+  const orderType: MainOrderType = watch("orderType");
 
   const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
 
   const placeOrder = async (values: MarketOrderForm) => {
-    const handler =
-      orderType === OrderType.MARKET ? placeMarketOrder : placeLimitOrder;
+    const handler = orderHandlers[orderType];
     const response = await handler(values);
     handleApiCall(
       response,
       () => errorAlert("Something went wrong"),
-      () => successAlert("Order placed")
+      () => {
+        successAlert("Order placed");
+        if (values.takeProfit) {
+          placeMarketOrder({
+            ...values,
+            isBuy: !values.isBuy,
+            triggerPrice: values.takeProfit,
+            orderType: TP_SL_TYPES_MAP[orderType].takeProfit,
+          });
+        }
+        if (values.stopLoss) {
+          placeMarketOrder({
+            ...values,
+            isBuy: !values.isBuy,
+            triggerPrice: values.stopLoss,
+            orderType: TP_SL_TYPES_MAP[orderType].stopLoss,
+          });
+        }
+      }
     );
   };
 

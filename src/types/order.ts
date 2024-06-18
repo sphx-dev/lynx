@@ -32,6 +32,8 @@ export interface OrderMutation {
   isBuy: boolean;
   volume: number;
   leverage: number;
+  orderType: OrderType;
+  triggerPrice?: number;
 }
 
 export interface LimitOrderMutation extends OrderMutation {
@@ -53,4 +55,13 @@ export interface Position {
 export enum OrderSide {
   buy = "buy",
   sell = "sell",
+}
+
+export enum OrderType {
+  LIMIT = "limit",
+  MARKET = "market",
+  STOP_LOSS_MARKET = "stop_loss_market",
+  STOP_LOSS_LIMIT = "stop_loss_limit",
+  TAKE_PROFIT_MARKET = "take_profit_market",
+  TAKE_PROFIT_LIMIT = "take_profit_limit",
 }

@@ -8,7 +8,7 @@ import PlaceHolder from "./PlaceHolder";
 import { formatNumber } from "../../utils/format";
 import useTheme from "../../hooks/useTheme";
 import { usePlaceMarketOrderMutation } from "../../utils/api/orderApi";
-import { OrderSide } from "../../types/order";
+import { OrderSide, OrderType } from "../../types/order";
 import { useGetAccountQuery } from "../../utils/api/accountApi";
 import { useAccount } from "wagmi";
 
@@ -36,6 +36,7 @@ const Positions = () => {
       isBuy: side !== OrderSide.buy,
       volume: Math.abs(+size),
       leverage: leverage || 1,
+      orderType: OrderType.MARKET,
     });
   };
   const columns = [
