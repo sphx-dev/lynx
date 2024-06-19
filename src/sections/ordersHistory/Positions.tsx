@@ -70,7 +70,7 @@ const Positions = () => {
     },
     {
       accessorKey: "unrealizedPl",
-      header: "U&Pl",
+      header: "PNL",
       cell: (props: any) => (
         <Text color={getColorByPl(props.getValue())}>
           {formatNumber({ value: +props.getValue(), fixed: 2 })}

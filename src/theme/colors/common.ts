@@ -130,8 +130,10 @@ const common = {
   negative: "#2E1515",
   negative2: "#820000",
   negative3: "#FF4848",
+  negative4: "#fb5b5b",
   positive: "#1E4D39",
   positive1: "#4C972E",
+  positive2: "#58b035",
   gray: "#416075", //action bar, order book logo
   palette,
   tertiary: "#9D9D9D",

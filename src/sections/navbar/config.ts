@@ -3,12 +3,12 @@ import { ROUTES } from "../../routes";
 export const navLinks = [
   {
     title: "Dashboard",
-    path: "/",
+    path: ROUTES.dashboard,
     icon: null,
   },
   {
     title: "Exchange",
-    path: ROUTES.futures,
+    path: ROUTES.exchange,
     icon: null,
   },
   {

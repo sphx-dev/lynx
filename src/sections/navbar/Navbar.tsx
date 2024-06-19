@@ -4,8 +4,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { getThemeColors } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { navLinks } from "./config";
-import Icon from "../../components/Icon";
-import useTheme from "../../hooks/useTheme";
 import Button from "../../components/Button";
 
 const Wrapper = styled.nav`
@@ -28,10 +26,8 @@ const StyledLink = styled(NavLink)`
 `;
 
 const Navbar = () => {
-  const { themeColors } = useTheme();
   return (
     <Wrapper>
-      <Icon icon="HomeIcon" stroke={themeColors.text.secondaryLink} />
       {navLinks.map(({ title, path }) => (
         <StyledLink to={path} key={title}>
           {title}

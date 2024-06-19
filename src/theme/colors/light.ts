@@ -114,6 +114,16 @@ const lightTheme = {
   actionBar: {
     text: common.gray,
   },
+  orderButton: {
+    buy: {
+      background: common.positive1,
+      hover: common.positive,
+    },
+    sell: {
+      background: common.negative3,
+      hover: common.negative,
+    },
+  },
 };
 
 export default lightTheme;

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -20,7 +20,6 @@ import TabButton from "../../components/TabButton";
 import useTheme from "../../hooks/useTheme";
 import { useAccount } from "wagmi";
 import { useForm } from "react-hook-form";
-import Colors from "../../theme/colors";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import {
@@ -33,6 +32,7 @@ import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useAppSelector } from "../../hooks";
 import { selectMarketId } from "../../state/futuresSlice";
 import { OrderType } from "../../types/order";
+import { getThemeColors } from "../../theme";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -49,6 +49,28 @@ const StyledButton = styled(Button)`
   align-items: center;
   justify-content: center;
   padding: 0;
+`;
+
+const buyStyle = css`
+  background-color: ${({ theme }) =>
+    getThemeColors(theme).orderButton.buy.background};
+  &:hover {
+    background-color: ${({ theme }) =>
+      getThemeColors(theme).orderButton.buy.hover};
+  }
+`;
+
+const sellStyle = css`
+  background-color: ${({ theme }) =>
+    getThemeColors(theme).orderButton.sell.background};
+  &:hover {
+    background-color: ${({ theme }) =>
+      getThemeColors(theme).orderButton.sell.hover};
+  }
+`;
+
+const PlaceOrderButton = styled(Button)<{ $isBuy: boolean }>`
+  ${({ $isBuy }) => ($isBuy ? buyStyle : sellStyle)}
 `;
 
 const TP_SL_TYPES_MAP = {
@@ -334,15 +356,9 @@ function OrderInput() {
                     />
                     {!isConnected && <ConnectButton />}
                     {isConnected && (
-                      <Button
-                        style={{
-                          backgroundColor: isBuyPosition
-                            ? Colors.common.positive1
-                            : Colors.common.negative3,
-                        }}
-                      >
+                      <PlaceOrderButton $isBuy={isBuyPosition}>
                         {t("placeOrder")}
-                      </Button>
+                      </PlaceOrderButton>
                     )}
                     <Summary />
                   </Stack>

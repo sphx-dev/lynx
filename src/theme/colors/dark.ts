@@ -114,6 +114,16 @@ const darkTheme = {
   actionBar: {
     text: common.gray,
   },
+  orderButton: {
+    buy: {
+      background: common.positive1,
+      hover: common.positive2,
+    },
+    sell: {
+      background: common.negative3,
+      hover: common.negative4,
+    },
+  },
 };
 
 export default darkTheme;
