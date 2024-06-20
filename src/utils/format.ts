@@ -18,3 +18,9 @@ export const formatNumber = ({
     return value.toString();
   }
 };
+
+export const displayPrice = (price: number, unit: string) =>
+  formatNumber({
+    value: price,
+    before: unit,
+  });

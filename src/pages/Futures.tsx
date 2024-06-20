@@ -13,6 +13,7 @@ import { ActionBarContainer } from "../components/AttributionBar/ActionBar";
 import Text from "../components/Text";
 import logo from "../assets/icons/logo-small.svg";
 import useTheme from "../hooks/useTheme";
+import Trades from "../sections/trades/Trades";
 
 const Wrapper = styled.div`
   display: grid;
@@ -39,13 +40,7 @@ const tabs = [
   },
   {
     title: "Trades",
-    content: (
-      <Stack fullHeight justify="center" align="center">
-        <Text variant="textXl" color="tertiary">
-          NO DATA
-        </Text>
-      </Stack>
-    ),
+    content: <Trades />,
   },
 ];
 const Futures = () => {

@@ -1,4 +1,4 @@
-import { Account } from "./order";
+import { Account, Side } from "./order";
 
 export interface Order<T> {
   quantity: T;
@@ -22,4 +22,11 @@ export interface OrderBookResponse {
 export enum OrderType {
   BIDS,
   ASKS,
+}
+
+export interface TradesItem {
+  price: string;
+  quantity: number;
+  side: Side;
+  date: string;
 }

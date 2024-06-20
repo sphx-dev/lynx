@@ -110,6 +110,8 @@ const darkTheme = {
     secondaryActive: common.palette.secondary["600"],
     secondaryLink: common.palette.secondary["700"],
     primaryLink: common.palette.primary["500"],
+    buy: common.positive1,
+    sell: common.negative3,
   },
   actionBar: {
     text: common.gray,

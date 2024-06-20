@@ -4,35 +4,23 @@ import { Text } from "../../components";
 import styled from "styled-components";
 
 interface TitleRowProps {
-  reversedFieldsOrder?: boolean;
-  windowWidth: number;
+  titles: string[];
 }
 
 const Label = styled.div`
   flex: 1;
 `;
 
-const TitleRow: FunctionComponent<TitleRowProps> = ({
-  reversedFieldsOrder = false,
-  windowWidth,
-}) => {
+const TitleRow: FunctionComponent<TitleRowProps> = ({ titles }) => {
   return (
     <Container data-testid="title-row">
-      <Label>
-        <Text variant="textXs" color="secondaryLink">
-          PRICE ETH
-        </Text>
-      </Label>
-      <Label>
-        <Text variant="textXs" color="secondaryLink">
-          AMOUNT
-        </Text>
-      </Label>
-      <Label>
-        <Text variant="textXs" color="secondaryLink">
-          TOTAL
-        </Text>
-      </Label>
+      {titles.map(title => (
+        <Label key={title}>
+          <Text variant="textXs" color="secondaryLink">
+            {title}
+          </Text>
+        </Label>
+      ))}
     </Container>
   );
 };

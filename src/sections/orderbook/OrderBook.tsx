@@ -13,21 +13,25 @@ import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
 import { OrderType, OrderWithDepth } from "../../types/orderBook";
 import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
 import { getOrderBookRecords } from "../../utils/helpers";
+import { useResize } from "../../hooks/useResize";
 
 interface OrderBookProps {
   windowWidth: number;
 }
 
+const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
+
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const book = useAppSelector(orderBook);
   const containerRef = useRef(null);
   const [height, setHeight] = useState(0);
+  const { height: windowHeight } = useResize();
 
   useEffect(() => {
     if (containerRef.current) {
       setHeight(getBoundingClientRect(containerRef.current).height);
     }
-  }, [containerRef.current]);
+  }, [setHeight, windowHeight]);
 
   const records = getOrderBookRecords(height);
   useGetOrderBookQuery(records, {
@@ -72,9 +76,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
       {book.bids.length && book.asks.length ? (
         <Stack style={{ width: "100%" }}>
           <TableContainer>
-            {windowWidth > MOBILE_WIDTH && (
-              <TitleRow windowWidth={windowWidth} reversedFieldsOrder={false} />
-            )}
+            {windowWidth > MOBILE_WIDTH && <TitleRow titles={HEADERS} />}
             <div>{buildPriceLevels(book.asks, OrderType.ASKS)}</div>
           </TableContainer>
           <Divider />
