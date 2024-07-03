@@ -73,7 +73,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
 
   return (
     <Container ref={containerRef}>
-      {book.bids.length && book.asks.length ? (
+      {book.bids.length || book.asks.length ? (
         <Stack style={{ width: "100%" }}>
           <TableContainer>
             {windowWidth > MOBILE_WIDTH && <TitleRow titles={HEADERS} />}

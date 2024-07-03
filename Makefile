@@ -3,7 +3,7 @@ clean:
 	@rm -rf build
 
 lint:
-	@yarn lint
+	@yarn lint --max-warnings=0
 	@yarn type-check
 
 lint_fix:
