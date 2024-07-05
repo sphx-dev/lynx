@@ -22,7 +22,6 @@ import { useRainbowKitDarkTheme } from "./hooks/useRainbowKitDarkTheme";
 import { useMediaQuery } from "react-responsive";
 import OnlyDesktopMessage from "./components/OnlyDesktopMessage";
 import { BREAK_POINTS } from "./constants";
-import axios from "axios";
 export const { chains, publicClient } = configureChains(
   [avalanche, avalancheFuji],
   [publicProvider()]

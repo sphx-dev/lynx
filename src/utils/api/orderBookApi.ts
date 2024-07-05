@@ -9,7 +9,9 @@ export const orderBookApi = api.injectEndpoints({
         return {
           ...res,
           bids: res.bids ? res.bids.slice(0, records) : [],
+          bids_size: res.bidsSize,
           asks: res.asks ? res.asks.slice(0, records) : [],
+          asks_size: res.asksSize,
         };
       },
     }),

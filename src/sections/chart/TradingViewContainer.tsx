@@ -62,7 +62,7 @@ export const TradingViewContainer = () => {
     return () => {
       tvWidget.remove();
     };
-  }, [chartContainerRef.current, marketId]);
+  }, [marketId]);
 
   return (
     <TVChartContainer ref={chartContainerRef} className={"TVChartContainer"} />

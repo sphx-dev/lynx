@@ -12,6 +12,8 @@ import {
 export interface OrderBookState {
   bids: OrderWithDepth[];
   asks: OrderWithDepth[];
+  bids_size: number;
+  asks_size: number;
   spread: number;
   percentage: number;
   status: "idle" | "loading" | "failed";
@@ -20,6 +22,8 @@ export interface OrderBookState {
 const initialState: OrderBookState = {
   bids: [],
   asks: [],
+  asks_size: 0,
+  bids_size: 0,
   status: "idle",
   spread: 0,
   percentage: 0,
@@ -48,9 +52,13 @@ export const orderBookSlice = createSlice({
           state.status = "idle";
           const bids = orderToState(payload.bids);
           const asks = asksToState(payload.asks);
+          const bids_size = payload.bidsSize;
+          const asks_size = payload.asksSize;
 
           state.bids = bids;
           state.asks = asks;
+          state.bids_size = bids_size;
+          state.asks_size = asks_size;
           const spread = getSpread(bids, asks);
           state.spread = spread;
           state.percentage = getPercentage(bids, asks, spread);

@@ -183,7 +183,7 @@ function OrderInput() {
       [OrderType.MARKET]: placeMarketOrder,
       [OrderType.LIMIT]: placeLimitOrder,
     }),
-    []
+    [placeLimitOrder, placeMarketOrder]
   );
   const handleSwitchOrderType = (type: MainOrderType) =>
     setValue("orderType", type);

@@ -35,7 +35,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
 
   const records = getOrderBookRecords(height);
   useGetOrderBookQuery(records, {
-    pollingInterval: 1000,
+    pollingInterval: 10000,
     skip: records <= 0,
   });
 
@@ -73,6 +73,9 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
 
   return (
     <Container ref={containerRef}>
+      <div>
+        Bids: {book.bids_size}, Asks: {book.asks_size}
+      </div>
       {book.bids.length || book.asks.length ? (
         <Stack style={{ width: "100%" }}>
           <TableContainer>

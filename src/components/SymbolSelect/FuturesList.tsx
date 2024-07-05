@@ -36,7 +36,7 @@ const FuturesList = ({ list, closePopup }: Props) => {
         ? themeColors.text.secondaryLink
         : "none";
     },
-    [favorites]
+    [favorites, themeColors.text.secondaryLink]
   );
 
   const handleRowClick = (row: TradePair) => {
@@ -44,12 +44,14 @@ const FuturesList = ({ list, closePopup }: Props) => {
     closePopup();
   };
 
-  const handleToggleFavorite =
+  const handleToggleFavorite = useCallback(
     (value: string) => (event: MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
       event.stopPropagation();
       dispatch(toggleFavorite(value));
-    };
+    },
+    [dispatch]
+  );
 
   const columns = useMemo(
     () => [
@@ -94,7 +96,7 @@ const FuturesList = ({ list, closePopup }: Props) => {
         ),
       },
     ],
-    [list, getColor]
+    [getColor, handleToggleFavorite, themeColors.text.secondaryLink]
   );
   return (
     <Table

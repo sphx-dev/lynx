@@ -17,6 +17,8 @@ export interface OrderBookResponse {
   account: Account;
   asks: Order<string>[];
   bids: Order<string>[];
+  bidsSize: number;
+  asksSize: number;
 }
 
 export enum OrderType {
