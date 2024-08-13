@@ -26,6 +26,7 @@ export interface ChartContainerProps {
   autosize: ChartingLibraryWidgetOptions["autosize"];
   studiesOverrides: ChartingLibraryWidgetOptions["studies_overrides"];
   container: ChartingLibraryWidgetOptions["container"];
+  custom_formaters: ChartingLibraryWidgetOptions["custom_formatters"];
 }
 
 const getLanguageFromURL = (): LanguageCode | null => {
@@ -56,6 +57,25 @@ export const TradingViewContainer = () => {
       container: chartContainerRef.current,
       locale: getLanguageFromURL() || "en",
       interval: DEFAULT_INTERVAL,
+      custom_formatters: {
+        priceFormatterFactory: (symbolInfo, minTick) => {
+          return {
+            format: (price, signPositive) => {
+              let precision = 8;
+              const integer = price.toString().split(".")?.[0];
+
+              if (integer.length > 3) {
+                precision = integer.length + 2;
+              } else if (integer.length > 1) {
+                precision = integer.length + 3;
+              } else {
+                precision = 4;
+              }
+              return price.toPrecision(precision);
+            },
+          };
+        },
+      },
     };
 
     const tvWidget = new widget(widgetOptions);
