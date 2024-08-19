@@ -5,7 +5,6 @@ import * as yup from "yup";
 
 import {
   Button,
-  ConnectButton,
   Divider,
   Group,
   Input,
@@ -18,7 +17,6 @@ import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
 import TabButton from "../../components/TabButton";
 import useTheme from "../../hooks/useTheme";
-import { useAccount } from "wagmi";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "../../utils/alerts";
@@ -33,6 +31,8 @@ import { useAppSelector } from "../../hooks";
 import { selectMarketId } from "../../state/futuresSlice";
 import { OrderType } from "../../types/order";
 import { getThemeColors } from "../../theme";
+import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
+import { ConnectButton } from "../../components/ConnectButton";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -162,7 +162,7 @@ const schema = (markPrice: number) =>
 
 function OrderInput() {
   const { themeColors } = useTheme();
-  const { isConnected } = useAccount();
+  const { isConnected } = useChainCosmoshub();
   const { t } = useTranslation();
   const {
     handleSubmit,
@@ -246,7 +246,7 @@ function OrderInput() {
                     </Text>
                   </Stack>
                 )}
-                <ConnectButton size="small" />
+                <ConnectButton size="sm" />
               </Group>
             </Container>
           )}
@@ -354,7 +354,14 @@ function OrderInput() {
                       type="number"
                       value={watch("stopLoss") || ""}
                     />
-                    {!isConnected && <ConnectButton />}
+
+                    {!isConnected && (
+                      <ConnectButton
+                        size="sm"
+                        fluid
+                        text={t("connectWallet")}
+                      />
+                    )}
                     {isConnected && (
                       <PlaceOrderButton $isBuy={isBuyPosition}>
                         {t("placeOrder")}

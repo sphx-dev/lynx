@@ -23,7 +23,6 @@ const Header = () => {
     <Group fluid spacing={0} style={{ width: "100vw" }}>
       <StyledHeader>
         <Logo src={logo} />
-        {/*<span>Logout</span>*/}
       </StyledHeader>
       <Nav />
     </Group>

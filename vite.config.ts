@@ -1,11 +1,18 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [svgr(), react()],
+    plugins: [
+      nodePolyfills({
+        include: ["crypto", "stream", "vm"],
+      }),
+      svgr(),
+      react(),
+    ],
     server: {
       open: false,
     },

@@ -1,5 +1,6 @@
 {
-  "connect": "CONNECT",
+  "connect": "Connect",
+  "disconnect": "Disconnect",
   "takeProfit": "Take Profit / Stop Loss",
   "makeWithHonor": "made with honor",
   "stats": "Stats",

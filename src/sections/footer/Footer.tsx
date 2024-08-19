@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { useTranslation } from "react-i18next";
-import { useAccount } from "wagmi";
 import useTheme from "../../hooks/useTheme";
+import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 const Wrapper = styled.footer`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
   display: flex;
@@ -47,7 +47,7 @@ const NavItem = styled.a`
   cursor: pointer;
 `;
 const Footer = () => {
-  const { isConnected } = useAccount();
+  const { isConnected } = useChainCosmoshub();
   const { themeColors } = useTheme();
   const color = !isConnected ? themeColors.negative2 : "";
   const { t } = useTranslation();

@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import styled, { css } from "styled-components";
 import { getThemeColors, ThemeColors } from "../../theme";
 
-type Size = "xs" | "sm" | "lg";
+export type Size = "xs" | "sm" | "lg";
 
 const SIZE_MAP = {
   xs: "0 8px",
@@ -10,7 +10,7 @@ const SIZE_MAP = {
   lg: "14px 22px",
 };
 
-type Variant = keyof ThemeColors["button"];
+export type Variant = keyof ThemeColors["button"];
 type Color = keyof ThemeColors["text"];
 interface CssProps extends Props {
   variant: Variant;
@@ -42,12 +42,12 @@ const styleByVariant = css<CssProps>`
   border: 1px solid transparent;
 `;
 
-interface Props extends Omit<React.HTMLProps<HTMLButtonElement>, "size"> {
+type Props = Omit<React.HTMLProps<HTMLButtonElement>, "size"> & {
   size?: Size;
   pill?: boolean;
   fluid?: boolean;
   variant?: Variant;
-}
+};
 
 const StyledButton = styled.button<CssProps>`
   ${styleByVariant}
@@ -67,9 +67,14 @@ const StyledButton = styled.button<CssProps>`
 `;
 const StyledWrapper = styled.span<Partial<CssProps>>`
   border: 1px solid rgba(255, 255, 255, 0.1);
-  display: inline-block;
+  display: inline-flex;
   padding: 2px;
-  border-radius: 1000px;
+  border-radius: ${
+    ({ theme, $pill }) =>
+      $pill
+        ? theme.borderRadius.pill
+        : "12px" /* TODO: extend "theme.borderRadius.md" to have also "wrapperBorderRadius" */
+  };
   width: ${({ $fluid }) => ($fluid ? "100%" : "auto")};
   align-self: center;
 `;
@@ -78,11 +83,12 @@ const Wrapper = ({
   variant,
   children,
   fluid,
+  pill,
   ...props
 }: PropsWithChildren<Props>) => {
   if (variant === "primary")
     return (
-      <StyledWrapper $fluid={fluid} {...props}>
+      <StyledWrapper $pill={pill} $fluid={fluid} {...props}>
         {children}
       </StyledWrapper>
     );
@@ -97,7 +103,7 @@ const Button = ({
   ...props
 }: PropsWithChildren<Props>) => {
   return (
-    <Wrapper variant={variant} fluid={fluid} {...props}>
+    <Wrapper pill={pill} fluid={fluid} variant={variant} {...props}>
       <StyledButton $pill={pill} $fluid={fluid} variant={variant} {...props}>
         {children}
       </StyledButton>
@@ -105,4 +111,5 @@ const Button = ({
   );
 };
 
+export type ButtonProps = React.ComponentPropsWithoutRef<typeof Button>;
 export default Button;

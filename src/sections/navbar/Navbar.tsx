@@ -1,16 +1,15 @@
-import React from "react";
 import styled from "styled-components";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { getThemeColors } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { navLinks } from "./config";
-import Button from "../../components/Button";
+import { ConnectButton } from "../../components/ConnectButton";
 
 const Wrapper = styled.nav`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
   display: flex;
   align-items: center;
-  padding: 8px 30px;
+  padding: 0px 30px;
+  height: 35px;
   gap: 20px;
   flex: 1;
   box-shadow: 0px 4px 8px 0px #00000040;
@@ -33,21 +32,7 @@ const Navbar = () => {
           {title}
         </StyledLink>
       ))}
-      <ConnectButton.Custom>
-        {({ openAccountModal, account }) =>
-          account && (
-            <Button
-              size="xs"
-              onClick={openAccountModal}
-              type="button"
-              style={{ marginLeft: "auto" }}
-            >
-              {account.displayName}
-              {account.displayBalance ? ` (${account.displayBalance})` : ""}
-            </Button>
-          )
-        }
-      </ConnectButton.Custom>
+      <ConnectButton size="xs" />
     </Wrapper>
   );
 };

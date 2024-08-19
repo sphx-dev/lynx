@@ -28,7 +28,7 @@ function handleStreamingData(data: any) {
       low: tradePrice,
       close: tradePrice,
     };
-    console.log("[stream] Generate new bar", bar);
+    // console.log("[stream] Generate new bar", bar);
   } else {
     bar = {
       ...lastDailyBar,
@@ -36,7 +36,7 @@ function handleStreamingData(data: any) {
       low: Math.min(lastDailyBar.low, tradePrice),
       close: tradePrice,
     };
-    console.log("[stream] Update the latest bar by price", tradePrice);
+    // console.log("[stream] Update the latest bar by price", tradePrice);
   }
 
   subscriptionItem.lastDailyBar = bar;

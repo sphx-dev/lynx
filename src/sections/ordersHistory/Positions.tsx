@@ -10,12 +10,12 @@ import useTheme from "../../hooks/useTheme";
 import { usePlaceMarketOrderMutation } from "../../utils/api/orderApi";
 import { OrderSide, OrderType } from "../../types/order";
 import { useGetAccountQuery } from "../../utils/api/accountApi";
-import { useAccount } from "wagmi";
+import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 
 const Positions = () => {
   const { positions } = useAppSelector(account);
   const { themeColors } = useTheme();
-  const { isConnected } = useAccount();
+  const { isConnected } = useChainCosmoshub();
 
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
 

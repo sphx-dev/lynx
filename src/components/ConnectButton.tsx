@@ -1,108 +1,46 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import Button from "./Button";
+import { useMemo } from "react";
+import { Button } from ".";
+import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useTranslation } from "react-i18next";
+import { ButtonProps } from "./Button";
 
-type Size = "small" | "large";
-
-export const AppButton = ({ size = "large" }: { size?: Size }) => {
-  const { t } = useTranslation();
-  return (
-    <ConnectButton.Custom>
-      {({
-        account,
-        chain,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-        authenticationStatus,
-        mounted,
-      }) => {
-        // Note: If your app doesn't use authentication, you
-        // can remove all 'authenticationStatus' checks
-        const ready = mounted && authenticationStatus !== "loading";
-        const connected =
-          ready &&
-          account &&
-          chain &&
-          (!authenticationStatus || authenticationStatus === "authenticated");
-        return (
-          <div
-            {...(!ready && {
-              "aria-hidden": true,
-              style: {
-                opacity: 0,
-                pointerEvents: "none",
-                userSelect: "none",
-              },
-            })}
-          >
-            {(() => {
-              if (!connected) {
-                return (
-                  <Button
-                    pill
-                    fluid
-                    onClick={openConnectModal}
-                    type="button"
-                    variant="primary"
-                  >
-                    {t(size === "large" ? "connectWallet" : "connect")}
-                  </Button>
-                );
-              }
-              if (chain.unsupported) {
-                return (
-                  <button onClick={openChainModal} type="button">
-                    Wrong network
-                  </button>
-                );
-              }
-              return (
-                <div style={{ display: "flex", gap: 12, width: "100%" }}>
-                  <Button
-                    onClick={openChainModal}
-                    style={{ display: "flex", alignItems: "center" }}
-                    type="button"
-                    pill
-                    fluid
-                    variant="primary"
-                  >
-                    {chain.hasIcon && (
-                      <div
-                        style={{
-                          background: chain.iconBackground,
-                          width: 12,
-                          height: 12,
-                          borderRadius: 999,
-                          overflow: "hidden",
-                          marginRight: 4,
-                        }}
-                      >
-                        {chain.iconUrl && (
-                          <img
-                            alt={chain.name ?? "Chain icon"}
-                            src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
-                          />
-                        )}
-                      </div>
-                    )}
-                    {chain.name}
-                  </Button>
-                  <button onClick={openAccountModal} type="button">
-                    {account.displayName}
-                    {account.displayBalance
-                      ? ` (${account.displayBalance})`
-                      : ""}
-                  </button>
-                </div>
-              );
-            })()}
-          </div>
-        );
-      }}
-    </ConnectButton.Custom>
-  );
+type ConnectButtonProps = ButtonProps & {
+  text?: string;
 };
 
-export default AppButton;
+export const ConnectButton = ({ text, ...props }: ConnectButtonProps) => {
+  const { connect, disconnect, isConnected, account } = useChainCosmoshub();
+  const address = account?.bech32Address;
+
+  const { t } = useTranslation();
+
+  const addressDisplay = useMemo(() => {
+    if (address) {
+      return (
+        address.substring(0, 10) +
+        "..." +
+        address.substring(address.length - 4, address.length)
+      );
+    }
+    return t("disconnect");
+  }, [address, t]);
+
+  return (
+    <>
+      {!isConnected ? (
+        <Button variant="primary" {...props} onClick={() => connect()}>
+          {text ?? t("connect")}
+        </Button>
+      ) : (
+        <Button
+          data-test="disconnect-button"
+          variant="secondary"
+          {...props}
+          onClick={() => disconnect()}
+        >
+          {addressDisplay}
+        </Button>
+      )}
+    </>
+  );
+};
