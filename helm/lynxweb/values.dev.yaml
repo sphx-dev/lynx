@@ -1,0 +1,62 @@
+# Default values for lynxweb.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+  
+lynxweb:
+  image: 940482415109.dkr.ecr.eu-west-2.amazonaws.com/sphx/lynx
+  tag: latest
+  # set to never when using local images
+  pullPolicy: Always
+  env:
+    PORT: 9898
+
+healthcheck:
+  url: /healthcheck
+  port: 9898
+
+service:
+  name: lynxweb
+  type: ClusterIP
+  port: 9898
+  externalPort: 9898
+  internalPort: 9898
+
+ingress:
+  enabled: true
+  certificate: arn:aws:acm:eu-west-2:585008044223:certificate/5ed9fddd-afbb-4790-9977-91c0f34f2856
+  domain: non-production.sphx.dev
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/load-balancer-name: "dev-lynxweb"
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: "/healthcheck"
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:{{ .Values.globals.aws_region }}:{{ .Values.globals.aws_account_id }}:certificate/{{ .Values.ingress.certificate }}"
+    alb.ingress.kubernetes.io/tags: cluster=dev-lynxweb
+  path: /
+  pathType: Prefix
+  hosts:
+    - api.non-production.sphx.dev
+  servicePort: 9898
+
+resources: { }
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+#  memory: 128Mi
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }
