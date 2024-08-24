@@ -1,10 +1,8 @@
 name: Build and Push Multi-Arch Docker Image
-
 on:
   push:
     branches:
       - main
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -48,6 +46,7 @@ jobs:
         DOCKER_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         SERVICE_NAME: sphx/lynx
         TAG: ${{ steps.extract_branch.outputs.branch }}-${{ steps.extract_short_sha.outputs.short_sha }}
+        CACHE_TAG: buildcache-${{ steps.extract_branch.outputs.branch }}
       with:
         context: .
         file: ./Dockerfile
@@ -56,5 +55,5 @@ jobs:
         tags: |
           ${{ env.DOCKER_REGISTRY }}/${{ env.SERVICE_NAME }}:${{ env.TAG }}
           ${{ env.DOCKER_REGISTRY }}/${{ env.SERVICE_NAME }}:latest
-        cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.SERVICE_NAME }}:buildcache
-        cache-to: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.SERVICE_NAME }}:buildcache,mode=max
+        cache-to: mode=max,image-manifest=true,oci-mediatypes=true,type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.SERVICE_NAME }}:${{ env.CACHE_TAG }}
+        cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.SERVICE_NAME }}:${{ env.CACHE_TAG }},mode=max

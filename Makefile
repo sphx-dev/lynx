@@ -32,3 +32,11 @@ server_auth:
 	BASIC_AUTH_ENABLED=true yarn server
 
 .PHONY: lint clean
+
+
+helm:
+	helm package --app-version=latest helm/lynxweb
+	helm upgrade --install lynxweb -f helm/lynxweb/values.dev.yaml ./lynxweb-0.1.0.tgz --set lynxweb.tag=latest --namespace dev
+
+helm-d:
+	helm uninstall lynxweb --namespace dev
