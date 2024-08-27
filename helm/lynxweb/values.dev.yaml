@@ -25,17 +25,16 @@ service:
 
 ingress:
   enabled: true
-  certificate: arn:aws:acm:eu-west-2:585008044223:certificate/5ed9fddd-afbb-4790-9977-91c0f34f2856
   domain: non-production.sphx.dev
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/load-balancer-name: "dev-lynxweb"
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/healthcheck-path: "/healthcheck"
     alb.ingress.kubernetes.io/success-codes: '200'
-    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:{{ .Values.globals.aws_region }}:{{ .Values.globals.aws_account_id }}:certificate/{{ .Values.ingress.certificate }}"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-2:585008044223:certificate/5ed9fddd-afbb-4790-9977-91c0f34f2856"
     alb.ingress.kubernetes.io/tags: cluster=dev-lynxweb
   path: /
   pathType: Prefix
