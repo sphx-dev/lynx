@@ -59,3 +59,7 @@ nodeSelector: { }
 tolerations: [ ]
 
 affinity: { }
+
+globals:
+  aws_region: eu-west-2
+  aws_account_id: 585008044223
