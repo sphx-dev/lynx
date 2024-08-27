@@ -14,6 +14,11 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     config.VITE_API_PORT = 443;
     config.VITE_API_URL = "//apidemo.sphx.dev";
   }
+  if (location.hostname.indexOf("non-prod.sphx.dev") > -1) {
+    config.VITE_API_HOST = "api.non-prod.sphx.dev";
+    config.VITE_API_PORT = 443;
+    config.VITE_API_URL = "//api.non-prod.sphx.dev";
+  }
   return config;
 }
 

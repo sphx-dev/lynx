@@ -39,7 +39,7 @@ ingress:
   path: /
   pathType: Prefix
   hosts:
-    - api.non-production.sphx.dev
+    - www.non-prod.sphx.dev
   servicePort: 9898
 
 resources: { }
