@@ -23,15 +23,12 @@ export interface MarginAccountAssetSDKType {
 function createBaseMarginAccountAsset(): MarginAccountAsset {
   return {
     id: 0,
-    amount: "",
+    amount: ""
   };
 }
 export const MarginAccountAsset = {
   typeUrl: "/sphx.marginacc.MarginAccountAsset",
-  encode(
-    message: MarginAccountAsset,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MarginAccountAsset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
@@ -40,13 +37,9 @@ export const MarginAccountAsset = {
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MarginAccountAsset {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MarginAccountAsset {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMarginAccountAsset();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -98,7 +91,7 @@ export const MarginAccountAsset = {
   toProtoMsg(message: MarginAccountAsset): MarginAccountAssetProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.MarginAccountAsset",
-      value: MarginAccountAsset.encode(message).finish(),
+      value: MarginAccountAsset.encode(message).finish()
     };
-  },
+  }
 };

@@ -1,18 +1,8 @@
 //@ts-nocheck
+import { Coin, CoinAmino, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
+import { Height, HeightAmino, HeightSDKType, Params, ParamsAmino, ParamsSDKType } from "../../../core/client/v1/client";
+import { Forwarding, ForwardingAmino, ForwardingSDKType } from "./transfer";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import {
-  Coin,
-  CoinAmino,
-  CoinSDKType,
-} from "../../../../cosmos/base/v1beta1/coin";
-import {
-  Height,
-  HeightAmino,
-  HeightSDKType,
-  Params,
-  ParamsAmino,
-  ParamsSDKType,
-} from "../../../core/client/v1/client";
 /**
  * MsgTransfer defines a msg to transfer fungible tokens (i.e Coins) between
  * ICS20 enabled chains. See ICS Spec here:
@@ -23,7 +13,8 @@ export interface MsgTransfer {
   sourcePort: string;
   /** the channel by which the packet will be sent */
   sourceChannel: string;
-  /** the tokens to be transferred */
+  /** the token to be transferred. this field has been replaced by the tokens field. */
+  /** @deprecated */
   token: Coin;
   /** the sender address */
   sender: string;
@@ -41,6 +32,10 @@ export interface MsgTransfer {
   timeoutTimestamp: bigint;
   /** optional memo */
   memo: string;
+  /** tokens to be transferred */
+  tokens: Coin[];
+  /** optional forwarding information */
+  forwarding?: Forwarding;
 }
 export interface MsgTransferProtoMsg {
   typeUrl: "/ibc.applications.transfer.v1.MsgTransfer";
@@ -56,7 +51,8 @@ export interface MsgTransferAmino {
   source_port?: string;
   /** the channel by which the packet will be sent */
   source_channel?: string;
-  /** the tokens to be transferred */
+  /** the token to be transferred. this field has been replaced by the tokens field. */
+  /** @deprecated */
   token: CoinAmino;
   /** the sender address */
   sender?: string;
@@ -74,6 +70,10 @@ export interface MsgTransferAmino {
   timeout_timestamp?: string;
   /** optional memo */
   memo?: string;
+  /** tokens to be transferred */
+  tokens?: CoinAmino[];
+  /** optional forwarding information */
+  forwarding?: ForwardingAmino;
 }
 export interface MsgTransferAminoMsg {
   type: "cosmos-sdk/MsgTransfer";
@@ -87,12 +87,15 @@ export interface MsgTransferAminoMsg {
 export interface MsgTransferSDKType {
   source_port: string;
   source_channel: string;
+  /** @deprecated */
   token: CoinSDKType;
   sender: string;
   receiver: string;
   timeout_height: HeightSDKType;
   timeout_timestamp: bigint;
   memo: string;
+  tokens: CoinSDKType[];
+  forwarding?: ForwardingSDKType;
 }
 /** MsgTransferResponse defines the Msg/Transfer response type. */
 export interface MsgTransferResponse {
@@ -122,7 +125,7 @@ export interface MsgUpdateParams {
   signer: string;
   /**
    * params defines the transfer parameters to update.
-   *
+   * 
    * NOTE: All parameters must be supplied.
    */
   params: Params;
@@ -137,7 +140,7 @@ export interface MsgUpdateParamsAmino {
   signer?: string;
   /**
    * params defines the transfer parameters to update.
-   *
+   * 
    * NOTE: All parameters must be supplied.
    */
   params?: ParamsAmino;
@@ -184,14 +187,13 @@ function createBaseMsgTransfer(): MsgTransfer {
     timeoutHeight: Height.fromPartial({}),
     timeoutTimestamp: BigInt(0),
     memo: "",
+    tokens: [],
+    forwarding: undefined
   };
 }
 export const MsgTransfer = {
   typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
-  encode(
-    message: MsgTransfer,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgTransfer, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sourcePort !== "") {
       writer.uint32(10).string(message.sourcePort);
     }
@@ -216,12 +218,17 @@ export const MsgTransfer = {
     if (message.memo !== "") {
       writer.uint32(66).string(message.memo);
     }
+    for (const v of message.tokens) {
+      Coin.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.forwarding !== undefined) {
+      Forwarding.encode(message.forwarding, writer.uint32(82).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgTransfer {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgTransfer();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -250,6 +257,12 @@ export const MsgTransfer = {
         case 8:
           message.memo = reader.string();
           break;
+        case 9:
+          message.tokens.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 10:
+          message.forwarding = Forwarding.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -261,21 +274,14 @@ export const MsgTransfer = {
     const message = createBaseMsgTransfer();
     message.sourcePort = object.sourcePort ?? "";
     message.sourceChannel = object.sourceChannel ?? "";
-    message.token =
-      object.token !== undefined && object.token !== null
-        ? Coin.fromPartial(object.token)
-        : undefined;
+    message.token = object.token !== undefined && object.token !== null ? Coin.fromPartial(object.token) : undefined;
     message.sender = object.sender ?? "";
     message.receiver = object.receiver ?? "";
-    message.timeoutHeight =
-      object.timeoutHeight !== undefined && object.timeoutHeight !== null
-        ? Height.fromPartial(object.timeoutHeight)
-        : undefined;
-    message.timeoutTimestamp =
-      object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null
-        ? BigInt(object.timeoutTimestamp.toString())
-        : BigInt(0);
+    message.timeoutHeight = object.timeoutHeight !== undefined && object.timeoutHeight !== null ? Height.fromPartial(object.timeoutHeight) : undefined;
+    message.timeoutTimestamp = object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null ? BigInt(object.timeoutTimestamp.toString()) : BigInt(0);
     message.memo = object.memo ?? "";
+    message.tokens = object.tokens?.map(e => Coin.fromPartial(e)) || [];
+    message.forwarding = object.forwarding !== undefined && object.forwarding !== null ? Forwarding.fromPartial(object.forwarding) : undefined;
     return message;
   },
   fromAmino(object: MsgTransferAmino): MsgTransfer {
@@ -298,36 +304,34 @@ export const MsgTransfer = {
     if (object.timeout_height !== undefined && object.timeout_height !== null) {
       message.timeoutHeight = Height.fromAmino(object.timeout_height);
     }
-    if (
-      object.timeout_timestamp !== undefined &&
-      object.timeout_timestamp !== null
-    ) {
+    if (object.timeout_timestamp !== undefined && object.timeout_timestamp !== null) {
       message.timeoutTimestamp = BigInt(object.timeout_timestamp);
     }
     if (object.memo !== undefined && object.memo !== null) {
       message.memo = object.memo;
     }
+    message.tokens = object.tokens?.map(e => Coin.fromAmino(e)) || [];
+    if (object.forwarding !== undefined && object.forwarding !== null) {
+      message.forwarding = Forwarding.fromAmino(object.forwarding);
+    }
     return message;
   },
   toAmino(message: MsgTransfer): MsgTransferAmino {
     const obj: any = {};
-    obj.source_port =
-      message.sourcePort === "" ? undefined : message.sourcePort;
-    obj.source_channel =
-      message.sourceChannel === "" ? undefined : message.sourceChannel;
-    obj.token = message.token
-      ? Coin.toAmino(message.token)
-      : Coin.toAmino(Coin.fromPartial({}));
+    obj.source_port = message.sourcePort === "" ? undefined : message.sourcePort;
+    obj.source_channel = message.sourceChannel === "" ? undefined : message.sourceChannel;
+    obj.token = message.token ? Coin.toAmino(message.token) : Coin.toAmino(Coin.fromPartial({}));
     obj.sender = message.sender === "" ? undefined : message.sender;
     obj.receiver = message.receiver === "" ? undefined : message.receiver;
-    obj.timeout_height = message.timeoutHeight
-      ? Height.toAmino(message.timeoutHeight)
-      : {};
-    obj.timeout_timestamp =
-      message.timeoutTimestamp !== BigInt(0)
-        ? message.timeoutTimestamp.toString()
-        : undefined;
+    obj.timeout_height = message.timeoutHeight ? Height.toAmino(message.timeoutHeight) : {};
+    obj.timeout_timestamp = message.timeoutTimestamp !== BigInt(0) ? message.timeoutTimestamp.toString() : undefined;
     obj.memo = message.memo === "" ? undefined : message.memo;
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.tokens = message.tokens;
+    }
+    obj.forwarding = message.forwarding ? Forwarding.toAmino(message.forwarding) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgTransferAminoMsg): MsgTransfer {
@@ -336,7 +340,7 @@ export const MsgTransfer = {
   toAminoMsg(message: MsgTransfer): MsgTransferAminoMsg {
     return {
       type: "cosmos-sdk/MsgTransfer",
-      value: MsgTransfer.toAmino(message),
+      value: MsgTransfer.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgTransferProtoMsg): MsgTransfer {
@@ -348,33 +352,26 @@ export const MsgTransfer = {
   toProtoMsg(message: MsgTransfer): MsgTransferProtoMsg {
     return {
       typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
-      value: MsgTransfer.encode(message).finish(),
+      value: MsgTransfer.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgTransferResponse(): MsgTransferResponse {
   return {
-    sequence: BigInt(0),
+    sequence: BigInt(0)
   };
 }
 export const MsgTransferResponse = {
   typeUrl: "/ibc.applications.transfer.v1.MsgTransferResponse",
-  encode(
-    message: MsgTransferResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgTransferResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sequence !== BigInt(0)) {
       writer.uint32(8).uint64(message.sequence);
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgTransferResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgTransferResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgTransferResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -391,10 +388,7 @@ export const MsgTransferResponse = {
   },
   fromPartial(object: Partial<MsgTransferResponse>): MsgTransferResponse {
     const message = createBaseMsgTransferResponse();
-    message.sequence =
-      object.sequence !== undefined && object.sequence !== null
-        ? BigInt(object.sequence.toString())
-        : BigInt(0);
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgTransferResponseAmino): MsgTransferResponse {
@@ -406,8 +400,7 @@ export const MsgTransferResponse = {
   },
   toAmino(message: MsgTransferResponse): MsgTransferResponseAmino {
     const obj: any = {};
-    obj.sequence =
-      message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgTransferResponseAminoMsg): MsgTransferResponse {
@@ -416,7 +409,7 @@ export const MsgTransferResponse = {
   toAminoMsg(message: MsgTransferResponse): MsgTransferResponseAminoMsg {
     return {
       type: "cosmos-sdk/MsgTransferResponse",
-      value: MsgTransferResponse.toAmino(message),
+      value: MsgTransferResponse.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgTransferResponseProtoMsg): MsgTransferResponse {
@@ -428,22 +421,19 @@ export const MsgTransferResponse = {
   toProtoMsg(message: MsgTransferResponse): MsgTransferResponseProtoMsg {
     return {
       typeUrl: "/ibc.applications.transfer.v1.MsgTransferResponse",
-      value: MsgTransferResponse.encode(message).finish(),
+      value: MsgTransferResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     signer: "",
-    params: Params.fromPartial({}),
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {
   typeUrl: "/ibc.applications.transfer.v1.MsgUpdateParams",
-  encode(
-    message: MsgUpdateParams,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.signer !== "") {
       writer.uint32(10).string(message.signer);
     }
@@ -453,9 +443,8 @@ export const MsgUpdateParams = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -476,10 +465,7 @@ export const MsgUpdateParams = {
   fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.signer = object.signer ?? "";
-    message.params =
-      object.params !== undefined && object.params !== null
-        ? Params.fromPartial(object.params)
-        : undefined;
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
@@ -504,7 +490,7 @@ export const MsgUpdateParams = {
   toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
     return {
       type: "cosmos-sdk/MsgUpdateParams",
-      value: MsgUpdateParams.toAmino(message),
+      value: MsgUpdateParams.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
@@ -516,28 +502,21 @@ export const MsgUpdateParams = {
   toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
     return {
       typeUrl: "/ibc.applications.transfer.v1.MsgUpdateParams",
-      value: MsgUpdateParams.encode(message).finish(),
+      value: MsgUpdateParams.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/ibc.applications.transfer.v1.MsgUpdateParamsResponse",
-  encode(
-    _: MsgUpdateParamsResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgUpdateParamsResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -561,33 +540,25 @@ export const MsgUpdateParamsResponse = {
     const obj: any = {};
     return obj;
   },
-  fromAminoMsg(
-    object: MsgUpdateParamsResponseAminoMsg
-  ): MsgUpdateParamsResponse {
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  toAminoMsg(
-    message: MsgUpdateParamsResponse
-  ): MsgUpdateParamsResponseAminoMsg {
+  toAminoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseAminoMsg {
     return {
       type: "cosmos-sdk/MsgUpdateParamsResponse",
-      value: MsgUpdateParamsResponse.toAmino(message),
+      value: MsgUpdateParamsResponse.toAmino(message)
     };
   },
-  fromProtoMsg(
-    message: MsgUpdateParamsResponseProtoMsg
-  ): MsgUpdateParamsResponse {
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.decode(message.value);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
   },
-  toProtoMsg(
-    message: MsgUpdateParamsResponse
-  ): MsgUpdateParamsResponseProtoMsg {
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
     return {
       typeUrl: "/ibc.applications.transfer.v1.MsgUpdateParamsResponse",
-      value: MsgUpdateParamsResponse.encode(message).finish(),
+      value: MsgUpdateParamsResponse.encode(message).finish()
     };
-  },
+  }
 };

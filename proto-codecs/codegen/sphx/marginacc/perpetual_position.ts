@@ -41,7 +41,7 @@ export interface PerpetualPosition {
   leverage: bigint;
   currentPrice: string;
   entryTime: bigint;
-  UnrealizedPL: string;
+  unrealizedPL: string;
   side: PositionSide;
 }
 export interface PerpetualPositionProtoMsg {
@@ -86,16 +86,13 @@ function createBasePerpetualPosition(): PerpetualPosition {
     leverage: BigInt(0),
     currentPrice: "",
     entryTime: BigInt(0),
-    UnrealizedPL: "",
-    side: 0,
+    unrealizedPL: "",
+    side: 0
   };
 }
 export const PerpetualPosition = {
   typeUrl: "/sphx.marginacc.PerpetualPosition",
-  encode(
-    message: PerpetualPosition,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: PerpetualPosition, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -120,8 +117,8 @@ export const PerpetualPosition = {
     if (message.entryTime !== BigInt(0)) {
       writer.uint32(64).uint64(message.entryTime);
     }
-    if (message.UnrealizedPL !== "") {
-      writer.uint32(74).string(message.UnrealizedPL);
+    if (message.unrealizedPL !== "") {
+      writer.uint32(74).string(message.unrealizedPL);
     }
     if (message.side !== 0) {
       writer.uint32(80).int32(message.side);
@@ -129,9 +126,8 @@ export const PerpetualPosition = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): PerpetualPosition {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePerpetualPosition();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -161,7 +157,7 @@ export const PerpetualPosition = {
           message.entryTime = reader.uint64();
           break;
         case 9:
-          message.UnrealizedPL = reader.string();
+          message.unrealizedPL = reader.string();
           break;
         case 10:
           message.side = reader.int32() as any;
@@ -180,16 +176,10 @@ export const PerpetualPosition = {
     message.ticker = object.ticker ?? "";
     message.size = object.size ?? "";
     message.entryPrice = object.entryPrice ?? "";
-    message.leverage =
-      object.leverage !== undefined && object.leverage !== null
-        ? BigInt(object.leverage.toString())
-        : BigInt(0);
+    message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
     message.currentPrice = object.currentPrice ?? "";
-    message.entryTime =
-      object.entryTime !== undefined && object.entryTime !== null
-        ? BigInt(object.entryTime.toString())
-        : BigInt(0);
-    message.UnrealizedPL = object.UnrealizedPL ?? "";
+    message.entryTime = object.entryTime !== undefined && object.entryTime !== null ? BigInt(object.entryTime.toString()) : BigInt(0);
+    message.unrealizedPL = object.unrealizedPL ?? "";
     message.side = object.side ?? 0;
     return message;
   },
@@ -220,7 +210,7 @@ export const PerpetualPosition = {
       message.entryTime = BigInt(object.entry_time);
     }
     if (object.UnrealizedPL !== undefined && object.UnrealizedPL !== null) {
-      message.UnrealizedPL = object.UnrealizedPL;
+      message.unrealizedPL = object.UnrealizedPL;
     }
     if (object.side !== undefined && object.side !== null) {
       message.side = object.side;
@@ -234,14 +224,10 @@ export const PerpetualPosition = {
     obj.ticker = message.ticker === "" ? undefined : message.ticker;
     obj.size = message.size ?? "";
     obj.entry_price = message.entryPrice ?? "";
-    obj.leverage =
-      message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
     obj.current_price = message.currentPrice ?? "";
-    obj.entry_time =
-      message.entryTime !== BigInt(0)
-        ? message.entryTime.toString()
-        : undefined;
-    obj.UnrealizedPL = message.UnrealizedPL ?? "";
+    obj.entry_time = message.entryTime !== BigInt(0) ? message.entryTime.toString() : undefined;
+    obj.UnrealizedPL = message.unrealizedPL ?? "";
     obj.side = message.side === 0 ? undefined : message.side;
     return obj;
   },
@@ -257,7 +243,7 @@ export const PerpetualPosition = {
   toProtoMsg(message: PerpetualPosition): PerpetualPositionProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.PerpetualPosition",
-      value: PerpetualPosition.encode(message).finish(),
+      value: PerpetualPosition.encode(message).finish()
     };
-  },
+  }
 };

@@ -1,10 +1,10 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import { base64FromBytes, bytesFromBase64 } from "../../../../helpers";
+import { bytesFromBase64, base64FromBytes } from "../../../../helpers";
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- *
+ * 
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -37,7 +37,7 @@ export interface PageRequest {
   countTotal: boolean;
   /**
    * reverse is set to true if results are to be returned in the descending order.
-   *
+   * 
    * Since: cosmos-sdk 0.43
    */
   reverse: boolean;
@@ -49,7 +49,7 @@ export interface PageRequestProtoMsg {
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- *
+ * 
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -82,7 +82,7 @@ export interface PageRequestAmino {
   count_total?: boolean;
   /**
    * reverse is set to true if results are to be returned in the descending order.
-   *
+   * 
    * Since: cosmos-sdk 0.43
    */
   reverse?: boolean;
@@ -94,7 +94,7 @@ export interface PageRequestAminoMsg {
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- *
+ * 
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -110,7 +110,7 @@ export interface PageRequestSDKType {
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- *
+ * 
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -136,7 +136,7 @@ export interface PageResponseProtoMsg {
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- *
+ * 
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -162,7 +162,7 @@ export interface PageResponseAminoMsg {
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- *
+ * 
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -178,15 +178,12 @@ function createBasePageRequest(): PageRequest {
     offset: BigInt(0),
     limit: BigInt(0),
     countTotal: false,
-    reverse: false,
+    reverse: false
   };
 }
 export const PageRequest = {
   typeUrl: "/cosmos.base.query.v1beta1.PageRequest",
-  encode(
-    message: PageRequest,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: PageRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
     }
@@ -205,9 +202,8 @@ export const PageRequest = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): PageRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePageRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -237,14 +233,8 @@ export const PageRequest = {
   fromPartial(object: Partial<PageRequest>): PageRequest {
     const message = createBasePageRequest();
     message.key = object.key ?? new Uint8Array();
-    message.offset =
-      object.offset !== undefined && object.offset !== null
-        ? BigInt(object.offset.toString())
-        : BigInt(0);
-    message.limit =
-      object.limit !== undefined && object.limit !== null
-        ? BigInt(object.limit.toString())
-        : BigInt(0);
+    message.offset = object.offset !== undefined && object.offset !== null ? BigInt(object.offset.toString()) : BigInt(0);
+    message.limit = object.limit !== undefined && object.limit !== null ? BigInt(object.limit.toString()) : BigInt(0);
     message.countTotal = object.countTotal ?? false;
     message.reverse = object.reverse ?? false;
     return message;
@@ -271,12 +261,9 @@ export const PageRequest = {
   toAmino(message: PageRequest): PageRequestAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
-    obj.offset =
-      message.offset !== BigInt(0) ? message.offset.toString() : undefined;
-    obj.limit =
-      message.limit !== BigInt(0) ? message.limit.toString() : undefined;
-    obj.count_total =
-      message.countTotal === false ? undefined : message.countTotal;
+    obj.offset = message.offset !== BigInt(0) ? message.offset.toString() : undefined;
+    obj.limit = message.limit !== BigInt(0) ? message.limit.toString() : undefined;
+    obj.count_total = message.countTotal === false ? undefined : message.countTotal;
     obj.reverse = message.reverse === false ? undefined : message.reverse;
     return obj;
   },
@@ -286,7 +273,7 @@ export const PageRequest = {
   toAminoMsg(message: PageRequest): PageRequestAminoMsg {
     return {
       type: "cosmos-sdk/PageRequest",
-      value: PageRequest.toAmino(message),
+      value: PageRequest.toAmino(message)
     };
   },
   fromProtoMsg(message: PageRequestProtoMsg): PageRequest {
@@ -298,22 +285,19 @@ export const PageRequest = {
   toProtoMsg(message: PageRequest): PageRequestProtoMsg {
     return {
       typeUrl: "/cosmos.base.query.v1beta1.PageRequest",
-      value: PageRequest.encode(message).finish(),
+      value: PageRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBasePageResponse(): PageResponse {
   return {
     nextKey: new Uint8Array(),
-    total: BigInt(0),
+    total: BigInt(0)
   };
 }
 export const PageResponse = {
   typeUrl: "/cosmos.base.query.v1beta1.PageResponse",
-  encode(
-    message: PageResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: PageResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.nextKey.length !== 0) {
       writer.uint32(10).bytes(message.nextKey);
     }
@@ -323,9 +307,8 @@ export const PageResponse = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): PageResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePageResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -346,10 +329,7 @@ export const PageResponse = {
   fromPartial(object: Partial<PageResponse>): PageResponse {
     const message = createBasePageResponse();
     message.nextKey = object.nextKey ?? new Uint8Array();
-    message.total =
-      object.total !== undefined && object.total !== null
-        ? BigInt(object.total.toString())
-        : BigInt(0);
+    message.total = object.total !== undefined && object.total !== null ? BigInt(object.total.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: PageResponseAmino): PageResponse {
@@ -364,11 +344,8 @@ export const PageResponse = {
   },
   toAmino(message: PageResponse): PageResponseAmino {
     const obj: any = {};
-    obj.next_key = message.nextKey
-      ? base64FromBytes(message.nextKey)
-      : undefined;
-    obj.total =
-      message.total !== BigInt(0) ? message.total.toString() : undefined;
+    obj.next_key = message.nextKey ? base64FromBytes(message.nextKey) : undefined;
+    obj.total = message.total !== BigInt(0) ? message.total.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: PageResponseAminoMsg): PageResponse {
@@ -377,7 +354,7 @@ export const PageResponse = {
   toAminoMsg(message: PageResponse): PageResponseAminoMsg {
     return {
       type: "cosmos-sdk/PageResponse",
-      value: PageResponse.toAmino(message),
+      value: PageResponse.toAmino(message)
     };
   },
   fromProtoMsg(message: PageResponseProtoMsg): PageResponse {
@@ -389,7 +366,7 @@ export const PageResponse = {
   toProtoMsg(message: PageResponse): PageResponseProtoMsg {
     return {
       typeUrl: "/cosmos.base.query.v1beta1.PageResponse",
-      value: PageResponse.encode(message).finish(),
+      value: PageResponse.encode(message).finish()
     };
-  },
+  }
 };

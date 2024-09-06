@@ -92,7 +92,7 @@ export interface OrderId {
   /** Margin Account Address to which the order belongs */
   marginAccountAddress: string;
   /** Order number to uniquely identify the order in the margin account, not globally */
-  number: number;
+  number: bigint;
 }
 export interface OrderIdProtoMsg {
   typeUrl: "/sphx.order.OrderId";
@@ -102,7 +102,7 @@ export interface OrderIdAmino {
   /** Margin Account Address to which the order belongs */
   marginAccountAddress?: string;
   /** Order number to uniquely identify the order in the margin account, not globally */
-  number?: number;
+  number?: string;
 }
 export interface OrderIdAminoMsg {
   type: "/sphx.order.OrderId";
@@ -110,7 +110,7 @@ export interface OrderIdAminoMsg {
 }
 export interface OrderIdSDKType {
   marginAccountAddress: string;
-  number: number;
+  number: bigint;
 }
 export interface Order {
   id: OrderId;
@@ -124,7 +124,7 @@ export interface Order {
   leverage: bigint;
   timestamp: bigint;
   /** The market id to which the order belongs e.g. BTC/USDC */
-  MarketId: string;
+  marketId: string;
 }
 export interface OrderProtoMsg {
   typeUrl: "/sphx.order.Order";
@@ -163,27 +163,23 @@ export interface OrderSDKType {
 function createBaseOrderId(): OrderId {
   return {
     marginAccountAddress: "",
-    number: 0,
+    number: BigInt(0)
   };
 }
 export const OrderId = {
   typeUrl: "/sphx.order.OrderId",
-  encode(
-    message: OrderId,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: OrderId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.marginAccountAddress !== "") {
       writer.uint32(10).string(message.marginAccountAddress);
     }
-    if (message.number !== 0) {
-      writer.uint32(16).uint32(message.number);
+    if (message.number !== BigInt(0)) {
+      writer.uint32(16).uint64(message.number);
     }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): OrderId {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderId();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -192,7 +188,7 @@ export const OrderId = {
           message.marginAccountAddress = reader.string();
           break;
         case 2:
-          message.number = reader.uint32();
+          message.number = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -204,29 +200,23 @@ export const OrderId = {
   fromPartial(object: Partial<OrderId>): OrderId {
     const message = createBaseOrderId();
     message.marginAccountAddress = object.marginAccountAddress ?? "";
-    message.number = object.number ?? 0;
+    message.number = object.number !== undefined && object.number !== null ? BigInt(object.number.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: OrderIdAmino): OrderId {
     const message = createBaseOrderId();
-    if (
-      object.marginAccountAddress !== undefined &&
-      object.marginAccountAddress !== null
-    ) {
+    if (object.marginAccountAddress !== undefined && object.marginAccountAddress !== null) {
       message.marginAccountAddress = object.marginAccountAddress;
     }
     if (object.number !== undefined && object.number !== null) {
-      message.number = object.number;
+      message.number = BigInt(object.number);
     }
     return message;
   },
   toAmino(message: OrderId): OrderIdAmino {
     const obj: any = {};
-    obj.marginAccountAddress =
-      message.marginAccountAddress === ""
-        ? undefined
-        : message.marginAccountAddress;
-    obj.number = message.number === 0 ? undefined : message.number;
+    obj.marginAccountAddress = message.marginAccountAddress === "" ? undefined : message.marginAccountAddress;
+    obj.number = message.number !== BigInt(0) ? message.number.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: OrderIdAminoMsg): OrderId {
@@ -241,9 +231,9 @@ export const OrderId = {
   toProtoMsg(message: OrderId): OrderIdProtoMsg {
     return {
       typeUrl: "/sphx.order.OrderId",
-      value: OrderId.encode(message).finish(),
+      value: OrderId.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseOrder(): Order {
   return {
@@ -256,15 +246,12 @@ function createBaseOrder(): Order {
     triggerPrice: BigInt(0),
     leverage: BigInt(0),
     timestamp: BigInt(0),
-    MarketId: "",
+    marketId: ""
   };
 }
 export const Order = {
   typeUrl: "/sphx.order.Order",
-  encode(
-    message: Order,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: Order, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== undefined) {
       OrderId.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -292,15 +279,14 @@ export const Order = {
     if (message.timestamp !== BigInt(0)) {
       writer.uint32(72).uint64(message.timestamp);
     }
-    if (message.MarketId !== "") {
-      writer.uint32(82).string(message.MarketId);
+    if (message.marketId !== "") {
+      writer.uint32(82).string(message.marketId);
     }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): Order {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -333,7 +319,7 @@ export const Order = {
           message.timestamp = reader.uint64();
           break;
         case 10:
-          message.MarketId = reader.string();
+          message.marketId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -344,34 +330,16 @@ export const Order = {
   },
   fromPartial(object: Partial<Order>): Order {
     const message = createBaseOrder();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? OrderId.fromPartial(object.id)
-        : undefined;
+    message.id = object.id !== undefined && object.id !== null ? OrderId.fromPartial(object.id) : undefined;
     message.accountId = object.accountId ?? "";
     message.side = object.side ?? 0;
-    message.quantity =
-      object.quantity !== undefined && object.quantity !== null
-        ? BigInt(object.quantity.toString())
-        : BigInt(0);
-    message.price =
-      object.price !== undefined && object.price !== null
-        ? BigInt(object.price.toString())
-        : BigInt(0);
+    message.quantity = object.quantity !== undefined && object.quantity !== null ? BigInt(object.quantity.toString()) : BigInt(0);
+    message.price = object.price !== undefined && object.price !== null ? BigInt(object.price.toString()) : BigInt(0);
     message.orderType = object.orderType ?? 0;
-    message.triggerPrice =
-      object.triggerPrice !== undefined && object.triggerPrice !== null
-        ? BigInt(object.triggerPrice.toString())
-        : BigInt(0);
-    message.leverage =
-      object.leverage !== undefined && object.leverage !== null
-        ? BigInt(object.leverage.toString())
-        : BigInt(0);
-    message.timestamp =
-      object.timestamp !== undefined && object.timestamp !== null
-        ? BigInt(object.timestamp.toString())
-        : BigInt(0);
-    message.MarketId = object.MarketId ?? "";
+    message.triggerPrice = object.triggerPrice !== undefined && object.triggerPrice !== null ? BigInt(object.triggerPrice.toString()) : BigInt(0);
+    message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
+    message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
+    message.marketId = object.marketId ?? "";
     return message;
   },
   fromAmino(object: OrderAmino): Order {
@@ -404,7 +372,7 @@ export const Order = {
       message.timestamp = BigInt(object.timestamp);
     }
     if (object.MarketId !== undefined && object.MarketId !== null) {
-      message.MarketId = object.MarketId;
+      message.marketId = object.MarketId;
     }
     return message;
   },
@@ -413,22 +381,13 @@ export const Order = {
     obj.id = message.id ? OrderId.toAmino(message.id) : undefined;
     obj.accountId = message.accountId === "" ? undefined : message.accountId;
     obj.side = message.side === 0 ? undefined : message.side;
-    obj.quantity =
-      message.quantity !== BigInt(0) ? message.quantity.toString() : undefined;
-    obj.price =
-      message.price !== BigInt(0) ? message.price.toString() : undefined;
+    obj.quantity = message.quantity !== BigInt(0) ? message.quantity.toString() : undefined;
+    obj.price = message.price !== BigInt(0) ? message.price.toString() : undefined;
     obj.orderType = message.orderType === 0 ? undefined : message.orderType;
-    obj.triggerPrice =
-      message.triggerPrice !== BigInt(0)
-        ? message.triggerPrice.toString()
-        : undefined;
-    obj.leverage =
-      message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
-    obj.timestamp =
-      message.timestamp !== BigInt(0)
-        ? message.timestamp.toString()
-        : undefined;
-    obj.MarketId = message.MarketId === "" ? undefined : message.MarketId;
+    obj.triggerPrice = message.triggerPrice !== BigInt(0) ? message.triggerPrice.toString() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
+    obj.MarketId = message.marketId === "" ? undefined : message.marketId;
     return obj;
   },
   fromAminoMsg(object: OrderAminoMsg): Order {
@@ -443,7 +402,7 @@ export const Order = {
   toProtoMsg(message: Order): OrderProtoMsg {
     return {
       typeUrl: "/sphx.order.Order",
-      value: Order.encode(message).finish(),
+      value: Order.encode(message).finish()
     };
-  },
+  }
 };

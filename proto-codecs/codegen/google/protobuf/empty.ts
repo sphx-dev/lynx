@@ -4,11 +4,11 @@ import { BinaryReader, BinaryWriter } from "../../binary";
  * A generic empty message that you can re-use to avoid defining duplicated
  * empty messages in your APIs. A typical example is to use it as the request
  * or the response type of an API method. For instance:
- *
+ * 
  *     service Foo {
  *       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
  *     }
- *
+ * 
  * The JSON representation for `Empty` is empty JSON object `{}`.
  */
 export interface Empty {}
@@ -20,11 +20,11 @@ export interface EmptyProtoMsg {
  * A generic empty message that you can re-use to avoid defining duplicated
  * empty messages in your APIs. A typical example is to use it as the request
  * or the response type of an API method. For instance:
- *
+ * 
  *     service Foo {
  *       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
  *     }
- *
+ * 
  * The JSON representation for `Empty` is empty JSON object `{}`.
  */
 export interface EmptyAmino {}
@@ -36,11 +36,11 @@ export interface EmptyAminoMsg {
  * A generic empty message that you can re-use to avoid defining duplicated
  * empty messages in your APIs. A typical example is to use it as the request
  * or the response type of an API method. For instance:
- *
+ * 
  *     service Foo {
  *       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
  *     }
- *
+ * 
  * The JSON representation for `Empty` is empty JSON object `{}`.
  */
 export interface EmptySDKType {}
@@ -53,9 +53,8 @@ export const Empty = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): Empty {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEmpty();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -91,7 +90,7 @@ export const Empty = {
   toProtoMsg(message: Empty): EmptyProtoMsg {
     return {
       typeUrl: "/google.protobuf.Empty",
-      value: Empty.encode(message).finish(),
+      value: Empty.encode(message).finish()
     };
-  },
+  }
 };

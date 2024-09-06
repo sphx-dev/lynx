@@ -1,7 +1,7 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../binary";
-import { Order, OrderAmino, OrderSDKType } from "./order";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Order, OrderAmino, OrderSDKType } from "./order";
+import { BinaryReader, BinaryWriter } from "../../binary";
 /** MsgUpdateParams is the Msg/UpdateParams request type. */
 export interface MsgUpdateParams {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
@@ -86,15 +86,12 @@ export interface MsgPlaceOrderResponseSDKType {}
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: Params.fromPartial({}),
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {
   typeUrl: "/sphx.order.MsgUpdateParams",
-  encode(
-    message: MsgUpdateParams,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -104,9 +101,8 @@ export const MsgUpdateParams = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -127,10 +123,7 @@ export const MsgUpdateParams = {
   fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
-    message.params =
-      object.params !== undefined && object.params !== null
-        ? Params.fromPartial(object.params)
-        : undefined;
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
@@ -146,9 +139,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params
-      ? Params.toAmino(message.params)
-      : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -157,7 +148,7 @@ export const MsgUpdateParams = {
   toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
     return {
       type: "sphx/x/order/MsgUpdateParams",
-      value: MsgUpdateParams.toAmino(message),
+      value: MsgUpdateParams.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
@@ -169,28 +160,21 @@ export const MsgUpdateParams = {
   toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
     return {
       typeUrl: "/sphx.order.MsgUpdateParams",
-      value: MsgUpdateParams.encode(message).finish(),
+      value: MsgUpdateParams.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/sphx.order.MsgUpdateParamsResponse",
-  encode(
-    _: MsgUpdateParamsResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgUpdateParamsResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -214,40 +198,31 @@ export const MsgUpdateParamsResponse = {
     const obj: any = {};
     return obj;
   },
-  fromAminoMsg(
-    object: MsgUpdateParamsResponseAminoMsg
-  ): MsgUpdateParamsResponse {
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(
-    message: MsgUpdateParamsResponseProtoMsg
-  ): MsgUpdateParamsResponse {
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.decode(message.value);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
   },
-  toProtoMsg(
-    message: MsgUpdateParamsResponse
-  ): MsgUpdateParamsResponseProtoMsg {
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
     return {
       typeUrl: "/sphx.order.MsgUpdateParamsResponse",
-      value: MsgUpdateParamsResponse.encode(message).finish(),
+      value: MsgUpdateParamsResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgPlaceOrder(): MsgPlaceOrder {
   return {
     user: "",
-    order: undefined,
+    order: undefined
   };
 }
 export const MsgPlaceOrder = {
   typeUrl: "/sphx.order.MsgPlaceOrder",
-  encode(
-    message: MsgPlaceOrder,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgPlaceOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.user !== "") {
       writer.uint32(10).string(message.user);
     }
@@ -257,9 +232,8 @@ export const MsgPlaceOrder = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgPlaceOrder {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPlaceOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -280,10 +254,7 @@ export const MsgPlaceOrder = {
   fromPartial(object: Partial<MsgPlaceOrder>): MsgPlaceOrder {
     const message = createBaseMsgPlaceOrder();
     message.user = object.user ?? "";
-    message.order =
-      object.order !== undefined && object.order !== null
-        ? Order.fromPartial(object.order)
-        : undefined;
+    message.order = object.order !== undefined && object.order !== null ? Order.fromPartial(object.order) : undefined;
     return message;
   },
   fromAmino(object: MsgPlaceOrderAmino): MsgPlaceOrder {
@@ -314,28 +285,21 @@ export const MsgPlaceOrder = {
   toProtoMsg(message: MsgPlaceOrder): MsgPlaceOrderProtoMsg {
     return {
       typeUrl: "/sphx.order.MsgPlaceOrder",
-      value: MsgPlaceOrder.encode(message).finish(),
+      value: MsgPlaceOrder.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgPlaceOrderResponse(): MsgPlaceOrderResponse {
   return {};
 }
 export const MsgPlaceOrderResponse = {
   typeUrl: "/sphx.order.MsgPlaceOrderResponse",
-  encode(
-    _: MsgPlaceOrderResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(_: MsgPlaceOrderResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgPlaceOrderResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgPlaceOrderResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPlaceOrderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -371,7 +335,7 @@ export const MsgPlaceOrderResponse = {
   toProtoMsg(message: MsgPlaceOrderResponse): MsgPlaceOrderResponseProtoMsg {
     return {
       typeUrl: "/sphx.order.MsgPlaceOrderResponse",
-      value: MsgPlaceOrderResponse.encode(message).finish(),
+      value: MsgPlaceOrderResponse.encode(message).finish()
     };
-  },
+  }
 };

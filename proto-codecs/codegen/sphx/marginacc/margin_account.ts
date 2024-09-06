@@ -1,10 +1,6 @@
 //@ts-nocheck
+import { PerpetualPosition, PerpetualPositionAmino, PerpetualPositionSDKType } from "./perpetual_position";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import {
-  PerpetualPosition,
-  PerpetualPositionAmino,
-  PerpetualPositionSDKType,
-} from "./perpetual_position";
 export interface MarginAccountId {
   owner: string;
   number: number;
@@ -55,15 +51,12 @@ export interface MarginAccountInfoSDKType {
 function createBaseMarginAccountId(): MarginAccountId {
   return {
     owner: "",
-    number: 0,
+    number: 0
   };
 }
 export const MarginAccountId = {
   typeUrl: "/sphx.marginacc.MarginAccountId",
-  encode(
-    message: MarginAccountId,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MarginAccountId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -73,9 +66,8 @@ export const MarginAccountId = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MarginAccountId {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMarginAccountId();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -127,23 +119,20 @@ export const MarginAccountId = {
   toProtoMsg(message: MarginAccountId): MarginAccountIdProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.MarginAccountId",
-      value: MarginAccountId.encode(message).finish(),
+      value: MarginAccountId.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMarginAccountInfo(): MarginAccountInfo {
   return {
     id: undefined,
     perpertualPositions: [],
-    delegates: [],
+    delegates: []
   };
 }
 export const MarginAccountInfo = {
   typeUrl: "/sphx.marginacc.MarginAccountInfo",
-  encode(
-    message: MarginAccountInfo,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MarginAccountInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== undefined) {
       MarginAccountId.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -156,9 +145,8 @@ export const MarginAccountInfo = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MarginAccountInfo {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMarginAccountInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -167,9 +155,7 @@ export const MarginAccountInfo = {
           message.id = MarginAccountId.decode(reader, reader.uint32());
           break;
         case 2:
-          message.perpertualPositions.push(
-            PerpetualPosition.decode(reader, reader.uint32())
-          );
+          message.perpertualPositions.push(PerpetualPosition.decode(reader, reader.uint32()));
           break;
         case 3:
           message.delegates.push(reader.string());
@@ -183,15 +169,9 @@ export const MarginAccountInfo = {
   },
   fromPartial(object: Partial<MarginAccountInfo>): MarginAccountInfo {
     const message = createBaseMarginAccountInfo();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? MarginAccountId.fromPartial(object.id)
-        : undefined;
-    message.perpertualPositions =
-      object.perpertualPositions?.map((e) =>
-        PerpetualPosition.fromPartial(e)
-      ) || [];
-    message.delegates = object.delegates?.map((e) => e) || [];
+    message.id = object.id !== undefined && object.id !== null ? MarginAccountId.fromPartial(object.id) : undefined;
+    message.perpertualPositions = object.perpertualPositions?.map(e => PerpetualPosition.fromPartial(e)) || [];
+    message.delegates = object.delegates?.map(e => e) || [];
     return message;
   },
   fromAmino(object: MarginAccountInfoAmino): MarginAccountInfo {
@@ -199,24 +179,20 @@ export const MarginAccountInfo = {
     if (object.id !== undefined && object.id !== null) {
       message.id = MarginAccountId.fromAmino(object.id);
     }
-    message.perpertualPositions =
-      object.perpertual_positions?.map((e) => PerpetualPosition.fromAmino(e)) ||
-      [];
-    message.delegates = object.delegates?.map((e) => e) || [];
+    message.perpertualPositions = object.perpertual_positions?.map(e => PerpetualPosition.fromAmino(e)) || [];
+    message.delegates = object.delegates?.map(e => e) || [];
     return message;
   },
   toAmino(message: MarginAccountInfo): MarginAccountInfoAmino {
     const obj: any = {};
     obj.id = message.id ? MarginAccountId.toAmino(message.id) : undefined;
     if (message.perpertualPositions) {
-      obj.perpertual_positions = message.perpertualPositions.map((e) =>
-        e ? PerpetualPosition.toAmino(e) : undefined
-      );
+      obj.perpertual_positions = message.perpertualPositions.map(e => e ? PerpetualPosition.toAmino(e) : undefined);
     } else {
       obj.perpertual_positions = message.perpertualPositions;
     }
     if (message.delegates) {
-      obj.delegates = message.delegates.map((e) => e);
+      obj.delegates = message.delegates.map(e => e);
     } else {
       obj.delegates = message.delegates;
     }
@@ -234,7 +210,7 @@ export const MarginAccountInfo = {
   toProtoMsg(message: MarginAccountInfo): MarginAccountInfoProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.MarginAccountInfo",
-      value: MarginAccountInfo.encode(message).finish(),
+      value: MarginAccountInfo.encode(message).finish()
     };
-  },
+  }
 };

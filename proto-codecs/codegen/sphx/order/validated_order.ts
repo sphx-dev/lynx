@@ -1,12 +1,6 @@
 //@ts-nocheck
+import { OrderId, OrderIdAmino, OrderIdSDKType, OrderSide, OrderType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import {
-  OrderId,
-  OrderIdAmino,
-  OrderIdSDKType,
-  OrderSide,
-  OrderType,
-} from "./order";
 export enum OrderStatus {
   ORDER_STATUS_UNSPECIFIED = 0,
   ORDER_STATUS_OPEN = 1,
@@ -73,7 +67,7 @@ export interface ValidatedOrder {
   triggerPrice: bigint;
   leverage: bigint;
   timestamp: bigint;
-  MarketId: string;
+  marketId: string;
   status: OrderStatus;
 }
 export interface ValidatedOrderProtoMsg {
@@ -121,16 +115,13 @@ function createBaseValidatedOrder(): ValidatedOrder {
     triggerPrice: BigInt(0),
     leverage: BigInt(0),
     timestamp: BigInt(0),
-    MarketId: "",
-    status: 0,
+    marketId: "",
+    status: 0
   };
 }
 export const ValidatedOrder = {
   typeUrl: "/sphx.order.ValidatedOrder",
-  encode(
-    message: ValidatedOrder,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: ValidatedOrder, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== undefined) {
       OrderId.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -158,8 +149,8 @@ export const ValidatedOrder = {
     if (message.timestamp !== BigInt(0)) {
       writer.uint32(72).uint64(message.timestamp);
     }
-    if (message.MarketId !== "") {
-      writer.uint32(82).string(message.MarketId);
+    if (message.marketId !== "") {
+      writer.uint32(82).string(message.marketId);
     }
     if (message.status !== 0) {
       writer.uint32(88).int32(message.status);
@@ -167,9 +158,8 @@ export const ValidatedOrder = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): ValidatedOrder {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatedOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -202,7 +192,7 @@ export const ValidatedOrder = {
           message.timestamp = reader.uint64();
           break;
         case 10:
-          message.MarketId = reader.string();
+          message.marketId = reader.string();
           break;
         case 11:
           message.status = reader.int32() as any;
@@ -216,34 +206,16 @@ export const ValidatedOrder = {
   },
   fromPartial(object: Partial<ValidatedOrder>): ValidatedOrder {
     const message = createBaseValidatedOrder();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? OrderId.fromPartial(object.id)
-        : undefined;
+    message.id = object.id !== undefined && object.id !== null ? OrderId.fromPartial(object.id) : undefined;
     message.accountId = object.accountId ?? "";
     message.side = object.side ?? 0;
-    message.quantity =
-      object.quantity !== undefined && object.quantity !== null
-        ? BigInt(object.quantity.toString())
-        : BigInt(0);
-    message.price =
-      object.price !== undefined && object.price !== null
-        ? BigInt(object.price.toString())
-        : BigInt(0);
+    message.quantity = object.quantity !== undefined && object.quantity !== null ? BigInt(object.quantity.toString()) : BigInt(0);
+    message.price = object.price !== undefined && object.price !== null ? BigInt(object.price.toString()) : BigInt(0);
     message.orderType = object.orderType ?? 0;
-    message.triggerPrice =
-      object.triggerPrice !== undefined && object.triggerPrice !== null
-        ? BigInt(object.triggerPrice.toString())
-        : BigInt(0);
-    message.leverage =
-      object.leverage !== undefined && object.leverage !== null
-        ? BigInt(object.leverage.toString())
-        : BigInt(0);
-    message.timestamp =
-      object.timestamp !== undefined && object.timestamp !== null
-        ? BigInt(object.timestamp.toString())
-        : BigInt(0);
-    message.MarketId = object.MarketId ?? "";
+    message.triggerPrice = object.triggerPrice !== undefined && object.triggerPrice !== null ? BigInt(object.triggerPrice.toString()) : BigInt(0);
+    message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
+    message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
+    message.marketId = object.marketId ?? "";
     message.status = object.status ?? 0;
     return message;
   },
@@ -277,7 +249,7 @@ export const ValidatedOrder = {
       message.timestamp = BigInt(object.timestamp);
     }
     if (object.MarketId !== undefined && object.MarketId !== null) {
-      message.MarketId = object.MarketId;
+      message.marketId = object.MarketId;
     }
     if (object.status !== undefined && object.status !== null) {
       message.status = object.status;
@@ -289,22 +261,13 @@ export const ValidatedOrder = {
     obj.id = message.id ? OrderId.toAmino(message.id) : undefined;
     obj.accountId = message.accountId === "" ? undefined : message.accountId;
     obj.side = message.side === 0 ? undefined : message.side;
-    obj.quantity =
-      message.quantity !== BigInt(0) ? message.quantity.toString() : undefined;
-    obj.price =
-      message.price !== BigInt(0) ? message.price.toString() : undefined;
+    obj.quantity = message.quantity !== BigInt(0) ? message.quantity.toString() : undefined;
+    obj.price = message.price !== BigInt(0) ? message.price.toString() : undefined;
     obj.orderType = message.orderType === 0 ? undefined : message.orderType;
-    obj.triggerPrice =
-      message.triggerPrice !== BigInt(0)
-        ? message.triggerPrice.toString()
-        : undefined;
-    obj.leverage =
-      message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
-    obj.timestamp =
-      message.timestamp !== BigInt(0)
-        ? message.timestamp.toString()
-        : undefined;
-    obj.MarketId = message.MarketId === "" ? undefined : message.MarketId;
+    obj.triggerPrice = message.triggerPrice !== BigInt(0) ? message.triggerPrice.toString() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
+    obj.MarketId = message.marketId === "" ? undefined : message.marketId;
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },
@@ -320,7 +283,7 @@ export const ValidatedOrder = {
   toProtoMsg(message: ValidatedOrder): ValidatedOrderProtoMsg {
     return {
       typeUrl: "/sphx.order.ValidatedOrder",
-      value: ValidatedOrder.encode(message).finish(),
+      value: ValidatedOrder.encode(message).finish()
     };
-  },
+  }
 };

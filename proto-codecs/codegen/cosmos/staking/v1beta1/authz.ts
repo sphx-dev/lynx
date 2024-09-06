@@ -1,9 +1,9 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 /**
  * AuthorizationType defines the type of staking module authorization type
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export enum AuthorizationType {
@@ -56,7 +56,7 @@ export function authorizationTypeToJSON(object: AuthorizationType): string {
 }
 /**
  * StakeAuthorization defines authorization for delegate/undelegate/redelegate.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface StakeAuthorization {
@@ -82,7 +82,7 @@ export interface StakeAuthorizationProtoMsg {
 }
 /**
  * StakeAuthorization defines authorization for delegate/undelegate/redelegate.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface StakeAuthorizationAmino {
@@ -107,7 +107,7 @@ export interface StakeAuthorizationAminoMsg {
 }
 /**
  * StakeAuthorization defines authorization for delegate/undelegate/redelegate.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface StakeAuthorizationSDKType {
@@ -143,42 +143,29 @@ function createBaseStakeAuthorization(): StakeAuthorization {
     maxTokens: undefined,
     allowList: undefined,
     denyList: undefined,
-    authorizationType: 0,
+    authorizationType: 0
   };
 }
 export const StakeAuthorization = {
   typeUrl: "/cosmos.staking.v1beta1.StakeAuthorization",
-  encode(
-    message: StakeAuthorization,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: StakeAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxTokens !== undefined) {
       Coin.encode(message.maxTokens, writer.uint32(10).fork()).ldelim();
     }
     if (message.allowList !== undefined) {
-      StakeAuthorization_Validators.encode(
-        message.allowList,
-        writer.uint32(18).fork()
-      ).ldelim();
+      StakeAuthorization_Validators.encode(message.allowList, writer.uint32(18).fork()).ldelim();
     }
     if (message.denyList !== undefined) {
-      StakeAuthorization_Validators.encode(
-        message.denyList,
-        writer.uint32(26).fork()
-      ).ldelim();
+      StakeAuthorization_Validators.encode(message.denyList, writer.uint32(26).fork()).ldelim();
     }
     if (message.authorizationType !== 0) {
       writer.uint32(32).int32(message.authorizationType);
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): StakeAuthorization {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): StakeAuthorization {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStakeAuthorization();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -187,16 +174,10 @@ export const StakeAuthorization = {
           message.maxTokens = Coin.decode(reader, reader.uint32());
           break;
         case 2:
-          message.allowList = StakeAuthorization_Validators.decode(
-            reader,
-            reader.uint32()
-          );
+          message.allowList = StakeAuthorization_Validators.decode(reader, reader.uint32());
           break;
         case 3:
-          message.denyList = StakeAuthorization_Validators.decode(
-            reader,
-            reader.uint32()
-          );
+          message.denyList = StakeAuthorization_Validators.decode(reader, reader.uint32());
           break;
         case 4:
           message.authorizationType = reader.int32() as any;
@@ -210,18 +191,9 @@ export const StakeAuthorization = {
   },
   fromPartial(object: Partial<StakeAuthorization>): StakeAuthorization {
     const message = createBaseStakeAuthorization();
-    message.maxTokens =
-      object.maxTokens !== undefined && object.maxTokens !== null
-        ? Coin.fromPartial(object.maxTokens)
-        : undefined;
-    message.allowList =
-      object.allowList !== undefined && object.allowList !== null
-        ? StakeAuthorization_Validators.fromPartial(object.allowList)
-        : undefined;
-    message.denyList =
-      object.denyList !== undefined && object.denyList !== null
-        ? StakeAuthorization_Validators.fromPartial(object.denyList)
-        : undefined;
+    message.maxTokens = object.maxTokens !== undefined && object.maxTokens !== null ? Coin.fromPartial(object.maxTokens) : undefined;
+    message.allowList = object.allowList !== undefined && object.allowList !== null ? StakeAuthorization_Validators.fromPartial(object.allowList) : undefined;
+    message.denyList = object.denyList !== undefined && object.denyList !== null ? StakeAuthorization_Validators.fromPartial(object.denyList) : undefined;
     message.authorizationType = object.authorizationType ?? 0;
     return message;
   },
@@ -231,36 +203,22 @@ export const StakeAuthorization = {
       message.maxTokens = Coin.fromAmino(object.max_tokens);
     }
     if (object.allow_list !== undefined && object.allow_list !== null) {
-      message.allowList = StakeAuthorization_Validators.fromAmino(
-        object.allow_list
-      );
+      message.allowList = StakeAuthorization_Validators.fromAmino(object.allow_list);
     }
     if (object.deny_list !== undefined && object.deny_list !== null) {
-      message.denyList = StakeAuthorization_Validators.fromAmino(
-        object.deny_list
-      );
+      message.denyList = StakeAuthorization_Validators.fromAmino(object.deny_list);
     }
-    if (
-      object.authorization_type !== undefined &&
-      object.authorization_type !== null
-    ) {
+    if (object.authorization_type !== undefined && object.authorization_type !== null) {
       message.authorizationType = object.authorization_type;
     }
     return message;
   },
   toAmino(message: StakeAuthorization): StakeAuthorizationAmino {
     const obj: any = {};
-    obj.max_tokens = message.maxTokens
-      ? Coin.toAmino(message.maxTokens)
-      : undefined;
-    obj.allow_list = message.allowList
-      ? StakeAuthorization_Validators.toAmino(message.allowList)
-      : undefined;
-    obj.deny_list = message.denyList
-      ? StakeAuthorization_Validators.toAmino(message.denyList)
-      : undefined;
-    obj.authorization_type =
-      message.authorizationType === 0 ? undefined : message.authorizationType;
+    obj.max_tokens = message.maxTokens ? Coin.toAmino(message.maxTokens) : undefined;
+    obj.allow_list = message.allowList ? StakeAuthorization_Validators.toAmino(message.allowList) : undefined;
+    obj.deny_list = message.denyList ? StakeAuthorization_Validators.toAmino(message.denyList) : undefined;
+    obj.authorization_type = message.authorizationType === 0 ? undefined : message.authorizationType;
     return obj;
   },
   fromAminoMsg(object: StakeAuthorizationAminoMsg): StakeAuthorization {
@@ -269,7 +227,7 @@ export const StakeAuthorization = {
   toAminoMsg(message: StakeAuthorization): StakeAuthorizationAminoMsg {
     return {
       type: "cosmos-sdk/StakeAuthorization",
-      value: StakeAuthorization.toAmino(message),
+      value: StakeAuthorization.toAmino(message)
     };
   },
   fromProtoMsg(message: StakeAuthorizationProtoMsg): StakeAuthorization {
@@ -281,33 +239,26 @@ export const StakeAuthorization = {
   toProtoMsg(message: StakeAuthorization): StakeAuthorizationProtoMsg {
     return {
       typeUrl: "/cosmos.staking.v1beta1.StakeAuthorization",
-      value: StakeAuthorization.encode(message).finish(),
+      value: StakeAuthorization.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseStakeAuthorization_Validators(): StakeAuthorization_Validators {
   return {
-    address: [],
+    address: []
   };
 }
 export const StakeAuthorization_Validators = {
   typeUrl: "/cosmos.staking.v1beta1.Validators",
-  encode(
-    message: StakeAuthorization_Validators,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: StakeAuthorization_Validators, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.address) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): StakeAuthorization_Validators {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): StakeAuthorization_Validators {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStakeAuthorization_Validators();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -322,58 +273,44 @@ export const StakeAuthorization_Validators = {
     }
     return message;
   },
-  fromPartial(
-    object: Partial<StakeAuthorization_Validators>
-  ): StakeAuthorization_Validators {
+  fromPartial(object: Partial<StakeAuthorization_Validators>): StakeAuthorization_Validators {
     const message = createBaseStakeAuthorization_Validators();
-    message.address = object.address?.map((e) => e) || [];
+    message.address = object.address?.map(e => e) || [];
     return message;
   },
-  fromAmino(
-    object: StakeAuthorization_ValidatorsAmino
-  ): StakeAuthorization_Validators {
+  fromAmino(object: StakeAuthorization_ValidatorsAmino): StakeAuthorization_Validators {
     const message = createBaseStakeAuthorization_Validators();
-    message.address = object.address?.map((e) => e) || [];
+    message.address = object.address?.map(e => e) || [];
     return message;
   },
-  toAmino(
-    message: StakeAuthorization_Validators
-  ): StakeAuthorization_ValidatorsAmino {
+  toAmino(message: StakeAuthorization_Validators): StakeAuthorization_ValidatorsAmino {
     const obj: any = {};
     if (message.address) {
-      obj.address = message.address.map((e) => e);
+      obj.address = message.address.map(e => e);
     } else {
       obj.address = message.address;
     }
     return obj;
   },
-  fromAminoMsg(
-    object: StakeAuthorization_ValidatorsAminoMsg
-  ): StakeAuthorization_Validators {
+  fromAminoMsg(object: StakeAuthorization_ValidatorsAminoMsg): StakeAuthorization_Validators {
     return StakeAuthorization_Validators.fromAmino(object.value);
   },
-  toAminoMsg(
-    message: StakeAuthorization_Validators
-  ): StakeAuthorization_ValidatorsAminoMsg {
+  toAminoMsg(message: StakeAuthorization_Validators): StakeAuthorization_ValidatorsAminoMsg {
     return {
       type: "cosmos-sdk/Validators",
-      value: StakeAuthorization_Validators.toAmino(message),
+      value: StakeAuthorization_Validators.toAmino(message)
     };
   },
-  fromProtoMsg(
-    message: StakeAuthorization_ValidatorsProtoMsg
-  ): StakeAuthorization_Validators {
+  fromProtoMsg(message: StakeAuthorization_ValidatorsProtoMsg): StakeAuthorization_Validators {
     return StakeAuthorization_Validators.decode(message.value);
   },
   toProto(message: StakeAuthorization_Validators): Uint8Array {
     return StakeAuthorization_Validators.encode(message).finish();
   },
-  toProtoMsg(
-    message: StakeAuthorization_Validators
-  ): StakeAuthorization_ValidatorsProtoMsg {
+  toProtoMsg(message: StakeAuthorization_Validators): StakeAuthorization_ValidatorsProtoMsg {
     return {
       typeUrl: "/cosmos.staking.v1beta1.Validators",
-      value: StakeAuthorization_Validators.encode(message).finish(),
+      value: StakeAuthorization_Validators.encode(message).finish()
     };
-  },
+  }
 };

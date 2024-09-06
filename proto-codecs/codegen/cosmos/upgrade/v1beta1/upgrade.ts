@@ -1,8 +1,8 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../../binary";
-import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Timestamp } from "../../../google/protobuf/timestamp";
-import { fromTimestamp, toTimestamp } from "../../../helpers";
+import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { toTimestamp, fromTimestamp } from "../../../helpers";
 /** Plan specifies information about a planned upgrade and when it should occur. */
 export interface Plan {
   /**
@@ -186,7 +186,7 @@ export interface CancelSoftwareUpgradeProposalSDKType {
 }
 /**
  * ModuleVersion specifies a module and its consensus version.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface ModuleVersion {
@@ -201,7 +201,7 @@ export interface ModuleVersionProtoMsg {
 }
 /**
  * ModuleVersion specifies a module and its consensus version.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface ModuleVersionAmino {
@@ -216,7 +216,7 @@ export interface ModuleVersionAminoMsg {
 }
 /**
  * ModuleVersion specifies a module and its consensus version.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface ModuleVersionSDKType {
@@ -229,23 +229,17 @@ function createBasePlan(): Plan {
     time: new Date(),
     height: BigInt(0),
     info: "",
-    upgradedClientState: undefined,
+    upgradedClientState: undefined
   };
 }
 export const Plan = {
   typeUrl: "/cosmos.upgrade.v1beta1.Plan",
-  encode(
-    message: Plan,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: Plan, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(
-        toTimestamp(message.time),
-        writer.uint32(18).fork()
-      ).ldelim();
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(18).fork()).ldelim();
     }
     if (message.height !== BigInt(0)) {
       writer.uint32(24).int64(message.height);
@@ -254,17 +248,13 @@ export const Plan = {
       writer.uint32(34).string(message.info);
     }
     if (message.upgradedClientState !== undefined) {
-      Any.encode(
-        message.upgradedClientState,
-        writer.uint32(42).fork()
-      ).ldelim();
+      Any.encode(message.upgradedClientState, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): Plan {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePlan();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -273,9 +263,7 @@ export const Plan = {
           message.name = reader.string();
           break;
         case 2:
-          message.time = fromTimestamp(
-            Timestamp.decode(reader, reader.uint32())
-          );
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 3:
           message.height = reader.int64();
@@ -297,16 +285,9 @@ export const Plan = {
     const message = createBasePlan();
     message.name = object.name ?? "";
     message.time = object.time ?? undefined;
-    message.height =
-      object.height !== undefined && object.height !== null
-        ? BigInt(object.height.toString())
-        : BigInt(0);
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.info = object.info ?? "";
-    message.upgradedClientState =
-      object.upgradedClientState !== undefined &&
-      object.upgradedClientState !== null
-        ? Any.fromPartial(object.upgradedClientState)
-        : undefined;
+    message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartial(object.upgradedClientState) : undefined;
     return message;
   },
   fromAmino(object: PlanAmino): Plan {
@@ -323,10 +304,7 @@ export const Plan = {
     if (object.info !== undefined && object.info !== null) {
       message.info = object.info;
     }
-    if (
-      object.upgraded_client_state !== undefined &&
-      object.upgraded_client_state !== null
-    ) {
+    if (object.upgraded_client_state !== undefined && object.upgraded_client_state !== null) {
       message.upgradedClientState = Any.fromAmino(object.upgraded_client_state);
     }
     return message;
@@ -334,15 +312,10 @@ export const Plan = {
   toAmino(message: Plan): PlanAmino {
     const obj: any = {};
     obj.name = message.name === "" ? undefined : message.name;
-    obj.time = message.time
-      ? Timestamp.toAmino(toTimestamp(message.time))
-      : undefined;
-    obj.height =
-      message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
+    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     obj.info = message.info === "" ? undefined : message.info;
-    obj.upgraded_client_state = message.upgradedClientState
-      ? Any.toAmino(message.upgradedClientState)
-      : undefined;
+    obj.upgraded_client_state = message.upgradedClientState ? Any.toAmino(message.upgradedClientState) : undefined;
     return obj;
   },
   fromAminoMsg(object: PlanAminoMsg): Plan {
@@ -351,7 +324,7 @@ export const Plan = {
   toAminoMsg(message: Plan): PlanAminoMsg {
     return {
       type: "cosmos-sdk/Plan",
-      value: Plan.toAmino(message),
+      value: Plan.toAmino(message)
     };
   },
   fromProtoMsg(message: PlanProtoMsg): Plan {
@@ -363,24 +336,21 @@ export const Plan = {
   toProtoMsg(message: Plan): PlanProtoMsg {
     return {
       typeUrl: "/cosmos.upgrade.v1beta1.Plan",
-      value: Plan.encode(message).finish(),
+      value: Plan.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseSoftwareUpgradeProposal(): SoftwareUpgradeProposal {
   return {
     $typeUrl: "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal",
     title: "",
     description: "",
-    plan: Plan.fromPartial({}),
+    plan: Plan.fromPartial({})
   };
 }
 export const SoftwareUpgradeProposal = {
   typeUrl: "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal",
-  encode(
-    message: SoftwareUpgradeProposal,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: SoftwareUpgradeProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -392,13 +362,9 @@ export const SoftwareUpgradeProposal = {
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): SoftwareUpgradeProposal {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): SoftwareUpgradeProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSoftwareUpgradeProposal();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -419,16 +385,11 @@ export const SoftwareUpgradeProposal = {
     }
     return message;
   },
-  fromPartial(
-    object: Partial<SoftwareUpgradeProposal>
-  ): SoftwareUpgradeProposal {
+  fromPartial(object: Partial<SoftwareUpgradeProposal>): SoftwareUpgradeProposal {
     const message = createBaseSoftwareUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
-    message.plan =
-      object.plan !== undefined && object.plan !== null
-        ? Plan.fromPartial(object.plan)
-        : undefined;
+    message.plan = object.plan !== undefined && object.plan !== null ? Plan.fromPartial(object.plan) : undefined;
     return message;
   },
   fromAmino(object: SoftwareUpgradeProposalAmino): SoftwareUpgradeProposal {
@@ -447,54 +408,42 @@ export const SoftwareUpgradeProposal = {
   toAmino(message: SoftwareUpgradeProposal): SoftwareUpgradeProposalAmino {
     const obj: any = {};
     obj.title = message.title === "" ? undefined : message.title;
-    obj.description =
-      message.description === "" ? undefined : message.description;
+    obj.description = message.description === "" ? undefined : message.description;
     obj.plan = message.plan ? Plan.toAmino(message.plan) : undefined;
     return obj;
   },
-  fromAminoMsg(
-    object: SoftwareUpgradeProposalAminoMsg
-  ): SoftwareUpgradeProposal {
+  fromAminoMsg(object: SoftwareUpgradeProposalAminoMsg): SoftwareUpgradeProposal {
     return SoftwareUpgradeProposal.fromAmino(object.value);
   },
-  toAminoMsg(
-    message: SoftwareUpgradeProposal
-  ): SoftwareUpgradeProposalAminoMsg {
+  toAminoMsg(message: SoftwareUpgradeProposal): SoftwareUpgradeProposalAminoMsg {
     return {
       type: "cosmos-sdk/SoftwareUpgradeProposal",
-      value: SoftwareUpgradeProposal.toAmino(message),
+      value: SoftwareUpgradeProposal.toAmino(message)
     };
   },
-  fromProtoMsg(
-    message: SoftwareUpgradeProposalProtoMsg
-  ): SoftwareUpgradeProposal {
+  fromProtoMsg(message: SoftwareUpgradeProposalProtoMsg): SoftwareUpgradeProposal {
     return SoftwareUpgradeProposal.decode(message.value);
   },
   toProto(message: SoftwareUpgradeProposal): Uint8Array {
     return SoftwareUpgradeProposal.encode(message).finish();
   },
-  toProtoMsg(
-    message: SoftwareUpgradeProposal
-  ): SoftwareUpgradeProposalProtoMsg {
+  toProtoMsg(message: SoftwareUpgradeProposal): SoftwareUpgradeProposalProtoMsg {
     return {
       typeUrl: "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal",
-      value: SoftwareUpgradeProposal.encode(message).finish(),
+      value: SoftwareUpgradeProposal.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseCancelSoftwareUpgradeProposal(): CancelSoftwareUpgradeProposal {
   return {
     $typeUrl: "/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal",
     title: "",
-    description: "",
+    description: ""
   };
 }
 export const CancelSoftwareUpgradeProposal = {
   typeUrl: "/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal",
-  encode(
-    message: CancelSoftwareUpgradeProposal,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: CancelSoftwareUpgradeProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -503,13 +452,9 @@ export const CancelSoftwareUpgradeProposal = {
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): CancelSoftwareUpgradeProposal {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): CancelSoftwareUpgradeProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCancelSoftwareUpgradeProposal();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -527,17 +472,13 @@ export const CancelSoftwareUpgradeProposal = {
     }
     return message;
   },
-  fromPartial(
-    object: Partial<CancelSoftwareUpgradeProposal>
-  ): CancelSoftwareUpgradeProposal {
+  fromPartial(object: Partial<CancelSoftwareUpgradeProposal>): CancelSoftwareUpgradeProposal {
     const message = createBaseCancelSoftwareUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
     return message;
   },
-  fromAmino(
-    object: CancelSoftwareUpgradeProposalAmino
-  ): CancelSoftwareUpgradeProposal {
+  fromAmino(object: CancelSoftwareUpgradeProposalAmino): CancelSoftwareUpgradeProposal {
     const message = createBaseCancelSoftwareUpgradeProposal();
     if (object.title !== undefined && object.title !== null) {
       message.title = object.title;
@@ -547,57 +488,43 @@ export const CancelSoftwareUpgradeProposal = {
     }
     return message;
   },
-  toAmino(
-    message: CancelSoftwareUpgradeProposal
-  ): CancelSoftwareUpgradeProposalAmino {
+  toAmino(message: CancelSoftwareUpgradeProposal): CancelSoftwareUpgradeProposalAmino {
     const obj: any = {};
     obj.title = message.title === "" ? undefined : message.title;
-    obj.description =
-      message.description === "" ? undefined : message.description;
+    obj.description = message.description === "" ? undefined : message.description;
     return obj;
   },
-  fromAminoMsg(
-    object: CancelSoftwareUpgradeProposalAminoMsg
-  ): CancelSoftwareUpgradeProposal {
+  fromAminoMsg(object: CancelSoftwareUpgradeProposalAminoMsg): CancelSoftwareUpgradeProposal {
     return CancelSoftwareUpgradeProposal.fromAmino(object.value);
   },
-  toAminoMsg(
-    message: CancelSoftwareUpgradeProposal
-  ): CancelSoftwareUpgradeProposalAminoMsg {
+  toAminoMsg(message: CancelSoftwareUpgradeProposal): CancelSoftwareUpgradeProposalAminoMsg {
     return {
       type: "cosmos-sdk/CancelSoftwareUpgradeProposal",
-      value: CancelSoftwareUpgradeProposal.toAmino(message),
+      value: CancelSoftwareUpgradeProposal.toAmino(message)
     };
   },
-  fromProtoMsg(
-    message: CancelSoftwareUpgradeProposalProtoMsg
-  ): CancelSoftwareUpgradeProposal {
+  fromProtoMsg(message: CancelSoftwareUpgradeProposalProtoMsg): CancelSoftwareUpgradeProposal {
     return CancelSoftwareUpgradeProposal.decode(message.value);
   },
   toProto(message: CancelSoftwareUpgradeProposal): Uint8Array {
     return CancelSoftwareUpgradeProposal.encode(message).finish();
   },
-  toProtoMsg(
-    message: CancelSoftwareUpgradeProposal
-  ): CancelSoftwareUpgradeProposalProtoMsg {
+  toProtoMsg(message: CancelSoftwareUpgradeProposal): CancelSoftwareUpgradeProposalProtoMsg {
     return {
       typeUrl: "/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal",
-      value: CancelSoftwareUpgradeProposal.encode(message).finish(),
+      value: CancelSoftwareUpgradeProposal.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseModuleVersion(): ModuleVersion {
   return {
     name: "",
-    version: BigInt(0),
+    version: BigInt(0)
   };
 }
 export const ModuleVersion = {
   typeUrl: "/cosmos.upgrade.v1beta1.ModuleVersion",
-  encode(
-    message: ModuleVersion,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: ModuleVersion, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -607,9 +534,8 @@ export const ModuleVersion = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): ModuleVersion {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleVersion();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -630,10 +556,7 @@ export const ModuleVersion = {
   fromPartial(object: Partial<ModuleVersion>): ModuleVersion {
     const message = createBaseModuleVersion();
     message.name = object.name ?? "";
-    message.version =
-      object.version !== undefined && object.version !== null
-        ? BigInt(object.version.toString())
-        : BigInt(0);
+    message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: ModuleVersionAmino): ModuleVersion {
@@ -649,8 +572,7 @@ export const ModuleVersion = {
   toAmino(message: ModuleVersion): ModuleVersionAmino {
     const obj: any = {};
     obj.name = message.name === "" ? undefined : message.name;
-    obj.version =
-      message.version !== BigInt(0) ? message.version.toString() : undefined;
+    obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ModuleVersionAminoMsg): ModuleVersion {
@@ -659,7 +581,7 @@ export const ModuleVersion = {
   toAminoMsg(message: ModuleVersion): ModuleVersionAminoMsg {
     return {
       type: "cosmos-sdk/ModuleVersion",
-      value: ModuleVersion.toAmino(message),
+      value: ModuleVersion.toAmino(message)
     };
   },
   fromProtoMsg(message: ModuleVersionProtoMsg): ModuleVersion {
@@ -671,7 +593,7 @@ export const ModuleVersion = {
   toProtoMsg(message: ModuleVersion): ModuleVersionProtoMsg {
     return {
       typeUrl: "/cosmos.upgrade.v1beta1.ModuleVersion",
-      value: ModuleVersion.encode(message).finish(),
+      value: ModuleVersion.encode(message).finish()
     };
-  },
+  }
 };

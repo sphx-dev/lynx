@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { base64FromBytes, bytesFromBase64 } from "../../../helpers";
+import { bytesFromBase64, base64FromBytes } from "../../../helpers";
 /** MsgIBCSend */
 export interface MsgIBCSend {
   /** the channel by which the packet will be sent */
@@ -103,15 +103,12 @@ function createBaseMsgIBCSend(): MsgIBCSend {
     channel: "",
     timeoutHeight: BigInt(0),
     timeoutTimestamp: BigInt(0),
-    data: new Uint8Array(),
+    data: new Uint8Array()
   };
 }
 export const MsgIBCSend = {
   typeUrl: "/cosmwasm.wasm.v1.MsgIBCSend",
-  encode(
-    message: MsgIBCSend,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgIBCSend, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channel !== "") {
       writer.uint32(18).string(message.channel);
     }
@@ -127,9 +124,8 @@ export const MsgIBCSend = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgIBCSend {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIBCSend();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -156,14 +152,8 @@ export const MsgIBCSend = {
   fromPartial(object: Partial<MsgIBCSend>): MsgIBCSend {
     const message = createBaseMsgIBCSend();
     message.channel = object.channel ?? "";
-    message.timeoutHeight =
-      object.timeoutHeight !== undefined && object.timeoutHeight !== null
-        ? BigInt(object.timeoutHeight.toString())
-        : BigInt(0);
-    message.timeoutTimestamp =
-      object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null
-        ? BigInt(object.timeoutTimestamp.toString())
-        : BigInt(0);
+    message.timeoutHeight = object.timeoutHeight !== undefined && object.timeoutHeight !== null ? BigInt(object.timeoutHeight.toString()) : BigInt(0);
+    message.timeoutTimestamp = object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null ? BigInt(object.timeoutTimestamp.toString()) : BigInt(0);
     message.data = object.data ?? new Uint8Array();
     return message;
   },
@@ -175,10 +165,7 @@ export const MsgIBCSend = {
     if (object.timeout_height !== undefined && object.timeout_height !== null) {
       message.timeoutHeight = BigInt(object.timeout_height);
     }
-    if (
-      object.timeout_timestamp !== undefined &&
-      object.timeout_timestamp !== null
-    ) {
+    if (object.timeout_timestamp !== undefined && object.timeout_timestamp !== null) {
       message.timeoutTimestamp = BigInt(object.timeout_timestamp);
     }
     if (object.data !== undefined && object.data !== null) {
@@ -189,14 +176,8 @@ export const MsgIBCSend = {
   toAmino(message: MsgIBCSend): MsgIBCSendAmino {
     const obj: any = {};
     obj.channel = message.channel === "" ? undefined : message.channel;
-    obj.timeout_height =
-      message.timeoutHeight !== BigInt(0)
-        ? message.timeoutHeight.toString()
-        : undefined;
-    obj.timeout_timestamp =
-      message.timeoutTimestamp !== BigInt(0)
-        ? message.timeoutTimestamp.toString()
-        : undefined;
+    obj.timeout_height = message.timeoutHeight !== BigInt(0) ? message.timeoutHeight.toString() : undefined;
+    obj.timeout_timestamp = message.timeoutTimestamp !== BigInt(0) ? message.timeoutTimestamp.toString() : undefined;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
@@ -206,7 +187,7 @@ export const MsgIBCSend = {
   toAminoMsg(message: MsgIBCSend): MsgIBCSendAminoMsg {
     return {
       type: "wasm/MsgIBCSend",
-      value: MsgIBCSend.toAmino(message),
+      value: MsgIBCSend.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgIBCSendProtoMsg): MsgIBCSend {
@@ -218,33 +199,26 @@ export const MsgIBCSend = {
   toProtoMsg(message: MsgIBCSend): MsgIBCSendProtoMsg {
     return {
       typeUrl: "/cosmwasm.wasm.v1.MsgIBCSend",
-      value: MsgIBCSend.encode(message).finish(),
+      value: MsgIBCSend.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgIBCSendResponse(): MsgIBCSendResponse {
   return {
-    sequence: BigInt(0),
+    sequence: BigInt(0)
   };
 }
 export const MsgIBCSendResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgIBCSendResponse",
-  encode(
-    message: MsgIBCSendResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgIBCSendResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sequence !== BigInt(0)) {
       writer.uint32(8).uint64(message.sequence);
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgIBCSendResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgIBCSendResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIBCSendResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -261,10 +235,7 @@ export const MsgIBCSendResponse = {
   },
   fromPartial(object: Partial<MsgIBCSendResponse>): MsgIBCSendResponse {
     const message = createBaseMsgIBCSendResponse();
-    message.sequence =
-      object.sequence !== undefined && object.sequence !== null
-        ? BigInt(object.sequence.toString())
-        : BigInt(0);
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgIBCSendResponseAmino): MsgIBCSendResponse {
@@ -276,8 +247,7 @@ export const MsgIBCSendResponse = {
   },
   toAmino(message: MsgIBCSendResponse): MsgIBCSendResponseAmino {
     const obj: any = {};
-    obj.sequence =
-      message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgIBCSendResponseAminoMsg): MsgIBCSendResponse {
@@ -286,7 +256,7 @@ export const MsgIBCSendResponse = {
   toAminoMsg(message: MsgIBCSendResponse): MsgIBCSendResponseAminoMsg {
     return {
       type: "wasm/MsgIBCSendResponse",
-      value: MsgIBCSendResponse.toAmino(message),
+      value: MsgIBCSendResponse.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgIBCSendResponseProtoMsg): MsgIBCSendResponse {
@@ -298,33 +268,26 @@ export const MsgIBCSendResponse = {
   toProtoMsg(message: MsgIBCSendResponse): MsgIBCSendResponseProtoMsg {
     return {
       typeUrl: "/cosmwasm.wasm.v1.MsgIBCSendResponse",
-      value: MsgIBCSendResponse.encode(message).finish(),
+      value: MsgIBCSendResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgIBCCloseChannel(): MsgIBCCloseChannel {
   return {
-    channel: "",
+    channel: ""
   };
 }
 export const MsgIBCCloseChannel = {
   typeUrl: "/cosmwasm.wasm.v1.MsgIBCCloseChannel",
-  encode(
-    message: MsgIBCCloseChannel,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgIBCCloseChannel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channel !== "") {
       writer.uint32(18).string(message.channel);
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgIBCCloseChannel {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgIBCCloseChannel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgIBCCloseChannel();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -362,7 +325,7 @@ export const MsgIBCCloseChannel = {
   toAminoMsg(message: MsgIBCCloseChannel): MsgIBCCloseChannelAminoMsg {
     return {
       type: "wasm/MsgIBCCloseChannel",
-      value: MsgIBCCloseChannel.toAmino(message),
+      value: MsgIBCCloseChannel.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgIBCCloseChannelProtoMsg): MsgIBCCloseChannel {
@@ -374,7 +337,7 @@ export const MsgIBCCloseChannel = {
   toProtoMsg(message: MsgIBCCloseChannel): MsgIBCCloseChannelProtoMsg {
     return {
       typeUrl: "/cosmwasm.wasm.v1.MsgIBCCloseChannel",
-      value: MsgIBCCloseChannel.encode(message).finish(),
+      value: MsgIBCCloseChannel.encode(message).finish()
     };
-  },
+  }
 };

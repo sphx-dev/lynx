@@ -1,48 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 /**
- * DenomTrace contains the base denomination for ICS20 fungible tokens and the
- * source tracing information path.
- */
-export interface DenomTrace {
-  /**
-   * path defines the chain of port/channel identifiers used for tracing the
-   * source of the fungible token.
-   */
-  path: string;
-  /** base denomination of the relayed fungible token. */
-  baseDenom: string;
-}
-export interface DenomTraceProtoMsg {
-  typeUrl: "/ibc.applications.transfer.v1.DenomTrace";
-  value: Uint8Array;
-}
-/**
- * DenomTrace contains the base denomination for ICS20 fungible tokens and the
- * source tracing information path.
- */
-export interface DenomTraceAmino {
-  /**
-   * path defines the chain of port/channel identifiers used for tracing the
-   * source of the fungible token.
-   */
-  path?: string;
-  /** base denomination of the relayed fungible token. */
-  base_denom?: string;
-}
-export interface DenomTraceAminoMsg {
-  type: "cosmos-sdk/DenomTrace";
-  value: DenomTraceAmino;
-}
-/**
- * DenomTrace contains the base denomination for ICS20 fungible tokens and the
- * source tracing information path.
- */
-export interface DenomTraceSDKType {
-  path: string;
-  base_denom: string;
-}
-/**
  * Params defines the set of IBC transfer parameters.
  * NOTE: To prevent a single token from being transferred, set the
  * TransfersEnabled parameter to true and then set the bank module's SendEnabled
@@ -96,103 +54,86 @@ export interface ParamsSDKType {
   send_enabled: boolean;
   receive_enabled: boolean;
 }
-function createBaseDenomTrace(): DenomTrace {
-  return {
-    path: "",
-    baseDenom: "",
-  };
+/**
+ * Forwarding defines a list of port ID, channel ID pairs determining the path
+ * through which a packet must be forwarded, and an unwind boolean indicating if
+ * the coin should be unwinded to its native chain before forwarding.
+ */
+export interface Forwarding {
+  /** optional unwinding for the token transfered */
+  unwind: boolean;
+  /** optional intermediate path through which packet will be forwarded */
+  hops: Hop[];
 }
-export const DenomTrace = {
-  typeUrl: "/ibc.applications.transfer.v1.DenomTrace",
-  encode(
-    message: DenomTrace,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
-    if (message.path !== "") {
-      writer.uint32(10).string(message.path);
-    }
-    if (message.baseDenom !== "") {
-      writer.uint32(18).string(message.baseDenom);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): DenomTrace {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseDenomTrace();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.path = reader.string();
-          break;
-        case 2:
-          message.baseDenom = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<DenomTrace>): DenomTrace {
-    const message = createBaseDenomTrace();
-    message.path = object.path ?? "";
-    message.baseDenom = object.baseDenom ?? "";
-    return message;
-  },
-  fromAmino(object: DenomTraceAmino): DenomTrace {
-    const message = createBaseDenomTrace();
-    if (object.path !== undefined && object.path !== null) {
-      message.path = object.path;
-    }
-    if (object.base_denom !== undefined && object.base_denom !== null) {
-      message.baseDenom = object.base_denom;
-    }
-    return message;
-  },
-  toAmino(message: DenomTrace): DenomTraceAmino {
-    const obj: any = {};
-    obj.path = message.path === "" ? undefined : message.path;
-    obj.base_denom = message.baseDenom === "" ? undefined : message.baseDenom;
-    return obj;
-  },
-  fromAminoMsg(object: DenomTraceAminoMsg): DenomTrace {
-    return DenomTrace.fromAmino(object.value);
-  },
-  toAminoMsg(message: DenomTrace): DenomTraceAminoMsg {
-    return {
-      type: "cosmos-sdk/DenomTrace",
-      value: DenomTrace.toAmino(message),
-    };
-  },
-  fromProtoMsg(message: DenomTraceProtoMsg): DenomTrace {
-    return DenomTrace.decode(message.value);
-  },
-  toProto(message: DenomTrace): Uint8Array {
-    return DenomTrace.encode(message).finish();
-  },
-  toProtoMsg(message: DenomTrace): DenomTraceProtoMsg {
-    return {
-      typeUrl: "/ibc.applications.transfer.v1.DenomTrace",
-      value: DenomTrace.encode(message).finish(),
-    };
-  },
-};
+export interface ForwardingProtoMsg {
+  typeUrl: "/ibc.applications.transfer.v1.Forwarding";
+  value: Uint8Array;
+}
+/**
+ * Forwarding defines a list of port ID, channel ID pairs determining the path
+ * through which a packet must be forwarded, and an unwind boolean indicating if
+ * the coin should be unwinded to its native chain before forwarding.
+ */
+export interface ForwardingAmino {
+  /** optional unwinding for the token transfered */
+  unwind?: boolean;
+  /** optional intermediate path through which packet will be forwarded */
+  hops?: HopAmino[];
+}
+export interface ForwardingAminoMsg {
+  type: "cosmos-sdk/Forwarding";
+  value: ForwardingAmino;
+}
+/**
+ * Forwarding defines a list of port ID, channel ID pairs determining the path
+ * through which a packet must be forwarded, and an unwind boolean indicating if
+ * the coin should be unwinded to its native chain before forwarding.
+ */
+export interface ForwardingSDKType {
+  unwind: boolean;
+  hops: HopSDKType[];
+}
+/**
+ * Hop defines a port ID, channel ID pair specifying where tokens must be forwarded
+ * next in a multihop transfer.
+ */
+export interface Hop {
+  portId: string;
+  channelId: string;
+}
+export interface HopProtoMsg {
+  typeUrl: "/ibc.applications.transfer.v1.Hop";
+  value: Uint8Array;
+}
+/**
+ * Hop defines a port ID, channel ID pair specifying where tokens must be forwarded
+ * next in a multihop transfer.
+ */
+export interface HopAmino {
+  port_id?: string;
+  channel_id?: string;
+}
+export interface HopAminoMsg {
+  type: "cosmos-sdk/Hop";
+  value: HopAmino;
+}
+/**
+ * Hop defines a port ID, channel ID pair specifying where tokens must be forwarded
+ * next in a multihop transfer.
+ */
+export interface HopSDKType {
+  port_id: string;
+  channel_id: string;
+}
 function createBaseParams(): Params {
   return {
     sendEnabled: false,
-    receiveEnabled: false,
+    receiveEnabled: false
   };
 }
 export const Params = {
   typeUrl: "/ibc.applications.transfer.v1.Params",
-  encode(
-    message: Params,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sendEnabled === true) {
       writer.uint32(8).bool(message.sendEnabled);
     }
@@ -202,9 +143,8 @@ export const Params = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): Params {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -233,20 +173,15 @@ export const Params = {
     if (object.send_enabled !== undefined && object.send_enabled !== null) {
       message.sendEnabled = object.send_enabled;
     }
-    if (
-      object.receive_enabled !== undefined &&
-      object.receive_enabled !== null
-    ) {
+    if (object.receive_enabled !== undefined && object.receive_enabled !== null) {
       message.receiveEnabled = object.receive_enabled;
     }
     return message;
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
-    obj.send_enabled =
-      message.sendEnabled === false ? undefined : message.sendEnabled;
-    obj.receive_enabled =
-      message.receiveEnabled === false ? undefined : message.receiveEnabled;
+    obj.send_enabled = message.sendEnabled === false ? undefined : message.sendEnabled;
+    obj.receive_enabled = message.receiveEnabled === false ? undefined : message.receiveEnabled;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {
@@ -255,7 +190,7 @@ export const Params = {
   toAminoMsg(message: Params): ParamsAminoMsg {
     return {
       type: "cosmos-sdk/Params",
-      value: Params.toAmino(message),
+      value: Params.toAmino(message)
     };
   },
   fromProtoMsg(message: ParamsProtoMsg): Params {
@@ -267,7 +202,171 @@ export const Params = {
   toProtoMsg(message: Params): ParamsProtoMsg {
     return {
       typeUrl: "/ibc.applications.transfer.v1.Params",
-      value: Params.encode(message).finish(),
+      value: Params.encode(message).finish()
+    };
+  }
+};
+function createBaseForwarding(): Forwarding {
+  return {
+    unwind: false,
+    hops: []
+  };
+}
+export const Forwarding = {
+  typeUrl: "/ibc.applications.transfer.v1.Forwarding",
+  encode(message: Forwarding, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.unwind === true) {
+      writer.uint32(8).bool(message.unwind);
+    }
+    for (const v of message.hops) {
+      Hop.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): Forwarding {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseForwarding();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.unwind = reader.bool();
+          break;
+        case 2:
+          message.hops.push(Hop.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<Forwarding>): Forwarding {
+    const message = createBaseForwarding();
+    message.unwind = object.unwind ?? false;
+    message.hops = object.hops?.map(e => Hop.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: ForwardingAmino): Forwarding {
+    const message = createBaseForwarding();
+    if (object.unwind !== undefined && object.unwind !== null) {
+      message.unwind = object.unwind;
+    }
+    message.hops = object.hops?.map(e => Hop.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: Forwarding): ForwardingAmino {
+    const obj: any = {};
+    obj.unwind = message.unwind === false ? undefined : message.unwind;
+    if (message.hops) {
+      obj.hops = message.hops.map(e => e ? Hop.toAmino(e) : undefined);
+    } else {
+      obj.hops = message.hops;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: ForwardingAminoMsg): Forwarding {
+    return Forwarding.fromAmino(object.value);
+  },
+  toAminoMsg(message: Forwarding): ForwardingAminoMsg {
+    return {
+      type: "cosmos-sdk/Forwarding",
+      value: Forwarding.toAmino(message)
     };
   },
+  fromProtoMsg(message: ForwardingProtoMsg): Forwarding {
+    return Forwarding.decode(message.value);
+  },
+  toProto(message: Forwarding): Uint8Array {
+    return Forwarding.encode(message).finish();
+  },
+  toProtoMsg(message: Forwarding): ForwardingProtoMsg {
+    return {
+      typeUrl: "/ibc.applications.transfer.v1.Forwarding",
+      value: Forwarding.encode(message).finish()
+    };
+  }
+};
+function createBaseHop(): Hop {
+  return {
+    portId: "",
+    channelId: ""
+  };
+}
+export const Hop = {
+  typeUrl: "/ibc.applications.transfer.v1.Hop",
+  encode(message: Hop, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.portId !== "") {
+      writer.uint32(10).string(message.portId);
+    }
+    if (message.channelId !== "") {
+      writer.uint32(18).string(message.channelId);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): Hop {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHop();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.portId = reader.string();
+          break;
+        case 2:
+          message.channelId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<Hop>): Hop {
+    const message = createBaseHop();
+    message.portId = object.portId ?? "";
+    message.channelId = object.channelId ?? "";
+    return message;
+  },
+  fromAmino(object: HopAmino): Hop {
+    const message = createBaseHop();
+    if (object.port_id !== undefined && object.port_id !== null) {
+      message.portId = object.port_id;
+    }
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    return message;
+  },
+  toAmino(message: Hop): HopAmino {
+    const obj: any = {};
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    return obj;
+  },
+  fromAminoMsg(object: HopAminoMsg): Hop {
+    return Hop.fromAmino(object.value);
+  },
+  toAminoMsg(message: Hop): HopAminoMsg {
+    return {
+      type: "cosmos-sdk/Hop",
+      value: Hop.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: HopProtoMsg): Hop {
+    return Hop.decode(message.value);
+  },
+  toProto(message: Hop): Uint8Array {
+    return Hop.encode(message).finish();
+  },
+  toProtoMsg(message: Hop): HopProtoMsg {
+    return {
+      typeUrl: "/ibc.applications.transfer.v1.Hop",
+      value: Hop.encode(message).finish()
+    };
+  }
 };

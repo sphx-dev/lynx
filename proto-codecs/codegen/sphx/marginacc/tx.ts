@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../binary";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { BinaryReader, BinaryWriter } from "../../binary";
 /** MsgUpdateParams is the Msg/UpdateParams request type. */
 export interface MsgUpdateParams {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
@@ -91,15 +91,12 @@ export interface MsgCreateMarginAccountResponseSDKType {
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     authority: "",
-    params: Params.fromPartial({}),
+    params: Params.fromPartial({})
   };
 }
 export const MsgUpdateParams = {
   typeUrl: "/sphx.marginacc.MsgUpdateParams",
-  encode(
-    message: MsgUpdateParams,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -109,9 +106,8 @@ export const MsgUpdateParams = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -132,10 +128,7 @@ export const MsgUpdateParams = {
   fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
-    message.params =
-      object.params !== undefined && object.params !== null
-        ? Params.fromPartial(object.params)
-        : undefined;
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
@@ -151,9 +144,7 @@ export const MsgUpdateParams = {
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
-    obj.params = message.params
-      ? Params.toAmino(message.params)
-      : Params.toAmino(Params.fromPartial({}));
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -162,7 +153,7 @@ export const MsgUpdateParams = {
   toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
     return {
       type: "sphx/x/marginacc/MsgUpdateParams",
-      value: MsgUpdateParams.toAmino(message),
+      value: MsgUpdateParams.toAmino(message)
     };
   },
   fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
@@ -174,28 +165,21 @@ export const MsgUpdateParams = {
   toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.MsgUpdateParams",
-      value: MsgUpdateParams.encode(message).finish(),
+      value: MsgUpdateParams.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/sphx.marginacc.MsgUpdateParamsResponse",
-  encode(
-    _: MsgUpdateParamsResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgUpdateParamsResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -219,40 +203,31 @@ export const MsgUpdateParamsResponse = {
     const obj: any = {};
     return obj;
   },
-  fromAminoMsg(
-    object: MsgUpdateParamsResponseAminoMsg
-  ): MsgUpdateParamsResponse {
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromAmino(object.value);
   },
-  fromProtoMsg(
-    message: MsgUpdateParamsResponseProtoMsg
-  ): MsgUpdateParamsResponse {
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.decode(message.value);
   },
   toProto(message: MsgUpdateParamsResponse): Uint8Array {
     return MsgUpdateParamsResponse.encode(message).finish();
   },
-  toProtoMsg(
-    message: MsgUpdateParamsResponse
-  ): MsgUpdateParamsResponseProtoMsg {
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.MsgUpdateParamsResponse",
-      value: MsgUpdateParamsResponse.encode(message).finish(),
+      value: MsgUpdateParamsResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgCreateMarginAccount(): MsgCreateMarginAccount {
   return {
     owner: "",
-    number: 0,
+    number: 0
   };
 }
 export const MsgCreateMarginAccount = {
   typeUrl: "/sphx.marginacc.MsgCreateMarginAccount",
-  encode(
-    message: MsgCreateMarginAccount,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgCreateMarginAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -261,13 +236,9 @@ export const MsgCreateMarginAccount = {
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgCreateMarginAccount {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateMarginAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateMarginAccount();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -313,12 +284,10 @@ export const MsgCreateMarginAccount = {
   toAminoMsg(message: MsgCreateMarginAccount): MsgCreateMarginAccountAminoMsg {
     return {
       type: "marginacc/MsgCreateMarginAccount",
-      value: MsgCreateMarginAccount.toAmino(message),
+      value: MsgCreateMarginAccount.toAmino(message)
     };
   },
-  fromProtoMsg(
-    message: MsgCreateMarginAccountProtoMsg
-  ): MsgCreateMarginAccount {
+  fromProtoMsg(message: MsgCreateMarginAccountProtoMsg): MsgCreateMarginAccount {
     return MsgCreateMarginAccount.decode(message.value);
   },
   toProto(message: MsgCreateMarginAccount): Uint8Array {
@@ -327,33 +296,26 @@ export const MsgCreateMarginAccount = {
   toProtoMsg(message: MsgCreateMarginAccount): MsgCreateMarginAccountProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.MsgCreateMarginAccount",
-      value: MsgCreateMarginAccount.encode(message).finish(),
+      value: MsgCreateMarginAccount.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgCreateMarginAccountResponse(): MsgCreateMarginAccountResponse {
   return {
-    address: "",
+    address: ""
   };
 }
 export const MsgCreateMarginAccountResponse = {
   typeUrl: "/sphx.marginacc.MsgCreateMarginAccountResponse",
-  encode(
-    message: MsgCreateMarginAccountResponse,
-    writer: BinaryWriter = BinaryWriter.create()
-  ): BinaryWriter {
+  encode(message: MsgCreateMarginAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
   },
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number
-  ): MsgCreateMarginAccountResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateMarginAccountResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateMarginAccountResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -368,48 +330,36 @@ export const MsgCreateMarginAccountResponse = {
     }
     return message;
   },
-  fromPartial(
-    object: Partial<MsgCreateMarginAccountResponse>
-  ): MsgCreateMarginAccountResponse {
+  fromPartial(object: Partial<MsgCreateMarginAccountResponse>): MsgCreateMarginAccountResponse {
     const message = createBaseMsgCreateMarginAccountResponse();
     message.address = object.address ?? "";
     return message;
   },
-  fromAmino(
-    object: MsgCreateMarginAccountResponseAmino
-  ): MsgCreateMarginAccountResponse {
+  fromAmino(object: MsgCreateMarginAccountResponseAmino): MsgCreateMarginAccountResponse {
     const message = createBaseMsgCreateMarginAccountResponse();
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
     }
     return message;
   },
-  toAmino(
-    message: MsgCreateMarginAccountResponse
-  ): MsgCreateMarginAccountResponseAmino {
+  toAmino(message: MsgCreateMarginAccountResponse): MsgCreateMarginAccountResponseAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
-  fromAminoMsg(
-    object: MsgCreateMarginAccountResponseAminoMsg
-  ): MsgCreateMarginAccountResponse {
+  fromAminoMsg(object: MsgCreateMarginAccountResponseAminoMsg): MsgCreateMarginAccountResponse {
     return MsgCreateMarginAccountResponse.fromAmino(object.value);
   },
-  fromProtoMsg(
-    message: MsgCreateMarginAccountResponseProtoMsg
-  ): MsgCreateMarginAccountResponse {
+  fromProtoMsg(message: MsgCreateMarginAccountResponseProtoMsg): MsgCreateMarginAccountResponse {
     return MsgCreateMarginAccountResponse.decode(message.value);
   },
   toProto(message: MsgCreateMarginAccountResponse): Uint8Array {
     return MsgCreateMarginAccountResponse.encode(message).finish();
   },
-  toProtoMsg(
-    message: MsgCreateMarginAccountResponse
-  ): MsgCreateMarginAccountResponseProtoMsg {
+  toProtoMsg(message: MsgCreateMarginAccountResponse): MsgCreateMarginAccountResponseProtoMsg {
     return {
       typeUrl: "/sphx.marginacc.MsgCreateMarginAccountResponse",
-      value: MsgCreateMarginAccountResponse.encode(message).finish(),
+      value: MsgCreateMarginAccountResponse.encode(message).finish()
     };
-  },
+  }
 };
