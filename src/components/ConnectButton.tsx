@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { Button } from ".";
 import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useTranslation } from "react-i18next";
@@ -8,39 +8,86 @@ type ConnectButtonProps = ButtonProps & {
   text?: string;
 };
 
-export const ConnectButton = ({ text, ...props }: ConnectButtonProps) => {
-  const { connect, disconnect, isConnected, account } = useChainCosmoshub();
-  const address = account?.bech32Address;
+const GET_KEPLR_URL = "https://www.keplr.app/get";
 
-  const { t } = useTranslation();
+export const ConnectButton = React.memo(
+  ({ text, size, ...props }: ConnectButtonProps) => {
+    const { connect, disconnect, isConnected, account, addChain } =
+      useChainCosmoshub();
+    const address = account?.bech32Address;
 
-  const addressDisplay = useMemo(() => {
-    if (address) {
+    const { t } = useTranslation();
+
+    const hasKeplr = !!window?.keplr;
+    // const hasChain = (async () => {
+    //   return await window.keplr.getChainInfosWithoutEndpoints();
+    // })();
+    // console.log(hasChain);
+
+    const addressDisplay = useMemo(() => {
+      if (address) {
+        return (
+          address.substring(0, 10) +
+          "..." +
+          address.substring(address.length - 4, address.length)
+        );
+      }
+      return t("disconnect");
+    }, [address, t]);
+
+    if (!hasKeplr) {
       return (
-        address.substring(0, 10) +
-        "..." +
-        address.substring(address.length - 4, address.length)
+        <Button
+          size={size}
+          style={{ textAlign: "center" }}
+          as="a"
+          href={GET_KEPLR_URL}
+          target="_blank"
+          title={t("getKeplrMessage")}
+        >
+          {t("getKeplrButton")}
+        </Button>
       );
     }
-    return t("disconnect");
-  }, [address, t]);
 
-  return (
-    <>
-      {!isConnected ? (
-        <Button variant="primary" {...props} onClick={() => connect()}>
-          {text ?? t("connect")}
+    // if (!hasChain) {
+    //   return (
+    //     <Button size={size} onClick={() => addChain()}>
+    //       Add Chain
+    //     </Button>
+    //   );
+    // }
+
+    return (
+      <>
+        <Button size={size} onClick={() => addChain()}>
+          Add Chain
         </Button>
-      ) : (
-        <Button
-          data-test="disconnect-button"
-          variant="secondary"
-          {...props}
-          onClick={() => disconnect()}
-        >
-          {addressDisplay}
-        </Button>
-      )}
-    </>
-  );
-};
+        {!isConnected ? (
+          <Button
+            variant="primary"
+            size={size}
+            {...props}
+            onClick={() => connect()}
+          >
+            {text ?? t("connect")}
+          </Button>
+        ) : (
+          <Button
+            data-test="disconnect-button"
+            variant="secondary"
+            size={size}
+            {...props}
+            onClick={() => {
+              // TODO: add confirmation modal to add chain config to Keplr
+              // addChain();
+              disconnect();
+            }}
+          >
+            {addressDisplay}
+          </Button>
+        )}
+      </>
+    );
+  }
+);

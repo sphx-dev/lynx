@@ -14,6 +14,7 @@ import { OrderType, OrderWithDepth } from "../../types/orderBook";
 import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
 import { getOrderBookRecords } from "../../utils/helpers";
 import { useResize } from "../../hooks/useResize";
+import { useWebsocket } from "../../hooks/useWebsocket";
 
 interface OrderBookProps {
   windowWidth: number;
@@ -22,12 +23,19 @@ interface OrderBookProps {
 const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
+  // console.info("rendering ORDERBOOK");
+
   const book = useAppSelector(orderBook);
   const containerRef = useRef(null);
   const [height, setHeight] = useState(0);
   const { height: windowHeight } = useResize();
 
+  useWebsocket(message => {
+    console.log("ORDERBOOK_message", message.result);
+  });
+
   useEffect(() => {
+    // TODO: get rid of this and implement it in CSS
     if (containerRef.current) {
       setHeight(getBoundingClientRect(containerRef.current).height);
     }
@@ -35,7 +43,8 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
 
   const records = getOrderBookRecords(height);
   useGetOrderBookQuery(records, {
-    pollingInterval: 10000,
+    // pollingInterval: 10000,
+    pollingInterval: 0,
     skip: records <= 0,
   });
 

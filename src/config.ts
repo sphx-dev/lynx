@@ -1,3 +1,9 @@
+import {
+  sphxLocalChainInfo,
+  sphxTestnetChain1Info,
+  sphxTestnetChain2Info,
+} from "./constants/chainInfo";
+
 export function getEnvVARs(location: { hostname: string | string[] }) {
   const config = {
     VITE_API_HOST: "localhost",
@@ -24,3 +30,24 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
 
 const config = getEnvVARs(window.location);
 export default config;
+
+export const getChain = () => {
+  // return sphxLocalChainInfo;
+  // return sphxTestnetChain1Info;
+  // return sphxTestnetChain2Info;
+  if (window.location.hostname.includes("localhost")) {
+    return sphxLocalChainInfo;
+  }
+  if (window.location.hostname.includes("demo.sphx.dev")) {
+    return sphxTestnetChain1Info;
+  }
+  return sphxTestnetChain2Info;
+};
+
+export const getChainWS = () => {
+  const protocol = getChain().rpc.indexOf("https") > -1 ? "wss" : "ws";
+  const host = getChain().rpc.replace(/http(s)?:\/\//, "");
+  return (
+    protocol + "://" + host + (host.endsWith("/") ? "" : "/") + "websocket"
+  );
+};

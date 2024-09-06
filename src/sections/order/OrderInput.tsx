@@ -1,17 +1,6 @@
-import React, { useMemo } from "react";
-import styled, { css } from "styled-components";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
-import {
-  Button,
-  Divider,
-  Group,
-  Input,
-  Stack,
-  Switcher,
-  Text,
-} from "../../components";
+import { Divider, Group, Input, Stack, Switcher, Text } from "../../components";
 import Surface from "../../Layouts/Surface";
 import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
@@ -20,69 +9,15 @@ import useTheme from "../../hooks/useTheme";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "../../utils/alerts";
-import {
-  usePlaceLimitOrderMutation,
-  usePlaceMarketOrderMutation,
-} from "../../utils/api/orderApi";
-import { handleApiCall } from "../../utils/handleApiCall";
-import { MESSAGE } from "../../constants/validation";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useAppSelector } from "../../hooks";
 import { selectMarketId } from "../../state/futuresSlice";
-import { OrderType } from "../../types/order";
-import { getThemeColors } from "../../theme";
+import { OrderSide, OrderType } from "../../types/order";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
-
-const Wrapper = styled.div`
-  background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
-  padding: 16px 0;
-  width: 320px;
-`;
-const Container = styled.div`
-  padding: 0 16px;
-`;
-const StyledButton = styled(Button)`
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-`;
-
-const buyStyle = css`
-  background-color: ${({ theme }) =>
-    getThemeColors(theme).orderButton.buy.background};
-  &:hover {
-    background-color: ${({ theme }) =>
-      getThemeColors(theme).orderButton.buy.hover};
-  }
-`;
-
-const sellStyle = css`
-  background-color: ${({ theme }) =>
-    getThemeColors(theme).orderButton.sell.background};
-  &:hover {
-    background-color: ${({ theme }) =>
-      getThemeColors(theme).orderButton.sell.hover};
-  }
-`;
-
-const PlaceOrderButton = styled(Button)<{ $isBuy: boolean }>`
-  ${({ $isBuy }) => ($isBuy ? buyStyle : sellStyle)}
-`;
-
-const TP_SL_TYPES_MAP = {
-  [OrderType.MARKET]: {
-    takeProfit: OrderType.TAKE_PROFIT_MARKET,
-    stopLoss: OrderType.STOP_LOSS_MARKET,
-  },
-  [OrderType.LIMIT]: {
-    takeProfit: OrderType.TAKE_PROFIT_LIMIT,
-    stopLoss: OrderType.STOP_LOSS_LIMIT,
-  },
-};
+import { placeLimitOrderInChain, placeMarketOrderInChain } from "./placeOrder";
+import { schema } from "./orderSchema";
+import { Container, PlaceOrderButton, StyledButton, Wrapper } from "./style";
 
 type MainOrderType = OrderType.MARKET | OrderType.LIMIT;
 
@@ -120,49 +55,11 @@ const defaultValues: MarketOrderForm = {
   orderType: OrderType.MARKET,
 };
 
-const schema = (markPrice: number) =>
-  yup.object().shape({
-    volume: yup
-      .number()
-      .typeError(MESSAGE.number)
-      .moreThan(0)
-      .required(MESSAGE.required),
-    price: yup.number().when("orderType", {
-      is: OrderType.LIMIT,
-      then: schema1 =>
-        schema1
-          .typeError(MESSAGE.required)
-          .moreThan(0)
-          .required(MESSAGE.required),
-      otherwise: schema1 => schema1.nullable(),
-    }),
-    takeProfit: yup
-      .number()
-      .nullable()
-      .transform(value => {
-        return value || null;
-      })
-      .when("isBuy", {
-        is: true,
-        then: schema => schema.moreThan(markPrice, MESSAGE.moreThan),
-        otherwise: schema => schema.lessThan(markPrice, MESSAGE.lessThan),
-      }),
-    stopLoss: yup
-      .number()
-      .nullable()
-      .transform(value => {
-        return value || null;
-      })
-      .when("isBuy", {
-        is: true,
-        then: schema => schema.lessThan(markPrice, MESSAGE.lessThan),
-        otherwise: schema => schema.moreThan(markPrice, MESSAGE.moreThan),
-      }),
-  });
-
 function OrderInput() {
   const { themeColors } = useTheme();
-  const { isConnected } = useChainCosmoshub();
+  const { account, isConnected } = useChainCosmoshub();
+  const address = account?.bech32Address;
+
   const { t } = useTranslation();
   const {
     handleSubmit,
@@ -174,17 +71,8 @@ function OrderInput() {
     defaultValues,
     resolver: yupResolver<any>(schema(90)),
   });
-  const [placeMarketOrder] = usePlaceMarketOrderMutation();
-  const [placeLimitOrder] = usePlaceLimitOrderMutation();
   const marketId = useAppSelector(selectMarketId);
 
-  const orderHandlers = useMemo(
-    () => ({
-      [OrderType.MARKET]: placeMarketOrder,
-      [OrderType.LIMIT]: placeLimitOrder,
-    }),
-    [placeLimitOrder, placeMarketOrder]
-  );
   const handleSwitchOrderType = (type: MainOrderType) =>
     setValue("orderType", type);
 
@@ -195,31 +83,36 @@ function OrderInput() {
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
 
   const placeOrder = async (values: MarketOrderForm) => {
-    const handler = orderHandlers[orderType];
-    const response = await handler(values);
-    handleApiCall(
-      response,
-      () => errorAlert("Something went wrong"),
-      () => {
-        successAlert("Order placed");
-        if (values.takeProfit) {
-          placeMarketOrder({
-            ...values,
-            isBuy: !values.isBuy,
-            triggerPrice: values.takeProfit,
-            orderType: TP_SL_TYPES_MAP[orderType].takeProfit,
-          });
-        }
-        if (values.stopLoss) {
-          placeMarketOrder({
-            ...values,
-            isBuy: !values.isBuy,
-            triggerPrice: values.stopLoss,
-            orderType: TP_SL_TYPES_MAP[orderType].stopLoss,
-          });
-        }
-      }
-    );
+    if (!address) return;
+
+    if (values.orderType === OrderType.MARKET) {
+      placeMarketOrderInChain({
+        address,
+        side: values.isBuy ? OrderSide.buy : OrderSide.sell,
+        quantity: BigInt(values.volume * 1e5),
+        price: BigInt(values.price),
+        leverage: BigInt(values.leverage),
+        onSuccess: successAlert,
+        onError: errorAlert,
+      });
+    }
+    if (
+      values.orderType === OrderType.LIMIT &&
+      values.stopLoss &&
+      values.takeProfit
+    ) {
+      placeLimitOrderInChain({
+        address,
+        side: values.isBuy ? OrderSide.buy : OrderSide.sell,
+        quantity: BigInt(values.volume * 1e5),
+        price: BigInt(values.price),
+        leverage: BigInt(values.leverage),
+        stopLoss: BigInt(values.stopLoss),
+        takeProfit: BigInt(values.takeProfit),
+        onSuccess: successAlert,
+        onError: errorAlert,
+      });
+    }
   };
 
   return (
@@ -278,16 +171,15 @@ function OrderInput() {
                       options={options}
                       name="orderType"
                     />
-                    {orderType !== OrderType.MARKET && (
-                      <Input
-                        {...register("price")}
-                        label="Price"
-                        rightSide="USD"
-                        type="number"
-                        value={watch("price")}
-                        error={errors.price?.message}
-                      />
-                    )}
+
+                    <Input
+                      {...register("price")}
+                      label="Price"
+                      rightSide="USD"
+                      type="number"
+                      value={watch("price")}
+                      error={errors.price?.message}
+                    />
                     <Input
                       {...register("volume")}
                       error={errors.volume?.message}
@@ -338,22 +230,26 @@ function OrderInput() {
                         </Group>
                       </Group>
                     </div>
-                    <Input
-                      {...register("takeProfit")}
-                      label="Take Profit"
-                      rightSide="USD"
-                      error={errors.takeProfit?.message}
-                      type="number"
-                      value={watch("takeProfit") || ""}
-                    />
-                    <Input
-                      {...register("stopLoss")}
-                      label="Stop Loss"
-                      rightSide="USD"
-                      error={errors.stopLoss?.message}
-                      type="number"
-                      value={watch("stopLoss") || ""}
-                    />
+                    {orderType !== OrderType.MARKET && (
+                      <>
+                        <Input
+                          {...register("takeProfit")}
+                          label="Take Profit"
+                          rightSide="USD"
+                          error={errors.takeProfit?.message}
+                          type="number"
+                          value={watch("takeProfit") || ""}
+                        />
+                        <Input
+                          {...register("stopLoss")}
+                          label="Stop Loss"
+                          rightSide="USD"
+                          error={errors.stopLoss?.message}
+                          type="number"
+                          value={watch("stopLoss") || ""}
+                        />
+                      </>
+                    )}
 
                     {!isConnected && (
                       <ConnectButton
@@ -363,9 +259,11 @@ function OrderInput() {
                       />
                     )}
                     {isConnected && (
-                      <PlaceOrderButton $isBuy={isBuyPosition}>
-                        {t("placeOrder")}
-                      </PlaceOrderButton>
+                      <>
+                        <PlaceOrderButton $isBuy={isBuyPosition}>
+                          {t("placeOrder")}
+                        </PlaceOrderButton>
+                      </>
                     )}
                     <Summary />
                   </Stack>

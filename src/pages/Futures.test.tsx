@@ -7,8 +7,8 @@ import Futures from "./Futures";
 import { ThemeProvider } from "styled-components";
 import { themes } from "../theme";
 import { GrazProvider } from "graz";
-import { cosmoshub } from "../App";
 import { MockKeplr } from "@keplr-wallet/provider-mock";
+import { sphxLocalChainInfo } from "../constants/chainInfo";
 
 // mockGetters(MockKeplr);
 
@@ -29,8 +29,8 @@ const WalletExtensionMock = new MockKeplr(
   },
   [
     {
-      chainId: cosmoshub.chainId,
-      bech32Config: { bech32PrefixAccAddr: "cosmos" },
+      chainId: sphxLocalChainInfo.chainId,
+      bech32Config: { bech32PrefixAccAddr: "sphx" },
     },
   ],
   "diary match wagon soccer worth planet sea stumble thought post easily want"
@@ -47,7 +47,7 @@ const Wrapper = ({ children }: any) => {
     <Provider store={store}>
       <GrazProvider
         grazOptions={{
-          chains: [cosmoshub],
+          chains: [sphxLocalChainInfo],
         }}
       >
         <ThemeProvider theme={themes["dark"]}>{children}</ThemeProvider>

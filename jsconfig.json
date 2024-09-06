@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@proto-codecs": ["proto-codecs"]
+    }
+  }
+}

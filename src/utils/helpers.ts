@@ -1,3 +1,4 @@
+// TODO: Get rid of this file and implement it in CSS
 const RECORD_HEIGHT = 24;
 const SPREAD_HEIGHT = 32;
 const HEADER = 36;

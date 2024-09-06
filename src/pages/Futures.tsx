@@ -14,6 +14,7 @@ import Text from "../components/Text";
 import logo from "../assets/icons/logo-small.svg";
 import useTheme from "../hooks/useTheme";
 import Trades from "../sections/trades/Trades";
+import { useWebsocket } from "../hooks/useWebsocket";
 
 const Wrapper = styled.div`
   display: grid;
@@ -44,6 +45,11 @@ const tabs = [
   },
 ];
 const Futures = () => {
+  // console.info("rendering FUTURES");
+  useWebsocket(message => {
+    console.log("FUTURES_message", message.result);
+  });
+
   return (
     <Wrapper>
       <OrderInput />

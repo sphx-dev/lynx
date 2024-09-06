@@ -11,4 +11,6 @@ export const API_URL: string = config.VITE_API_URL;
 
 export const BREAK_POINTS = {
   DESKTOP_MIN_WIDTH: 1200,
+  TABLET_MIN_WIDTH: 800,
+  MOBILE_MIN_WIDTH: 600,
 };
