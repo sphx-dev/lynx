@@ -49,7 +49,7 @@ export type PlaceLimitOrderInChainParams = {
   onError: (msg: string) => {};
 };
 
-let ORDERID = 1;
+let ORDERID: bigint = BigInt(1);
 function getOrderId() {
   return ORDERID++;
 }
@@ -85,7 +85,7 @@ export const placeMarketOrderInChain = async ({
         leverage: BigInt(leverage),
         timestamp: BigInt(Math.floor(Date.now() / 1000)),
         /** The market id to which the order belongs e.g. BTCUSDC.P */
-        MarketId: "BTCUSDC.P",
+        marketId: "BTCUSDC.P",
       },
     });
 
@@ -147,7 +147,7 @@ export const placeLimitOrderInChain = async ({
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
           /** The market id to which the order belongs e.g. BTCUSDC.P */
-          MarketId: "BTCUSDC.P",
+          marketId: "BTCUSDC.P",
         },
       }),
       // Take profit order
@@ -173,7 +173,7 @@ export const placeLimitOrderInChain = async ({
           triggerPrice: BigInt(takeProfit),
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          MarketId: "BTCUSDC.P",
+          marketId: "BTCUSDC.P",
         },
       }),
       // Stop loss order
@@ -199,7 +199,7 @@ export const placeLimitOrderInChain = async ({
           triggerPrice: BigInt(stopLoss),
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          MarketId: "BTCUSDC.P",
+          marketId: "BTCUSDC.P",
         },
       }),
     ];
