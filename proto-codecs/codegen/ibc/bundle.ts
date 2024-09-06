@@ -14,6 +14,9 @@ import * as _61 from "./applications/transfer/v1/tx.amino";
 import * as _62 from "./core/client/v1/tx.amino";
 import * as _63 from "./applications/transfer/v1/tx.registry";
 import * as _64 from "./core/client/v1/tx.registry";
+import * as _65 from "./applications/transfer/v1/tx.rpc.msg";
+import * as _66 from "./core/client/v1/tx.rpc.msg";
+import * as _91 from "./rpc.tx";
 export namespace ibc {
   export namespace applications {
     export namespace transfer {
@@ -23,7 +26,8 @@ export namespace ibc {
         ..._2,
         ..._3,
         ..._61,
-        ..._63
+        ..._63,
+        ..._65
       };
       export const v2 = {
         ..._4,
@@ -40,8 +44,12 @@ export namespace ibc {
         ..._9,
         ..._10,
         ..._62,
-        ..._64
+        ..._64,
+        ..._66
       };
     }
   }
+  export const ClientFactory = {
+    ..._91
+  };
 }

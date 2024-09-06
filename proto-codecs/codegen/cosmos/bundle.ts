@@ -13,12 +13,16 @@ import * as _41 from "./staking/v1beta1/staking";
 import * as _42 from "./staking/v1beta1/tx";
 import * as _43 from "./upgrade/v1beta1/tx";
 import * as _44 from "./upgrade/v1beta1/upgrade";
-import * as _71 from "./bank/v1beta1/tx.amino";
-import * as _72 from "./staking/v1beta1/tx.amino";
-import * as _73 from "./upgrade/v1beta1/tx.amino";
-import * as _74 from "./bank/v1beta1/tx.registry";
-import * as _75 from "./staking/v1beta1/tx.registry";
-import * as _76 from "./upgrade/v1beta1/tx.registry";
+import * as _82 from "./bank/v1beta1/tx.amino";
+import * as _83 from "./staking/v1beta1/tx.amino";
+import * as _84 from "./upgrade/v1beta1/tx.amino";
+import * as _85 from "./bank/v1beta1/tx.registry";
+import * as _86 from "./staking/v1beta1/tx.registry";
+import * as _87 from "./upgrade/v1beta1/tx.registry";
+import * as _88 from "./bank/v1beta1/tx.rpc.msg";
+import * as _89 from "./staking/v1beta1/tx.rpc.msg";
+import * as _90 from "./upgrade/v1beta1/tx.rpc.msg";
+import * as _98 from "./rpc.tx";
 export namespace cosmos {
   export namespace auth {
     export const v1beta1 = {
@@ -32,8 +36,9 @@ export namespace cosmos {
       ..._34,
       ..._35,
       ..._36,
-      ..._71,
-      ..._74
+      ..._82,
+      ..._85,
+      ..._88
     };
   }
   export namespace base {
@@ -52,16 +57,21 @@ export namespace cosmos {
       ..._40,
       ..._41,
       ..._42,
-      ..._72,
-      ..._75
+      ..._83,
+      ..._86,
+      ..._89
     };
   }
   export namespace upgrade {
     export const v1beta1 = {
       ..._43,
       ..._44,
-      ..._73,
-      ..._76
+      ..._84,
+      ..._87,
+      ..._90
     };
   }
+  export const ClientFactory = {
+    ..._98
+  };
 }
