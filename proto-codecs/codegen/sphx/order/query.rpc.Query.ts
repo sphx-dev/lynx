@@ -2,11 +2,13 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryOrdersRequest, QueryOrdersResponse, QueryOrdersForAccountRequest, QueryOrdersForAccountResponse, QueryOrderInfoRequest, QueryOrderInfoResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryExecutionAuthorityRequest, QueryExecutionAuthorityResponse, QueryMarketRequest, QueryMarketResponse, QueryOrdersRequest, QueryOrdersResponse, QueryOrdersForAccountRequest, QueryOrdersForAccountResponse, QueryOrderInfoRequest, QueryOrderInfoResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  executionAuthority(request?: QueryExecutionAuthorityRequest): Promise<QueryExecutionAuthorityResponse>;
+  market(request: QueryMarketRequest): Promise<QueryMarketResponse>;
   orders(request?: QueryOrdersRequest): Promise<QueryOrdersResponse>;
   /** Queries orders for a given margin account */
   ordersForAccount(request: QueryOrdersForAccountRequest): Promise<QueryOrdersForAccountResponse>;
@@ -17,6 +19,8 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.params = this.params.bind(this);
+    this.executionAuthority = this.executionAuthority.bind(this);
+    this.market = this.market.bind(this);
     this.orders = this.orders.bind(this);
     this.ordersForAccount = this.ordersForAccount.bind(this);
     this.orderInfo = this.orderInfo.bind(this);
@@ -25,6 +29,16 @@ export class QueryClientImpl implements Query {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("sphx.order.Query", "Params", data);
     return promise.then(data => QueryParamsResponse.decode(new BinaryReader(data)));
+  }
+  executionAuthority(request: QueryExecutionAuthorityRequest = {}): Promise<QueryExecutionAuthorityResponse> {
+    const data = QueryExecutionAuthorityRequest.encode(request).finish();
+    const promise = this.rpc.request("sphx.order.Query", "ExecutionAuthority", data);
+    return promise.then(data => QueryExecutionAuthorityResponse.decode(new BinaryReader(data)));
+  }
+  market(request: QueryMarketRequest): Promise<QueryMarketResponse> {
+    const data = QueryMarketRequest.encode(request).finish();
+    const promise = this.rpc.request("sphx.order.Query", "Market", data);
+    return promise.then(data => QueryMarketResponse.decode(new BinaryReader(data)));
   }
   orders(request: QueryOrdersRequest = {
     pagination: undefined
@@ -50,6 +64,12 @@ export const createRpcQueryExtension = (base: QueryClient) => {
   return {
     params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
       return queryService.params(request);
+    },
+    executionAuthority(request?: QueryExecutionAuthorityRequest): Promise<QueryExecutionAuthorityResponse> {
+      return queryService.executionAuthority(request);
+    },
+    market(request: QueryMarketRequest): Promise<QueryMarketResponse> {
+      return queryService.market(request);
     },
     orders(request?: QueryOrdersRequest): Promise<QueryOrdersResponse> {
       return queryService.orders(request);

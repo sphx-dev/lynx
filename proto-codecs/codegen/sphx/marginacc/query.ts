@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { MarginAccountInfo, MarginAccountInfoAmino, MarginAccountInfoSDKType } from "./margin_account";
 import { BinaryReader, BinaryWriter } from "../../binary";
@@ -75,6 +76,54 @@ export interface QueryMarginAccountInfoResponseAminoMsg {
 }
 export interface QueryMarginAccountInfoResponseSDKType {
   margin_account_info: MarginAccountInfoSDKType;
+}
+export interface QueryMarginAccountsByOwnerRequest {
+  /** owner of the margin accounts */
+  owner: string;
+  /** pagination defines an optional pagination for the request. */
+  pagination?: PageRequest;
+}
+export interface QueryMarginAccountsByOwnerRequestProtoMsg {
+  typeUrl: "/sphx.marginacc.QueryMarginAccountsByOwnerRequest";
+  value: Uint8Array;
+}
+export interface QueryMarginAccountsByOwnerRequestAmino {
+  /** owner of the margin accounts */
+  owner?: string;
+  /** pagination defines an optional pagination for the request. */
+  pagination?: PageRequestAmino;
+}
+export interface QueryMarginAccountsByOwnerRequestAminoMsg {
+  type: "/sphx.marginacc.QueryMarginAccountsByOwnerRequest";
+  value: QueryMarginAccountsByOwnerRequestAmino;
+}
+export interface QueryMarginAccountsByOwnerRequestSDKType {
+  owner: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryMarginAccountsByOwnerResponse {
+  /** margin accounts */
+  marginAccounts: MarginAccountInfo[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse;
+}
+export interface QueryMarginAccountsByOwnerResponseProtoMsg {
+  typeUrl: "/sphx.marginacc.QueryMarginAccountsByOwnerResponse";
+  value: Uint8Array;
+}
+export interface QueryMarginAccountsByOwnerResponseAmino {
+  /** margin accounts */
+  margin_accounts: MarginAccountInfoAmino[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponseAmino;
+}
+export interface QueryMarginAccountsByOwnerResponseAminoMsg {
+  type: "/sphx.marginacc.QueryMarginAccountsByOwnerResponse";
+  value: QueryMarginAccountsByOwnerResponseAmino;
+}
+export interface QueryMarginAccountsByOwnerResponseSDKType {
+  margin_accounts: MarginAccountInfoSDKType[];
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -312,6 +361,158 @@ export const QueryMarginAccountInfoResponse = {
     return {
       typeUrl: "/sphx.marginacc.QueryMarginAccountInfoResponse",
       value: QueryMarginAccountInfoResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryMarginAccountsByOwnerRequest(): QueryMarginAccountsByOwnerRequest {
+  return {
+    owner: "",
+    pagination: undefined
+  };
+}
+export const QueryMarginAccountsByOwnerRequest = {
+  typeUrl: "/sphx.marginacc.QueryMarginAccountsByOwnerRequest",
+  encode(message: QueryMarginAccountsByOwnerRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryMarginAccountsByOwnerRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryMarginAccountsByOwnerRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryMarginAccountsByOwnerRequest>): QueryMarginAccountsByOwnerRequest {
+    const message = createBaseQueryMarginAccountsByOwnerRequest();
+    message.owner = object.owner ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryMarginAccountsByOwnerRequestAmino): QueryMarginAccountsByOwnerRequest {
+    const message = createBaseQueryMarginAccountsByOwnerRequest();
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryMarginAccountsByOwnerRequest): QueryMarginAccountsByOwnerRequestAmino {
+    const obj: any = {};
+    obj.owner = message.owner === "" ? undefined : message.owner;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryMarginAccountsByOwnerRequestAminoMsg): QueryMarginAccountsByOwnerRequest {
+    return QueryMarginAccountsByOwnerRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMarginAccountsByOwnerRequestProtoMsg): QueryMarginAccountsByOwnerRequest {
+    return QueryMarginAccountsByOwnerRequest.decode(message.value);
+  },
+  toProto(message: QueryMarginAccountsByOwnerRequest): Uint8Array {
+    return QueryMarginAccountsByOwnerRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMarginAccountsByOwnerRequest): QueryMarginAccountsByOwnerRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.marginacc.QueryMarginAccountsByOwnerRequest",
+      value: QueryMarginAccountsByOwnerRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryMarginAccountsByOwnerResponse(): QueryMarginAccountsByOwnerResponse {
+  return {
+    marginAccounts: [],
+    pagination: undefined
+  };
+}
+export const QueryMarginAccountsByOwnerResponse = {
+  typeUrl: "/sphx.marginacc.QueryMarginAccountsByOwnerResponse",
+  encode(message: QueryMarginAccountsByOwnerResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.marginAccounts) {
+      MarginAccountInfo.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryMarginAccountsByOwnerResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryMarginAccountsByOwnerResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.marginAccounts.push(MarginAccountInfo.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryMarginAccountsByOwnerResponse>): QueryMarginAccountsByOwnerResponse {
+    const message = createBaseQueryMarginAccountsByOwnerResponse();
+    message.marginAccounts = object.marginAccounts?.map(e => MarginAccountInfo.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryMarginAccountsByOwnerResponseAmino): QueryMarginAccountsByOwnerResponse {
+    const message = createBaseQueryMarginAccountsByOwnerResponse();
+    message.marginAccounts = object.margin_accounts?.map(e => MarginAccountInfo.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryMarginAccountsByOwnerResponse): QueryMarginAccountsByOwnerResponseAmino {
+    const obj: any = {};
+    if (message.marginAccounts) {
+      obj.margin_accounts = message.marginAccounts.map(e => e ? MarginAccountInfo.toAmino(e) : undefined);
+    } else {
+      obj.margin_accounts = message.marginAccounts;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryMarginAccountsByOwnerResponseAminoMsg): QueryMarginAccountsByOwnerResponse {
+    return QueryMarginAccountsByOwnerResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMarginAccountsByOwnerResponseProtoMsg): QueryMarginAccountsByOwnerResponse {
+    return QueryMarginAccountsByOwnerResponse.decode(message.value);
+  },
+  toProto(message: QueryMarginAccountsByOwnerResponse): Uint8Array {
+    return QueryMarginAccountsByOwnerResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMarginAccountsByOwnerResponse): QueryMarginAccountsByOwnerResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.marginacc.QueryMarginAccountsByOwnerResponse",
+      value: QueryMarginAccountsByOwnerResponse.encode(message).finish()
     };
   }
 };

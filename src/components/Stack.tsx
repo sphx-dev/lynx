@@ -50,6 +50,7 @@ const Stack: FC<StackProps> = ({
   style,
   onClick,
   className,
+  ...props
 }) => {
   return (
     <StackFlex
@@ -61,6 +62,7 @@ const Stack: FC<StackProps> = ({
       onClick={onClick}
       className={className}
       style={style}
+      {...props}
     >
       {children}
     </StackFlex>

@@ -5,10 +5,6 @@
  * and run the transpile command or npm scripts command that is used to regenerate this bundle.
  */
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-
 const atob: (b64: string) => string =
   globalThis.atob ||
   ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));

@@ -88,6 +88,38 @@ export function orderTypeToJSON(object: OrderType): string {
       return "UNRECOGNIZED";
   }
 }
+export enum FillType {
+  FILL_TYPE_PARTIAL = 0,
+  FILL_TYPE_FULL = 1,
+  UNRECOGNIZED = -1,
+}
+export const FillTypeSDKType = FillType;
+export const FillTypeAmino = FillType;
+export function fillTypeFromJSON(object: any): FillType {
+  switch (object) {
+    case 0:
+    case "FILL_TYPE_PARTIAL":
+      return FillType.FILL_TYPE_PARTIAL;
+    case 1:
+    case "FILL_TYPE_FULL":
+      return FillType.FILL_TYPE_FULL;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return FillType.UNRECOGNIZED;
+  }
+}
+export function fillTypeToJSON(object: FillType): string {
+  switch (object) {
+    case FillType.FILL_TYPE_PARTIAL:
+      return "FILL_TYPE_PARTIAL";
+    case FillType.FILL_TYPE_FULL:
+      return "FILL_TYPE_FULL";
+    case FillType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface OrderId {
   /** Margin Account Address to which the order belongs */
   marginAccountAddress: string;
@@ -123,8 +155,7 @@ export interface Order {
   triggerPrice: bigint;
   leverage: bigint;
   timestamp: bigint;
-  /** The market id to which the order belongs e.g. BTC/USDC */
-  marketId: string;
+  marketId: number;
 }
 export interface OrderProtoMsg {
   typeUrl: "/sphx.order.Order";
@@ -141,8 +172,7 @@ export interface OrderAmino {
   triggerPrice?: string;
   leverage?: string;
   timestamp?: string;
-  /** The market id to which the order belongs e.g. BTC/USDC */
-  MarketId?: string;
+  MarketId?: number;
 }
 export interface OrderAminoMsg {
   type: "/sphx.order.Order";
@@ -158,7 +188,7 @@ export interface OrderSDKType {
   triggerPrice: bigint;
   leverage: bigint;
   timestamp: bigint;
-  MarketId: string;
+  MarketId: number;
 }
 function createBaseOrderId(): OrderId {
   return {
@@ -246,7 +276,7 @@ function createBaseOrder(): Order {
     triggerPrice: BigInt(0),
     leverage: BigInt(0),
     timestamp: BigInt(0),
-    marketId: ""
+    marketId: 0
   };
 }
 export const Order = {
@@ -279,8 +309,8 @@ export const Order = {
     if (message.timestamp !== BigInt(0)) {
       writer.uint32(72).uint64(message.timestamp);
     }
-    if (message.marketId !== "") {
-      writer.uint32(82).string(message.marketId);
+    if (message.marketId !== 0) {
+      writer.uint32(80).uint32(message.marketId);
     }
     return writer;
   },
@@ -319,7 +349,7 @@ export const Order = {
           message.timestamp = reader.uint64();
           break;
         case 10:
-          message.marketId = reader.string();
+          message.marketId = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -339,7 +369,7 @@ export const Order = {
     message.triggerPrice = object.triggerPrice !== undefined && object.triggerPrice !== null ? BigInt(object.triggerPrice.toString()) : BigInt(0);
     message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
-    message.marketId = object.marketId ?? "";
+    message.marketId = object.marketId ?? 0;
     return message;
   },
   fromAmino(object: OrderAmino): Order {
@@ -387,7 +417,7 @@ export const Order = {
     obj.triggerPrice = message.triggerPrice !== BigInt(0) ? message.triggerPrice.toString() : undefined;
     obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
     obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
-    obj.MarketId = message.marketId === "" ? undefined : message.marketId;
+    obj.MarketId = message.marketId === 0 ? undefined : message.marketId;
     return obj;
   },
   fromAminoMsg(object: OrderAminoMsg): Order {

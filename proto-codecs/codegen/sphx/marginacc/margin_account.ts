@@ -22,7 +22,10 @@ export interface MarginAccountIdSDKType {
   number: number;
 }
 export interface MarginAccountInfo {
+  /** Margin account id. */
   id?: MarginAccountId;
+  /** Margin account address. */
+  address: string;
   /** List of positions in the margin account. */
   perpertualPositions: PerpetualPosition[];
   /** List of addresses that can place orders on behalf of the margin account owner. */
@@ -33,7 +36,10 @@ export interface MarginAccountInfoProtoMsg {
   value: Uint8Array;
 }
 export interface MarginAccountInfoAmino {
+  /** Margin account id. */
   id?: MarginAccountIdAmino;
+  /** Margin account address. */
+  address?: string;
   /** List of positions in the margin account. */
   perpertual_positions?: PerpetualPositionAmino[];
   /** List of addresses that can place orders on behalf of the margin account owner. */
@@ -45,6 +51,7 @@ export interface MarginAccountInfoAminoMsg {
 }
 export interface MarginAccountInfoSDKType {
   id?: MarginAccountIdSDKType;
+  address: string;
   perpertual_positions: PerpetualPositionSDKType[];
   delegates: string[];
 }
@@ -126,6 +133,7 @@ export const MarginAccountId = {
 function createBaseMarginAccountInfo(): MarginAccountInfo {
   return {
     id: undefined,
+    address: "",
     perpertualPositions: [],
     delegates: []
   };
@@ -136,11 +144,14 @@ export const MarginAccountInfo = {
     if (message.id !== undefined) {
       MarginAccountId.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
+    if (message.address !== "") {
+      writer.uint32(18).string(message.address);
+    }
     for (const v of message.perpertualPositions) {
-      PerpetualPosition.encode(v!, writer.uint32(18).fork()).ldelim();
+      PerpetualPosition.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.delegates) {
-      writer.uint32(26).string(v!);
+      writer.uint32(34).string(v!);
     }
     return writer;
   },
@@ -155,9 +166,12 @@ export const MarginAccountInfo = {
           message.id = MarginAccountId.decode(reader, reader.uint32());
           break;
         case 2:
-          message.perpertualPositions.push(PerpetualPosition.decode(reader, reader.uint32()));
+          message.address = reader.string();
           break;
         case 3:
+          message.perpertualPositions.push(PerpetualPosition.decode(reader, reader.uint32()));
+          break;
+        case 4:
           message.delegates.push(reader.string());
           break;
         default:
@@ -170,6 +184,7 @@ export const MarginAccountInfo = {
   fromPartial(object: Partial<MarginAccountInfo>): MarginAccountInfo {
     const message = createBaseMarginAccountInfo();
     message.id = object.id !== undefined && object.id !== null ? MarginAccountId.fromPartial(object.id) : undefined;
+    message.address = object.address ?? "";
     message.perpertualPositions = object.perpertualPositions?.map(e => PerpetualPosition.fromPartial(e)) || [];
     message.delegates = object.delegates?.map(e => e) || [];
     return message;
@@ -179,6 +194,9 @@ export const MarginAccountInfo = {
     if (object.id !== undefined && object.id !== null) {
       message.id = MarginAccountId.fromAmino(object.id);
     }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
     message.perpertualPositions = object.perpertual_positions?.map(e => PerpetualPosition.fromAmino(e)) || [];
     message.delegates = object.delegates?.map(e => e) || [];
     return message;
@@ -186,6 +204,7 @@ export const MarginAccountInfo = {
   toAmino(message: MarginAccountInfo): MarginAccountInfoAmino {
     const obj: any = {};
     obj.id = message.id ? MarginAccountId.toAmino(message.id) : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
     if (message.perpertualPositions) {
       obj.perpertual_positions = message.perpertualPositions.map(e => e ? PerpetualPosition.toAmino(e) : undefined);
     } else {

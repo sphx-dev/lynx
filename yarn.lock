@@ -2985,6 +2985,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cosmology/lcd@npm:^0.13.4":
+  version: 0.13.4
+  resolution: "@cosmology/lcd@npm:0.13.4"
+  dependencies:
+    axios: "npm:1.6.0"
+  checksum: 10c0/9d8642747b1badc74da743dd5d65c81294d277c1a140400a604158b4e1e003a7abab6c0cdcebe93e39a762e3f0576a2072eaf6862321005e98283815a4a246ec
+  languageName: node
+  linkType: hard
+
 "@cosmsnap/snapper@npm:^0.1.29":
   version: 0.1.31
   resolution: "@cosmsnap/snapper@npm:0.1.31"
@@ -8665,6 +8674,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:1.6.0":
+  version: 1.6.0
+  resolution: "axios@npm:1.6.0"
+  dependencies:
+    follow-redirects: "npm:^1.15.0"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/2879e17b96cbca7e2096d231a44e2d0f03e657d79f8928ea38ec5fbaf5a5b7bf952d580cdb58a66ba328c26eb3528b89d5a32da57cc5cf89813786c044f7e9d6
+  languageName: node
+  linkType: hard
+
 "axios@npm:^1.5.0":
   version: 1.6.7
   resolution: "axios@npm:1.6.7"
@@ -12290,6 +12310,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.15.0":
+  version: 1.15.9
+  resolution: "follow-redirects@npm:1.15.9"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 10c0/5829165bd112c3c0e82be6c15b1a58fa9dcfaede3b3c54697a82fe4a62dd5ae5e8222956b448d2f98e331525f05d00404aba7d696de9e761ef6e42fdc780244f
+  languageName: node
+  linkType: hard
+
 "follow-redirects@npm:^1.15.4":
   version: 1.15.5
   resolution: "follow-redirects@npm:1.15.5"
@@ -15183,6 +15213,7 @@ __metadata:
     "@cosmjs/proto-signing": "npm:^0.32.4"
     "@cosmjs/stargate": "npm:^0.32.4"
     "@cosmjs/tendermint-rpc": "npm:^0.32.4"
+    "@cosmology/lcd": "npm:^0.13.4"
     "@hookform/resolvers": "npm:^3.3.4"
     "@keplr-wallet/provider-mock": "npm:^0.12.121"
     "@keplr-wallet/types": "npm:^0.12.121"
@@ -15259,6 +15290,7 @@ __metadata:
     vitest-localstorage-mock: "npm:^0.1.2"
     webpack: "npm:^5.75.0"
     yup: "npm:^1.4.0"
+    zustand: "npm:^4.5.5"
   languageName: unknown
   linkType: soft
 
@@ -20939,7 +20971,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:^4.5.2":
+"zustand@npm:^4.5.2, zustand@npm:^4.5.5":
   version: 4.5.5
   resolution: "zustand@npm:4.5.5"
   dependencies:

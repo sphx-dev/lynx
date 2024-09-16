@@ -1,14 +1,14 @@
-import { GasPrice, SigningStargateClient } from "@cosmjs/stargate";
-import { SigningStargateClientOptions, StdFee } from "@cosmjs/stargate";
-import { sphx } from "../../../proto-codecs";
-import { Registry } from "@cosmjs/proto-signing";
-import { registry } from "../../../proto-codecs/codegen/sphx/order/tx.registry";
-import { OrderSide, OrderType } from "../../types/order";
+import { sphx } from "../../proto-codecs";
+
+import { OrderSide, OrderType } from "../types/order";
 import {
   OrderType as OrderTypeProto,
   OrderSide as OrderSideProto,
-} from "../../../proto-codecs/codegen/sphx/order/order";
-import { getChain } from "../../config";
+} from "../../proto-codecs/codegen/sphx/order/order";
+import {
+  composeFee,
+  getSigningStargateOrderClient,
+} from "./SigningStargateClient";
 
 export type PlaceOrderInChainParams = {
   address: string;
@@ -25,6 +25,8 @@ export type PlaceOrderInChainParams = {
 
 export type PlaceMarketOrderInChainParams = {
   address: string;
+  marginAccountAddress: string;
+  orderId: bigint;
   side: OrderSide;
   quantity: bigint;
   price: bigint;
@@ -37,6 +39,8 @@ export type PlaceMarketOrderInChainParams = {
 
 export type PlaceLimitOrderInChainParams = {
   address: string;
+  marginAccountAddress: string;
+  orderId: bigint;
   side: OrderSide;
   quantity: bigint;
   price: bigint;
@@ -56,6 +60,8 @@ function getOrderId() {
 
 export const placeMarketOrderInChain = async ({
   address,
+  marginAccountAddress,
+  orderId,
   side,
   quantity,
   price,
@@ -68,8 +74,8 @@ export const placeMarketOrderInChain = async ({
       user: address,
       order: {
         id: {
-          marginAccountAddress: address,
-          number: getOrderId(),
+          marginAccountAddress: marginAccountAddress,
+          number: orderId,
         },
         accountId: address,
         // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
@@ -85,26 +91,29 @@ export const placeMarketOrderInChain = async ({
         leverage: BigInt(leverage),
         timestamp: BigInt(Math.floor(Date.now() / 1000)),
         /** The market id to which the order belongs e.g. BTCUSDC.P */
-        marketId: "BTCUSDC.P",
+        // marketId: "BTCUSDC.P",
+        // TODO: fetch marketId from the chain
+        marketId: 1,
       },
     });
 
     console.log("orderMessage", orderMessage);
 
     try {
-      const signingClient = await getSigningStargateClient();
+      const signingClient = await getSigningStargateOrderClient();
       const response = await signingClient?.signAndBroadcast(
         address,
         [orderMessage],
-        getFee(),
+        composeFee(),
         `Market Order ${quantity} at ${price}USDC  leverage:${leverage}x`
       );
       console.log("TxResponse", response);
       if (response.code === 0) {
         onSuccess("Order placed correctly");
       } else {
-        onError(getMessageFromCode(response.code));
+        onError(getMessageFromCode(response.code, response?.rawLog));
       }
+      return response;
     } catch (err) {
       console.log("ERR", err);
       onError?.("" + err);
@@ -114,6 +123,8 @@ export const placeMarketOrderInChain = async ({
 
 export const placeLimitOrderInChain = async ({
   address,
+  marginAccountAddress,
+  orderId,
   side,
   quantity,
   price,
@@ -123,6 +134,12 @@ export const placeLimitOrderInChain = async ({
   onSuccess,
   onError,
 }: PlaceLimitOrderInChainParams) => {
+  if (!address) {
+    console.error("Empty address");
+  }
+  if (!marginAccountAddress) {
+    console.error("Empty marginAccountAddress");
+  }
   if (address) {
     const orderMessages = [
       // Initial order to Buy/Sell
@@ -130,8 +147,8 @@ export const placeLimitOrderInChain = async ({
         user: address,
         order: {
           id: {
-            marginAccountAddress: address,
-            number: getOrderId(),
+            marginAccountAddress: marginAccountAddress,
+            number: orderId,
           },
           accountId: address,
           // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
@@ -147,7 +164,9 @@ export const placeLimitOrderInChain = async ({
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
           /** The market id to which the order belongs e.g. BTCUSDC.P */
-          marketId: "BTCUSDC.P",
+          // marketId: "BTCUSDC.P",
+          // TODO: fetch marketId from the chain
+          marketId: 1,
         },
       }),
       // Take profit order
@@ -155,7 +174,7 @@ export const placeLimitOrderInChain = async ({
         user: address,
         order: {
           id: {
-            marginAccountAddress: address,
+            marginAccountAddress: marginAccountAddress,
             number: getOrderId(),
           },
           accountId: address,
@@ -173,7 +192,9 @@ export const placeLimitOrderInChain = async ({
           triggerPrice: BigInt(takeProfit),
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          marketId: "BTCUSDC.P",
+          // marketId: "BTCUSDC.P",
+          // TODO: fetch marketId from the chain
+          marketId: 1,
         },
       }),
       // Stop loss order
@@ -181,7 +202,7 @@ export const placeLimitOrderInChain = async ({
         user: address,
         order: {
           id: {
-            marginAccountAddress: address,
+            marginAccountAddress: marginAccountAddress,
             number: getOrderId(),
           },
           accountId: address,
@@ -199,7 +220,9 @@ export const placeLimitOrderInChain = async ({
           triggerPrice: BigInt(stopLoss),
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          marketId: "BTCUSDC.P",
+          // marketId: "BTCUSDC.P",
+          // TODO: fetch marketId from the chain
+          marketId: 1,
         },
       }),
     ];
@@ -207,19 +230,21 @@ export const placeLimitOrderInChain = async ({
     console.log("orderMessage", orderMessages);
 
     try {
-      const signingClient = await getSigningStargateClient();
+      const signingClient = await getSigningStargateOrderClient();
       const response = await signingClient?.signAndBroadcast(
         address,
         orderMessages,
-        getFee(),
+        composeFee(),
         `Limit Order ${quantity} at ${price}USDC  leverage:${leverage}x (tp: ${takeProfit}, sl: ${stopLoss})`
       );
       console.log("TxResponse", response);
       if (response.code === 0) {
         onSuccess("Order placed correctly");
       } else {
-        onError(getMessageFromCode(response.code));
+        onError(getMessageFromCode(response.code, response?.rawLog));
       }
+
+      return response;
     } catch (err) {
       console.log("ERR", err);
       onError?.("" + err);
@@ -227,40 +252,18 @@ export const placeLimitOrderInChain = async ({
   }
 };
 
-const getFee = (): StdFee => {
-  const fee = {
-    amount: [{ denom: "usdc", amount: "100000" }],
-    gas: "200000",
-  };
-  return fee;
-};
-
-export const getSigningStargateClient =
-  async (): Promise<SigningStargateClient> => {
-    if (window.getOfflineSigner) {
-      const offlineSigner = window.getOfflineSigner(getChain().chainId);
-      const signingClientOptions: SigningStargateClientOptions = {
-        gasPrice: GasPrice.fromString("1usdc"),
-        registry: new Registry(registry),
-      };
-
-      const signingClient: SigningStargateClient =
-        await SigningStargateClient.connectWithSigner(
-          getChain().rpc,
-          offlineSigner,
-          signingClientOptions
-        );
-      return signingClient;
-    } else {
-      throw Error('No method "getOfflineSigner" available');
-    }
-  };
-
-const getMessageFromCode = (code: number): string => {
+const getMessageFromCode = (code: number, rawLog = ""): string => {
   // TODO: move this to translations
   switch (code) {
     case 1:
-      return "Insufficient balance in margin account to place order";
+      if (rawLog.includes("balance")) {
+        return "Insufficient balance in margin account to place order";
+      }
+      if (rawLog.includes("market with id")) {
+        return "Selected Market id does not exist";
+      }
+
+      return "Internal error";
     case 111222:
       return "111222 error";
     default:

@@ -81,7 +81,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   };
 
   return (
-    <Container ref={containerRef}>
+    <Container ref={containerRef} data-test="orderbook-tab">
       <div>
         Bids: {book.bids_size}, Asks: {book.asks_size}
       </div>

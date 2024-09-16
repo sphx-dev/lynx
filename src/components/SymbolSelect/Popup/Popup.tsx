@@ -2,8 +2,8 @@ import React, { useState, useRef, ReactNode, useEffect } from "react";
 import { usePopper } from "react-popper";
 import { Placement } from "@popperjs/core";
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
-import useClickOutside from "../../hooks/useClickOutside";
+import { getThemeColors } from "../../../theme";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 interface CustomPopoverProps {
   children: ReactNode;

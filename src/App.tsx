@@ -15,6 +15,9 @@ import { GrazProvider } from "graz";
 import { useChainCosmoshub } from "./hooks/useChainCosmoshub";
 import { getChain } from "./config";
 import { WebSocketProvider } from "./hooks/useWebsocket";
+import { Modal, useModalStore } from "./components/Modal/Modal";
+import { DepositForm } from "./components/Modal/DepositForm";
+import { WithdrawForm } from "./components/Modal/WithdrawForm";
 
 const Desktop = ({ children }: PropsWithChildren) => {
   const isDesktop = useMediaQuery({ minWidth: BREAK_POINTS.MOBILE_MIN_WIDTH });
@@ -39,6 +42,7 @@ const AppInitializtion = ({ children }: PropsWithChildren) => {
 function App() {
   const content = useRoutes(routes);
   const theme: ThemeInterface = themes["dark"];
+  const { isOpen, closeModal, openModalType } = useModalStore();
 
   return (
     <WebSocketProvider>
@@ -54,6 +58,10 @@ function App() {
               {content}
               <Footer />
               <Toaster />
+              <Modal isOpen={isOpen} onClose={closeModal}>
+                {openModalType === "DEPOSIT" && <DepositForm />}
+                {openModalType === "WITHDRAW" && <WithdrawForm />}
+              </Modal>
             </Desktop>
             <AnotherDevices>
               <OnlyDesktopMessage />

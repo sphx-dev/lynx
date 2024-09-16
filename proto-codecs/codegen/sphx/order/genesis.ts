@@ -5,6 +5,7 @@ import { BinaryReader, BinaryWriter } from "../../binary";
 export interface GenesisState {
   /** params defines all the parameters of the module. */
   params: Params;
+  executionAuthority: string;
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/sphx.order.GenesisState";
@@ -14,6 +15,7 @@ export interface GenesisStateProtoMsg {
 export interface GenesisStateAmino {
   /** params defines all the parameters of the module. */
   params: ParamsAmino;
+  executionAuthority?: string;
 }
 export interface GenesisStateAminoMsg {
   type: "/sphx.order.GenesisState";
@@ -22,10 +24,12 @@ export interface GenesisStateAminoMsg {
 /** GenesisState defines the order module's genesis state. */
 export interface GenesisStateSDKType {
   params: ParamsSDKType;
+  executionAuthority: string;
 }
 function createBaseGenesisState(): GenesisState {
   return {
-    params: Params.fromPartial({})
+    params: Params.fromPartial({}),
+    executionAuthority: ""
   };
 }
 export const GenesisState = {
@@ -33,6 +37,9 @@ export const GenesisState = {
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.executionAuthority !== "") {
+      writer.uint32(18).string(message.executionAuthority);
     }
     return writer;
   },
@@ -46,6 +53,9 @@ export const GenesisState = {
         case 1:
           message.params = Params.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.executionAuthority = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -56,6 +66,7 @@ export const GenesisState = {
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.executionAuthority = object.executionAuthority ?? "";
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -63,11 +74,15 @@ export const GenesisState = {
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromAmino(object.params);
     }
+    if (object.executionAuthority !== undefined && object.executionAuthority !== null) {
+      message.executionAuthority = object.executionAuthority;
+    }
     return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
     obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
+    obj.executionAuthority = message.executionAuthority === "" ? undefined : message.executionAuthority;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

@@ -3,6 +3,7 @@ import { getThemeColors } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { navLinks } from "./config";
 import { ConnectButton } from "../../components/ConnectButton";
+import { MarginAccButton } from "../../components/MarginAccButton";
 
 const Wrapper = styled.nav`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
@@ -33,6 +34,7 @@ const Navbar = () => {
         </StyledLink>
       ))}
       <ConnectButton size="xs" />
+      <MarginAccButton size="xs" />
     </Wrapper>
   );
 };

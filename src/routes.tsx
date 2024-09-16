@@ -3,6 +3,7 @@ import BaseTemplate from "./Layouts/BaseTemplate";
 import Page404 from "./pages/404";
 import Dashboard from "./pages/Dashboard";
 import { Navigate } from "react-router-dom";
+import MarginAccountsPage from "./pages/MarginAccounts";
 
 export const ROUTES = {
   futures: "futures",
@@ -10,6 +11,7 @@ export const ROUTES = {
   leaderBoard: "leaderboard",
   referrals: "referrals",
   dashboard: "dashboard",
+  marginAccounts: "accounts",
 };
 
 export const routes = [
@@ -28,6 +30,10 @@ export const routes = [
       {
         path: ROUTES.exchange,
         element: <Futures />,
+      },
+      {
+        path: ROUTES.marginAccounts,
+        element: <MarginAccountsPage />,
       },
     ],
   },

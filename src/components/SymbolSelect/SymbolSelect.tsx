@@ -1,6 +1,6 @@
 import Stack from "../Stack";
 import Input from "../Input";
-import Popup from "../Popup/Popup";
+import Popup from "./Popup/Popup";
 import Group from "../Group";
 import Text from "../Text";
 import { useAppSelector } from "../../hooks";

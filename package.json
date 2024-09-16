@@ -29,6 +29,7 @@
     "@cosmjs/proto-signing": "^0.32.4",
     "@cosmjs/stargate": "^0.32.4",
     "@cosmjs/tendermint-rpc": "^0.32.4",
+    "@cosmology/lcd": "^0.13.4",
     "@hookform/resolvers": "^3.3.4",
     "@keplr-wallet/types": "^0.12.121",
     "@leapwallet/cosmos-social-login-capsule-provider": "^0.0.40",
@@ -70,7 +71,8 @@
     "styled-components": "^6.0.7",
     "vite-plugin-svgr": "^4.2.0",
     "webpack": "^5.75.0",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.2.26",

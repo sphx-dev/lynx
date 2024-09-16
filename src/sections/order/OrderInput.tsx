@@ -15,9 +15,15 @@ import { selectMarketId } from "../../state/futuresSlice";
 import { OrderSide, OrderType } from "../../types/order";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
-import { placeLimitOrderInChain, placeMarketOrderInChain } from "./placeOrder";
+// import {
+//   placeLimitOrderInChain,
+//   placeMarketOrderInChain,
+// } from "../../utils/placeOrder";
 import { schema } from "./orderSchema";
 import { Container, PlaceOrderButton, StyledButton, Wrapper } from "./style";
+import { useMarginAccount } from "../../hooks/useMarginAccounts";
+import { useOrders } from "../../hooks/useOrders";
+import { useState } from "react";
 
 type MainOrderType = OrderType.MARKET | OrderType.LIMIT;
 
@@ -59,6 +65,10 @@ function OrderInput() {
   const { themeColors } = useTheme();
   const { account, isConnected } = useChainCosmoshub();
   const address = account?.bech32Address;
+  const { selectedAddress } = useMarginAccount(address);
+
+  const { nextOrderId, placeLimitOrderInChain, placeMarketOrderInChain } =
+    useOrders(selectedAddress);
 
   const { t } = useTranslation();
   const {
@@ -82,18 +92,27 @@ function OrderInput() {
   const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
 
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
   const placeOrder = async (values: MarketOrderForm) => {
     if (!address) return;
+    if (!nextOrderId) return;
+    if (!selectedAddress) return;
 
     if (values.orderType === OrderType.MARKET) {
+      setIsPlacingOrder(true);
       placeMarketOrderInChain({
         address,
+        marginAccountAddress: selectedAddress,
+        orderId: nextOrderId,
         side: values.isBuy ? OrderSide.buy : OrderSide.sell,
-        quantity: BigInt(values.volume * 1e5),
+        quantity: BigInt(values.volume * 1e6),
         price: BigInt(values.price),
         leverage: BigInt(values.leverage),
         onSuccess: successAlert,
         onError: errorAlert,
+      }).finally(() => {
+        setIsPlacingOrder(false);
       });
     }
     if (
@@ -101,16 +120,21 @@ function OrderInput() {
       values.stopLoss &&
       values.takeProfit
     ) {
+      setIsPlacingOrder(true);
       placeLimitOrderInChain({
         address,
+        marginAccountAddress: selectedAddress,
+        orderId: nextOrderId,
         side: values.isBuy ? OrderSide.buy : OrderSide.sell,
-        quantity: BigInt(values.volume * 1e5),
+        quantity: BigInt(values.volume * 1e6),
         price: BigInt(values.price),
         leverage: BigInt(values.leverage),
         stopLoss: BigInt(values.stopLoss),
         takeProfit: BigInt(values.takeProfit),
         onSuccess: successAlert,
         onError: errorAlert,
+      }).finally(() => {
+        setIsPlacingOrder(false);
       });
     }
   };
@@ -260,7 +284,10 @@ function OrderInput() {
                     )}
                     {isConnected && (
                       <>
-                        <PlaceOrderButton $isBuy={isBuyPosition}>
+                        <PlaceOrderButton
+                          $isBuy={isBuyPosition}
+                          disabled={isPlacingOrder}
+                        >
                           {t("placeOrder")}
                         </PlaceOrderButton>
                       </>

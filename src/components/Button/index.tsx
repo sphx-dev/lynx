@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { ForwardedRef, PropsWithChildren } from "react";
 import styled, { css } from "styled-components";
 import { getThemeColors, ThemeColors } from "../../theme";
 
@@ -95,21 +95,32 @@ const Wrapper = ({
   return <>{children}</>;
 };
 
-const Button = ({
-  children,
-  variant = "secondary",
-  pill,
-  fluid,
-  ...props
-}: PropsWithChildren<Props>) => {
-  return (
-    <Wrapper pill={pill} fluid={fluid} variant={variant} {...props}>
-      <StyledButton $pill={pill} $fluid={fluid} variant={variant} {...props}>
-        {children}
-      </StyledButton>
-    </Wrapper>
-  );
-};
+const Button = React.forwardRef(
+  (
+    {
+      children,
+      variant = "secondary",
+      pill,
+      fluid,
+      ...props
+    }: PropsWithChildren<Props>,
+    ref: ForwardedRef<HTMLButtonElement>
+  ) => {
+    return (
+      <Wrapper pill={pill} fluid={fluid} variant={variant} {...props}>
+        <StyledButton
+          $pill={pill}
+          $fluid={fluid}
+          variant={variant}
+          ref={ref}
+          {...props}
+        >
+          {children}
+        </StyledButton>
+      </Wrapper>
+    );
+  }
+);
 
 export type ButtonProps = React.ComponentPropsWithoutRef<typeof Button>;
 export default Button;

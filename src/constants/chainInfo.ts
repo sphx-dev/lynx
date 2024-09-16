@@ -68,14 +68,14 @@ export const sphxLocalChainInfo: ChainInfo = {
   currencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "usdc",
+      coinMinimalDenom: "uusdc",
       coinDecimals: 6,
     },
   ],
   feeCurrencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "usdc",
+      coinMinimalDenom: "uusdc",
       coinDecimals: 6,
     },
   ],
@@ -101,14 +101,14 @@ export const sphxTestnetChain1Info: ChainInfo = {
   currencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "usdc",
+      coinMinimalDenom: "uusdc",
       coinDecimals: 6,
     },
   ],
   feeCurrencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "usdc",
+      coinMinimalDenom: "uusdc",
       coinDecimals: 6,
     },
   ],
@@ -134,14 +134,14 @@ export const sphxTestnetChain2Info: ChainInfo = {
   currencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "usdc",
+      coinMinimalDenom: "uusdc",
       coinDecimals: 6,
     },
   ],
   feeCurrencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "usdc",
+      coinMinimalDenom: "uusdc",
       coinDecimals: 6,
     },
   ],

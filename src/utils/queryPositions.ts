@@ -1,0 +1,98 @@
+import { StargateClient } from "@cosmjs/stargate";
+// import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { getChain } from "../config";
+import { createRPCQueryClient } from "../../proto-codecs/codegen/sphx/rpc.query";
+import { sphx } from "../../proto-codecs";
+import {
+  composeFee,
+  getSigningStargateMarginAccountClient,
+} from "./SigningStargateClient";
+
+let client: StargateClient | null = null;
+
+export const getStargateClient = async (): Promise<StargateClient> => {
+  if (!client) {
+    client = await StargateClient.connect(getChain().rpc);
+  }
+  return client;
+};
+
+export const getMarginAccountInfoByAddress = async (address: string) => {
+  const queryClient = await createRPCQueryClient({
+    rpcEndpoint: getChain().rpc,
+  });
+
+  const request = { address: address };
+
+  const response = await queryClient.sphx.marginacc.marginAccountInfo(request);
+
+  return response;
+};
+
+export const getOrdersByAddress = async (address: string) => {
+  const queryClient = await createRPCQueryClient({
+    rpcEndpoint: getChain().rpc,
+  });
+
+  const request = { address: address };
+
+  const response = await queryClient.sphx.order.ordersForAccount(request);
+
+  return response;
+};
+
+export const createMarginAccount = async (address: string, number = 0) => {
+  const message =
+    sphx.marginacc.MessageComposer.withTypeUrl.createMarginAccount({
+      owner: address,
+      number: number,
+    });
+
+  const signingClient = await getSigningStargateMarginAccountClient();
+  const txResponse = await signingClient.signAndBroadcast(
+    address,
+    [message],
+    composeFee(),
+    "Create Margin Account"
+  );
+
+  return txResponse;
+};
+
+export const getAccountsByOwner = async (address: string) => {
+  const queryClient = await createRPCQueryClient({
+    rpcEndpoint: getChain().rpc,
+  });
+
+  const request = { owner: address };
+
+  const response = await queryClient.sphx.marginacc.marginAccountsByOwner(
+    request
+  );
+
+  return response;
+};
+
+export const getMarketInfo = async (id: number) => {
+  const queryClient = await createRPCQueryClient({
+    rpcEndpoint: getChain().rpc,
+  });
+
+  const response = await queryClient.sphx.order.market({ id: id });
+  console.log(response);
+
+  return response;
+};
+
+// Unused TODO: removed if not needed in UI
+export const getExecutionAuthority = async (id: number) => {
+  const queryClient = await createRPCQueryClient({
+    rpcEndpoint: getChain().rpc,
+  });
+
+  const executionAuthorityResponse =
+    await queryClient.sphx.order.executionAuthority({});
+  console.log(executionAuthorityResponse);
+
+  return executionAuthorityResponse;
+};

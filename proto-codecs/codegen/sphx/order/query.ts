@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Market, MarketAmino, MarketSDKType } from "./market";
 import { ValidatedOrder, ValidatedOrderAmino, ValidatedOrderSDKType } from "./validated_order";
 import { BinaryReader, BinaryWriter } from "../../binary";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -38,6 +39,68 @@ export interface QueryParamsResponseAminoMsg {
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
   params: ParamsSDKType;
+}
+export interface QueryExecutionAuthorityRequest {}
+export interface QueryExecutionAuthorityRequestProtoMsg {
+  typeUrl: "/sphx.order.QueryExecutionAuthorityRequest";
+  value: Uint8Array;
+}
+export interface QueryExecutionAuthorityRequestAmino {}
+export interface QueryExecutionAuthorityRequestAminoMsg {
+  type: "/sphx.order.QueryExecutionAuthorityRequest";
+  value: QueryExecutionAuthorityRequestAmino;
+}
+export interface QueryExecutionAuthorityRequestSDKType {}
+export interface QueryExecutionAuthorityResponse {
+  executionAuthority: string;
+}
+export interface QueryExecutionAuthorityResponseProtoMsg {
+  typeUrl: "/sphx.order.QueryExecutionAuthorityResponse";
+  value: Uint8Array;
+}
+export interface QueryExecutionAuthorityResponseAmino {
+  executionAuthority?: string;
+}
+export interface QueryExecutionAuthorityResponseAminoMsg {
+  type: "/sphx.order.QueryExecutionAuthorityResponse";
+  value: QueryExecutionAuthorityResponseAmino;
+}
+export interface QueryExecutionAuthorityResponseSDKType {
+  executionAuthority: string;
+}
+export interface QueryMarketRequest {
+  id: number;
+}
+export interface QueryMarketRequestProtoMsg {
+  typeUrl: "/sphx.order.QueryMarketRequest";
+  value: Uint8Array;
+}
+export interface QueryMarketRequestAmino {
+  id?: number;
+}
+export interface QueryMarketRequestAminoMsg {
+  type: "/sphx.order.QueryMarketRequest";
+  value: QueryMarketRequestAmino;
+}
+export interface QueryMarketRequestSDKType {
+  id: number;
+}
+export interface QueryMarketResponse {
+  market: Market;
+}
+export interface QueryMarketResponseProtoMsg {
+  typeUrl: "/sphx.order.QueryMarketResponse";
+  value: Uint8Array;
+}
+export interface QueryMarketResponseAmino {
+  market: MarketAmino;
+}
+export interface QueryMarketResponseAminoMsg {
+  type: "/sphx.order.QueryMarketResponse";
+  value: QueryMarketResponseAmino;
+}
+export interface QueryMarketResponseSDKType {
+  market: MarketSDKType;
 }
 export interface QueryOrdersRequest {
   pagination?: PageRequest;
@@ -262,6 +325,245 @@ export const QueryParamsResponse = {
     return {
       typeUrl: "/sphx.order.QueryParamsResponse",
       value: QueryParamsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryExecutionAuthorityRequest(): QueryExecutionAuthorityRequest {
+  return {};
+}
+export const QueryExecutionAuthorityRequest = {
+  typeUrl: "/sphx.order.QueryExecutionAuthorityRequest",
+  encode(_: QueryExecutionAuthorityRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryExecutionAuthorityRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryExecutionAuthorityRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(_: Partial<QueryExecutionAuthorityRequest>): QueryExecutionAuthorityRequest {
+    const message = createBaseQueryExecutionAuthorityRequest();
+    return message;
+  },
+  fromAmino(_: QueryExecutionAuthorityRequestAmino): QueryExecutionAuthorityRequest {
+    const message = createBaseQueryExecutionAuthorityRequest();
+    return message;
+  },
+  toAmino(_: QueryExecutionAuthorityRequest): QueryExecutionAuthorityRequestAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: QueryExecutionAuthorityRequestAminoMsg): QueryExecutionAuthorityRequest {
+    return QueryExecutionAuthorityRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryExecutionAuthorityRequestProtoMsg): QueryExecutionAuthorityRequest {
+    return QueryExecutionAuthorityRequest.decode(message.value);
+  },
+  toProto(message: QueryExecutionAuthorityRequest): Uint8Array {
+    return QueryExecutionAuthorityRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryExecutionAuthorityRequest): QueryExecutionAuthorityRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryExecutionAuthorityRequest",
+      value: QueryExecutionAuthorityRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryExecutionAuthorityResponse(): QueryExecutionAuthorityResponse {
+  return {
+    executionAuthority: ""
+  };
+}
+export const QueryExecutionAuthorityResponse = {
+  typeUrl: "/sphx.order.QueryExecutionAuthorityResponse",
+  encode(message: QueryExecutionAuthorityResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.executionAuthority !== "") {
+      writer.uint32(10).string(message.executionAuthority);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryExecutionAuthorityResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryExecutionAuthorityResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.executionAuthority = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryExecutionAuthorityResponse>): QueryExecutionAuthorityResponse {
+    const message = createBaseQueryExecutionAuthorityResponse();
+    message.executionAuthority = object.executionAuthority ?? "";
+    return message;
+  },
+  fromAmino(object: QueryExecutionAuthorityResponseAmino): QueryExecutionAuthorityResponse {
+    const message = createBaseQueryExecutionAuthorityResponse();
+    if (object.executionAuthority !== undefined && object.executionAuthority !== null) {
+      message.executionAuthority = object.executionAuthority;
+    }
+    return message;
+  },
+  toAmino(message: QueryExecutionAuthorityResponse): QueryExecutionAuthorityResponseAmino {
+    const obj: any = {};
+    obj.executionAuthority = message.executionAuthority === "" ? undefined : message.executionAuthority;
+    return obj;
+  },
+  fromAminoMsg(object: QueryExecutionAuthorityResponseAminoMsg): QueryExecutionAuthorityResponse {
+    return QueryExecutionAuthorityResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryExecutionAuthorityResponseProtoMsg): QueryExecutionAuthorityResponse {
+    return QueryExecutionAuthorityResponse.decode(message.value);
+  },
+  toProto(message: QueryExecutionAuthorityResponse): Uint8Array {
+    return QueryExecutionAuthorityResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryExecutionAuthorityResponse): QueryExecutionAuthorityResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryExecutionAuthorityResponse",
+      value: QueryExecutionAuthorityResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryMarketRequest(): QueryMarketRequest {
+  return {
+    id: 0
+  };
+}
+export const QueryMarketRequest = {
+  typeUrl: "/sphx.order.QueryMarketRequest",
+  encode(message: QueryMarketRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== 0) {
+      writer.uint32(8).uint32(message.id);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryMarketRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryMarketRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.uint32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryMarketRequest>): QueryMarketRequest {
+    const message = createBaseQueryMarketRequest();
+    message.id = object.id ?? 0;
+    return message;
+  },
+  fromAmino(object: QueryMarketRequestAmino): QueryMarketRequest {
+    const message = createBaseQueryMarketRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    return message;
+  },
+  toAmino(message: QueryMarketRequest): QueryMarketRequestAmino {
+    const obj: any = {};
+    obj.id = message.id === 0 ? undefined : message.id;
+    return obj;
+  },
+  fromAminoMsg(object: QueryMarketRequestAminoMsg): QueryMarketRequest {
+    return QueryMarketRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMarketRequestProtoMsg): QueryMarketRequest {
+    return QueryMarketRequest.decode(message.value);
+  },
+  toProto(message: QueryMarketRequest): Uint8Array {
+    return QueryMarketRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMarketRequest): QueryMarketRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryMarketRequest",
+      value: QueryMarketRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryMarketResponse(): QueryMarketResponse {
+  return {
+    market: Market.fromPartial({})
+  };
+}
+export const QueryMarketResponse = {
+  typeUrl: "/sphx.order.QueryMarketResponse",
+  encode(message: QueryMarketResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.market !== undefined) {
+      Market.encode(message.market, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryMarketResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryMarketResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.market = Market.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryMarketResponse>): QueryMarketResponse {
+    const message = createBaseQueryMarketResponse();
+    message.market = object.market !== undefined && object.market !== null ? Market.fromPartial(object.market) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryMarketResponseAmino): QueryMarketResponse {
+    const message = createBaseQueryMarketResponse();
+    if (object.market !== undefined && object.market !== null) {
+      message.market = Market.fromAmino(object.market);
+    }
+    return message;
+  },
+  toAmino(message: QueryMarketResponse): QueryMarketResponseAmino {
+    const obj: any = {};
+    obj.market = message.market ? Market.toAmino(message.market) : Market.toAmino(Market.fromPartial({}));
+    return obj;
+  },
+  fromAminoMsg(object: QueryMarketResponseAminoMsg): QueryMarketResponse {
+    return QueryMarketResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMarketResponseProtoMsg): QueryMarketResponse {
+    return QueryMarketResponse.decode(message.value);
+  },
+  toProto(message: QueryMarketResponse): Uint8Array {
+    return QueryMarketResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMarketResponse): QueryMarketResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryMarketResponse",
+      value: QueryMarketResponse.encode(message).finish()
     };
   }
 };

@@ -11,7 +11,12 @@ import { getChain } from "../config";
 // export const useChainCosmoshub = () => useChain("cosmoshub");
 export const useChainCosmoshub = () => {
   const { connectAsync, status: connectionStatus, error } = useConnect();
-  const { data: account, isConnected, status: accountStatus } = useAccount();
+  const {
+    data: account,
+    isConnected,
+    status: accountStatus,
+    reconnect,
+  } = useAccount();
   const { disconnect } = useDisconnect();
 
   // TODO: use client to get sequence if needed for order creation
@@ -50,10 +55,12 @@ export const useChainCosmoshub = () => {
         console.log("-------->", e);
       }
     },
+    reconnect,
     disconnect,
     connectionStatus,
     accountStatus,
     account,
+    address: account?.bech32Address,
     isConnected,
   };
 };

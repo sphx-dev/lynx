@@ -17,6 +17,7 @@ interface ITableProps<T> {
   headerStyle?: CSSProperties;
   onClick?: (data: T) => void;
   enableSorting?: boolean;
+  "data-test"?: string;
 }
 const StyledTable = styled.table`
   ${({ theme }) => theme.fonts.typography.textSm};
@@ -63,6 +64,7 @@ const Table = <T extends object>({
   headerStyle,
   onClick,
   enableSorting = false,
+  ...rest
 }: ITableProps<T>) => {
   const table = useReactTable<any>({
     data,
@@ -74,7 +76,7 @@ const Table = <T extends object>({
   const { themeColors } = useTheme();
 
   return (
-    <StyledTable>
+    <StyledTable data-test={rest["data-test"]}>
       <thead style={headerStyle}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>

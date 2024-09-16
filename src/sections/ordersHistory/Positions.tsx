@@ -7,10 +7,12 @@ import { usePlaceMarketOrderMutation } from "../../utils/api/orderApi";
 import { OrderSide, OrderType } from "../../types/order";
 import { useGetAccountQuery } from "../../utils/api/accountApi";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
-import { usePositionColumns } from "./usePositionColumns";
+import { usePositionColumnsByOrders } from "./usePositionColumns";
+import { useCallback } from "react";
 
 const Positions = () => {
   const { positions } = useAppSelector(account);
+  // const [positions, setPositions] = useState<ValidatedOrder[]>([]);
   const { isConnected } = useChainCosmoshub();
 
   const [placeMarketOrder] = usePlaceMarketOrderMutation();
@@ -21,29 +23,42 @@ const Positions = () => {
     skip: !isConnected,
   });
 
-  const closePosition = ({
-    size,
-    side,
-    leverage,
-  }: {
-    size: string;
-    side: OrderSide;
-    leverage: number;
-  }) => {
-    placeMarketOrder({
-      isBuy: side !== OrderSide.buy,
-      volume: Math.abs(+size),
-      leverage: leverage || 1,
-      orderType: OrderType.MARKET,
-    });
-  };
+  const closePosition = useCallback(
+    ({
+      size,
+      side,
+      leverage,
+    }: {
+      size: string;
+      side: OrderSide;
+      leverage: number;
+    }) => {
+      placeMarketOrder({
+        isBuy: side !== OrderSide.buy,
+        volume: Math.abs(+size),
+        leverage: leverage || 1,
+        orderType: OrderType.MARKET,
+      });
+    },
+    [placeMarketOrder]
+  );
 
-  const positionColumns = usePositionColumns(closePosition);
+  const positionColumns = usePositionColumnsByOrders(closePosition);
 
   if (!positions.length || !isConnected) {
-    return <PlaceHolder>No Orders yet</PlaceHolder>;
+    return (
+      <PlaceHolder data-test="order-history-positions">
+        No Orders yet
+      </PlaceHolder>
+    );
   }
-  return <Table columns={positionColumns} data={positions} />;
+  return (
+    <Table
+      data-test="order-history-positions"
+      columns={positionColumns}
+      data={positions}
+    />
+  );
 };
 
 export default Positions;
