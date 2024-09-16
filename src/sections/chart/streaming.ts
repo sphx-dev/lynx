@@ -49,6 +49,7 @@ function handleStreamingData(data: any) {
 function startStreaming(retries = 3, delay = 3000) {
   fetch(streamingUrl)
     .then(response => {
+      console.log(response.body);
       const reader = response.body?.getReader();
 
       function streamData() {
@@ -62,6 +63,7 @@ function startStreaming(retries = 3, delay = 3000) {
 
             // Assuming the streaming data is separated by line breaks
             const dataStrings = new TextDecoder().decode(value).split("\n");
+            // console.log("[stream] dataStrings:", dataStrings);
             dataStrings.forEach(dataString => {
               const trimmedDataString = dataString.trim();
               if (trimmedDataString) {

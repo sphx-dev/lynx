@@ -3,10 +3,10 @@ import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../hooks/useMarginAccounts";
 import Button, { ButtonProps } from "./Button";
 
-import { useEffect, useRef, useState } from "react";
-import { getBalance } from "../utils/getBalance";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getThemeColors } from "../theme";
 import { useModalStore } from "./Modal/Modal";
+import { useBalances } from "../hooks/useBalance";
 
 export const MarginAccSelector = ({
   size,
@@ -35,17 +35,28 @@ export const MarginAccSelector = ({
   const { marginAccounts, selectedAccount, setSelectedIndex, selectedIndex } =
     useMarginAccount(address);
 
-  const [balances, setBalances] = useState<any[]>([]);
-  useEffect(() => {
+  const balanceQueries = useMemo(() => {
     if (marginAccounts && marginAccounts.length) {
-      const promises = marginAccounts.map(account =>
-        getBalance(account.address, "uusdc")
-      );
-      Promise.all(promises).then(balances => {
-        setBalances(balances);
-      });
+      return marginAccounts.map(account => ({
+        address: account.address,
+        denom: "uusdc",
+      }));
     }
+    return [];
   }, [marginAccounts]);
+
+  const { balances } = useBalances(balanceQueries);
+
+  const itemList = useMemo(() => {
+    return marginAccounts?.map((account, index) => {
+      let item = `Account #${account.id?.number}`;
+      const balance = balances?.[index];
+      if (balance && balance?.amount) {
+        item += ` (${balance?.amount / 1e6} USDC)`;
+      }
+      return item;
+    });
+  }, [marginAccounts, balances]);
 
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
@@ -78,13 +89,7 @@ export const MarginAccSelector = ({
         y={y}
         selectedIndex={selectedIndex}
         show={menuVisible}
-        items={marginAccounts.map(
-          (account, index) =>
-            `Account #${account.id?.number}` +
-            (balances?.[index]?.amount
-              ? ` (${balances?.[index]?.amount / 1e6} USDC)`
-              : "")
-        )}
+        items={itemList}
         onSelect={index => {
           if (marginAccounts) {
             setSelectedIndex(index);
@@ -111,7 +116,6 @@ const DropdownMenu = ({
   y: number;
 }) => {
   const { openModal } = useModalStore();
-  console.log("typeof", typeof show);
 
   return (
     <DropdawnWindow $show={show} style={{ top: y, left: x }}>

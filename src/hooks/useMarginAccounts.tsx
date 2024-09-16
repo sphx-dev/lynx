@@ -69,21 +69,11 @@ export const useMarginAccountStore = create<MarginAccountState>((set, get) => ({
         marginAccounts: [],
         selectedIndex: 0,
       });
-      // get().setMarginAccounts([]);
-      // get().setSelectedIndex(0);
-      // get().setStatus(STATUS.READY);
     }
     if (owner && owner !== currentOwner) {
       get().getAccounts();
     }
   },
-  // setMarginAccounts: (marginAccounts: MarginAccountInfo[]) => {
-  //   set({
-  //     marginAccounts,
-  //     selectedAccount: get().marginAccounts[get().selectedIndex],
-  //     selectedAddress: get().marginAccounts[get().selectedIndex]?.address,
-  //   });
-  // },
   setSelectedIndex: (selectedIndex: number) => {
     set({
       selectedIndex,
@@ -110,7 +100,7 @@ export const useMarginAccountStore = create<MarginAccountState>((set, get) => ({
     if (!owner) {
       return;
     }
-    // get().setStatus(STATUS.LOADING);
+
     set({ status: STATUS.LOADING });
     try {
       const response = await getAccountsByOwner(owner);
@@ -118,15 +108,11 @@ export const useMarginAccountStore = create<MarginAccountState>((set, get) => ({
         marginAccounts: response.marginAccounts,
         status: STATUS.READY,
       });
-      // get().setMarginAccounts(response.marginAccounts);
-      // get().setStatus(STATUS.READY);
     } catch {
       set({
         marginAccounts: [],
         status: STATUS.ERROR,
       });
-      // get().setMarginAccounts([]);
-      // get().setStatus(STATUS.ERROR);
     }
   },
   createAccount: async () => {
@@ -135,7 +121,6 @@ export const useMarginAccountStore = create<MarginAccountState>((set, get) => ({
       return;
     }
     try {
-      // get().setStatus(STATUS.CREATING);
       set({ status: STATUS.CREATING });
       const ids = get().marginAccounts.map(ma => ma?.id?.number || 0);
       const nextMarginAccountNumber = Math.max(...ids, 0) + 1;
@@ -146,11 +131,9 @@ export const useMarginAccountStore = create<MarginAccountState>((set, get) => ({
 
       if (response.code === 0) {
         successAlert("Margin account created successfully");
-        // get().setStatus(STATUS.READY);
         set({ status: STATUS.READY });
       } else {
         errorAlert(getTextByCode(response.code));
-        // get().setStatus(STATUS.ERROR);
         set({ status: STATUS.ERROR });
       }
     } catch (error) {

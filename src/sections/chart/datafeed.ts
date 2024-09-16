@@ -65,6 +65,7 @@ const datafeed = {
     fetch(
       `${API_ENDPOINT}/history?symbol=${symbolInfo.ticker}&from=${fetchFrom}&to=${periodParams.to}&resolution=${resolution}`
     ).then(response => {
+      console.log("no stream", response.body);
       response
         .json()
         .then(data => {

@@ -23,6 +23,30 @@ export const useBalance = (
     amount: balance?.amount,
     formatedAmount: formatCoin(Number(balance?.amount) / 1e6 || 0),
     denom: balance?.denom,
+    markBalanceAsStale: () => markBalanceAsStale(address || "", denom),
+  };
+};
+
+export const useBalances = (balances: { address: string; denom: string }[]) => {
+  const store = balancesStore.getState();
+  const [balanceList, setBalanceList] = useState<(Balance | null)[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      if (!balances.length) return;
+      let freshBalances = [];
+      for (let i = 0; i < balances.length; i++) {
+        freshBalances[i] = await store.getBalance(
+          balances[i].address,
+          balances[i].denom
+        );
+      }
+      setBalanceList(freshBalances);
+    })();
+  }, [balances, store]);
+
+  return {
+    balances: balanceList,
   };
 };
 
