@@ -15,7 +15,7 @@ export const formatNumber = ({
     const localeValue = Number(formattedValue).toLocaleString("en-GB");
     return String(before || "") + localeValue + String(after || "");
   } catch (e) {
-    return value.toString();
+    return value?.toString();
   }
 };
 

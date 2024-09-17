@@ -246,7 +246,7 @@ export const OrderId = {
   toAmino(message: OrderId): OrderIdAmino {
     const obj: any = {};
     obj.marginAccountAddress = message.marginAccountAddress === "" ? undefined : message.marginAccountAddress;
-    obj.number = message.number !== BigInt(0) ? message.number.toString() : undefined;
+    obj.number = message.number !== BigInt(0) ? (message.number?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: OrderIdAminoMsg): OrderId {
@@ -411,12 +411,12 @@ export const Order = {
     obj.id = message.id ? OrderId.toAmino(message.id) : undefined;
     obj.accountId = message.accountId === "" ? undefined : message.accountId;
     obj.side = message.side === 0 ? undefined : message.side;
-    obj.quantity = message.quantity !== BigInt(0) ? message.quantity.toString() : undefined;
-    obj.price = message.price !== BigInt(0) ? message.price.toString() : undefined;
+    obj.quantity = message.quantity !== BigInt(0) ? (message.quantity?.toString)() : undefined;
+    obj.price = message.price !== BigInt(0) ? (message.price?.toString)() : undefined;
     obj.orderType = message.orderType === 0 ? undefined : message.orderType;
-    obj.triggerPrice = message.triggerPrice !== BigInt(0) ? message.triggerPrice.toString() : undefined;
-    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
-    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
+    obj.triggerPrice = message.triggerPrice !== BigInt(0) ? (message.triggerPrice?.toString)() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
     obj.MarketId = message.marketId === 0 ? undefined : message.marketId;
     return obj;
   },

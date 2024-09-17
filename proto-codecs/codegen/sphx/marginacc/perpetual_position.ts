@@ -224,9 +224,9 @@ export const PerpetualPosition = {
     obj.ticker = message.ticker === "" ? undefined : message.ticker;
     obj.size = message.size ?? "";
     obj.entry_price = message.entryPrice ?? "";
-    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
     obj.current_price = message.currentPrice ?? "";
-    obj.entry_time = message.entryTime !== BigInt(0) ? message.entryTime.toString() : undefined;
+    obj.entry_time = message.entryTime !== BigInt(0) ? (message.entryTime?.toString)() : undefined;
     obj.UnrealizedPL = message.unrealizedPL ?? "";
     obj.side = message.side === 0 ? undefined : message.side;
     return obj;

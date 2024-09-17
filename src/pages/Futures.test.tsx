@@ -9,6 +9,7 @@ import { themes } from "../theme";
 import { GrazProvider } from "graz";
 import { MockKeplr } from "@keplr-wallet/provider-mock";
 import { sphxLocalChainInfo } from "../constants/chainInfo";
+import { vi } from "vitest";
 
 // mockGetters(MockKeplr);
 
@@ -22,6 +23,24 @@ import { sphxLocalChainInfo } from "../constants/chainInfo";
 //     }
 //   }
 // }
+
+vi.mock("../utils/queryMarkets", async () => {
+  return {
+    getAllMarkets: async () => {
+      return {
+        markets: [
+          {
+            id: 1,
+            ticker: "BTCUSDT.P",
+            status: 1,
+            baseAsset: "BTC",
+            quoteAsset: "USDT",
+          },
+        ],
+      };
+    },
+  };
+});
 
 const WalletExtensionMock = new MockKeplr(
   async () => {

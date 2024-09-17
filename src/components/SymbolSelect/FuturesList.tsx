@@ -56,7 +56,7 @@ const FuturesList = ({ list, closePopup }: Props) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "symbol",
+        accessorKey: "ticker",
         header: "Symbol",
         cell: (props: any) => (
           <Group align="center">

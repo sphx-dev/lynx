@@ -13,8 +13,8 @@ interface CustomPopoverProps {
 
 const Content = styled.div`
   background-color: ${({ theme }) => getThemeColors(theme).background.dropdown};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  padding: 20px;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  padding: 20px 0;
 `;
 
 const Trigger = styled.button`

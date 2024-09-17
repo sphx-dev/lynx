@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@cosmology/lcd";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryExecutionAuthorityRequest, QueryExecutionAuthorityResponseSDKType, QueryMarketRequest, QueryMarketResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType, QueryOrdersForAccountRequest, QueryOrdersForAccountResponseSDKType, QueryOrderInfoRequest, QueryOrderInfoResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryExecutionAuthorityRequest, QueryExecutionAuthorityResponseSDKType, QueryMarketsRequest, QueryMarketsResponseSDKType, QueryMarketRequest, QueryMarketResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType, QueryOrdersForAccountRequest, QueryOrdersForAccountResponseSDKType, QueryOrderInfoRequest, QueryOrderInfoResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -12,6 +12,7 @@ export class LCDQueryClient {
     this.req = requestClient;
     this.params = this.params.bind(this);
     this.executionAuthority = this.executionAuthority.bind(this);
+    this.markets = this.markets.bind(this);
     this.market = this.market.bind(this);
     this.orders = this.orders.bind(this);
     this.ordersForAccount = this.ordersForAccount.bind(this);
@@ -26,6 +27,19 @@ export class LCDQueryClient {
   async executionAuthority(_params: QueryExecutionAuthorityRequest = {}): Promise<QueryExecutionAuthorityResponseSDKType> {
     const endpoint = `sphx/order/execution_authority`;
     return await this.req.get<QueryExecutionAuthorityResponseSDKType>(endpoint);
+  }
+  /* Markets */
+  async markets(params: QueryMarketsRequest = {
+    pagination: undefined
+  }): Promise<QueryMarketsResponseSDKType> {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.pagination !== "undefined") {
+      setPaginationParams(options, params.pagination);
+    }
+    const endpoint = `sphx/order/markets`;
+    return await this.req.get<QueryMarketsResponseSDKType>(endpoint, options);
   }
   /* Market */
   async market(params: QueryMarketRequest): Promise<QueryMarketResponseSDKType> {

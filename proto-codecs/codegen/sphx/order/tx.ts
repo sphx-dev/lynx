@@ -1044,10 +1044,10 @@ export const MsgExecuteOrder = {
     obj.executionAuthority = message.executionAuthority === "" ? undefined : message.executionAuthority;
     obj.order_id = message.orderId ? OrderId.toAmino(message.orderId) : OrderId.toAmino(OrderId.fromPartial({}));
     obj.fill_type = message.fillType === 0 ? undefined : message.fillType;
-    obj.qty = message.qty !== BigInt(0) ? message.qty.toString() : undefined;
+    obj.qty = message.qty !== BigInt(0) ? (message.qty?.toString)() : undefined;
     obj.price = message.price ?? "";
-    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
-    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExecuteOrderAminoMsg): MsgExecuteOrder {

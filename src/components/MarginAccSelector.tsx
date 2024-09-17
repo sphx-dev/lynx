@@ -51,7 +51,7 @@ export const MarginAccSelector = ({
     return marginAccounts?.map((account, index) => {
       let item = `Account #${account.id?.number}`;
       const balance = balances?.[index];
-      if (balance && balance?.amount) {
+      if (balance && typeof balance?.amount === "number") {
         item += ` (${balance?.amount / 1e6} USDC)`;
       }
       return item;

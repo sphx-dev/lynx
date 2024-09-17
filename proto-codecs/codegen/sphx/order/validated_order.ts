@@ -242,10 +242,10 @@ export const PartialFill = {
   },
   toAmino(message: PartialFill): PartialFillAmino {
     const obj: any = {};
-    obj.quantity = message.quantity !== BigInt(0) ? message.quantity.toString() : undefined;
-    obj.price = message.price !== BigInt(0) ? message.price.toString() : undefined;
-    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
-    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
+    obj.quantity = message.quantity !== BigInt(0) ? (message.quantity?.toString)() : undefined;
+    obj.price = message.price !== BigInt(0) ? (message.price?.toString)() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: PartialFillAminoMsg): PartialFill {
@@ -430,12 +430,12 @@ export const ValidatedOrder = {
     obj.id = message.id ? OrderId.toAmino(message.id) : undefined;
     obj.accountId = message.accountId === "" ? undefined : message.accountId;
     obj.side = message.side === 0 ? undefined : message.side;
-    obj.quantity = message.quantity !== BigInt(0) ? message.quantity.toString() : undefined;
-    obj.price = message.price !== BigInt(0) ? message.price.toString() : undefined;
+    obj.quantity = message.quantity !== BigInt(0) ? (message.quantity?.toString)() : undefined;
+    obj.price = message.price !== BigInt(0) ? (message.price?.toString)() : undefined;
     obj.orderType = message.orderType === 0 ? undefined : message.orderType;
-    obj.triggerPrice = message.triggerPrice !== BigInt(0) ? message.triggerPrice.toString() : undefined;
-    obj.leverage = message.leverage !== BigInt(0) ? message.leverage.toString() : undefined;
-    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
+    obj.triggerPrice = message.triggerPrice !== BigInt(0) ? (message.triggerPrice?.toString)() : undefined;
+    obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
     obj.MarketId = message.marketId === 0 ? undefined : message.marketId;
     obj.status = message.status === 0 ? undefined : message.status;
     if (message.partialFills) {

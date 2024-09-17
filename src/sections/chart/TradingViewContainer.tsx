@@ -8,8 +8,9 @@ import {
 import { TVChartContainer } from "./style";
 import datafeed from "./datafeed";
 import { CHART_DEFAULT_OPTIONS, DEFAULT_INTERVAL } from "./constants";
-import { useAppSelector } from "../../hooks";
-import { selectMarketId } from "../../state/futuresSlice";
+// import { useAppSelector } from "../../hooks";
+// import { selectMarketId } from "../../state/futuresSlice";
+import { useMarkets } from "../../hooks/useMarkets";
 
 export interface ChartContainerProps {
   symbol: ChartingLibraryWidgetOptions["symbol"];
@@ -39,7 +40,10 @@ const getLanguageFromURL = (): LanguageCode | null => {
 };
 
 export const TradingViewContainer = () => {
-  const marketId = useAppSelector(selectMarketId);
+  // const marketId = useAppSelector(selectMarketId);
+  const { selectedMarket } = useMarkets();
+  const marketId = selectedMarket?.baseAsset;
+  console.log("MARKET ID", marketId);
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
@@ -47,7 +51,7 @@ export const TradingViewContainer = () => {
     const widgetOptions: ChartingLibraryWidgetOptions = {
       ...CHART_DEFAULT_OPTIONS,
       // FIXME use marketId when price API ready
-      symbol: marketId,
+      symbol: "ETH/USD", //marketId,
       datafeed,
       overrides: {
         "paneProperties.backgroundGradientStartColor": "#0E2836",

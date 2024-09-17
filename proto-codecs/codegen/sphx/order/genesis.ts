@@ -1,11 +1,13 @@
 //@ts-nocheck
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { MsgRegisterMarket, MsgRegisterMarketAmino, MsgRegisterMarketSDKType } from "./tx";
 import { BinaryReader, BinaryWriter } from "../../binary";
 /** GenesisState defines the order module's genesis state. */
 export interface GenesisState {
   /** params defines all the parameters of the module. */
   params: Params;
   executionAuthority: string;
+  registerMarket: MsgRegisterMarket[];
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/sphx.order.GenesisState";
@@ -16,6 +18,7 @@ export interface GenesisStateAmino {
   /** params defines all the parameters of the module. */
   params: ParamsAmino;
   executionAuthority?: string;
+  register_market?: MsgRegisterMarketAmino[];
 }
 export interface GenesisStateAminoMsg {
   type: "/sphx.order.GenesisState";
@@ -25,11 +28,13 @@ export interface GenesisStateAminoMsg {
 export interface GenesisStateSDKType {
   params: ParamsSDKType;
   executionAuthority: string;
+  register_market: MsgRegisterMarketSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
     params: Params.fromPartial({}),
-    executionAuthority: ""
+    executionAuthority: "",
+    registerMarket: []
   };
 }
 export const GenesisState = {
@@ -40,6 +45,9 @@ export const GenesisState = {
     }
     if (message.executionAuthority !== "") {
       writer.uint32(18).string(message.executionAuthority);
+    }
+    for (const v of message.registerMarket) {
+      MsgRegisterMarket.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -56,6 +64,9 @@ export const GenesisState = {
         case 2:
           message.executionAuthority = reader.string();
           break;
+        case 3:
+          message.registerMarket.push(MsgRegisterMarket.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -67,6 +78,7 @@ export const GenesisState = {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.executionAuthority = object.executionAuthority ?? "";
+    message.registerMarket = object.registerMarket?.map(e => MsgRegisterMarket.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -77,12 +89,18 @@ export const GenesisState = {
     if (object.executionAuthority !== undefined && object.executionAuthority !== null) {
       message.executionAuthority = object.executionAuthority;
     }
+    message.registerMarket = object.register_market?.map(e => MsgRegisterMarket.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
     obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     obj.executionAuthority = message.executionAuthority === "" ? undefined : message.executionAuthority;
+    if (message.registerMarket) {
+      obj.register_market = message.registerMarket.map(e => e ? MsgRegisterMarket.toAmino(e) : undefined);
+    } else {
+      obj.register_market = message.registerMarket;
+    }
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

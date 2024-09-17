@@ -504,8 +504,8 @@ export const Height = {
   },
   toAmino(message: Height): HeightAmino {
     const obj: any = {};
-    obj.revision_number = message.revisionNumber ? message.revisionNumber.toString() : "0";
-    obj.revision_height = message.revisionHeight ? message.revisionHeight.toString() : "0";
+    obj.revision_number = message.revisionNumber ? (message.revisionNumber?.toString)() : "0";
+    obj.revision_height = message.revisionHeight ? (message.revisionHeight?.toString)() : "0";
     return obj;
   },
   fromAminoMsg(object: HeightAminoMsg): Height {

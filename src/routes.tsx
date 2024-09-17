@@ -4,6 +4,7 @@ import Page404 from "./pages/404";
 import Dashboard from "./pages/Dashboard";
 import { Navigate } from "react-router-dom";
 import MarginAccountsPage from "./pages/MarginAccounts";
+import MarketsPage from "./pages/Markets";
 
 export const ROUTES = {
   futures: "futures",
@@ -12,6 +13,7 @@ export const ROUTES = {
   referrals: "referrals",
   dashboard: "dashboard",
   marginAccounts: "accounts",
+  markets: "markets",
 };
 
 export const routes = [
@@ -34,6 +36,10 @@ export const routes = [
       {
         path: ROUTES.marginAccounts,
         element: <MarginAccountsPage />,
+      },
+      {
+        path: ROUTES.markets,
+        element: <MarketsPage />,
       },
     ],
   },

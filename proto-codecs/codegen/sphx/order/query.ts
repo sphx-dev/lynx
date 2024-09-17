@@ -68,6 +68,43 @@ export interface QueryExecutionAuthorityResponseAminoMsg {
 export interface QueryExecutionAuthorityResponseSDKType {
   executionAuthority: string;
 }
+export interface QueryMarketsRequest {
+  pagination?: PageRequest;
+}
+export interface QueryMarketsRequestProtoMsg {
+  typeUrl: "/sphx.order.QueryMarketsRequest";
+  value: Uint8Array;
+}
+export interface QueryMarketsRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryMarketsRequestAminoMsg {
+  type: "/sphx.order.QueryMarketsRequest";
+  value: QueryMarketsRequestAmino;
+}
+export interface QueryMarketsRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryMarketsResponse {
+  markets: Market[];
+  pagination?: PageResponse;
+}
+export interface QueryMarketsResponseProtoMsg {
+  typeUrl: "/sphx.order.QueryMarketsResponse";
+  value: Uint8Array;
+}
+export interface QueryMarketsResponseAmino {
+  markets: MarketAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryMarketsResponseAminoMsg {
+  type: "/sphx.order.QueryMarketsResponse";
+  value: QueryMarketsResponseAmino;
+}
+export interface QueryMarketsResponseSDKType {
+  markets: MarketSDKType[];
+  pagination?: PageResponseSDKType;
+}
 export interface QueryMarketRequest {
   id: number;
 }
@@ -438,6 +475,146 @@ export const QueryExecutionAuthorityResponse = {
     return {
       typeUrl: "/sphx.order.QueryExecutionAuthorityResponse",
       value: QueryExecutionAuthorityResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryMarketsRequest(): QueryMarketsRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryMarketsRequest = {
+  typeUrl: "/sphx.order.QueryMarketsRequest",
+  encode(message: QueryMarketsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryMarketsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryMarketsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryMarketsRequest>): QueryMarketsRequest {
+    const message = createBaseQueryMarketsRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryMarketsRequestAmino): QueryMarketsRequest {
+    const message = createBaseQueryMarketsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryMarketsRequest): QueryMarketsRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryMarketsRequestAminoMsg): QueryMarketsRequest {
+    return QueryMarketsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMarketsRequestProtoMsg): QueryMarketsRequest {
+    return QueryMarketsRequest.decode(message.value);
+  },
+  toProto(message: QueryMarketsRequest): Uint8Array {
+    return QueryMarketsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMarketsRequest): QueryMarketsRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryMarketsRequest",
+      value: QueryMarketsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryMarketsResponse(): QueryMarketsResponse {
+  return {
+    markets: [],
+    pagination: undefined
+  };
+}
+export const QueryMarketsResponse = {
+  typeUrl: "/sphx.order.QueryMarketsResponse",
+  encode(message: QueryMarketsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.markets) {
+      Market.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryMarketsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryMarketsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.markets.push(Market.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryMarketsResponse>): QueryMarketsResponse {
+    const message = createBaseQueryMarketsResponse();
+    message.markets = object.markets?.map(e => Market.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryMarketsResponseAmino): QueryMarketsResponse {
+    const message = createBaseQueryMarketsResponse();
+    message.markets = object.markets?.map(e => Market.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryMarketsResponse): QueryMarketsResponseAmino {
+    const obj: any = {};
+    if (message.markets) {
+      obj.markets = message.markets.map(e => e ? Market.toAmino(e) : undefined);
+    } else {
+      obj.markets = message.markets;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryMarketsResponseAminoMsg): QueryMarketsResponse {
+    return QueryMarketsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryMarketsResponseProtoMsg): QueryMarketsResponse {
+    return QueryMarketsResponse.decode(message.value);
+  },
+  toProto(message: QueryMarketsResponse): Uint8Array {
+    return QueryMarketsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryMarketsResponse): QueryMarketsResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryMarketsResponse",
+      value: QueryMarketsResponse.encode(message).finish()
     };
   }
 };

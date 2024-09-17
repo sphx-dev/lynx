@@ -677,7 +677,7 @@ export const Channel = {
       obj.connection_hops = message.connectionHops;
     }
     obj.version = message.version === "" ? undefined : message.version;
-    obj.upgrade_sequence = message.upgradeSequence !== BigInt(0) ? message.upgradeSequence.toString() : undefined;
+    obj.upgrade_sequence = message.upgradeSequence !== BigInt(0) ? (message.upgradeSequence?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: ChannelAminoMsg): Channel {
@@ -832,7 +832,7 @@ export const IdentifiedChannel = {
     obj.version = message.version === "" ? undefined : message.version;
     obj.port_id = message.portId === "" ? undefined : message.portId;
     obj.channel_id = message.channelId === "" ? undefined : message.channelId;
-    obj.upgrade_sequence = message.upgradeSequence !== BigInt(0) ? message.upgradeSequence.toString() : undefined;
+    obj.upgrade_sequence = message.upgradeSequence !== BigInt(0) ? (message.upgradeSequence?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: IdentifiedChannelAminoMsg): IdentifiedChannel {
@@ -1059,14 +1059,14 @@ export const Packet = {
   },
   toAmino(message: Packet): PacketAmino {
     const obj: any = {};
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? (message.sequence?.toString)() : undefined;
     obj.source_port = message.sourcePort === "" ? undefined : message.sourcePort;
     obj.source_channel = message.sourceChannel === "" ? undefined : message.sourceChannel;
     obj.destination_port = message.destinationPort === "" ? undefined : message.destinationPort;
     obj.destination_channel = message.destinationChannel === "" ? undefined : message.destinationChannel;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     obj.timeout_height = message.timeoutHeight ? Height.toAmino(message.timeoutHeight) : {};
-    obj.timeout_timestamp = message.timeoutTimestamp !== BigInt(0) ? message.timeoutTimestamp.toString() : undefined;
+    obj.timeout_timestamp = message.timeoutTimestamp !== BigInt(0) ? (message.timeoutTimestamp?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: PacketAminoMsg): Packet {
@@ -1170,7 +1170,7 @@ export const PacketState = {
     const obj: any = {};
     obj.port_id = message.portId === "" ? undefined : message.portId;
     obj.channel_id = message.channelId === "" ? undefined : message.channelId;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? (message.sequence?.toString)() : undefined;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
@@ -1264,7 +1264,7 @@ export const PacketId = {
     const obj: any = {};
     obj.port_id = message.portId === "" ? undefined : message.portId;
     obj.channel_id = message.channelId === "" ? undefined : message.channelId;
-    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? (message.sequence?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: PacketIdAminoMsg): PacketId {
@@ -1426,7 +1426,7 @@ export const Timeout = {
   toAmino(message: Timeout): TimeoutAmino {
     const obj: any = {};
     obj.height = message.height ? Height.toAmino(message.height) : {};
-    obj.timestamp = message.timestamp !== BigInt(0) ? message.timestamp.toString() : undefined;
+    obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: TimeoutAminoMsg): Timeout {

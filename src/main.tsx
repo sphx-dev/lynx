@@ -50,6 +50,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               window.location.reload();
             }, 1000);
           }
+        } else {
+          console.error(error, info);
         }
       }}
     >
