@@ -14,6 +14,7 @@ RUN yarn build_server
 COPY public /home/lynx/public
 COPY .storybook /home/lynx/.storybook
 COPY src /home/lynx/src
+COPY proto-codecs /home/lynx/proto-codecs
 
 RUN yarn build
 
