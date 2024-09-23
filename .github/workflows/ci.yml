@@ -3,7 +3,7 @@ name: Continuous Integration
 jobs:
   build:
     runs-on: arc-runner-set
-    timeout-minutes: 3
+    timeout-minutes: 15
     steps:
       - name: Install NodeJS
         uses: actions/setup-node@v3
@@ -19,7 +19,7 @@ jobs:
         run: make build
   lint:
     runs-on: arc-runner-set
-    timeout-minutes: 3
+    timeout-minutes: 15
     steps:
     - name: Install NodeJS
       uses: actions/setup-node@v3
@@ -37,7 +37,7 @@ jobs:
       run: yarn lint
   test:
     runs-on: arc-runner-set
-    timeout-minutes: 3
+    timeout-minutes: 15
     steps:
     - name: Install NodeJS
       uses: actions/setup-node@v3
