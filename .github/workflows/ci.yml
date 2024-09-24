@@ -2,7 +2,7 @@ on: [pull_request]
 name: Continuous Integration
 jobs:
   build:
-    runs-on: arc-runner-set
+    runs-on: arc-runner-set-ubuntu
     timeout-minutes: 15
     steps:
       - name: Install NodeJS
@@ -14,41 +14,61 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
       - name: Install dependencies
-        run: yarn
+        run: |
+          echo "Starting nslookup for registry.yarnpkg.com"
+          nslookup <<EOF
+          registry.yarnpkg.com
+          exit
+          EOF
+          echo "nslookup completed"
+          echo "Starting yarn install"
+          yarn install
       - name: Build
         run: make build
   lint:
-    runs-on: arc-runner-set
+    runs-on: arc-runner-set-ubuntu
     timeout-minutes: 15
     steps:
     - name: Install NodeJS
       uses: actions/setup-node@v3
       with:
         node-version: '18.x'
-    - name: Install Yarn
-      run: npm install -g yarn
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Install dependencies
-      run: yarn install --verbose
+      run: |
+        echo "Starting nslookup for registry.yarnpkg.com"
+        nslookup <<EOF
+        registry.yarnpkg.com
+        exit
+        EOF
+        echo "nslookup completed"
+        echo "Starting yarn install"
+        yarn install
     - name: Check code
       run: yarn type-check
     - name: Lint
       run: yarn lint
   test:
-    runs-on: arc-runner-set
+    runs-on: arc-runner-set-ubuntu
     timeout-minutes: 15
     steps:
     - name: Install NodeJS
       uses: actions/setup-node@v3
       with:
         node-version: '18.x'
-    - name: Install Yarn
-      run: npm install -g yarn
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Install dependencies
-      run: yarn
+      run: |
+        echo "Starting nslookup for registry.yarnpkg.com"
+        nslookup <<EOF
+        registry.yarnpkg.com
+        exit
+        EOF
+        echo "nslookup completed"
+        echo "Starting yarn install"
+        yarn install
     - name: Test
       run: yarn test
 
