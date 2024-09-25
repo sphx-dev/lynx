@@ -1,5 +1,4 @@
 import { StargateClient } from "@cosmjs/stargate";
-// import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { getChain } from "../config";
 import { createRPCQueryClient } from "../../proto-codecs/codegen/sphx/rpc.query";
 import { sphx } from "../../proto-codecs";
@@ -25,18 +24,6 @@ export const getMarginAccountInfoByAddress = async (address: string) => {
   const request = { address: address };
 
   const response = await queryClient.sphx.marginacc.marginAccountInfo(request);
-
-  return response;
-};
-
-export const getOrdersByAddress = async (address: string) => {
-  const queryClient = await createRPCQueryClient({
-    rpcEndpoint: getChain().rpc,
-  });
-
-  const request = { address: address };
-
-  const response = await queryClient.sphx.order.ordersForAccount(request);
 
   return response;
 };
@@ -73,7 +60,7 @@ export const getAccountsByOwner = async (address: string) => {
   return response;
 };
 
-export const getMarketInfo = async (id: number) => {
+export const getMarketInfo = async (id: bigint) => {
   const queryClient = await createRPCQueryClient({
     rpcEndpoint: getChain().rpc,
   });

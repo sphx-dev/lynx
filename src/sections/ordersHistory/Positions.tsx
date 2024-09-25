@@ -1,6 +1,4 @@
 import { Table } from "../../components";
-import { useAppSelector } from "../../hooks";
-import { account } from "../../state/accountSlice";
 import PlaceHolder from "./PlaceHolder";
 
 import { usePlaceMarketOrderMutation } from "../../utils/api/orderApi";
@@ -8,10 +6,11 @@ import { OrderSide, OrderType } from "../../types/order";
 import { useGetAccountQuery } from "../../utils/api/accountApi";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { usePositionColumnsByOrders } from "./usePositionColumns";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { getPerpetualPositionsByAddress } from "../../utils/queryPerpetualPositions";
 
 const Positions = () => {
-  const { positions } = useAppSelector(account);
+  // const { positions } = useAppSelector(account);
   // const [positions, setPositions] = useState<ValidatedOrder[]>([]);
   const { isConnected } = useChainCosmoshub();
 
@@ -42,6 +41,17 @@ const Positions = () => {
     },
     [placeMarketOrder]
   );
+
+  const { address } = useChainCosmoshub();
+  const [positions, setPositions] = useState<any[]>([]);
+  useEffect(() => {
+    if (address) {
+      getPerpetualPositionsByAddress(address).then(response => {
+        console.log("response", response);
+        setPositions(response.positions);
+      });
+    }
+  }, [address]);
 
   const positionColumns = usePositionColumnsByOrders(closePosition);
 

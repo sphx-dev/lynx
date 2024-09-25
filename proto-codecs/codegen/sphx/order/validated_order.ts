@@ -111,7 +111,7 @@ export interface ValidatedOrder {
   /** Timestamp of the order */
   timestamp: bigint;
   /** MarketId of the order */
-  marketId: number;
+  marketId: bigint;
   /** Status of the order, open, filled, cancelled etc */
   status: OrderStatus;
   /** List of partial fills if the order was partially filled or fully filled */
@@ -141,7 +141,7 @@ export interface ValidatedOrderAmino {
   /** Timestamp of the order */
   timestamp?: string;
   /** MarketId of the order */
-  MarketId?: number;
+  MarketId?: string;
   /** Status of the order, open, filled, cancelled etc */
   status?: OrderStatus;
   /** List of partial fills if the order was partially filled or fully filled */
@@ -161,7 +161,7 @@ export interface ValidatedOrderSDKType {
   triggerPrice: bigint;
   leverage: bigint;
   timestamp: bigint;
-  MarketId: number;
+  MarketId: bigint;
   status: OrderStatus;
   partialFills: PartialFillSDKType[];
 }
@@ -177,16 +177,16 @@ export const PartialFill = {
   typeUrl: "/sphx.order.PartialFill",
   encode(message: PartialFill, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.quantity !== BigInt(0)) {
-      writer.uint32(8).uint64(message.quantity);
+      writer.uint32(8).int64(message.quantity);
     }
     if (message.price !== BigInt(0)) {
-      writer.uint32(16).uint64(message.price);
+      writer.uint32(16).int64(message.price);
     }
     if (message.timestamp !== BigInt(0)) {
-      writer.uint32(24).uint64(message.timestamp);
+      writer.uint32(24).int64(message.timestamp);
     }
     if (message.leverage !== BigInt(0)) {
-      writer.uint32(32).uint64(message.leverage);
+      writer.uint32(32).int64(message.leverage);
     }
     return writer;
   },
@@ -198,16 +198,16 @@ export const PartialFill = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.quantity = reader.uint64();
+          message.quantity = reader.int64();
           break;
         case 2:
-          message.price = reader.uint64();
+          message.price = reader.int64();
           break;
         case 3:
-          message.timestamp = reader.uint64();
+          message.timestamp = reader.int64();
           break;
         case 4:
-          message.leverage = reader.uint64();
+          message.leverage = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -275,7 +275,7 @@ function createBaseValidatedOrder(): ValidatedOrder {
     triggerPrice: BigInt(0),
     leverage: BigInt(0),
     timestamp: BigInt(0),
-    marketId: 0,
+    marketId: BigInt(0),
     status: 0,
     partialFills: []
   };
@@ -293,25 +293,25 @@ export const ValidatedOrder = {
       writer.uint32(24).int32(message.side);
     }
     if (message.quantity !== BigInt(0)) {
-      writer.uint32(32).uint64(message.quantity);
+      writer.uint32(32).int64(message.quantity);
     }
     if (message.price !== BigInt(0)) {
-      writer.uint32(40).uint64(message.price);
+      writer.uint32(40).int64(message.price);
     }
     if (message.orderType !== 0) {
       writer.uint32(48).int32(message.orderType);
     }
     if (message.triggerPrice !== BigInt(0)) {
-      writer.uint32(56).uint64(message.triggerPrice);
+      writer.uint32(56).int64(message.triggerPrice);
     }
     if (message.leverage !== BigInt(0)) {
-      writer.uint32(64).uint64(message.leverage);
+      writer.uint32(64).int64(message.leverage);
     }
     if (message.timestamp !== BigInt(0)) {
-      writer.uint32(72).uint64(message.timestamp);
+      writer.uint32(72).int64(message.timestamp);
     }
-    if (message.marketId !== 0) {
-      writer.uint32(80).uint32(message.marketId);
+    if (message.marketId !== BigInt(0)) {
+      writer.uint32(80).int64(message.marketId);
     }
     if (message.status !== 0) {
       writer.uint32(88).int32(message.status);
@@ -338,25 +338,25 @@ export const ValidatedOrder = {
           message.side = reader.int32() as any;
           break;
         case 4:
-          message.quantity = reader.uint64();
+          message.quantity = reader.int64();
           break;
         case 5:
-          message.price = reader.uint64();
+          message.price = reader.int64();
           break;
         case 6:
           message.orderType = reader.int32() as any;
           break;
         case 7:
-          message.triggerPrice = reader.uint64();
+          message.triggerPrice = reader.int64();
           break;
         case 8:
-          message.leverage = reader.uint64();
+          message.leverage = reader.int64();
           break;
         case 9:
-          message.timestamp = reader.uint64();
+          message.timestamp = reader.int64();
           break;
         case 10:
-          message.marketId = reader.uint32();
+          message.marketId = reader.int64();
           break;
         case 11:
           message.status = reader.int32() as any;
@@ -382,7 +382,7 @@ export const ValidatedOrder = {
     message.triggerPrice = object.triggerPrice !== undefined && object.triggerPrice !== null ? BigInt(object.triggerPrice.toString()) : BigInt(0);
     message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
-    message.marketId = object.marketId ?? 0;
+    message.marketId = object.marketId !== undefined && object.marketId !== null ? BigInt(object.marketId.toString()) : BigInt(0);
     message.status = object.status ?? 0;
     message.partialFills = object.partialFills?.map(e => PartialFill.fromPartial(e)) || [];
     return message;
@@ -417,7 +417,7 @@ export const ValidatedOrder = {
       message.timestamp = BigInt(object.timestamp);
     }
     if (object.MarketId !== undefined && object.MarketId !== null) {
-      message.marketId = object.MarketId;
+      message.marketId = BigInt(object.MarketId);
     }
     if (object.status !== undefined && object.status !== null) {
       message.status = object.status;
@@ -436,7 +436,7 @@ export const ValidatedOrder = {
     obj.triggerPrice = message.triggerPrice !== BigInt(0) ? (message.triggerPrice?.toString)() : undefined;
     obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
     obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
-    obj.MarketId = message.marketId === 0 ? undefined : message.marketId;
+    obj.MarketId = message.marketId !== BigInt(0) ? (message.marketId?.toString)() : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
     if (message.partialFills) {
       obj.partialFills = message.partialFills.map(e => e ? PartialFill.toAmino(e) : undefined);

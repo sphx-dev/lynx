@@ -1,27 +1,15 @@
 import { sphx } from "../../proto-codecs";
 
-import { OrderSide, OrderType } from "../types/order";
+import { OrderSide } from "../types/order";
 import {
   OrderType as OrderTypeProto,
   OrderSide as OrderSideProto,
+  OrderId,
 } from "../../proto-codecs/codegen/sphx/order/order";
 import {
   composeFee,
   getSigningStargateOrderClient,
 } from "./SigningStargateClient";
-
-export type PlaceOrderInChainParams = {
-  address: string;
-  side: OrderSide;
-  quantity: bigint;
-  price: bigint;
-  orderType: OrderType;
-  triggerPrice: bigint;
-  leverage: bigint;
-
-  onSuccess: (msg: string) => {};
-  onError: (msg: string) => {};
-};
 
 export type PlaceMarketOrderInChainParams = {
   address: string;
@@ -32,6 +20,7 @@ export type PlaceMarketOrderInChainParams = {
   price: bigint;
   // orderType: OrderType; // Always MARKET
   leverage: bigint;
+  marketId: bigint;
 
   onSuccess: (msg: string) => {};
   onError: (msg: string) => {};
@@ -48,15 +37,11 @@ export type PlaceLimitOrderInChainParams = {
   stopLoss: bigint;
   takeProfit: bigint;
   leverage: bigint;
+  marketId: bigint;
 
   onSuccess: (msg: string) => {};
   onError: (msg: string) => {};
 };
-
-let ORDERID: bigint = BigInt(1);
-function getOrderId() {
-  return ORDERID++;
-}
 
 export const placeMarketOrderInChain = async ({
   address,
@@ -66,6 +51,7 @@ export const placeMarketOrderInChain = async ({
   quantity,
   price,
   leverage,
+  marketId,
   onSuccess,
   onError,
 }: PlaceMarketOrderInChainParams) => {
@@ -90,10 +76,7 @@ export const placeMarketOrderInChain = async ({
         triggerPrice: BigInt(0),
         leverage: BigInt(leverage),
         timestamp: BigInt(Math.floor(Date.now() / 1000)),
-        /** The market id to which the order belongs e.g. BTCUSDC.P */
-        // marketId: "BTCUSDC.P",
-        // TODO: fetch marketId from the chain
-        marketId: 1,
+        marketId,
       },
     });
 
@@ -131,6 +114,7 @@ export const placeLimitOrderInChain = async ({
   stopLoss,
   takeProfit,
   leverage,
+  marketId,
   onSuccess,
   onError,
 }: PlaceLimitOrderInChainParams) => {
@@ -163,10 +147,7 @@ export const placeLimitOrderInChain = async ({
           triggerPrice: BigInt(0),
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          /** The market id to which the order belongs e.g. BTCUSDC.P */
-          // marketId: "BTCUSDC.P",
-          // TODO: fetch marketId from the chain
-          marketId: 1,
+          marketId,
         },
       }),
       // Take profit order
@@ -175,7 +156,7 @@ export const placeLimitOrderInChain = async ({
         order: {
           id: {
             marginAccountAddress: marginAccountAddress,
-            number: getOrderId(),
+            number: ++orderId,
           },
           accountId: address,
           // Oposit to the original order
@@ -192,9 +173,7 @@ export const placeLimitOrderInChain = async ({
           triggerPrice: BigInt(takeProfit),
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          // marketId: "BTCUSDC.P",
-          // TODO: fetch marketId from the chain
-          marketId: 1,
+          marketId,
         },
       }),
       // Stop loss order
@@ -203,7 +182,7 @@ export const placeLimitOrderInChain = async ({
         order: {
           id: {
             marginAccountAddress: marginAccountAddress,
-            number: getOrderId(),
+            number: ++orderId,
           },
           accountId: address,
           // Oposit to the original order
@@ -220,9 +199,7 @@ export const placeLimitOrderInChain = async ({
           triggerPrice: BigInt(stopLoss),
           leverage: BigInt(leverage),
           timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          // marketId: "BTCUSDC.P",
-          // TODO: fetch marketId from the chain
-          marketId: 1,
+          marketId,
         },
       }),
     ];
@@ -269,4 +246,31 @@ const getMessageFromCode = (code: number, rawLog = ""): string => {
     default:
       return "Error placing order. Please try again";
   }
+};
+
+export const cancelOrderInChain = async ({
+  address,
+  orderId,
+  memo,
+}: {
+  address: string;
+  orderId: OrderId;
+  memo: string;
+}) => {
+  const message = sphx.order.MessageComposer.withTypeUrl.cancelOrder({
+    user: address,
+    orderId,
+  });
+
+  const signingClient = await getSigningStargateOrderClient();
+  const response = await signingClient?.signAndBroadcast(
+    address,
+    [message],
+    composeFee(),
+    memo
+  );
+
+  console.log("TxResponse CANCEL", response);
+
+  return response;
 };

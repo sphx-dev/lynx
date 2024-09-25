@@ -105,21 +105,21 @@ export interface MsgRegisterMarketSDKType {
   market: MarketSDKType;
 }
 export interface MsgRegisterMarketResponse {
-  marketId: number;
+  marketId: bigint;
 }
 export interface MsgRegisterMarketResponseProtoMsg {
   typeUrl: "/sphx.order.MsgRegisterMarketResponse";
   value: Uint8Array;
 }
 export interface MsgRegisterMarketResponseAmino {
-  market_id?: number;
+  market_id?: string;
 }
 export interface MsgRegisterMarketResponseAminoMsg {
   type: "/sphx.order.MsgRegisterMarketResponse";
   value: MsgRegisterMarketResponseAmino;
 }
 export interface MsgRegisterMarketResponseSDKType {
-  market_id: number;
+  market_id: bigint;
 }
 export interface MsgPlaceOrder {
   user: string;
@@ -198,6 +198,8 @@ export interface MsgCancelOrderResponseSDKType {
 export interface MsgExecuteOrder {
   /** Execution authority is the address that can execute the order */
   executionAuthority: string;
+  /** PositionId is to be used to identify the position to which the order belongs */
+  positionId: string;
   /** OrderId is the order to be executed */
   orderId: OrderId;
   /** Filltype is used to determine if the order was partially or fully filled */
@@ -218,6 +220,8 @@ export interface MsgExecuteOrderProtoMsg {
 export interface MsgExecuteOrderAmino {
   /** Execution authority is the address that can execute the order */
   executionAuthority?: string;
+  /** PositionId is to be used to identify the position to which the order belongs */
+  position_id?: string;
   /** OrderId is the order to be executed */
   order_id: OrderIdAmino;
   /** Filltype is used to determine if the order was partially or fully filled */
@@ -237,6 +241,7 @@ export interface MsgExecuteOrderAminoMsg {
 }
 export interface MsgExecuteOrderSDKType {
   executionAuthority: string;
+  position_id: string;
   order_id: OrderIdSDKType;
   fill_type: FillType;
   qty: bigint;
@@ -594,14 +599,14 @@ export const MsgRegisterMarket = {
 };
 function createBaseMsgRegisterMarketResponse(): MsgRegisterMarketResponse {
   return {
-    marketId: 0
+    marketId: BigInt(0)
   };
 }
 export const MsgRegisterMarketResponse = {
   typeUrl: "/sphx.order.MsgRegisterMarketResponse",
   encode(message: MsgRegisterMarketResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.marketId !== 0) {
-      writer.uint32(8).uint32(message.marketId);
+    if (message.marketId !== BigInt(0)) {
+      writer.uint32(8).int64(message.marketId);
     }
     return writer;
   },
@@ -613,7 +618,7 @@ export const MsgRegisterMarketResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.marketId = reader.uint32();
+          message.marketId = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -624,19 +629,19 @@ export const MsgRegisterMarketResponse = {
   },
   fromPartial(object: Partial<MsgRegisterMarketResponse>): MsgRegisterMarketResponse {
     const message = createBaseMsgRegisterMarketResponse();
-    message.marketId = object.marketId ?? 0;
+    message.marketId = object.marketId !== undefined && object.marketId !== null ? BigInt(object.marketId.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgRegisterMarketResponseAmino): MsgRegisterMarketResponse {
     const message = createBaseMsgRegisterMarketResponse();
     if (object.market_id !== undefined && object.market_id !== null) {
-      message.marketId = object.market_id;
+      message.marketId = BigInt(object.market_id);
     }
     return message;
   },
   toAmino(message: MsgRegisterMarketResponse): MsgRegisterMarketResponseAmino {
     const obj: any = {};
-    obj.market_id = message.marketId === 0 ? undefined : message.marketId;
+    obj.market_id = message.marketId !== BigInt(0) ? (message.marketId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRegisterMarketResponseAminoMsg): MsgRegisterMarketResponse {
@@ -934,6 +939,7 @@ export const MsgCancelOrderResponse = {
 function createBaseMsgExecuteOrder(): MsgExecuteOrder {
   return {
     executionAuthority: "",
+    positionId: "",
     orderId: OrderId.fromPartial({}),
     fillType: 0,
     qty: BigInt(0),
@@ -948,23 +954,26 @@ export const MsgExecuteOrder = {
     if (message.executionAuthority !== "") {
       writer.uint32(10).string(message.executionAuthority);
     }
+    if (message.positionId !== "") {
+      writer.uint32(18).string(message.positionId);
+    }
     if (message.orderId !== undefined) {
-      OrderId.encode(message.orderId, writer.uint32(18).fork()).ldelim();
+      OrderId.encode(message.orderId, writer.uint32(26).fork()).ldelim();
     }
     if (message.fillType !== 0) {
-      writer.uint32(24).int32(message.fillType);
+      writer.uint32(32).int32(message.fillType);
     }
     if (message.qty !== BigInt(0)) {
-      writer.uint32(32).uint64(message.qty);
+      writer.uint32(40).int64(message.qty);
     }
     if (message.price !== "") {
-      writer.uint32(42).string(message.price);
+      writer.uint32(50).string(message.price);
     }
     if (message.timestamp !== BigInt(0)) {
-      writer.uint32(48).uint64(message.timestamp);
+      writer.uint32(56).int64(message.timestamp);
     }
     if (message.leverage !== BigInt(0)) {
-      writer.uint32(56).uint64(message.leverage);
+      writer.uint32(64).int64(message.leverage);
     }
     return writer;
   },
@@ -979,22 +988,25 @@ export const MsgExecuteOrder = {
           message.executionAuthority = reader.string();
           break;
         case 2:
-          message.orderId = OrderId.decode(reader, reader.uint32());
+          message.positionId = reader.string();
           break;
         case 3:
-          message.fillType = reader.int32() as any;
+          message.orderId = OrderId.decode(reader, reader.uint32());
           break;
         case 4:
-          message.qty = reader.uint64();
+          message.fillType = reader.int32() as any;
           break;
         case 5:
-          message.price = reader.string();
+          message.qty = reader.int64();
           break;
         case 6:
-          message.timestamp = reader.uint64();
+          message.price = reader.string();
           break;
         case 7:
-          message.leverage = reader.uint64();
+          message.timestamp = reader.int64();
+          break;
+        case 8:
+          message.leverage = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1006,6 +1018,7 @@ export const MsgExecuteOrder = {
   fromPartial(object: Partial<MsgExecuteOrder>): MsgExecuteOrder {
     const message = createBaseMsgExecuteOrder();
     message.executionAuthority = object.executionAuthority ?? "";
+    message.positionId = object.positionId ?? "";
     message.orderId = object.orderId !== undefined && object.orderId !== null ? OrderId.fromPartial(object.orderId) : undefined;
     message.fillType = object.fillType ?? 0;
     message.qty = object.qty !== undefined && object.qty !== null ? BigInt(object.qty.toString()) : BigInt(0);
@@ -1018,6 +1031,9 @@ export const MsgExecuteOrder = {
     const message = createBaseMsgExecuteOrder();
     if (object.executionAuthority !== undefined && object.executionAuthority !== null) {
       message.executionAuthority = object.executionAuthority;
+    }
+    if (object.position_id !== undefined && object.position_id !== null) {
+      message.positionId = object.position_id;
     }
     if (object.order_id !== undefined && object.order_id !== null) {
       message.orderId = OrderId.fromAmino(object.order_id);
@@ -1042,6 +1058,7 @@ export const MsgExecuteOrder = {
   toAmino(message: MsgExecuteOrder): MsgExecuteOrderAmino {
     const obj: any = {};
     obj.executionAuthority = message.executionAuthority === "" ? undefined : message.executionAuthority;
+    obj.position_id = message.positionId === "" ? undefined : message.positionId;
     obj.order_id = message.orderId ? OrderId.toAmino(message.orderId) : OrderId.toAmino(OrderId.fromPartial({}));
     obj.fill_type = message.fillType === 0 ? undefined : message.fillType;
     obj.qty = message.qty !== BigInt(0) ? (message.qty?.toString)() : undefined;

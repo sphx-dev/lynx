@@ -18,7 +18,7 @@ export const createMarket = async () => {
   const message = sphx.order.MessageComposer.withTypeUrl.registerMarket({
     authority: "TODO: set authority here",
     market: {
-      id: 1,
+      id: BigInt(1),
       ticker: "BTCUSDT.P",
       status: MarketStatus.STATUS_ACTIVE,
       baseAsset: "BTC",

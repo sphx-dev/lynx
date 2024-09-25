@@ -3,7 +3,64 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Market, MarketAmino, MarketSDKType } from "./market";
 import { ValidatedOrder, ValidatedOrderAmino, ValidatedOrderSDKType } from "./validated_order";
+import { PerpetualPosition, PerpetualPositionAmino, PerpetualPositionSDKType } from "./perpetual_position";
 import { BinaryReader, BinaryWriter } from "../../binary";
+export enum QueryPerpPositionsRequest_OrderStatus {
+  ORDER_STATUS_UNSPECIFIED = 0,
+  ORDER_STATUS_OPEN = 1,
+  ORDER_STATUS_PARTIALLY_FILLED = 2,
+  ORDER_STATUS_FILLED = 3,
+  ORDER_STATUS_CANCELED = 4,
+  ORDER_STATUS_EXPIRED = 5,
+  UNRECOGNIZED = -1,
+}
+export const QueryPerpPositionsRequest_OrderStatusSDKType = QueryPerpPositionsRequest_OrderStatus;
+export const QueryPerpPositionsRequest_OrderStatusAmino = QueryPerpPositionsRequest_OrderStatus;
+export function queryPerpPositionsRequest_OrderStatusFromJSON(object: any): QueryPerpPositionsRequest_OrderStatus {
+  switch (object) {
+    case 0:
+    case "ORDER_STATUS_UNSPECIFIED":
+      return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_UNSPECIFIED;
+    case 1:
+    case "ORDER_STATUS_OPEN":
+      return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_OPEN;
+    case 2:
+    case "ORDER_STATUS_PARTIALLY_FILLED":
+      return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_PARTIALLY_FILLED;
+    case 3:
+    case "ORDER_STATUS_FILLED":
+      return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_FILLED;
+    case 4:
+    case "ORDER_STATUS_CANCELED":
+      return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_CANCELED;
+    case 5:
+    case "ORDER_STATUS_EXPIRED":
+      return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_EXPIRED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return QueryPerpPositionsRequest_OrderStatus.UNRECOGNIZED;
+  }
+}
+export function queryPerpPositionsRequest_OrderStatusToJSON(object: QueryPerpPositionsRequest_OrderStatus): string {
+  switch (object) {
+    case QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_UNSPECIFIED:
+      return "ORDER_STATUS_UNSPECIFIED";
+    case QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_OPEN:
+      return "ORDER_STATUS_OPEN";
+    case QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_PARTIALLY_FILLED:
+      return "ORDER_STATUS_PARTIALLY_FILLED";
+    case QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_FILLED:
+      return "ORDER_STATUS_FILLED";
+    case QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_CANCELED:
+      return "ORDER_STATUS_CANCELED";
+    case QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_EXPIRED:
+      return "ORDER_STATUS_EXPIRED";
+    case QueryPerpPositionsRequest_OrderStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -106,21 +163,21 @@ export interface QueryMarketsResponseSDKType {
   pagination?: PageResponseSDKType;
 }
 export interface QueryMarketRequest {
-  id: number;
+  id: bigint;
 }
 export interface QueryMarketRequestProtoMsg {
   typeUrl: "/sphx.order.QueryMarketRequest";
   value: Uint8Array;
 }
 export interface QueryMarketRequestAmino {
-  id?: number;
+  id?: string;
 }
 export interface QueryMarketRequestAminoMsg {
   type: "/sphx.order.QueryMarketRequest";
   value: QueryMarketRequestAmino;
 }
 export interface QueryMarketRequestSDKType {
-  id: number;
+  id: bigint;
 }
 export interface QueryMarketResponse {
   market: Market;
@@ -176,24 +233,30 @@ export interface QueryOrdersResponseSDKType {
   orders: ValidatedOrderSDKType[];
   pagination?: PageResponseSDKType;
 }
+/** If order status is omitted, then get all */
 export interface QueryOrdersForAccountRequest {
   address: string;
+  status?: QueryPerpPositionsRequest_OrderStatus;
   pagination?: PageRequest;
 }
 export interface QueryOrdersForAccountRequestProtoMsg {
   typeUrl: "/sphx.order.QueryOrdersForAccountRequest";
   value: Uint8Array;
 }
+/** If order status is omitted, then get all */
 export interface QueryOrdersForAccountRequestAmino {
   address?: string;
+  status?: QueryPerpPositionsRequest_OrderStatus;
   pagination?: PageRequestAmino;
 }
 export interface QueryOrdersForAccountRequestAminoMsg {
   type: "/sphx.order.QueryOrdersForAccountRequest";
   value: QueryOrdersForAccountRequestAmino;
 }
+/** If order status is omitted, then get all */
 export interface QueryOrdersForAccountRequestSDKType {
   address: string;
+  status?: QueryPerpPositionsRequest_OrderStatus;
   pagination?: PageRequestSDKType;
 }
 export interface QueryOrdersForAccountResponse {
@@ -251,6 +314,117 @@ export interface QueryOrderInfoResponseAminoMsg {
 }
 export interface QueryOrderInfoResponseSDKType {
   order: ValidatedOrderSDKType;
+}
+export interface QueryPerpPositionsRequest {
+  pagination?: PageRequest;
+}
+export interface QueryPerpPositionsRequestProtoMsg {
+  typeUrl: "/sphx.order.QueryPerpPositionsRequest";
+  value: Uint8Array;
+}
+export interface QueryPerpPositionsRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryPerpPositionsRequestAminoMsg {
+  type: "/sphx.order.QueryPerpPositionsRequest";
+  value: QueryPerpPositionsRequestAmino;
+}
+export interface QueryPerpPositionsRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryPerpPositionsResponse {
+  positions: PerpetualPosition[];
+  pagination?: PageResponse;
+}
+export interface QueryPerpPositionsResponseProtoMsg {
+  typeUrl: "/sphx.order.QueryPerpPositionsResponse";
+  value: Uint8Array;
+}
+export interface QueryPerpPositionsResponseAmino {
+  positions?: PerpetualPositionAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryPerpPositionsResponseAminoMsg {
+  type: "/sphx.order.QueryPerpPositionsResponse";
+  value: QueryPerpPositionsResponseAmino;
+}
+export interface QueryPerpPositionsResponseSDKType {
+  positions: PerpetualPositionSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryPerpPositionForAccountRequest {
+  address: string;
+  pagination?: PageRequest;
+}
+export interface QueryPerpPositionForAccountRequestProtoMsg {
+  typeUrl: "/sphx.order.QueryPerpPositionForAccountRequest";
+  value: Uint8Array;
+}
+export interface QueryPerpPositionForAccountRequestAmino {
+  address?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryPerpPositionForAccountRequestAminoMsg {
+  type: "/sphx.order.QueryPerpPositionForAccountRequest";
+  value: QueryPerpPositionForAccountRequestAmino;
+}
+export interface QueryPerpPositionForAccountRequestSDKType {
+  address: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryPerpPositionForAccountResponse {
+  positions: PerpetualPosition[];
+  pagination?: PageResponse;
+}
+export interface QueryPerpPositionForAccountResponseProtoMsg {
+  typeUrl: "/sphx.order.QueryPerpPositionForAccountResponse";
+  value: Uint8Array;
+}
+export interface QueryPerpPositionForAccountResponseAmino {
+  positions?: PerpetualPositionAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryPerpPositionForAccountResponseAminoMsg {
+  type: "/sphx.order.QueryPerpPositionForAccountResponse";
+  value: QueryPerpPositionForAccountResponseAmino;
+}
+export interface QueryPerpPositionForAccountResponseSDKType {
+  positions: PerpetualPositionSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryPerpPositionRequest {
+  positionId: string;
+}
+export interface QueryPerpPositionRequestProtoMsg {
+  typeUrl: "/sphx.order.QueryPerpPositionRequest";
+  value: Uint8Array;
+}
+export interface QueryPerpPositionRequestAmino {
+  position_id?: string;
+}
+export interface QueryPerpPositionRequestAminoMsg {
+  type: "/sphx.order.QueryPerpPositionRequest";
+  value: QueryPerpPositionRequestAmino;
+}
+export interface QueryPerpPositionRequestSDKType {
+  position_id: string;
+}
+export interface QueryPerpPositionResponse {
+  position: PerpetualPosition;
+}
+export interface QueryPerpPositionResponseProtoMsg {
+  typeUrl: "/sphx.order.QueryPerpPositionResponse";
+  value: Uint8Array;
+}
+export interface QueryPerpPositionResponseAmino {
+  position?: PerpetualPositionAmino;
+}
+export interface QueryPerpPositionResponseAminoMsg {
+  type: "/sphx.order.QueryPerpPositionResponse";
+  value: QueryPerpPositionResponseAmino;
+}
+export interface QueryPerpPositionResponseSDKType {
+  position: PerpetualPositionSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -620,14 +794,14 @@ export const QueryMarketsResponse = {
 };
 function createBaseQueryMarketRequest(): QueryMarketRequest {
   return {
-    id: 0
+    id: BigInt(0)
   };
 }
 export const QueryMarketRequest = {
   typeUrl: "/sphx.order.QueryMarketRequest",
   encode(message: QueryMarketRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.id !== 0) {
-      writer.uint32(8).uint32(message.id);
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).int64(message.id);
     }
     return writer;
   },
@@ -639,7 +813,7 @@ export const QueryMarketRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.uint32();
+          message.id = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -650,19 +824,19 @@ export const QueryMarketRequest = {
   },
   fromPartial(object: Partial<QueryMarketRequest>): QueryMarketRequest {
     const message = createBaseQueryMarketRequest();
-    message.id = object.id ?? 0;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryMarketRequestAmino): QueryMarketRequest {
     const message = createBaseQueryMarketRequest();
     if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
+      message.id = BigInt(object.id);
     }
     return message;
   },
   toAmino(message: QueryMarketRequest): QueryMarketRequestAmino {
     const obj: any = {};
-    obj.id = message.id === 0 ? undefined : message.id;
+    obj.id = message.id !== BigInt(0) ? (message.id?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryMarketRequestAminoMsg): QueryMarketRequest {
@@ -887,6 +1061,7 @@ export const QueryOrdersResponse = {
 function createBaseQueryOrdersForAccountRequest(): QueryOrdersForAccountRequest {
   return {
     address: "",
+    status: undefined,
     pagination: undefined
   };
 }
@@ -896,8 +1071,11 @@ export const QueryOrdersForAccountRequest = {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
+    if (message.status !== undefined) {
+      writer.uint32(16).int32(message.status);
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -912,6 +1090,9 @@ export const QueryOrdersForAccountRequest = {
           message.address = reader.string();
           break;
         case 2:
+          message.status = reader.int32() as any;
+          break;
+        case 3:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -924,6 +1105,7 @@ export const QueryOrdersForAccountRequest = {
   fromPartial(object: Partial<QueryOrdersForAccountRequest>): QueryOrdersForAccountRequest {
     const message = createBaseQueryOrdersForAccountRequest();
     message.address = object.address ?? "";
+    message.status = object.status ?? undefined;
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -931,6 +1113,9 @@ export const QueryOrdersForAccountRequest = {
     const message = createBaseQueryOrdersForAccountRequest();
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
     }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
@@ -940,6 +1125,7 @@ export const QueryOrdersForAccountRequest = {
   toAmino(message: QueryOrdersForAccountRequest): QueryOrdersForAccountRequestAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
+    obj.status = message.status === null ? undefined : message.status;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     return obj;
   },
@@ -1159,6 +1345,424 @@ export const QueryOrderInfoResponse = {
     return {
       typeUrl: "/sphx.order.QueryOrderInfoResponse",
       value: QueryOrderInfoResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPerpPositionsRequest(): QueryPerpPositionsRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryPerpPositionsRequest = {
+  typeUrl: "/sphx.order.QueryPerpPositionsRequest",
+  encode(message: QueryPerpPositionsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPerpPositionsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPerpPositionsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPerpPositionsRequest>): QueryPerpPositionsRequest {
+    const message = createBaseQueryPerpPositionsRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPerpPositionsRequestAmino): QueryPerpPositionsRequest {
+    const message = createBaseQueryPerpPositionsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPerpPositionsRequest): QueryPerpPositionsRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPerpPositionsRequestAminoMsg): QueryPerpPositionsRequest {
+    return QueryPerpPositionsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPerpPositionsRequestProtoMsg): QueryPerpPositionsRequest {
+    return QueryPerpPositionsRequest.decode(message.value);
+  },
+  toProto(message: QueryPerpPositionsRequest): Uint8Array {
+    return QueryPerpPositionsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPerpPositionsRequest): QueryPerpPositionsRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryPerpPositionsRequest",
+      value: QueryPerpPositionsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPerpPositionsResponse(): QueryPerpPositionsResponse {
+  return {
+    positions: [],
+    pagination: undefined
+  };
+}
+export const QueryPerpPositionsResponse = {
+  typeUrl: "/sphx.order.QueryPerpPositionsResponse",
+  encode(message: QueryPerpPositionsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.positions) {
+      PerpetualPosition.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPerpPositionsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPerpPositionsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.positions.push(PerpetualPosition.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPerpPositionsResponse>): QueryPerpPositionsResponse {
+    const message = createBaseQueryPerpPositionsResponse();
+    message.positions = object.positions?.map(e => PerpetualPosition.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPerpPositionsResponseAmino): QueryPerpPositionsResponse {
+    const message = createBaseQueryPerpPositionsResponse();
+    message.positions = object.positions?.map(e => PerpetualPosition.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPerpPositionsResponse): QueryPerpPositionsResponseAmino {
+    const obj: any = {};
+    if (message.positions) {
+      obj.positions = message.positions.map(e => e ? PerpetualPosition.toAmino(e) : undefined);
+    } else {
+      obj.positions = message.positions;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPerpPositionsResponseAminoMsg): QueryPerpPositionsResponse {
+    return QueryPerpPositionsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPerpPositionsResponseProtoMsg): QueryPerpPositionsResponse {
+    return QueryPerpPositionsResponse.decode(message.value);
+  },
+  toProto(message: QueryPerpPositionsResponse): Uint8Array {
+    return QueryPerpPositionsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPerpPositionsResponse): QueryPerpPositionsResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryPerpPositionsResponse",
+      value: QueryPerpPositionsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPerpPositionForAccountRequest(): QueryPerpPositionForAccountRequest {
+  return {
+    address: "",
+    pagination: undefined
+  };
+}
+export const QueryPerpPositionForAccountRequest = {
+  typeUrl: "/sphx.order.QueryPerpPositionForAccountRequest",
+  encode(message: QueryPerpPositionForAccountRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPerpPositionForAccountRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPerpPositionForAccountRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPerpPositionForAccountRequest>): QueryPerpPositionForAccountRequest {
+    const message = createBaseQueryPerpPositionForAccountRequest();
+    message.address = object.address ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPerpPositionForAccountRequestAmino): QueryPerpPositionForAccountRequest {
+    const message = createBaseQueryPerpPositionForAccountRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPerpPositionForAccountRequest): QueryPerpPositionForAccountRequestAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPerpPositionForAccountRequestAminoMsg): QueryPerpPositionForAccountRequest {
+    return QueryPerpPositionForAccountRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPerpPositionForAccountRequestProtoMsg): QueryPerpPositionForAccountRequest {
+    return QueryPerpPositionForAccountRequest.decode(message.value);
+  },
+  toProto(message: QueryPerpPositionForAccountRequest): Uint8Array {
+    return QueryPerpPositionForAccountRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPerpPositionForAccountRequest): QueryPerpPositionForAccountRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryPerpPositionForAccountRequest",
+      value: QueryPerpPositionForAccountRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPerpPositionForAccountResponse(): QueryPerpPositionForAccountResponse {
+  return {
+    positions: [],
+    pagination: undefined
+  };
+}
+export const QueryPerpPositionForAccountResponse = {
+  typeUrl: "/sphx.order.QueryPerpPositionForAccountResponse",
+  encode(message: QueryPerpPositionForAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.positions) {
+      PerpetualPosition.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPerpPositionForAccountResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPerpPositionForAccountResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.positions.push(PerpetualPosition.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPerpPositionForAccountResponse>): QueryPerpPositionForAccountResponse {
+    const message = createBaseQueryPerpPositionForAccountResponse();
+    message.positions = object.positions?.map(e => PerpetualPosition.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPerpPositionForAccountResponseAmino): QueryPerpPositionForAccountResponse {
+    const message = createBaseQueryPerpPositionForAccountResponse();
+    message.positions = object.positions?.map(e => PerpetualPosition.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPerpPositionForAccountResponse): QueryPerpPositionForAccountResponseAmino {
+    const obj: any = {};
+    if (message.positions) {
+      obj.positions = message.positions.map(e => e ? PerpetualPosition.toAmino(e) : undefined);
+    } else {
+      obj.positions = message.positions;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPerpPositionForAccountResponseAminoMsg): QueryPerpPositionForAccountResponse {
+    return QueryPerpPositionForAccountResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPerpPositionForAccountResponseProtoMsg): QueryPerpPositionForAccountResponse {
+    return QueryPerpPositionForAccountResponse.decode(message.value);
+  },
+  toProto(message: QueryPerpPositionForAccountResponse): Uint8Array {
+    return QueryPerpPositionForAccountResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPerpPositionForAccountResponse): QueryPerpPositionForAccountResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryPerpPositionForAccountResponse",
+      value: QueryPerpPositionForAccountResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPerpPositionRequest(): QueryPerpPositionRequest {
+  return {
+    positionId: ""
+  };
+}
+export const QueryPerpPositionRequest = {
+  typeUrl: "/sphx.order.QueryPerpPositionRequest",
+  encode(message: QueryPerpPositionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.positionId !== "") {
+      writer.uint32(10).string(message.positionId);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPerpPositionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPerpPositionRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.positionId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPerpPositionRequest>): QueryPerpPositionRequest {
+    const message = createBaseQueryPerpPositionRequest();
+    message.positionId = object.positionId ?? "";
+    return message;
+  },
+  fromAmino(object: QueryPerpPositionRequestAmino): QueryPerpPositionRequest {
+    const message = createBaseQueryPerpPositionRequest();
+    if (object.position_id !== undefined && object.position_id !== null) {
+      message.positionId = object.position_id;
+    }
+    return message;
+  },
+  toAmino(message: QueryPerpPositionRequest): QueryPerpPositionRequestAmino {
+    const obj: any = {};
+    obj.position_id = message.positionId === "" ? undefined : message.positionId;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPerpPositionRequestAminoMsg): QueryPerpPositionRequest {
+    return QueryPerpPositionRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPerpPositionRequestProtoMsg): QueryPerpPositionRequest {
+    return QueryPerpPositionRequest.decode(message.value);
+  },
+  toProto(message: QueryPerpPositionRequest): Uint8Array {
+    return QueryPerpPositionRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPerpPositionRequest): QueryPerpPositionRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryPerpPositionRequest",
+      value: QueryPerpPositionRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPerpPositionResponse(): QueryPerpPositionResponse {
+  return {
+    position: PerpetualPosition.fromPartial({})
+  };
+}
+export const QueryPerpPositionResponse = {
+  typeUrl: "/sphx.order.QueryPerpPositionResponse",
+  encode(message: QueryPerpPositionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.position !== undefined) {
+      PerpetualPosition.encode(message.position, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPerpPositionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPerpPositionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.position = PerpetualPosition.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPerpPositionResponse>): QueryPerpPositionResponse {
+    const message = createBaseQueryPerpPositionResponse();
+    message.position = object.position !== undefined && object.position !== null ? PerpetualPosition.fromPartial(object.position) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPerpPositionResponseAmino): QueryPerpPositionResponse {
+    const message = createBaseQueryPerpPositionResponse();
+    if (object.position !== undefined && object.position !== null) {
+      message.position = PerpetualPosition.fromAmino(object.position);
+    }
+    return message;
+  },
+  toAmino(message: QueryPerpPositionResponse): QueryPerpPositionResponseAmino {
+    const obj: any = {};
+    obj.position = message.position ? PerpetualPosition.toAmino(message.position) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPerpPositionResponseAminoMsg): QueryPerpPositionResponse {
+    return QueryPerpPositionResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPerpPositionResponseProtoMsg): QueryPerpPositionResponse {
+    return QueryPerpPositionResponse.decode(message.value);
+  },
+  toProto(message: QueryPerpPositionResponse): Uint8Array {
+    return QueryPerpPositionResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPerpPositionResponse): QueryPerpPositionResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QueryPerpPositionResponse",
+      value: QueryPerpPositionResponse.encode(message).finish()
     };
   }
 };

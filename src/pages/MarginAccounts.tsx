@@ -148,7 +148,7 @@ const MarginAccountsPage = () => {
                 <div title="Send funds" style={{ minWidth: "600px" }}>
                   {account.address}
                 </div>
-                <div>Positions: {account.perpertualPositions.length}</div>
+                <div>Positions:</div>
                 <div style={{ minWidth: "70px" }}>
                   {balances[index]
                     ? balances[index].amount / 1e6

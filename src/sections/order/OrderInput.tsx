@@ -10,20 +10,15 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
-import { useAppSelector } from "../../hooks";
-import { selectMarketId } from "../../state/futuresSlice";
 import { OrderSide, OrderType } from "../../types/order";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
-// import {
-//   placeLimitOrderInChain,
-//   placeMarketOrderInChain,
-// } from "../../utils/placeOrder";
 import { schema } from "./orderSchema";
 import { Container, PlaceOrderButton, StyledButton, Wrapper } from "./style";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
-import { useOrders } from "../../hooks/useOrders";
+import { useCreateOrder } from "../../hooks/useOrders";
 import { useState } from "react";
+import { useMarkets } from "../../hooks/useMarkets";
 
 type MainOrderType = OrderType.MARKET | OrderType.LIMIT;
 
@@ -67,9 +62,6 @@ function OrderInput() {
   const address = account?.bech32Address;
   const { selectedAddress } = useMarginAccount(address);
 
-  const { nextOrderId, placeLimitOrderInChain, placeMarketOrderInChain } =
-    useOrders(selectedAddress);
-
   const { t } = useTranslation();
   const {
     handleSubmit,
@@ -81,7 +73,8 @@ function OrderInput() {
     defaultValues,
     resolver: yupResolver<any>(schema(90)),
   });
-  const marketId = useAppSelector(selectMarketId);
+
+  const { selectedMarketId: marketId } = useMarkets();
 
   const handleSwitchOrderType = (type: MainOrderType) =>
     setValue("orderType", type);
@@ -94,48 +87,60 @@ function OrderInput() {
 
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
-  const placeOrder = async (values: MarketOrderForm) => {
-    if (!address) return;
-    if (!nextOrderId) return;
-    if (!selectedAddress) return;
+  const { placeMarketOrder, placeLimitOrder } = useCreateOrder();
 
-    if (values.orderType === OrderType.MARKET) {
-      setIsPlacingOrder(true);
-      placeMarketOrderInChain({
-        address,
-        marginAccountAddress: selectedAddress,
-        orderId: nextOrderId,
-        side: values.isBuy ? OrderSide.buy : OrderSide.sell,
-        quantity: BigInt(values.volume * 1e6),
-        price: BigInt(values.price),
-        leverage: BigInt(values.leverage),
-        onSuccess: successAlert,
-        onError: errorAlert,
-      }).finally(() => {
-        setIsPlacingOrder(false);
-      });
-    }
-    if (
-      values.orderType === OrderType.LIMIT &&
-      values.stopLoss &&
-      values.takeProfit
-    ) {
-      setIsPlacingOrder(true);
-      placeLimitOrderInChain({
-        address,
-        marginAccountAddress: selectedAddress,
-        orderId: nextOrderId,
-        side: values.isBuy ? OrderSide.buy : OrderSide.sell,
-        quantity: BigInt(values.volume * 1e6),
-        price: BigInt(values.price),
-        leverage: BigInt(values.leverage),
-        stopLoss: BigInt(values.stopLoss),
-        takeProfit: BigInt(values.takeProfit),
-        onSuccess: successAlert,
-        onError: errorAlert,
-      }).finally(() => {
-        setIsPlacingOrder(false);
-      });
+  const placeOrder = async (values: MarketOrderForm) => {
+    // TODO: Add toast notifications for address, selectedAddress, and marketId
+    if (!address) return;
+    if (!selectedAddress) return;
+    if (!marketId) return;
+
+    try {
+      if (values.orderType === OrderType.MARKET) {
+        setIsPlacingOrder(true);
+
+        placeMarketOrder({
+          address,
+          marginAccountAddress: selectedAddress,
+          orderId: BigInt(Date.now() * 1000),
+          side: values.isBuy ? OrderSide.buy : OrderSide.sell,
+          quantity: BigInt(values.volume * 1e6),
+          price: BigInt(values.price),
+          leverage: BigInt(values.leverage),
+          marketId: BigInt(marketId),
+          onSuccess: successAlert,
+          onError: errorAlert,
+        }).finally(() => {
+          setIsPlacingOrder(false);
+        });
+      }
+      if (
+        values.orderType === OrderType.LIMIT &&
+        values.stopLoss &&
+        values.takeProfit
+      ) {
+        setIsPlacingOrder(true);
+        placeLimitOrder({
+          address,
+          marginAccountAddress: selectedAddress,
+          orderId: BigInt(Date.now() * 1000),
+          side: values.isBuy ? OrderSide.buy : OrderSide.sell,
+          quantity: BigInt(values.volume * 1e6),
+          price: BigInt(values.price),
+          leverage: BigInt(values.leverage),
+          stopLoss: BigInt(values.stopLoss),
+          takeProfit: BigInt(values.takeProfit),
+          marketId: BigInt(marketId),
+          onSuccess: successAlert,
+          onError: errorAlert,
+        }).finally(() => {
+          setIsPlacingOrder(false);
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setIsPlacingOrder(false);
+      errorAlert("Error placing order");
     }
   };
 
@@ -210,7 +215,7 @@ function OrderInput() {
                       value={watch("volume")}
                       type="number"
                       label="Size"
-                      rightSide={marketId}
+                      rightSide={marketId?.toString() || ""}
                     />
                     <div style={{ position: "relative" }}>
                       <Group align="end">

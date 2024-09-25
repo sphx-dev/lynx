@@ -10,6 +10,7 @@ import { GrazProvider } from "graz";
 import { MockKeplr } from "@keplr-wallet/provider-mock";
 import { sphxLocalChainInfo } from "../constants/chainInfo";
 import { vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 // mockGetters(MockKeplr);
 
@@ -42,6 +43,31 @@ vi.mock("../utils/queryMarkets", async () => {
   };
 });
 
+//getPerpetualPositionsByAddress
+vi.mock("../utils/queryPerpetualPositions", async () => {
+  return {
+    getPerpetualPositionsByAddress: async () => {
+      return {
+        positions: [
+          {
+            id: 1,
+            marketId: 1,
+            size: 1,
+            side: 1,
+            leverage: 1,
+            entryPrice: 1,
+            liquidationPrice: 1,
+            pnl: 1,
+            margin: 1,
+            marginRatio: 1,
+            created: new Date(),
+          },
+        ],
+      };
+    },
+  };
+});
+
 const WalletExtensionMock = new MockKeplr(
   async () => {
     return new Uint8Array(0);
@@ -61,19 +87,31 @@ declare global {
 
 globalThis.keplr = WalletExtensionMock;
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // turns retries off
+      retry: false,
+    },
+  },
+});
+
 const Wrapper = ({ children }: any) => {
   return (
     <Provider store={store}>
-      <GrazProvider
-        grazOptions={{
-          chains: [sphxLocalChainInfo],
-        }}
-      >
-        <ThemeProvider theme={themes["dark"]}>{children}</ThemeProvider>
-      </GrazProvider>
+      <QueryClientProvider client={queryClient}>
+        <GrazProvider
+          grazOptions={{
+            chains: [sphxLocalChainInfo],
+          }}
+        >
+          <ThemeProvider theme={themes["dark"]}>{children}</ThemeProvider>
+        </GrazProvider>
+      </QueryClientProvider>
     </Provider>
   );
 };
+
 test("Futures page render properly", async () => {
   // mock for render charting library
   global.URL.createObjectURL = jest.fn(

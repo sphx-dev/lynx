@@ -43,15 +43,18 @@ export const TradingViewContainer = () => {
   // const marketId = useAppSelector(selectMarketId);
   const { selectedMarket } = useMarkets();
   const marketId = selectedMarket?.baseAsset;
-  console.log("MARKET ID", marketId);
+  // console.log("MARKET ID", marketId);
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
+    if (!marketId) {
+      return;
+    }
     const widgetOptions: ChartingLibraryWidgetOptions = {
       ...CHART_DEFAULT_OPTIONS,
       // FIXME use marketId when price API ready
-      symbol: "ETH/USD", //marketId,
+      symbol: marketId,
       datafeed,
       overrides: {
         "paneProperties.backgroundGradientStartColor": "#0E2836",

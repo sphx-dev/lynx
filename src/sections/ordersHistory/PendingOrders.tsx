@@ -1,13 +1,19 @@
-import { useMemo } from "react";
-import { dateToDisplay } from "../../utils/date";
+import { useMemo, useState } from "react";
+
 import { Table, Text, Button } from "../../components/";
-import { getSideColor } from "./helpers";
+import { getOrderStatusText, getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
-import { useOrders } from "../../hooks/useOrders";
+import { useCancelOrder, useOrders } from "../../hooks/useOrders";
 import { OrderSide } from "../../../proto-codecs/codegen/sphx/order/order";
 import { Side } from "../../types/order";
+import { useTranslation } from "react-i18next";
+import { successAlert } from "@/utils/alerts";
+import { useMarkets } from "../../hooks/useMarkets";
+import dayjs from "dayjs";
+import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
+import { Pagination } from "@/components/Pagination";
 
 const PendingOrders = () => {
   // const { openOrders } = useAppSelector(account);
@@ -20,14 +26,52 @@ const PendingOrders = () => {
   //     () => successAlert("Order canceled")
   //   );
   // };
+
+  const { t } = useTranslation();
+  const { address } = useChainCosmoshub();
+  const { selectedAddress } = useMarginAccount(address);
+
+  const { markets } = useMarkets();
+  const marketMap = useMemo(() => {
+    const map = new Map();
+    markets.forEach(m => {
+      map.set(m.id, m.baseAsset + "/" + m.quoteAsset);
+    });
+    return map;
+  }, [markets]);
+
+  const [page, setPage] = useState<number>(0);
+
+  const [cancelingOrders, setCancelingOrders] = useState<any[]>([]);
+
+  const { orders, totalOrders, pageSize } = useOrders(
+    selectedAddress,
+    page,
+    OrderStatus.ORDER_STATUS_OPEN
+  );
+
+  const { cancelOrder } = useCancelOrder();
+
   const columns = [
+    {
+      accessorKey: "marketId",
+      header: "Market",
+      cell: (props: any) => (
+        <Text color="tertiary">{marketMap.get(props.getValue())}</Text>
+      ),
+    },
     {
       flex: 1,
       accessorKey: "timestamp",
       header: "Date",
       cell: (props: any) => (
         <Text color="tertiary">
-          {dateToDisplay(Number(props.getValue()) * 1000)}
+          {dayjs(Date.now()).diff(
+            dayjs(Number(props.getValue()) * 1000),
+            "day"
+          ) > 1
+            ? dayjs(Number(props.getValue()) * 1000).format("YYYY-MM-DD")
+            : dayjs(Number(props.getValue()) * 1000).format("HH:mm:ss")}
         </Text>
       ),
     },
@@ -46,6 +90,13 @@ const PendingOrders = () => {
       ),
     },
     {
+      accessorKey: "leverage",
+      header: "Lev.",
+      cell: (props: any) => (
+        <Text color="tertiary">x{Number(props.getValue())}</Text>
+      ),
+    },
+    {
       accessorKey: "side",
       header: "Side",
       cell: (props: any) => (
@@ -61,44 +112,84 @@ const PendingOrders = () => {
     {
       accessorKey: "status",
       header: "Status",
-      cell: (props: any) => <Text>{props.getValue()}</Text>,
+      cell: (props: any) => (
+        <Text>{getOrderStatusText(props.getValue(), t)}</Text>
+      ),
     },
     {
       flex: 1,
-      accessorKey: "id",
+      // accessorKey: "id",
+      accessorFn: (row: any) => {
+        return { id: row.id, status: row.status };
+      },
       header: "Cancel",
-      cell: (props: any) => (
-        <Button
-          variant="error"
-          onClick={() => console.log("TODO: Cancel order", props.getValue())}
-        >
-          Cancel
-        </Button>
-      ),
+      cell: (props: any) => {
+        const status = props.getValue()?.status;
+        const orderId = props.getValue()?.id;
+        const isCanceling = cancelingOrders.includes(orderId);
+        return (
+          <>
+            {status === OrderStatus.ORDER_STATUS_OPEN && (
+              <Button
+                variant="error"
+                size="xs"
+                disabled={isCanceling}
+                onClick={() => {
+                  setCancelingOrders([...cancelingOrders, orderId]);
+                  if (
+                    address &&
+                    orderId?.number &&
+                    orderId?.marginAccountAddress
+                  ) {
+                    cancelOrder({
+                      address,
+                      orderId,
+                      memo: `Cancel order #${orderId.number}`,
+                    })
+                      .then(() => {
+                        successAlert("Order canceled successfully");
+                        setCancelingOrders(co =>
+                          co.filter(o => o.number !== orderId.number)
+                        );
+                      })
+                      .catch(error => {
+                        console.error(error);
+                        setCancelingOrders(co =>
+                          co.filter(o => o.number !== orderId.number)
+                        );
+                      });
+                  }
+                }}
+              >
+                {isCanceling ? "Canceling..." : "Cancel"}
+              </Button>
+            )}
+          </>
+        );
+      },
     },
   ];
 
-  const { address } = useChainCosmoshub();
-  const { selectedAddress } = useMarginAccount(address);
-
-  const { orders } = useOrders(selectedAddress);
-  const sortedOrders = useMemo(
-    () => orders?.toSorted((a, b) => Number(a.timestamp - b.timestamp)),
-    [orders]
-  );
-  console.log("========>", sortedOrders);
-
   // if (!openOrders.length) {
-  if (!sortedOrders.length) {
+  // if (!sortedOrders.length) {
+  if (totalOrders === 0) {
     return <PlaceHolder>No Orders yet</PlaceHolder>;
   }
   return (
-    <Table
-      columns={columns}
-      // data={openOrders}
-      data={sortedOrders}
-      headerStyle={{ backgroundColor: "#031a28" }}
-    />
+    <>
+      <Table
+        columns={columns}
+        // data={openOrders}
+        data={orders}
+        headerStyle={{ backgroundColor: "#031a28" }}
+      />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalItems={totalOrders}
+        pageSize={pageSize}
+      />
+    </>
   );
 };
 

@@ -23,5 +23,13 @@
   "offline": "OFFLINE",
   "onlyDesktopScreen": "Dear Users, \n\n Our app is currently available only in the desktop version. \n Mobile versions are in development and will be available soon. \nThank you for your patience! \n\nBest regards,\n Sphinx team.",
   "getKeplrButton": "Get Keplr",
-  "getKeplrMessage": "It seems you don't have Keplr wallet extension installed in your browser, get it here"
+  "getKeplrMessage": "It seems you don't have Keplr wallet extension installed in your browser, get it here",
+  "ORDER_STATUS_UNSPECIFIED":"Unspecified",
+  "ORDER_STATUS_OPEN":"Open",
+  "ORDER_STATUS_PARTIALLY_FILLED":"Partially filled",
+  "ORDER_STATUS_FILLED":"Filled",
+  "ORDER_STATUS_CANCELED":"Canceled",
+  "ORDER_STATUS_EXPIRED":"Expired",
+  "ORDER_STATUS_UNRECOGNIZED":"Unrecognized",
+  "ORDER_STATUS_UNKNOWN":"Unknown"
 }

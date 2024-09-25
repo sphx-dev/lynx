@@ -1,11 +1,11 @@
 import {
   createMarginAccount,
   getAccountsByOwner,
-} from "../utils/queryPositions";
-import { errorAlert, successAlert } from "../utils/alerts";
-import { MarginAccountInfo } from "../../proto-codecs/codegen/sphx/marginacc/margin_account";
+} from "../utils/queryMarginAccounts";
+import { MarginAccountInfo } from "proto-codecs/codegen/sphx/marginacc/margin_account";
 import { create } from "zustand";
 import { useEffect } from "react";
+import { errorAlert, successAlert } from "@/utils/alerts";
 
 const STATUS = {
   READY: "READY",

@@ -51,7 +51,7 @@ export function marketStatusToJSON(object: MarketStatus): string {
   }
 }
 export interface Market {
-  id: number;
+  id: bigint;
   ticker: string;
   baseAsset: string;
   quoteAsset: string;
@@ -62,7 +62,7 @@ export interface MarketProtoMsg {
   value: Uint8Array;
 }
 export interface MarketAmino {
-  id?: number;
+  id?: string;
   ticker?: string;
   baseAsset?: string;
   quoteAsset?: string;
@@ -73,7 +73,7 @@ export interface MarketAminoMsg {
   value: MarketAmino;
 }
 export interface MarketSDKType {
-  id: number;
+  id: bigint;
   ticker: string;
   baseAsset: string;
   quoteAsset: string;
@@ -81,7 +81,7 @@ export interface MarketSDKType {
 }
 function createBaseMarket(): Market {
   return {
-    id: 0,
+    id: BigInt(0),
     ticker: "",
     baseAsset: "",
     quoteAsset: "",
@@ -91,8 +91,8 @@ function createBaseMarket(): Market {
 export const Market = {
   typeUrl: "/sphx.order.Market",
   encode(message: Market, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.id !== 0) {
-      writer.uint32(8).uint32(message.id);
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).int64(message.id);
     }
     if (message.ticker !== "") {
       writer.uint32(18).string(message.ticker);
@@ -116,7 +116,7 @@ export const Market = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.uint32();
+          message.id = reader.int64();
           break;
         case 2:
           message.ticker = reader.string();
@@ -139,7 +139,7 @@ export const Market = {
   },
   fromPartial(object: Partial<Market>): Market {
     const message = createBaseMarket();
-    message.id = object.id ?? 0;
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.ticker = object.ticker ?? "";
     message.baseAsset = object.baseAsset ?? "";
     message.quoteAsset = object.quoteAsset ?? "";
@@ -149,7 +149,7 @@ export const Market = {
   fromAmino(object: MarketAmino): Market {
     const message = createBaseMarket();
     if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
+      message.id = BigInt(object.id);
     }
     if (object.ticker !== undefined && object.ticker !== null) {
       message.ticker = object.ticker;
@@ -167,7 +167,7 @@ export const Market = {
   },
   toAmino(message: Market): MarketAmino {
     const obj: any = {};
-    obj.id = message.id === 0 ? undefined : message.id;
+    obj.id = message.id !== BigInt(0) ? (message.id?.toString)() : undefined;
     obj.ticker = message.ticker === "" ? undefined : message.ticker;
     obj.baseAsset = message.baseAsset === "" ? undefined : message.baseAsset;
     obj.quoteAsset = message.quoteAsset === "" ? undefined : message.quoteAsset;

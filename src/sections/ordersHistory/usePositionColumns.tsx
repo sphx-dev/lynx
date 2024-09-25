@@ -99,9 +99,7 @@ export const usePositionColumnsByOrders = function (
     {
       accessorKey: "marketId",
       header: "Symbol",
-      cell: (props: any) => (
-        <Text color="tertiary">{props.getValue().replace(".P", "")}</Text>
-      ),
+      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
     },
     {
       accessorKey: "price",
@@ -116,7 +114,7 @@ export const usePositionColumnsByOrders = function (
       accessorKey: "quantity",
       header: "Size",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / 1e6}</Text>
+        <Text color="tertiary">{Number(props.getValue() || 0) / 1e6}</Text>
       ),
     },
     {

@@ -145,34 +145,52 @@ export interface OrderIdSDKType {
   number: bigint;
 }
 export interface Order {
+  /** Order ID is a unique identifier for the order */
   id: OrderId;
   /** Do we need to store the account id in the order, or order id is enough? */
   accountId: string;
+  /** Order side is either buy or sell */
   side: OrderSide;
+  /** Quantity of the asset or contract to buy or sell */
   quantity: bigint;
+  /** Price of the asset to buy or sell */
   price: bigint;
+  /** Type of the order, either limit or market */
   orderType: OrderType;
+  /** Trigger price for stop loss or take profit orders */
   triggerPrice: bigint;
+  /** Leverage for the order */
   leverage: bigint;
+  /** Timestamp of the order creation */
   timestamp: bigint;
-  marketId: number;
+  /** id of the market for which the order is placed */
+  marketId: bigint;
 }
 export interface OrderProtoMsg {
   typeUrl: "/sphx.order.Order";
   value: Uint8Array;
 }
 export interface OrderAmino {
+  /** Order ID is a unique identifier for the order */
   id?: OrderIdAmino;
   /** Do we need to store the account id in the order, or order id is enough? */
   accountId?: string;
+  /** Order side is either buy or sell */
   side?: OrderSide;
+  /** Quantity of the asset or contract to buy or sell */
   quantity?: string;
+  /** Price of the asset to buy or sell */
   price?: string;
+  /** Type of the order, either limit or market */
   orderType?: OrderType;
+  /** Trigger price for stop loss or take profit orders */
   triggerPrice?: string;
+  /** Leverage for the order */
   leverage?: string;
+  /** Timestamp of the order creation */
   timestamp?: string;
-  MarketId?: number;
+  /** id of the market for which the order is placed */
+  MarketId?: string;
 }
 export interface OrderAminoMsg {
   type: "/sphx.order.Order";
@@ -188,7 +206,7 @@ export interface OrderSDKType {
   triggerPrice: bigint;
   leverage: bigint;
   timestamp: bigint;
-  MarketId: number;
+  MarketId: bigint;
 }
 function createBaseOrderId(): OrderId {
   return {
@@ -276,7 +294,7 @@ function createBaseOrder(): Order {
     triggerPrice: BigInt(0),
     leverage: BigInt(0),
     timestamp: BigInt(0),
-    marketId: 0
+    marketId: BigInt(0)
   };
 }
 export const Order = {
@@ -292,25 +310,25 @@ export const Order = {
       writer.uint32(24).int32(message.side);
     }
     if (message.quantity !== BigInt(0)) {
-      writer.uint32(32).uint64(message.quantity);
+      writer.uint32(32).int64(message.quantity);
     }
     if (message.price !== BigInt(0)) {
-      writer.uint32(40).uint64(message.price);
+      writer.uint32(40).int64(message.price);
     }
     if (message.orderType !== 0) {
       writer.uint32(48).int32(message.orderType);
     }
     if (message.triggerPrice !== BigInt(0)) {
-      writer.uint32(56).uint64(message.triggerPrice);
+      writer.uint32(56).int64(message.triggerPrice);
     }
     if (message.leverage !== BigInt(0)) {
-      writer.uint32(64).uint64(message.leverage);
+      writer.uint32(64).int64(message.leverage);
     }
     if (message.timestamp !== BigInt(0)) {
-      writer.uint32(72).uint64(message.timestamp);
+      writer.uint32(72).int64(message.timestamp);
     }
-    if (message.marketId !== 0) {
-      writer.uint32(80).uint32(message.marketId);
+    if (message.marketId !== BigInt(0)) {
+      writer.uint32(80).int64(message.marketId);
     }
     return writer;
   },
@@ -331,25 +349,25 @@ export const Order = {
           message.side = reader.int32() as any;
           break;
         case 4:
-          message.quantity = reader.uint64();
+          message.quantity = reader.int64();
           break;
         case 5:
-          message.price = reader.uint64();
+          message.price = reader.int64();
           break;
         case 6:
           message.orderType = reader.int32() as any;
           break;
         case 7:
-          message.triggerPrice = reader.uint64();
+          message.triggerPrice = reader.int64();
           break;
         case 8:
-          message.leverage = reader.uint64();
+          message.leverage = reader.int64();
           break;
         case 9:
-          message.timestamp = reader.uint64();
+          message.timestamp = reader.int64();
           break;
         case 10:
-          message.marketId = reader.uint32();
+          message.marketId = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -369,7 +387,7 @@ export const Order = {
     message.triggerPrice = object.triggerPrice !== undefined && object.triggerPrice !== null ? BigInt(object.triggerPrice.toString()) : BigInt(0);
     message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
-    message.marketId = object.marketId ?? 0;
+    message.marketId = object.marketId !== undefined && object.marketId !== null ? BigInt(object.marketId.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: OrderAmino): Order {
@@ -402,7 +420,7 @@ export const Order = {
       message.timestamp = BigInt(object.timestamp);
     }
     if (object.MarketId !== undefined && object.MarketId !== null) {
-      message.marketId = object.MarketId;
+      message.marketId = BigInt(object.MarketId);
     }
     return message;
   },
@@ -417,7 +435,7 @@ export const Order = {
     obj.triggerPrice = message.triggerPrice !== BigInt(0) ? (message.triggerPrice?.toString)() : undefined;
     obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
     obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
-    obj.MarketId = message.marketId === 0 ? undefined : message.marketId;
+    obj.MarketId = message.marketId !== BigInt(0) ? (message.marketId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: OrderAminoMsg): Order {

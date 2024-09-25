@@ -1,8 +1,10 @@
 //@ts-nocheck
+import { OrderId, OrderIdAmino, OrderIdSDKType } from "./order";
 import { BinaryReader, BinaryWriter } from "../../binary";
 export enum PositionSide {
-  POSITION_SIDE_SHORT = 0,
-  POSITION_SIDE_LONG = 1,
+  POSITION_SIDE_UNSPECIFIED = 0,
+  POSITION_SIDE_SHORT = 1,
+  POSITION_SIDE_LONG = 2,
   UNRECOGNIZED = -1,
 }
 export const PositionSideSDKType = PositionSide;
@@ -10,9 +12,12 @@ export const PositionSideAmino = PositionSide;
 export function positionSideFromJSON(object: any): PositionSide {
   switch (object) {
     case 0:
+    case "POSITION_SIDE_UNSPECIFIED":
+      return PositionSide.POSITION_SIDE_UNSPECIFIED;
+    case 1:
     case "POSITION_SIDE_SHORT":
       return PositionSide.POSITION_SIDE_SHORT;
-    case 1:
+    case 2:
     case "POSITION_SIDE_LONG":
       return PositionSide.POSITION_SIDE_LONG;
     case -1:
@@ -23,6 +28,8 @@ export function positionSideFromJSON(object: any): PositionSide {
 }
 export function positionSideToJSON(object: PositionSide): string {
   switch (object) {
+    case PositionSide.POSITION_SIDE_UNSPECIFIED:
+      return "POSITION_SIDE_UNSPECIFIED";
     case PositionSide.POSITION_SIDE_SHORT:
       return "POSITION_SIDE_SHORT";
     case PositionSide.POSITION_SIDE_LONG:
@@ -32,75 +39,117 @@ export function positionSideToJSON(object: PositionSide): string {
       return "UNRECOGNIZED";
   }
 }
+export enum PositionStatus {
+  POSITION_STATUS_UNSPECIFIED = 0,
+  POSITION_STATUS_OPEN = 1,
+  POSITION_STATUS_CLOSED = 2,
+  UNRECOGNIZED = -1,
+}
+export const PositionStatusSDKType = PositionStatus;
+export const PositionStatusAmino = PositionStatus;
+export function positionStatusFromJSON(object: any): PositionStatus {
+  switch (object) {
+    case 0:
+    case "POSITION_STATUS_UNSPECIFIED":
+      return PositionStatus.POSITION_STATUS_UNSPECIFIED;
+    case 1:
+    case "POSITION_STATUS_OPEN":
+      return PositionStatus.POSITION_STATUS_OPEN;
+    case 2:
+    case "POSITION_STATUS_CLOSED":
+      return PositionStatus.POSITION_STATUS_CLOSED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return PositionStatus.UNRECOGNIZED;
+  }
+}
+export function positionStatusToJSON(object: PositionStatus): string {
+  switch (object) {
+    case PositionStatus.POSITION_STATUS_UNSPECIFIED:
+      return "POSITION_STATUS_UNSPECIFIED";
+    case PositionStatus.POSITION_STATUS_OPEN:
+      return "POSITION_STATUS_OPEN";
+    case PositionStatus.POSITION_STATUS_CLOSED:
+      return "POSITION_STATUS_CLOSED";
+    case PositionStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface PerpetualPosition {
   id: string;
-  accountId: string;
-  ticker: string;
+  marginAccount: string;
+  marketId: bigint;
   size: string;
   entryPrice: string;
   leverage: bigint;
-  currentPrice: string;
   entryTime: bigint;
-  unrealizedPL: string;
   side: PositionSide;
+  tpOrderId: OrderId;
+  slOrderId: OrderId;
+  status: PositionStatus;
 }
 export interface PerpetualPositionProtoMsg {
-  typeUrl: "/sphx.marginacc.PerpetualPosition";
+  typeUrl: "/sphx.order.PerpetualPosition";
   value: Uint8Array;
 }
 export interface PerpetualPositionAmino {
   id?: string;
-  account_id?: string;
-  ticker?: string;
+  margin_account?: string;
+  market_id?: string;
   size: string;
   entry_price: string;
   leverage?: string;
-  current_price: string;
   entry_time?: string;
-  UnrealizedPL: string;
   side?: PositionSide;
+  tp_order_id: OrderIdAmino;
+  sl_order_id: OrderIdAmino;
+  status?: PositionStatus;
 }
 export interface PerpetualPositionAminoMsg {
-  type: "/sphx.marginacc.PerpetualPosition";
+  type: "/sphx.order.PerpetualPosition";
   value: PerpetualPositionAmino;
 }
 export interface PerpetualPositionSDKType {
   id: string;
-  account_id: string;
-  ticker: string;
+  margin_account: string;
+  market_id: bigint;
   size: string;
   entry_price: string;
   leverage: bigint;
-  current_price: string;
   entry_time: bigint;
-  UnrealizedPL: string;
   side: PositionSide;
+  tp_order_id: OrderIdSDKType;
+  sl_order_id: OrderIdSDKType;
+  status: PositionStatus;
 }
 function createBasePerpetualPosition(): PerpetualPosition {
   return {
     id: "",
-    accountId: "",
-    ticker: "",
+    marginAccount: "",
+    marketId: BigInt(0),
     size: "",
     entryPrice: "",
     leverage: BigInt(0),
-    currentPrice: "",
     entryTime: BigInt(0),
-    unrealizedPL: "",
-    side: 0
+    side: 0,
+    tpOrderId: OrderId.fromPartial({}),
+    slOrderId: OrderId.fromPartial({}),
+    status: 0
   };
 }
 export const PerpetualPosition = {
-  typeUrl: "/sphx.marginacc.PerpetualPosition",
+  typeUrl: "/sphx.order.PerpetualPosition",
   encode(message: PerpetualPosition, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.accountId !== "") {
-      writer.uint32(18).string(message.accountId);
+    if (message.marginAccount !== "") {
+      writer.uint32(18).string(message.marginAccount);
     }
-    if (message.ticker !== "") {
-      writer.uint32(26).string(message.ticker);
+    if (message.marketId !== BigInt(0)) {
+      writer.uint32(24).int64(message.marketId);
     }
     if (message.size !== "") {
       writer.uint32(34).string(message.size);
@@ -109,19 +158,22 @@ export const PerpetualPosition = {
       writer.uint32(42).string(message.entryPrice);
     }
     if (message.leverage !== BigInt(0)) {
-      writer.uint32(48).uint64(message.leverage);
-    }
-    if (message.currentPrice !== "") {
-      writer.uint32(58).string(message.currentPrice);
+      writer.uint32(48).int64(message.leverage);
     }
     if (message.entryTime !== BigInt(0)) {
-      writer.uint32(64).uint64(message.entryTime);
-    }
-    if (message.unrealizedPL !== "") {
-      writer.uint32(74).string(message.unrealizedPL);
+      writer.uint32(56).int64(message.entryTime);
     }
     if (message.side !== 0) {
-      writer.uint32(80).int32(message.side);
+      writer.uint32(64).int32(message.side);
+    }
+    if (message.tpOrderId !== undefined) {
+      OrderId.encode(message.tpOrderId, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.slOrderId !== undefined) {
+      OrderId.encode(message.slOrderId, writer.uint32(82).fork()).ldelim();
+    }
+    if (message.status !== 0) {
+      writer.uint32(88).int32(message.status);
     }
     return writer;
   },
@@ -136,10 +188,10 @@ export const PerpetualPosition = {
           message.id = reader.string();
           break;
         case 2:
-          message.accountId = reader.string();
+          message.marginAccount = reader.string();
           break;
         case 3:
-          message.ticker = reader.string();
+          message.marketId = reader.int64();
           break;
         case 4:
           message.size = reader.string();
@@ -148,19 +200,22 @@ export const PerpetualPosition = {
           message.entryPrice = reader.string();
           break;
         case 6:
-          message.leverage = reader.uint64();
+          message.leverage = reader.int64();
           break;
         case 7:
-          message.currentPrice = reader.string();
+          message.entryTime = reader.int64();
           break;
         case 8:
-          message.entryTime = reader.uint64();
+          message.side = reader.int32() as any;
           break;
         case 9:
-          message.unrealizedPL = reader.string();
+          message.tpOrderId = OrderId.decode(reader, reader.uint32());
           break;
         case 10:
-          message.side = reader.int32() as any;
+          message.slOrderId = OrderId.decode(reader, reader.uint32());
+          break;
+        case 11:
+          message.status = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -172,15 +227,16 @@ export const PerpetualPosition = {
   fromPartial(object: Partial<PerpetualPosition>): PerpetualPosition {
     const message = createBasePerpetualPosition();
     message.id = object.id ?? "";
-    message.accountId = object.accountId ?? "";
-    message.ticker = object.ticker ?? "";
+    message.marginAccount = object.marginAccount ?? "";
+    message.marketId = object.marketId !== undefined && object.marketId !== null ? BigInt(object.marketId.toString()) : BigInt(0);
     message.size = object.size ?? "";
     message.entryPrice = object.entryPrice ?? "";
     message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
-    message.currentPrice = object.currentPrice ?? "";
     message.entryTime = object.entryTime !== undefined && object.entryTime !== null ? BigInt(object.entryTime.toString()) : BigInt(0);
-    message.unrealizedPL = object.unrealizedPL ?? "";
     message.side = object.side ?? 0;
+    message.tpOrderId = object.tpOrderId !== undefined && object.tpOrderId !== null ? OrderId.fromPartial(object.tpOrderId) : undefined;
+    message.slOrderId = object.slOrderId !== undefined && object.slOrderId !== null ? OrderId.fromPartial(object.slOrderId) : undefined;
+    message.status = object.status ?? 0;
     return message;
   },
   fromAmino(object: PerpetualPositionAmino): PerpetualPosition {
@@ -188,11 +244,11 @@ export const PerpetualPosition = {
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     }
-    if (object.account_id !== undefined && object.account_id !== null) {
-      message.accountId = object.account_id;
+    if (object.margin_account !== undefined && object.margin_account !== null) {
+      message.marginAccount = object.margin_account;
     }
-    if (object.ticker !== undefined && object.ticker !== null) {
-      message.ticker = object.ticker;
+    if (object.market_id !== undefined && object.market_id !== null) {
+      message.marketId = BigInt(object.market_id);
     }
     if (object.size !== undefined && object.size !== null) {
       message.size = object.size;
@@ -203,32 +259,36 @@ export const PerpetualPosition = {
     if (object.leverage !== undefined && object.leverage !== null) {
       message.leverage = BigInt(object.leverage);
     }
-    if (object.current_price !== undefined && object.current_price !== null) {
-      message.currentPrice = object.current_price;
-    }
     if (object.entry_time !== undefined && object.entry_time !== null) {
       message.entryTime = BigInt(object.entry_time);
     }
-    if (object.UnrealizedPL !== undefined && object.UnrealizedPL !== null) {
-      message.unrealizedPL = object.UnrealizedPL;
-    }
     if (object.side !== undefined && object.side !== null) {
       message.side = object.side;
+    }
+    if (object.tp_order_id !== undefined && object.tp_order_id !== null) {
+      message.tpOrderId = OrderId.fromAmino(object.tp_order_id);
+    }
+    if (object.sl_order_id !== undefined && object.sl_order_id !== null) {
+      message.slOrderId = OrderId.fromAmino(object.sl_order_id);
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
     }
     return message;
   },
   toAmino(message: PerpetualPosition): PerpetualPositionAmino {
     const obj: any = {};
     obj.id = message.id === "" ? undefined : message.id;
-    obj.account_id = message.accountId === "" ? undefined : message.accountId;
-    obj.ticker = message.ticker === "" ? undefined : message.ticker;
+    obj.margin_account = message.marginAccount === "" ? undefined : message.marginAccount;
+    obj.market_id = message.marketId !== BigInt(0) ? (message.marketId?.toString)() : undefined;
     obj.size = message.size ?? "";
     obj.entry_price = message.entryPrice ?? "";
     obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
-    obj.current_price = message.currentPrice ?? "";
     obj.entry_time = message.entryTime !== BigInt(0) ? (message.entryTime?.toString)() : undefined;
-    obj.UnrealizedPL = message.unrealizedPL ?? "";
     obj.side = message.side === 0 ? undefined : message.side;
+    obj.tp_order_id = message.tpOrderId ? OrderId.toAmino(message.tpOrderId) : OrderId.toAmino(OrderId.fromPartial({}));
+    obj.sl_order_id = message.slOrderId ? OrderId.toAmino(message.slOrderId) : OrderId.toAmino(OrderId.fromPartial({}));
+    obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },
   fromAminoMsg(object: PerpetualPositionAminoMsg): PerpetualPosition {
@@ -242,7 +302,7 @@ export const PerpetualPosition = {
   },
   toProtoMsg(message: PerpetualPosition): PerpetualPositionProtoMsg {
     return {
-      typeUrl: "/sphx.marginacc.PerpetualPosition",
+      typeUrl: "/sphx.order.PerpetualPosition",
       value: PerpetualPosition.encode(message).finish()
     };
   }

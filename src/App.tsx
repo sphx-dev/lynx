@@ -18,6 +18,7 @@ import { WebSocketProvider } from "./hooks/useWebsocket";
 import { Modal, useModalStore } from "./components/Modal/Modal";
 import { DepositForm } from "./components/Modal/DepositForm";
 import { WithdrawForm } from "./components/Modal/WithdrawForm";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const Desktop = ({ children }: PropsWithChildren) => {
   const isDesktop = useMediaQuery({ minWidth: BREAK_POINTS.MOBILE_MIN_WIDTH });
@@ -39,37 +40,41 @@ const AppInitializtion = ({ children }: PropsWithChildren) => {
   return children;
 };
 
+const queryClient = new QueryClient();
+
 function App() {
   const content = useRoutes(routes);
   const theme: ThemeInterface = themes["dark"];
   const { isOpen, closeModal, openModalType } = useModalStore();
 
   return (
-    <WebSocketProvider>
-      <GrazProvider
-        grazOptions={{
-          chains: [getChain()],
-        }}
-      >
-        <ThemeProvider theme={theme}>
-          <AppInitializtion>
-            <Desktop>
-              <Header />
-              {content}
-              <Footer />
-              <Toaster />
-              <Modal isOpen={isOpen} onClose={closeModal}>
-                {openModalType === "DEPOSIT" && <DepositForm />}
-                {openModalType === "WITHDRAW" && <WithdrawForm />}
-              </Modal>
-            </Desktop>
-            <AnotherDevices>
-              <OnlyDesktopMessage />
-            </AnotherDevices>
-          </AppInitializtion>
-        </ThemeProvider>
-      </GrazProvider>
-    </WebSocketProvider>
+    <QueryClientProvider client={queryClient}>
+      <WebSocketProvider>
+        <GrazProvider
+          grazOptions={{
+            chains: [getChain()],
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <AppInitializtion>
+              <Desktop>
+                <Header />
+                {content}
+                <Footer />
+                <Toaster />
+                <Modal isOpen={isOpen} onClose={closeModal}>
+                  {openModalType === "DEPOSIT" && <DepositForm />}
+                  {openModalType === "WITHDRAW" && <WithdrawForm />}
+                </Modal>
+              </Desktop>
+              <AnotherDevices>
+                <OnlyDesktopMessage />
+              </AnotherDevices>
+            </AppInitializtion>
+          </ThemeProvider>
+        </GrazProvider>
+      </WebSocketProvider>
+    </QueryClientProvider>
   );
 }
 

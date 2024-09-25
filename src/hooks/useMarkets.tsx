@@ -3,17 +3,16 @@ import { Market } from "../../proto-codecs/codegen/sphx/order/market";
 import { getAllMarkets } from "../utils/queryMarkets";
 import { useEffect, useMemo } from "react";
 import { mockFutures } from "../constants/mock";
+import { useQuery } from "react-query";
 
 export const useMarkets = () => {
   const { markets, selectedMarket, setMarkets, setMarketId } =
     useMarketsStore();
-  useEffect(() => {
-    if (markets.length > 0) return;
 
-    getAllMarkets().then(response => {
-      setMarkets(response.markets);
-    });
-  }, [markets, setMarkets]);
+  const { data } = useQuery("markets", getAllMarkets, { staleTime: Infinity });
+  useEffect(() => {
+    setMarkets(data?.markets || []);
+  }, [data, setMarkets]);
 
   // TODO: use real data
   const { symbol, icon } = useMemo(() => {
@@ -23,34 +22,57 @@ export const useMarkets = () => {
     return { symbol: mock?.symbol || "", icon: mock?.icon || "" };
   }, [selectedMarket]);
 
-  return { markets, selectedMarket, symbol, icon, setMarkets, setMarketId };
+  return {
+    markets,
+    selectedMarket,
+    selectedMarketId: selectedMarket?.id,
+    symbol,
+    icon,
+    setMarkets,
+    setMarketId,
+  };
 };
 
 type MarketsStore = {
   markets: Market[];
-  selectMarketId: number;
+  selectedMarketId: bigint;
   selectedMarket: Market | null;
   setMarkets: (markets: Market[]) => void;
-  setMarketId: (id: number) => void;
+  setMarketId: (id: bigint) => void;
 };
 
 const useMarketsStore = create<MarketsStore>((set, get) => ({
   markets: [],
-  selectMarketId: 0,
+  selectedMarketId: 0n,
   selectedMarket: null,
   setMarkets: (markets: Market[]) => {
+    if (equal(get().markets, markets)) return;
+
     const selectedId =
-      get().selectMarketId === 0 ? markets[0].id : get().selectMarketId;
+      get().selectedMarketId === 0n ? markets[0]?.id : get().selectedMarketId;
     set({
       markets,
-      selectMarketId: selectedId,
+      selectedMarketId: selectedId,
       selectedMarket: markets.find(m => m.id === selectedId),
     });
   },
   setMarketId: id => {
     const selectedMarket = get().markets.find(market => market.id === id);
     if (selectedMarket) {
-      set({ selectMarketId: id, selectedMarket });
+      set({ selectedMarketId: id, selectedMarket });
     }
   },
 }));
+
+const equal = (a: Market[], b: Market[]) => {
+  if (a.length === 0 && b.length === 0) return true;
+  if (a.length !== b.length) return false;
+  return a.every(
+    (m, i) =>
+      m.id === b[i]?.id &&
+      m.ticker === b[i]?.ticker &&
+      m.status === b[i]?.status &&
+      m.baseAsset === b[i]?.baseAsset &&
+      m.quoteAsset === b[i]?.quoteAsset
+  );
+};

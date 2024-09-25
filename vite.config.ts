@@ -30,8 +30,8 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        src: "/src",
-        "@proto-codecs": path.resolve(__dirname, "/protocodecs"),
+        "@": path.resolve(__dirname, "/src"),
+        "proto-codecs": path.resolve(__dirname, "/proto-codecs"),
       },
     },
   };
