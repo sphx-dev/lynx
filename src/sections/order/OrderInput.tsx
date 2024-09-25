@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { Divider, Group, Input, Stack, Switcher, Text } from "../../components";
+import { Divider, Group, Stack, Switcher, Text } from "../../components";
 import Surface from "../../Layouts/Surface";
 import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
@@ -10,50 +10,60 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
-import { OrderSide, OrderType } from "../../types/order";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
 import { schema } from "./orderSchema";
-import { Container, PlaceOrderButton, StyledButton, Wrapper } from "./style";
+import {
+  Container,
+  PlaceOrderButton,
+  StyledButton,
+  Wrapper,
+  PlaceOrderMessage,
+} from "./style";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useCreateOrder } from "../../hooks/useOrders";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMarkets } from "../../hooks/useMarkets";
-
-type MainOrderType = OrderType.MARKET | OrderType.LIMIT;
+import { useSub } from "@/hooks/usePubSub";
+import { Input } from "@/components/Input/Input";
+import { Checkbox } from "@/components/Input/Checkbox";
+import { useBalance } from "@/hooks/useBalance";
+import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
 
 const options: [
-  { label: string; value: OrderType.MARKET },
-  { label: string; value: OrderType.LIMIT }
+  { label: string; value: OrderType },
+  { label: string; value: OrderType }
 ] = [
   {
     label: "Market",
-    value: OrderType.MARKET,
+    value: OrderType.ORDER_TYPE_MARKET,
   },
   {
     label: "Limit",
-    value: OrderType.LIMIT,
+    value: OrderType.ORDER_TYPE_LIMIT,
   },
 ];
 
 export interface MarketOrderForm {
-  volume: number;
+  volume: number | string;
   isBuy: boolean;
   leverage: number;
-  price: number;
-  takeProfit: number | null;
-  stopLoss: number | null;
-  orderType: MainOrderType;
+  price: number | string;
+  hasTPSL: boolean;
+  takeProfit: number | string;
+  stopLoss: number | string;
+  orderType: OrderType;
 }
 
 const defaultValues: MarketOrderForm = {
-  volume: 0,
+  volume: "",
   isBuy: true,
   leverage: 1,
-  price: 0,
-  takeProfit: null,
-  stopLoss: null,
-  orderType: OrderType.MARKET,
+  price: "",
+  hasTPSL: false,
+  takeProfit: "",
+  stopLoss: "",
+  orderType: OrderType.ORDER_TYPE_MARKET,
 };
 
 function OrderInput() {
@@ -61,6 +71,7 @@ function OrderInput() {
   const { account, isConnected } = useChainCosmoshub();
   const address = account?.bech32Address;
   const { selectedAddress } = useMarginAccount(address);
+  const { amount } = useBalance(selectedAddress);
 
   const { t } = useTranslation();
   const {
@@ -71,42 +82,71 @@ function OrderInput() {
     formState: { errors },
   } = useForm<MarketOrderForm>({
     defaultValues,
-    resolver: yupResolver<any>(schema(90)),
+    resolver: yupResolver<any>(schema()),
   });
 
-  const { selectedMarketId: marketId } = useMarkets();
+  const { selectedMarketId: marketId, selectedMarket } = useMarkets();
 
-  const handleSwitchOrderType = (type: MainOrderType) =>
+  const handleSwitchOrderType = (type: OrderType) => {
     setValue("orderType", type);
+    if (type === OrderType.ORDER_TYPE_MARKET) {
+      setValue("price", "");
+    }
+  };
 
   const isBuyPosition = watch("isBuy");
-  const orderType: MainOrderType = watch("orderType");
+  const orderType: OrderType = watch("orderType");
+  const hasTPSL = watch("hasTPSL");
 
   const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
+  const handleClickHasTPSL = () => {
+    setValue("takeProfit", "");
+    setValue("stopLoss", "");
+  };
+
+  const setPriceFromEvent = useCallback(
+    (price: number) => {
+      console.log("PRICE_SELECTED", price);
+      setValue("orderType", OrderType.ORDER_TYPE_LIMIT);
+      setValue("price", price);
+    },
+    [setValue]
+  );
+  useSub("PRICE_SELECTED", setPriceFromEvent);
 
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const { placeMarketOrder, placeLimitOrder } = useCreateOrder();
 
   const placeOrder = async (values: MarketOrderForm) => {
+    console.log("PLACE_ORDER", values);
     // TODO: Add toast notifications for address, selectedAddress, and marketId
+    console.log(address, selectedAddress, marketId);
     if (!address) return;
     if (!selectedAddress) return;
     if (!marketId) return;
 
     try {
-      if (values.orderType === OrderType.MARKET) {
+      if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
         setIsPlacingOrder(true);
 
         placeMarketOrder({
           address,
           marginAccountAddress: selectedAddress,
           orderId: BigInt(Date.now() * 1000),
-          side: values.isBuy ? OrderSide.buy : OrderSide.sell,
-          quantity: BigInt(values.volume * 1e6),
-          price: BigInt(values.price),
+          side: values.isBuy
+            ? OrderSide.ORDER_SIDE_BUY
+            : OrderSide.ORDER_SIDE_SELL,
+          quantity: BigInt(Number(values.volume) * 1e6),
+          // price: BigInt(values.price * 1e6),
           leverage: BigInt(values.leverage),
+          stopLoss: values.stopLoss
+            ? BigInt(Number(values.stopLoss) * 1e6)
+            : undefined,
+          takeProfit: values.takeProfit
+            ? BigInt(Number(values.takeProfit) * 1e6)
+            : undefined,
           marketId: BigInt(marketId),
           onSuccess: successAlert,
           onError: errorAlert,
@@ -114,22 +154,24 @@ function OrderInput() {
           setIsPlacingOrder(false);
         });
       }
-      if (
-        values.orderType === OrderType.LIMIT &&
-        values.stopLoss &&
-        values.takeProfit
-      ) {
+      if (values.orderType === OrderType.ORDER_TYPE_LIMIT) {
         setIsPlacingOrder(true);
         placeLimitOrder({
           address,
           marginAccountAddress: selectedAddress,
           orderId: BigInt(Date.now() * 1000),
-          side: values.isBuy ? OrderSide.buy : OrderSide.sell,
-          quantity: BigInt(values.volume * 1e6),
-          price: BigInt(values.price),
+          side: values.isBuy
+            ? OrderSide.ORDER_SIDE_BUY
+            : OrderSide.ORDER_SIDE_SELL,
+          quantity: BigInt(Number(values.volume) * 1e6),
+          price: BigInt(Number(values.price) * 1e6),
           leverage: BigInt(values.leverage),
-          stopLoss: BigInt(values.stopLoss),
-          takeProfit: BigInt(values.takeProfit),
+          stopLoss: values.stopLoss
+            ? BigInt(Number(values.stopLoss) * 1e6)
+            : undefined,
+          takeProfit: values.takeProfit
+            ? BigInt(Number(values.takeProfit) * 1e6)
+            : undefined,
           marketId: BigInt(marketId),
           onSuccess: successAlert,
           onError: errorAlert,
@@ -173,7 +215,11 @@ function OrderInput() {
             </Container>
           )}
           <Stack spacing={20}>
-            <form onSubmit={handleSubmit(placeOrder)}>
+            <form
+              onSubmit={handleSubmit(placeOrder, errors => {
+                console.log(errors);
+              })}
+            >
               <Stack spacing={20}>
                 <Group spacing={0}>
                   <TabButton
@@ -197,25 +243,28 @@ function OrderInput() {
                   <Stack spacing={20}>
                     <Switcher
                       onChange={handleSwitchOrderType}
+                      defaultValue={orderType}
                       options={options}
                       name="orderType"
                     />
 
-                    <Input
-                      {...register("price")}
-                      label="Price"
-                      rightSide="USD"
-                      type="number"
-                      value={watch("price")}
-                      error={errors.price?.message}
-                    />
+                    {orderType !== OrderType.ORDER_TYPE_MARKET && (
+                      <Input
+                        {...register("price")}
+                        label="Price"
+                        rightSide="USD"
+                        type="number"
+                        value={watch("price")}
+                        error={errors.price?.message}
+                      />
+                    )}
                     <Input
                       {...register("volume")}
                       error={errors.volume?.message}
                       value={watch("volume")}
                       type="number"
                       label="Size"
-                      rightSide={marketId?.toString() || ""}
+                      rightSide={selectedMarket?.baseAsset || ""}
                     />
                     <div style={{ position: "relative" }}>
                       <Group align="end">
@@ -259,7 +308,15 @@ function OrderInput() {
                         </Group>
                       </Group>
                     </div>
-                    {orderType !== OrderType.MARKET && (
+                    <Group>
+                      <Checkbox
+                        type="checkbox"
+                        left={t("Take Profit/Stop Loss")}
+                        onClick={handleClickHasTPSL}
+                        {...register("hasTPSL")}
+                      />
+                    </Group>
+                    {hasTPSL && (
                       <>
                         <Input
                           {...register("takeProfit")}
@@ -289,12 +346,16 @@ function OrderInput() {
                     )}
                     {isConnected && (
                       <>
-                        <PlaceOrderButton
-                          $isBuy={isBuyPosition}
-                          disabled={isPlacingOrder}
-                        >
-                          {t("placeOrder")}
-                        </PlaceOrderButton>
+                        {!selectedAddress || !amount ? (
+                          <PlaceOrderMessage />
+                        ) : (
+                          <PlaceOrderButton
+                            $isBuy={isBuyPosition}
+                            disabled={isPlacingOrder}
+                          >
+                            {t("placeOrder")}
+                          </PlaceOrderButton>
+                        )}
                       </>
                     )}
                     <Summary />

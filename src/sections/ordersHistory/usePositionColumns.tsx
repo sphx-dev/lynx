@@ -1,14 +1,15 @@
-import { OrderType } from "../../../proto-codecs/codegen/sphx/order/order";
+import { useMarkets } from "@/hooks/useMarkets";
 import { Button, Text } from "../../components";
 import UseTheme from "../../hooks/useTheme";
-import { OrderSide } from "../../types/order";
 import { dateToDisplay } from "../../utils/date";
 import { formatNumber } from "../../utils/format";
 import { getColorByPl } from "./helpers";
+import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
 
 type ClosePositionCallback = (params: {
   size: string;
   side: OrderSide;
+  type: OrderType;
   leverage: number;
 }) => void;
 
@@ -17,76 +18,11 @@ export const usePositionColumns = function (
 ) {
   const { themeColors } = UseTheme();
 
+  const { markets } = useMarkets();
+
   return [
     {
       accessorKey: "entryTime",
-      header: "Date",
-      cell: (props: any) => (
-        <Text color="tertiary">{dateToDisplay(props.getValue())}</Text>
-      ),
-    },
-    {
-      accessorKey: "ticker",
-      header: "Symbol",
-      cell: (props: any) => (
-        // <Text color="tertiary">{props.getValue().replace(".P", "")}</Text>
-        <Text color="tertiary">{props.getValue()}</Text>
-      ),
-    },
-    {
-      accessorKey: "entryPrice",
-      header: "Entry Price",
-      cell: (props: any) => (
-        <Text color="tertiary">
-          {formatNumber({ value: +props.getValue(), fixed: 2 })}
-        </Text>
-      ),
-    },
-    {
-      accessorKey: "size",
-      header: "Size",
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
-    },
-    {
-      accessorKey: "unrealizedPl",
-      header: "PNL",
-      cell: (props: any) => (
-        <Text color={getColorByPl(props.getValue())}>
-          {formatNumber({ value: +props.getValue(), fixed: 2 })}
-        </Text>
-      ),
-      width: "100px",
-    },
-    {
-      header: "Close",
-      cell: (props: any) => {
-        // console.log(props);
-        const { size, side, leverage } = props.row.original;
-        return (
-          <Button
-            variant="link"
-            onClick={() => {
-              console.log("TODO: CLOSE POSITION", { size, side, leverage });
-              closePosition({ size, side, leverage });
-            }}
-            color={themeColors.text.secondaryLink}
-          >
-            Market
-          </Button>
-        );
-      },
-    },
-  ];
-};
-
-export const usePositionColumnsByOrders = function (
-  closePosition: ClosePositionCallback
-) {
-  const { themeColors } = UseTheme();
-
-  return [
-    {
-      accessorKey: "timestamp",
       header: "Date",
       cell: (props: any) => {
         return (
@@ -99,22 +35,41 @@ export const usePositionColumnsByOrders = function (
     {
       accessorKey: "marketId",
       header: "Symbol",
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      cell: (props: any) => {
+        const market = markets.find(m => m.id === props.getValue());
+        return (
+          <Text color="tertiary">{market?.ticker}</Text>
+          // <Text color="tertiary">{props.getValue() /*.replace(".P", "")*/}</Text>
+        );
+      },
     },
     {
-      accessorKey: "price",
+      accessorKey: "entryPrice",
       header: "Entry Price",
       cell: (props: any) => (
         <Text color="tertiary">
-          {formatNumber({ value: Number(props.getValue()), fixed: 2 })}
+          {formatNumber({ value: Number(props.getValue()) / 1e6, fixed: 2 })}
         </Text>
       ),
     },
     {
-      accessorKey: "quantity",
-      header: "Size",
+      accessorKey: "size",
+      header: "Qty",
       cell: (props: any) => (
         <Text color="tertiary">{Number(props.getValue() || 0) / 1e6}</Text>
+      ),
+    },
+
+    {
+      // accessorKey: "size",
+      accessorFn: (row: any) => {
+        return (Number(row.size) / 1e6) * (Number(row.entryPrice) / 1e6);
+      },
+      header: "Value",
+      cell: (props: any) => (
+        <Text color="tertiary">
+          {formatNumber({ value: props.getValue(), fixed: 8 })}
+        </Text>
       ),
     },
     {
@@ -130,6 +85,36 @@ export const usePositionColumnsByOrders = function (
       width: "100px",
     },
     {
+      header: "TP/SL",
+      cell: (props: any) => {
+        const position = props.row.original;
+        const slOrderId = position.slOrderId;
+        const tpOrderId = position.tpOrderId;
+        const hasDetails =
+          tpOrderId.marginAccountAddress &&
+          slOrderId.marginAccountAddress &&
+          tpOrderId.number &&
+          slOrderId.number;
+        return (
+          <>
+            {hasDetails && (
+              <Button
+                variant="secondary"
+                size="xs"
+                onClick={() => {
+                  console.log("TODO: SHOW TP/SL", slOrderId, tpOrderId);
+                }}
+                // color={themeColors.text.secondaryLink}
+              >
+                Details
+              </Button>
+            )}
+          </>
+        );
+      },
+      // width: "100px",
+    },
+    {
       accessorKey: "orderType",
       header: "Type",
       cell: (props: any) => (
@@ -142,21 +127,52 @@ export const usePositionColumnsByOrders = function (
       width: "100px",
     },
     {
-      header: "Close",
+      header: "Close By",
       cell: (props: any) => {
         // console.log(props);
         const { size, side, leverage } = props.row.original;
         return (
-          <Button
-            variant="link"
-            onClick={() => {
-              // console.log("TODO: CLOSE POSITION", { size, side, leverage });
-              closePosition({ size, side, leverage });
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "2px",
+              width: "75px",
             }}
-            color={themeColors.text.secondaryLink}
           >
-            Market
-          </Button>
+            <Button
+              variant="secondary"
+              size="xs"
+              onClick={() => {
+                // console.log("TODO: CLOSE POSITION", { size, side, leverage });
+                closePosition({
+                  size,
+                  side,
+                  type: OrderType.ORDER_TYPE_MARKET,
+                  leverage,
+                });
+              }}
+              // color={themeColors.text.secondaryLink}
+            >
+              Market
+            </Button>
+            <Button
+              variant="secondary"
+              size="xs"
+              onClick={() => {
+                // console.log("TODO: CLOSE POSITION", { size, side, leverage });
+                closePosition({
+                  size,
+                  side,
+                  type: OrderType.ORDER_TYPE_LIMIT,
+                  leverage,
+                });
+              }}
+              // color={themeColors.text.secondaryLink}
+            >
+              Limit
+            </Button>
+          </div>
         );
       },
     },

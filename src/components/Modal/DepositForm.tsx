@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import Button from "../Button";
-import Input from "../Input";
+import { Input } from "../Input";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import Divider from "../Divider";
-import { markBalanceAsStale, useBalance } from "../../hooks/useBalance";
+import { useBalance } from "../../hooks/useBalance";
 import { sendTokens } from "../../utils/sendTokens";
 import { successAlert } from "../../utils/alerts";
 
@@ -46,7 +46,7 @@ async function depositToMarginAccount({
 
 export const DepositForm = () => {
   const { address } = useChainCosmoshub();
-  const { selectedAccount, isReady } = useMarginAccount(address);
+  const { selectedAccount, isSuccess } = useMarginAccount(address);
   const [depositAmount, setDepositAmount] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -72,8 +72,6 @@ export const DepositForm = () => {
           setIsSubmitting(false);
           setDepositAmount("");
           setError("");
-          markBalanceAsStale(address, "uusdc");
-          markBalanceAsStale(selectedAccount?.address, "uusdc");
           successAlert("Deposit successful");
         },
         onError: msg => {
@@ -87,13 +85,13 @@ export const DepositForm = () => {
     }
   };
 
-  if (!isReady) {
+  if (!isSuccess) {
     return null;
   }
 
   return (
     <Container>
-      <Title>Deposit to Margin Account</Title>
+      <Header>Deposit to Margin Account</Header>
       <Divider />
       <FormRow>
         <label>Availabe balance: {addressBalance} USDC</label>
@@ -144,7 +142,7 @@ const Container = styled.div`
   ${({ theme }) => theme.fonts.typography.textMd}
 `;
 
-const Title = styled.h3`
+const Header = styled.h2`
   margin-bottom: 26px;
 `;
 
@@ -158,7 +156,6 @@ const FormRow = styled.div`
 `;
 
 const StyledLabel = styled.label`
-  v
   color: ${({ theme }) => getThemeColors(theme).text.secondaryLink};
   &.active {
     color: ${({ theme }) => getThemeColors(theme).text.primary};

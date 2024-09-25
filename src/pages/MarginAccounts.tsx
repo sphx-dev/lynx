@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, Input, Stack } from "../components";
+import { Button, Stack } from "../components";
 import { ConnectButton } from "../components/ConnectButton";
 import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../hooks/useMarginAccounts";
@@ -8,12 +8,13 @@ import { getBalance } from "../utils/getBalance";
 import { Coin } from "@cosmjs/proto-signing";
 import { sendTokens } from "../utils/sendTokens";
 import { errorAlert, infoAlert, successAlert } from "../utils/alerts";
+import { Input } from "@/components/Input";
 
 const MarginAccountsPage = () => {
   const { address, reconnect } = useChainCosmoshub();
   const {
     status,
-    isReady,
+    isSuccess,
     marginAccounts,
     createAccount,
     selectedAddress,
@@ -85,7 +86,7 @@ const MarginAccountsPage = () => {
             </RowContainer>
             <RowContainer>
               <h4>Using: {selectedAddress}</h4>
-              {isReady ? (
+              {isSuccess ? (
                 <Button onClick={createAccount}>
                   Create new Margin Account
                 </Button>

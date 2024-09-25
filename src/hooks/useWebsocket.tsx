@@ -89,27 +89,34 @@ const subscribe = (websocket: WebSocket) => {
       id: "sphx-ws-subscribe-2-" + new Date().toJSON(),
       query: `message.module = 'marginacc'`,
     },
+    // {
+    //   id: "sphx-ws-subscribe-3-" + new Date().toJSON(),
+    //   query: `tm.event = 'Tx'`,
+    // },
+    //`tm.event = 'Tx' AND transfer.sender = '${address}'`
+    // {
+    //   id: "sphx-ws-subscribe-4-" + new Date().toJSON(),
+    //   query: `tm.event = 'Tx'`,
+    // },
+    //`tm.event = 'Tx' AND transfer.receiver = '${address}'`
+    {
+      id: "sphx-ws-subscribe-3-" + new Date().toJSON(),
+      query: `tm.event = 'Tx'`,
+    },
+    // {
+    //   id: "sphx-ws-subscribe-4-" + new Date().toJSON(),
+    //   query: ``,
+    // },
   ];
 
-  const subscriptionMessages: SubscritionMessage[] = [
-    {
-      id: subs[0].id,
-      jsonrpc: "2.0",
-      method: "subscribe",
-      params: {
-        query: subs[0].query,
-      },
+  const subscriptionMessages: SubscritionMessage[] = subs.map(sub => ({
+    id: sub.id,
+    jsonrpc: "2.0",
+    method: "subscribe",
+    params: {
+      query: sub.query,
     },
-
-    {
-      id: subs[1].id,
-      jsonrpc: "2.0",
-      method: "subscribe",
-      params: {
-        query: subs[1].query,
-      },
-    },
-  ];
+  }));
 
   subscriptionMessages.forEach(msg => {
     websocket.send(JSON.stringify(msg));
@@ -136,7 +143,44 @@ const unsubscribe = (
   });
 };
 
-export const useWebsocket = (onMessage?: (message: any) => void) => {
+// Cosmos types
+// TODO: confirm fields for Cosmos types
+export type CosmosMessage = {
+  data: {
+    type: string;
+    value: {
+      TxResult: {
+        height: string;
+        result: {
+          data: string;
+          events: CosmosTransactionEvent[];
+          gas_used: string;
+          gas_wanted: string;
+        };
+        tx: string;
+      };
+    };
+  };
+  events: { [eventName: string]: CosmposFlattenedEvent };
+  query: string;
+};
+
+export type CosmosTransactionEvent = {
+  attributes: { key: string; value: string; index: boolean }[];
+  type: string;
+};
+
+export type CosmposFlattenedEvent = string[];
+
+export type JsonRpcResultMessage = {
+  id: string;
+  jsonrpc: string;
+  result: CosmosMessage;
+};
+
+export const useWebsocket = (
+  onMessage?: (message: JsonRpcResultMessage) => void
+) => {
   const { ws, error, subscriptions, reconnect } = useContext(WsContext);
   // const [messages, setMessages] = useState<any[]>([]);
 
@@ -145,12 +189,14 @@ export const useWebsocket = (onMessage?: (message: any) => void) => {
 
     if (ws && ws?.readyState !== WebSocket.CLOSED) {
       messageHandler = (event: MessageEvent<any>) => {
-        let msg = {};
+        console.log("WS::::::::::", "EVENT:", event);
+        let msg;
         try {
           msg = JSON.parse(event.data);
         } catch (e) {
           console.log("WS::::::::::", "msg-error", e);
         }
+        console.log("WS::::::::::", "EVENT data:", msg);
         onMessage?.(msg);
       };
 

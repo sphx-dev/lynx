@@ -1,38 +1,53 @@
-import React, { FunctionComponent } from "react";
-import useTheme from "../../hooks/useTheme";
 import { OrderType } from "../../types/orderBook";
+import styled from "styled-components";
+import { getThemeColors } from "@/theme";
 
-interface DepthVisualizerProps {
-  depth: number;
-  orderType: OrderType;
-  windowWidth: number;
-}
+const DepthVisualizer = styled.div<{
+  $orderType: OrderType;
+  $depth: number;
+  $filled: number;
+}>`
+  background-color: ${({ $orderType, theme }) =>
+    $orderType === OrderType.BIDS
+      ? getThemeColors(theme).positive
+      : getThemeColors(theme).negative};
 
-const DepthVisualizer: FunctionComponent<DepthVisualizerProps> = ({
-  windowWidth,
-  depth,
-  orderType,
-}) => {
-  const { themeColors } = useTheme();
-  return (
-    <div
-      data-testid="depth-visualizer"
-      style={{
-        backgroundColor: `${
-          orderType === OrderType.BIDS
-            ? themeColors.positive
-            : themeColors.negative
-        }`,
-        height: "1.250em",
-        width: `${depth}%`,
-        position: "relative",
-        top: 21,
-        left: `${100 - depth}%`,
-        marginTop: -24,
-        zIndex: 0,
-      }}
-    />
-  );
-};
+  height: 19px;
+  width: ${({ $depth }) => $depth}%;
+  top: 0;
+  right: 0;
+  position: absolute;
+  transform: translateY(5px);
+  z-index: 0;
+  :hover > & {
+    // TODO: hover collors for depth
+    /* background-color: ${({ $orderType, theme }) =>
+      $orderType === OrderType.BIDS
+        ? getThemeColors(theme).positive
+        : getThemeColors(theme).negative}; */
+  }
+  &:after {
+    content: "";
+    display: block;
+    height: 19px;
+    //TODO: fix this with proper width calculation of partially filled depth
+    width: ${({ $filled }) => $filled}%;
+    top: 0;
+    right: 0;
+    position: absolute;
+    z-index: 1;
+    background-color: ${({ $orderType, theme }) =>
+      $orderType === OrderType.BIDS
+        ? getThemeColors(theme).positive2
+        : getThemeColors(theme).negative2};
+  }
+  :hover > &:after {
+    // TODO: hover collors for partially filled depth
+    /* background-color: ${({ $orderType, theme }) =>
+      $orderType === OrderType.BIDS
+        ? getThemeColors(theme).positive2
+        : getThemeColors(theme).negative2}; */
+  }
+`;
 
 export default DepthVisualizer;

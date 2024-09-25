@@ -10,6 +10,10 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 
 import { Window as KeplrWindow } from "@keplr-wallet/types";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { WebSocketProvider } from "./hooks/useWebsocket";
+import { GrazProvider } from "graz";
+import { getChain } from "./config";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -34,6 +38,8 @@ function Fallback({
   );
 }
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ErrorBoundary
@@ -57,7 +63,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     >
       <Provider store={store}>
         <BrowserRouter>
-          <App />
+          <QueryClientProvider client={queryClient}>
+            <GrazProvider
+              grazOptions={{
+                chains: [getChain()],
+              }}
+            >
+              <WebSocketProvider>
+                <App />
+              </WebSocketProvider>
+            </GrazProvider>
+          </QueryClientProvider>
         </BrowserRouter>
       </Provider>
     </ErrorBoundary>

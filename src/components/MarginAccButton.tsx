@@ -8,13 +8,14 @@ export const MarginAccButton = ({
   ...props
 }: ButtonProps & { size: string }) => {
   const { address } = useChainCosmoshub();
-  const { marginAccounts, createAccount, isReady } = useMarginAccount(address);
+  const { marginAccounts, createAccount, isSuccess } =
+    useMarginAccount(address);
 
-  if (!address || !isReady) {
+  if (!address || !isSuccess) {
     return null;
   }
 
-  if (isReady && !marginAccounts.length) {
+  if (isSuccess && !marginAccounts.length) {
     return (
       <Button size={size} onClick={createAccount}>
         Create Margin Account
@@ -22,7 +23,7 @@ export const MarginAccButton = ({
     );
   }
 
-  if (isReady && marginAccounts.length > 0) {
+  if (isSuccess && marginAccounts.length > 0) {
     return <MarginAccSelector size={size} {...props} />;
   }
   return null;

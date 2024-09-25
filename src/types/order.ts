@@ -1,3 +1,5 @@
+import { OrderType } from "proto-codecs/codegen/sphx/order/order";
+
 export enum Side {
   Sell = "sell",
   Buy = "buy",
@@ -52,16 +54,18 @@ export interface Position {
   unrealizedPl: string;
 }
 
-export enum OrderSide {
-  buy = "buy",
-  sell = "sell",
-}
+// Replaced by OrderSide in proto-codecs
+// export enum OrderSide {
+//   buy = "buy",
+//   sell = "sell",
+// }
 
-export enum OrderType {
-  LIMIT = "limit",
-  MARKET = "market",
-  STOP_LOSS_MARKET = "stop_loss_market",
-  STOP_LOSS_LIMIT = "stop_loss_limit",
-  TAKE_PROFIT_MARKET = "take_profit_market",
-  TAKE_PROFIT_LIMIT = "take_profit_limit",
-}
+// Replaced by OrderType in proto-codecs
+// export enum OrderType {
+//   LIMIT = "limit",
+//   MARKET = "market",
+//   STOP_LOSS_MARKET = "stop_loss_market",
+//   STOP_LOSS_LIMIT = "stop_loss_limit",
+//   TAKE_PROFIT_MARKET = "take_profit_market",
+//   TAKE_PROFIT_LIMIT = "take_profit_limit",
+// }

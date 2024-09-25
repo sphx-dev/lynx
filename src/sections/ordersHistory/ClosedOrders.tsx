@@ -70,7 +70,7 @@ const ClosedOrders = () => {
       header: "Price",
       cell: (props: any) => (
         <Text color="tertiary">
-          {formatNumber({ value: Number(props.getValue()), fixed: 2 })}
+          {formatNumber({ value: Number(props.getValue()) / 1e6, fixed: 2 })}
         </Text>
       ),
     },

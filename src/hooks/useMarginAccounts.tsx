@@ -4,83 +4,103 @@ import {
 } from "../utils/queryMarginAccounts";
 import { MarginAccountInfo } from "proto-codecs/codegen/sphx/marginacc/margin_account";
 import { create } from "zustand";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { errorAlert, successAlert } from "@/utils/alerts";
-
-const STATUS = {
-  READY: "READY",
-  LOADING: "LOADING",
-  ERROR: "ERROR",
-  CREATING: "CREATING",
-};
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 type MarginAccountState = {
-  owner: string | null | undefined;
   marginAccounts: MarginAccountInfo[];
   selectedIndex: number;
-  status: string;
 
-  setOwner: (owner: string | null | undefined) => void;
+  setMarginAccounts: (marginAccounts: MarginAccountInfo[]) => void;
   setSelectedIndex: (selectedIndex: number) => void;
-  setStatus: (status: string) => void;
 
   getSelectedAccount: () => MarginAccountInfo | undefined;
   getSelectedAddress: () => string | undefined;
   getSelectedIndex: () => number;
-
-  getAccounts: () => void;
-  createAccount: () => void;
 };
 
 export const useMarginAccount = (owner: string | null | undefined) => {
   const store = useMarginAccountStore();
-  const { setOwner } = store;
+  const { setMarginAccounts } = store;
 
+  const queryClient = useQueryClient();
+
+  // Fetch margin accounts
+  const { data, isLoading, isError, isIdle, isSuccess, status } = useQuery(
+    ["marginAccounts", owner],
+    () => {
+      return getAccountsByOwner(owner!).then(response => {
+        return response.marginAccounts;
+      });
+    },
+    {
+      enabled: !!owner,
+      staleTime: 1000 * 60 * 60,
+    }
+  );
   useEffect(() => {
-    setOwner(owner);
-  }, [owner, setOwner]);
+    if (data) {
+      setMarginAccounts(data);
+    }
+  }, [data, setMarginAccounts]);
+
+  // Mutation for creating margin account
+  const mutation = useMutation(createMarginAccount);
+  const createAccount = useCallback(() => {
+    const ids = store.marginAccounts.map(ma => ma?.id?.number || 0);
+    const nextMarginAccountNumber = Math.max(...ids, 0) + 1;
+    return mutation.mutateAsync(
+      {
+        address: owner!,
+        number: nextMarginAccountNumber,
+      },
+      {
+        onSettled: () => {
+          queryClient.invalidateQueries(["marginAccounts", owner]);
+        },
+        onSuccess: response => {
+          if (response.code === 0) {
+            successAlert("Margin account created successfully");
+          } else {
+            errorAlert(getTextByCode(response.code));
+          }
+        },
+        onError: error => {
+          errorAlert(getTextFromError((error as Error).message));
+        },
+      }
+    );
+  }, [owner, mutation, store.marginAccounts, queryClient]);
 
   return {
     ...store,
-    isReady: store.status === STATUS.READY,
-    isLoading: store.status === STATUS.LOADING,
-    isError: store.status === STATUS.ERROR,
-    isCreating: store.status === STATUS.CREATING,
+    status,
+    isIdle,
+    isLoading,
+    isError,
+    isSuccess,
     selectedAccount: store.getSelectedAccount(),
     selectedAddress: store.getSelectedAddress(),
     selectedIndex: store.getSelectedIndex(),
+    createAccount,
   };
 };
 
 export const useMarginAccountStore = create<MarginAccountState>((set, get) => ({
-  owner: null,
   marginAccounts: [],
   selectedIndex: 0,
-  status: STATUS.READY,
 
   // Setters
-  setOwner: (owner: string | null | undefined) => {
-    const currentOwner = get().owner;
-    set({ owner });
-    if (!owner) {
-      set({
-        owner: null,
-        status: STATUS.READY,
-        marginAccounts: [],
-        selectedIndex: 0,
-      });
-    }
-    if (owner && owner !== currentOwner) {
-      get().getAccounts();
-    }
+  setMarginAccounts: (marginAccounts: MarginAccountInfo[]) => {
+    set({
+      marginAccounts,
+    });
   },
   setSelectedIndex: (selectedIndex: number) => {
     set({
       selectedIndex,
     });
-  },
-  setStatus: (status: string) => {
-    set({ status });
   },
 
   // Getters
@@ -92,56 +112,6 @@ export const useMarginAccountStore = create<MarginAccountState>((set, get) => ({
   },
   getSelectedIndex: () => {
     return get().selectedIndex;
-  },
-
-  // Actions
-  getAccounts: async () => {
-    const owner = get().owner;
-    if (!owner) {
-      return;
-    }
-
-    set({ status: STATUS.LOADING });
-    try {
-      const response = await getAccountsByOwner(owner);
-      set({
-        marginAccounts: response.marginAccounts,
-        status: STATUS.READY,
-      });
-    } catch {
-      set({
-        marginAccounts: [],
-        status: STATUS.ERROR,
-      });
-    }
-  },
-  createAccount: async () => {
-    const owner = get().owner;
-    if (!owner) {
-      return;
-    }
-    try {
-      set({ status: STATUS.CREATING });
-      const ids = get().marginAccounts.map(ma => ma?.id?.number || 0);
-      const nextMarginAccountNumber = Math.max(...ids, 0) + 1;
-      const response = await createMarginAccount(
-        owner,
-        nextMarginAccountNumber
-      );
-
-      if (response.code === 0) {
-        successAlert("Margin account created successfully");
-        set({ status: STATUS.READY });
-      } else {
-        errorAlert(getTextByCode(response.code));
-        set({ status: STATUS.ERROR });
-      }
-    } catch (error) {
-      console.log(error);
-      errorAlert(getTextFromError((error as Error).message));
-    } finally {
-      get().getAccounts();
-    }
   },
 }));
 

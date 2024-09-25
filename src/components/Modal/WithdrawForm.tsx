@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
-import { markBalanceAsStale, useBalance } from "../../hooks/useBalance";
+import { useBalance } from "../../hooks/useBalance";
 import { successAlert } from "../../utils/alerts";
 import styled from "styled-components";
 import Button from "../Button";
-import Input from "../Input";
+import { Input } from "../Input";
 
 export const WithdrawForm = () => {
   const { address } = useChainCosmoshub();
-  const { selectedAccount, isReady } = useMarginAccount(address);
+  const { selectedAccount, isSuccess } = useMarginAccount(address);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -35,8 +35,6 @@ export const WithdrawForm = () => {
           setIsSubmitting(false);
           setWithdrawAmount("");
           setError("");
-          markBalanceAsStale(address, "uusdc");
-          markBalanceAsStale(selectedAccount?.address, "uusdc");
           successAlert("Withdraw successful");
         },
         onError: (msg: string) => {
@@ -57,7 +55,8 @@ export const WithdrawForm = () => {
         onSubmit();
       }}
     >
-      <Header>Withdraw Amount</Header>
+      <Header>Withdraw From Margin Account</Header>
+      <Title>Withdraw Amount</Title>
       <FormRow>
         <InputWrapper>
           <Input
@@ -73,7 +72,7 @@ export const WithdrawForm = () => {
           />
         </InputWrapper>
       </FormRow>
-      <Header>Margin Account</Header>
+      <Title>Margin Account</Title>
       <FormRow>
         <InputWrapper>
           <Input
@@ -85,14 +84,17 @@ export const WithdrawForm = () => {
           />
         </InputWrapper>
       </FormRow>
-      <FormRow>
-        <Label>Available Balance: {marginBalance} USDC</Label>
+
+      <FormRow style={{ display: "flex", justifyContent: "space-between" }}>
+        <Label>Available Balance:</Label>
+        <Label>{marginBalance} USDC</Label>
       </FormRow>
-      <FormRow>
-        <Label>Address Balance: {addressBalance} USDC</Label>
+      <FormRow style={{ display: "flex", justifyContent: "space-between" }}>
+        <Label>Address Balance:</Label>
+        <Label>{addressBalance} USDC</Label>
       </FormRow>
       <FormRow style={{ display: "flex", justifyContent: "space-around" }}>
-        <Button type="submit" disabled={!isReady || isSubmitting}>
+        <Button type="submit" disabled={!isSuccess || isSubmitting}>
           {isSubmitting ? "Withdrawing..." : "Withdraw"}
         </Button>
       </FormRow>
@@ -107,7 +109,10 @@ const Form = styled.form`
   min-width: 400px;
 `;
 
-const Header = styled.h2``;
+const Header = styled.h2`
+  margin-bottom: 26px;
+`;
+const Title = styled.h3``;
 
 const FormRow = styled.div`
   margin-bottom: 16px;

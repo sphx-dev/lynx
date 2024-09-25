@@ -14,7 +14,7 @@ import { OrderType, OrderWithDepth } from "../../types/orderBook";
 import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
 import { getOrderBookRecords } from "../../utils/helpers";
 import { useResize } from "../../hooks/useResize";
-import { useWebsocket } from "../../hooks/useWebsocket";
+import { usePubSub } from "@/hooks/usePubSub";
 
 interface OrderBookProps {
   windowWidth: number;
@@ -30,10 +30,6 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const [height, setHeight] = useState(0);
   const { height: windowHeight } = useResize();
 
-  useWebsocket(message => {
-    console.log("ORDERBOOK_message", message.result);
-  });
-
   useEffect(() => {
     // TODO: get rid of this and implement it in CSS
     if (containerRef.current) {
@@ -44,9 +40,11 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const records = getOrderBookRecords(height);
   useGetOrderBookQuery(records, {
     // pollingInterval: 10000,
-    pollingInterval: 0,
+    pollingInterval: 1000,
     skip: records <= 0,
   });
+
+  const { publish } = usePubSub();
 
   const buildPriceLevels = (
     levels: OrderWithDepth[],
@@ -60,12 +58,16 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
       const price: string = formatPrice(level.price);
 
       return (
-        <PriceLevelRowContainer key={idx + depth}>
+        <PriceLevelRowContainer
+          key={idx + depth}
+          onClick={() => publish("PRICE_SELECTED", level.price)}
+        >
           <DepthVisualizer
+            data-testid="depth-visualizer"
             key={depth}
-            windowWidth={windowWidth}
-            depth={depth}
-            orderType={orderType}
+            $depth={depth}
+            $filled={0}
+            $orderType={orderType}
           />
           <PriceLevelRow
             key={size + total}
@@ -89,13 +91,23 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
         <Stack style={{ width: "100%" }}>
           <TableContainer>
             {windowWidth > MOBILE_WIDTH && <TitleRow titles={HEADERS} />}
-            <div>{buildPriceLevels(book.asks, OrderType.ASKS)}</div>
+            <div>
+              {buildPriceLevels(book.asks.slice(0, 10), OrderType.ASKS)}
+            </div>
           </TableContainer>
           <Divider />
           {/*<Spread bids={book.bids} asks={book.asks} />*/}
           <TableContainer>
             {/*<TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />*/}
-            <div>{buildPriceLevels(book.bids, OrderType.BIDS)}</div>
+            <div>
+              {buildPriceLevels(
+                book.bids.slice(
+                  book.bids.length - 10 >= 0 ? book.bids.length - 10 : 0,
+                  book.bids.length
+                ),
+                OrderType.BIDS
+              )}
+            </div>
           </TableContainer>
         </Stack>
       ) : (

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Input from "./index";
+import { Input } from "./index";
 import { themes } from "../../theme";
 import { ThemeProvider } from "styled-components";
 import { store } from "../../state/store";

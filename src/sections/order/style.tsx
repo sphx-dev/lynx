@@ -41,3 +41,20 @@ export const sellStyle = css`
 export const PlaceOrderButton = styled(Button)<{ $isBuy: boolean }>`
   ${({ $isBuy }) => ($isBuy ? buyStyle : sellStyle)}
 `;
+
+export const PlaceOrderMessage = () => {
+  return (
+    <PlaceHolder>
+      You need a Margin Account with funds to place an order
+    </PlaceHolder>
+  );
+};
+export const PlaceHolder = styled.div`
+  text-align: center;
+  padding: 16px;
+  color: ${({ theme }) => getThemeColors(theme).text.primary};
+  background: ${({ theme }) => getThemeColors(theme).background.button};
+  border: 1px solid ${({ theme }) => getThemeColors(theme).border.default};
+  border-radius: 8px;
+  margin: 6px;
+`;

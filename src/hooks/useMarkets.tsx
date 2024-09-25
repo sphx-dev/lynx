@@ -50,6 +50,7 @@ const useMarketsStore = create<MarketsStore>((set, get) => ({
 
     const selectedId =
       get().selectedMarketId === 0n ? markets[0]?.id : get().selectedMarketId;
+
     set({
       markets,
       selectedMarketId: selectedId,

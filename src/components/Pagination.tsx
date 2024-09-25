@@ -14,6 +14,8 @@ export const Pagination = ({
   const totalPages = Math.ceil(Number(totalItems) / pageSize);
   const pages = Array.from({ length: totalPages }, (_, i) => i);
 
+  if (totalItems <= pageSize) return null;
+
   return (
     <PagesContainer>
       {pages.map((p, index) => (
@@ -30,6 +32,7 @@ export const Pagination = ({
 };
 
 const PagesContainer = styled.div`
+  min-height: 30px;
   display: flex;
   justify-content: center;
   gap: 1px;

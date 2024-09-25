@@ -1,8 +1,9 @@
-import React from "react";
 import { Group, Stack, Text } from "../../components";
 import { formatNumber } from "../../utils/format";
-import { useSelector } from "react-redux";
-import { account } from "../../state/accountSlice";
+
+import { useBalance } from "@/hooks/useBalance";
+import { useMarginAccount } from "@/hooks/useMarginAccounts";
+import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 
 interface Label {
   label: string;
@@ -20,19 +21,25 @@ const Label = ({ label, value }: Label) => {
 };
 
 const Summary = () => {
-  const { balance } = useSelector(account);
+  const { address } = useChainCosmoshub();
+  const { selectedAddress } = useMarginAccount(address);
+  const { amount } = useBalance(selectedAddress);
   return (
     <Stack>
       <Label
         label="Total Fees"
-        value={formatNumber({ value: 2.21, before: "$" })}
+        value={formatNumber({ value: 2.21, after: " USDC" })}
       />
       <Label label="Liquidation Price" />
       <Label label="Fill Price" />
       <Label label="Price Impact" />
-      <Label
+      {/* <Label
         label="Balance"
         value={formatNumber({ value: +balance, fixed: 2, before: "$" })}
+      /> */}
+      <Label
+        label="Available Margin"
+        value={amount ? (amount / 1e6).toFixed(5) + " USDC" : ""}
       />
     </Stack>
   );

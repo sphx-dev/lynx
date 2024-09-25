@@ -153,6 +153,7 @@ const DropdawnWindow = styled.div<{ $show: boolean }>`
   transform: translateX(-50%);
   border-radius: 8px;
   padding: 12px 0;
+  box-shadow: 0px 5px 20px black;
 `;
 
 const MenuItem = styled.li`

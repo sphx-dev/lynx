@@ -56,13 +56,15 @@ interface Option<T> {
 }
 
 interface Props<T> {
+  defaultValue?: T;
   options: Option<T>[];
   name: string;
   onChange?: (value: T) => void;
 }
 
-const Switcher = <T extends string>({ options, name, onChange }: Props<T>) => {
-  const [value, setValue] = useState<T>(options[0].value);
+function Switcher<T>({ defaultValue, options, name, onChange }: Props<T>) {
+  const [value, setValue] = useState<T>(defaultValue || options[0].value);
+
   const handleChange = (value: T) => {
     setValue(value);
     if (onChange) {
@@ -82,6 +84,6 @@ const Switcher = <T extends string>({ options, name, onChange }: Props<T>) => {
       ))}
     </Container>
   );
-};
+}
 
 export default Switcher;

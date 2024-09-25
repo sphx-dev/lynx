@@ -1,73 +1,62 @@
 import { Table } from "../../components";
 import PlaceHolder from "./PlaceHolder";
 
-import { usePlaceMarketOrderMutation } from "../../utils/api/orderApi";
-import { OrderSide, OrderType } from "../../types/order";
-import { useGetAccountQuery } from "../../utils/api/accountApi";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
-import { usePositionColumnsByOrders } from "./usePositionColumns";
-import { useCallback, useEffect, useState } from "react";
-import { getPerpetualPositionsByAddress } from "../../utils/queryPerpetualPositions";
+import { usePositionColumns } from "./usePositionColumns";
+import { useCallback, useState } from "react";
+import { usePositions } from "@/hooks/usePositions";
+import { Pagination } from "@/components/Pagination";
+import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
 
 const Positions = () => {
-  // const { positions } = useAppSelector(account);
-  // const [positions, setPositions] = useState<ValidatedOrder[]>([]);
   const { isConnected } = useChainCosmoshub();
-
-  const [placeMarketOrder] = usePlaceMarketOrderMutation();
-
-  useGetAccountQuery(undefined, {
-    // pollingInterval: 5000,
-    pollingInterval: 0,
-    skip: !isConnected,
-  });
 
   const closePosition = useCallback(
     ({
       size,
       side,
+      type,
       leverage,
     }: {
       size: string;
       side: OrderSide;
+      type: OrderType;
       leverage: number;
     }) => {
-      placeMarketOrder({
-        isBuy: side !== OrderSide.buy,
-        volume: Math.abs(+size),
-        leverage: leverage || 1,
-        orderType: OrderType.MARKET,
-      });
+      console.log("TODO: close position", size, side, type, leverage);
     },
-    [placeMarketOrder]
+    []
   );
 
-  const { address } = useChainCosmoshub();
-  const [positions, setPositions] = useState<any[]>([]);
-  useEffect(() => {
-    if (address) {
-      getPerpetualPositionsByAddress(address).then(response => {
-        console.log("response", response);
-        setPositions(response.positions);
-      });
-    }
-  }, [address]);
+  const { data } = usePositions();
+  const positions = data?.positions || [];
 
-  const positionColumns = usePositionColumnsByOrders(closePosition);
+  const [page, setPage] = useState(0);
+  const pagination = data?.pagination || { total: 0 };
+
+  const positionColumns = usePositionColumns(closePosition);
 
   if (!positions.length || !isConnected) {
     return (
       <PlaceHolder data-test="order-history-positions">
-        No Orders yet
+        No Positions
       </PlaceHolder>
     );
   }
   return (
-    <Table
-      data-test="order-history-positions"
-      columns={positionColumns}
-      data={positions}
-    />
+    <>
+      <Table
+        data-test="order-history-positions"
+        columns={positionColumns}
+        data={positions}
+      />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalItems={Number(pagination?.total) || 0}
+        pageSize={10}
+      />
+    </>
   );
 };
 

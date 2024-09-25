@@ -28,7 +28,13 @@ export const getMarginAccountInfoByAddress = async (address: string) => {
   return response;
 };
 
-export const createMarginAccount = async (address: string, number = 0) => {
+export const createMarginAccount = async ({
+  address,
+  number = 0,
+}: {
+  address: string;
+  number: number;
+}) => {
   const message =
     sphx.marginacc.MessageComposer.withTypeUrl.createMarginAccount({
       owner: address,

@@ -11,14 +11,11 @@ import { useGetAccountQuery } from "./utils/api/accountApi";
 import { useMediaQuery } from "react-responsive";
 import OnlyDesktopMessage from "./components/OnlyDesktopMessage";
 import { BREAK_POINTS } from "./constants";
-import { GrazProvider } from "graz";
 import { useChainCosmoshub } from "./hooks/useChainCosmoshub";
-import { getChain } from "./config";
-import { WebSocketProvider } from "./hooks/useWebsocket";
 import { Modal, useModalStore } from "./components/Modal/Modal";
 import { DepositForm } from "./components/Modal/DepositForm";
 import { WithdrawForm } from "./components/Modal/WithdrawForm";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { useGlobalWebsocketHandler } from "./hooks/useGlobalWebsocketHandler";
 
 const Desktop = ({ children }: PropsWithChildren) => {
   const isDesktop = useMediaQuery({ minWidth: BREAK_POINTS.MOBILE_MIN_WIDTH });
@@ -40,41 +37,32 @@ const AppInitializtion = ({ children }: PropsWithChildren) => {
   return children;
 };
 
-const queryClient = new QueryClient();
-
 function App() {
   const content = useRoutes(routes);
   const theme: ThemeInterface = themes["dark"];
   const { isOpen, closeModal, openModalType } = useModalStore();
 
+  // Query invalidator needed to be called only in a single place
+  useGlobalWebsocketHandler();
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <WebSocketProvider>
-        <GrazProvider
-          grazOptions={{
-            chains: [getChain()],
-          }}
-        >
-          <ThemeProvider theme={theme}>
-            <AppInitializtion>
-              <Desktop>
-                <Header />
-                {content}
-                <Footer />
-                <Toaster />
-                <Modal isOpen={isOpen} onClose={closeModal}>
-                  {openModalType === "DEPOSIT" && <DepositForm />}
-                  {openModalType === "WITHDRAW" && <WithdrawForm />}
-                </Modal>
-              </Desktop>
-              <AnotherDevices>
-                <OnlyDesktopMessage />
-              </AnotherDevices>
-            </AppInitializtion>
-          </ThemeProvider>
-        </GrazProvider>
-      </WebSocketProvider>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <AppInitializtion>
+        <Desktop>
+          <Header />
+          {content}
+          <Footer />
+          <Toaster />
+          <Modal isOpen={isOpen} onClose={closeModal}>
+            {openModalType === "DEPOSIT" && <DepositForm />}
+            {openModalType === "WITHDRAW" && <WithdrawForm />}
+          </Modal>
+        </Desktop>
+        <AnotherDevices>
+          <OnlyDesktopMessage />
+        </AnotherDevices>
+      </AppInitializtion>
+    </ThemeProvider>
   );
 }
 

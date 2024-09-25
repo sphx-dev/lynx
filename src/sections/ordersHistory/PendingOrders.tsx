@@ -86,7 +86,7 @@ const PendingOrders = () => {
       accessorKey: "price",
       header: "Price",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue())}</Text>
+        <Text color="tertiary">{Number(props.getValue()) / 1e6}</Text>
       ),
     },
     {
@@ -175,6 +175,7 @@ const PendingOrders = () => {
   if (totalOrders === 0) {
     return <PlaceHolder>No Orders yet</PlaceHolder>;
   }
+  console.log("orders", orders);
   return (
     <>
       <Table
