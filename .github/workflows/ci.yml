@@ -2,78 +2,38 @@ on: [pull_request]
 name: Continuous Integration
 jobs:
   build:
-    runs-on: arc-runner-set-ubuntu
+    runs-on: arc-runner-set
     timeout-minutes: 15
     steps:
-      - name: Install NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Install Yarn
-        run: npm install -g yarn
       - name: Install dependencies
-        run: |
-          echo "Starting nslookup for registry.yarnpkg.com"
-          nslookup <<EOF
-          registry.yarnpkg.com
-          exit
-          EOF
-          echo "nslookup completed"
-          echo "Starting yarn install"
-          yarn install
+        run: yarn
       - name: Build
         run: make build
   lint:
-    runs-on: arc-runner-set-ubuntu
+    runs-on: arc-runner-set
     timeout-minutes: 15
     steps:
-    - name: Install NodeJS
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Install dependencies
-      run: |
-        echo "Starting nslookup for registry.yarnpkg.com"
-        nslookup <<EOF
-        registry.yarnpkg.com
-        exit
-        EOF
-        echo "nslookup completed"
-        echo "Starting yarn install"
-        yarn install
+      run: yarn
     - name: Check code
       run: yarn type-check
     - name: Lint
       run: yarn lint
   test:
-    runs-on: arc-runner-set-ubuntu
+    runs-on: arc-runner-set
     timeout-minutes: 15
     steps:
-    - name: Install NodeJS
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Install dependencies
-      run: |
-        echo "Starting nslookup for registry.yarnpkg.com"
-        nslookup <<EOF
-        registry.yarnpkg.com
-        exit
-        EOF
-        echo "nslookup completed"
-        echo "Starting yarn install"
-        yarn install
+      run: yarn
     - name: Test
       run: yarn test
   sonarcloud:
     name: SonarCloud
-    runs-on: arc-runner-set-ubuntu
+    runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v4
         with:
