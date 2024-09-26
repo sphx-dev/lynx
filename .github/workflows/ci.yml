@@ -10,7 +10,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Build
-        run: make build
+        run: yarn build_server && yarn build
   lint:
     runs-on: arc-runner-set
     timeout-minutes: 15
