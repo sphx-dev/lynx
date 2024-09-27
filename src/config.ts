@@ -38,6 +38,9 @@ export const getChain = () => {
   if (window.location.hostname.includes("localhost")) {
     return sphxLocalChainInfo;
   }
+  if (window.location.hostname.includes("non-prod.sphx.dev")) {
+    return sphxTestnetChain1Info;
+  }
   if (window.location.hostname.includes("demo.sphx.dev")) {
     return sphxTestnetChain1Info;
   }
