@@ -8,7 +8,7 @@ jobs:
     name: SonarCloud
     runs-on: arc-runner-set
     container:
-      image: buildpack-deps:jammy
+      image: node:20
     timeout-minutes: 15
     steps:
       - name: Checkout code
