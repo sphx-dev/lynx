@@ -1,4 +1,4 @@
-FROM node:18 as lynx-builder
+FROM node:20 as lynx-builder
 
 
 WORKDIR /home/lynx
@@ -19,7 +19,7 @@ COPY proto-codecs /home/lynx/proto-codecs
 RUN export NODE_OPTIONS="--max-old-space-size=8192"
 RUN yarn build
 
-FROM node:18-alpine
+FROM node:20-alpine
 
 ARG BUILD_DATE
 ARG VERSION

@@ -4,6 +4,8 @@ jobs:
   build:
     runs-on: arc-runner-set
     timeout-minutes: 15
+    container:
+      image: node:20
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -14,6 +16,8 @@ jobs:
   lint:
     runs-on: arc-runner-set
     timeout-minutes: 15
+    container:
+      image: node:20
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -26,6 +30,8 @@ jobs:
   test:
     runs-on: arc-runner-set
     timeout-minutes: 15
+    container:
+      image: node:20
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
