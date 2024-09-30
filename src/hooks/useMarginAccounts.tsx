@@ -48,7 +48,7 @@ export const useMarginAccount = (owner: string | null | undefined) => {
   // Mutation for creating margin account
   const mutation = useMutation(createMarginAccount);
   const createAccount = useCallback(() => {
-    const ids = store.marginAccounts.map(ma => ma?.id?.number || 0);
+    const ids = store.marginAccounts.map(ma => ma?.id?.number ?? 0);
     const nextMarginAccountNumber = Math.max(...ids, 0) + 1;
     return mutation.mutateAsync(
       {

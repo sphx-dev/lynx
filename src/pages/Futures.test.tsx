@@ -46,23 +46,62 @@ vi.mock("../utils/queryMarkets", async () => {
 //getPerpetualPositionsByAddress
 vi.mock("../utils/queryPerpetualPositions", async () => {
   return {
+    PAGE_SIZE: 10n,
     getPerpetualPositionsByAddress: async () => {
       return {
         positions: [
           {
+            id: "1",
+            marginAccount: "sphx1123456789",
+            marketId: BigInt(1),
+            size: "",
+            entryPrice: "",
+            leverage: BigInt(0),
+            entryTime: BigInt(0),
+            side: 0,
+            tpOrderId: { marginAccountAddress: "", number: BigInt(0) },
+            slOrderId: { marginAccountAddress: "", number: BigInt(0) },
+            status: 0,
+          },
+        ],
+        pagination: {
+          total: 1n,
+        },
+      };
+    },
+  };
+});
+
+// src/utils/queryMarginAccounts.ts
+vi.mock("../utils/queryMarginAccounts", async () => {
+  return {
+    createMarginAccount: async () => {
+      return {
+        code: 0,
+      };
+    },
+    getAccountsByOwner: async () => {
+      return {
+        marginAccounts: [
+          {
             id: 1,
-            marketId: 1,
-            size: 1,
-            side: 1,
-            leverage: 1,
-            entryPrice: 1,
-            liquidationPrice: 1,
-            pnl: 1,
-            margin: 1,
-            marginRatio: 1,
+            address: "sphx1",
+            number: 1,
             created: new Date(),
           },
         ],
+      };
+    },
+  };
+});
+
+// src/utils/getBalance.ts
+vi.mock("../utils/getBalance", async () => {
+  return {
+    getBalance: async () => {
+      return {
+        denom: "uusdc",
+        amount: "100",
       };
     },
   };

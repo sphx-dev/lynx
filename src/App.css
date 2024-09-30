@@ -1,7 +1,12 @@
+html {
+  height: 100%;
+}
 
 body {
-  overflow: hidden;
-  background: center / cover no-repeat url("assets/glow-up.png"), #031a28 35% !important
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: center / cover no-repeat url("assets/glow-up.png"), #031a28 35% !important;
 }
 
 .App {
@@ -44,14 +49,11 @@ body {
   }
 }
 
-*{
+* {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
-
-html { height: 100%; }
-body {height: 100%; overflow-y: auto }
 
 ::-webkit-scrollbar {
   display: none;

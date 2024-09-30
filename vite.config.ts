@@ -6,6 +6,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  console.log("Vitest mode:", mode);
   return {
     plugins: [
       nodePolyfills({
@@ -23,10 +24,17 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: true,
     },
     test: {
-      globals: true,
+      globals: true, // Enables globals like `describe` and `it`
       environment: "jsdom",
-      setupFiles: "src/setupTests",
+      setupFiles: ["./vitest.setup.ts"], // Load the setup file globally
       mockReset: true,
+      coverage: {
+        provider: "v8",
+        reporter: ["text", "json", "html", "lcov"], // Report formats to generate
+        reportsDirectory: "./coverage", // Directory to save coverage reports
+        include: ["src/**/*.*"], // Files to include in coverage reports
+        exclude: ["node_modules", "dist"], // Files/directories to exclude
+      },
     },
     resolve: {
       alias: {

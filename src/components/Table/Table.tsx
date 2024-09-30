@@ -86,7 +86,7 @@ const Table = <T extends object>({
   return (
     <StyledTable data-test={rest["data-test"]}>
       <thead style={headerStyle}>
-        {table.getHeaderGroups().map(headerGroup => (
+        {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header: any) => (
               <th
@@ -105,13 +105,12 @@ const Table = <T extends object>({
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.map(row => (
+        {table.getRowModel().rows.map((row) => (
           <StyledRow
             key={row.id}
             onClick={onClick && (() => onClick(row.original))}
           >
-            {row.getVisibleCells().map(cell => {
-              console.log(cell);
+            {row.getVisibleCells().map((cell) => {
               let meta;
               if (cell.column.columnDef?.meta) {
                 meta = cell.column.columnDef.meta as any;

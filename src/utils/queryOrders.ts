@@ -24,8 +24,8 @@ export const getOrdersByAddress = async (
        * Only one of offset or key should be set.
        */
       key: Uint8Array.from([]),
-      offset: pagination?.offset || 0n,
-      limit: pagination?.limit || 10n,
+      offset: pagination?.offset ?? 0n,
+      limit: pagination?.limit ?? 10n,
       countTotal: true,
       reverse: false,
     },

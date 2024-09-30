@@ -98,8 +98,9 @@ export const DepositForm = () => {
       </FormRow>
       <Divider />
       <FormRow>
-        <label>Amount</label>
+        <label htmlFor="deposit-form-input-amount">Amount</label>
         <Input
+          id="deposit-form-input-amount"
           type="number"
           placeholder="0.00"
           value={depositAmount}

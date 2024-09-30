@@ -10,6 +10,9 @@ server-comp.cjs
 # testing
 /coverage
 
+# sonar
+/sonar/**/+.*
+
 # production
 /build
 
