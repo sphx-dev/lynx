@@ -3,24 +3,50 @@ import { useQueryClient } from "react-query";
 import { useChainCosmoshub } from "./useChainCosmoshub";
 import {
   CosmosTransactionEvent,
+  CosmosFlattenedEvent,
   JsonRpcResultMessage,
   useWebsocket,
 } from "./useWebsocket";
+import { useMarginAccount } from "./useMarginAccounts";
 
 export function useGlobalWebsocketHandler() {
   const { address } = useChainCosmoshub();
+  const { selectedAddress } = useMarginAccount(address);
   const queryClient = useQueryClient();
   const messageHandlerRef = useRef<(message: JsonRpcResultMessage) => void>();
 
   const handleWebSocketMessage = useCallback(
     (message: JsonRpcResultMessage) => {
-      if (!address) return; // Ensure the address is available
+      // Ensure the address is available
+      if (!address) {
+        return;
+      }
+
+      if (!selectedAddress) {
+        return;
+      }
 
       const chainEvents =
         message?.result?.data?.value?.TxResult?.result?.events;
-      if (!chainEvents) return;
+      const events: {
+        [eventName: string]: CosmosFlattenedEvent;
+      } = message?.result.events;
 
-      const chainEventsNames = chainEvents.map(event => event.type);
+      // Ensure the chain events are available
+      if (!chainEvents) {
+        return;
+      }
+
+      // Ensure message sender is the current address or MarginAcount address
+      console.log("WS_message", "message.sender", events["message.sender"]);
+      if (
+        !events["message.sender"].includes(address) &&
+        !events["message.sender"].includes(selectedAddress)
+      ) {
+        return;
+      }
+
+      const chainEventsNames = chainEvents.map((event) => event.type);
       const chainEventsMap = new Set(chainEventsNames);
 
       // ACCOUNT EVENTS
@@ -49,6 +75,16 @@ export function useGlobalWebsocketHandler() {
         queryClient.invalidateQueries(["orders"]);
       }
 
+      // "new_position" and "modify_position"
+      if (chainEventsMap.has("new_position")) {
+        console.log("WS_message", "new_position");
+        queryClient.invalidateQueries(["positions"]);
+      }
+      if (chainEventsMap.has("modify_position")) {
+        console.log("WS_message", "modify_position");
+        queryClient.invalidateQueries(["positions"]);
+      }
+
       // TRADE EVENTS
       // "transfer"
       if (chainEventsMap.has("transfer")) {
@@ -64,7 +100,7 @@ export function useGlobalWebsocketHandler() {
         }
       }
     },
-    [address, queryClient]
+    [address, queryClient, selectedAddress]
   );
 
   // Persist the current callback in a ref to avoid resubscribing
@@ -73,7 +109,7 @@ export function useGlobalWebsocketHandler() {
   }, [handleWebSocketMessage]);
 
   // Subscribe to WebSocket messages using the singleton pattern
-  useWebsocket(message => {
+  useWebsocket((message) => {
     if (messageHandlerRef.current) {
       messageHandlerRef.current(message);
     }
@@ -81,10 +117,10 @@ export function useGlobalWebsocketHandler() {
 }
 
 function getAddresesFromTransferEvent(events: CosmosTransactionEvent[]) {
-  const transferEvents = events.filter(ev => ev.type === "transfer");
-  const attributes = transferEvents.map(ev => ev.attributes).flat();
+  const transferEvents = events.filter((ev) => ev.type === "transfer");
+  const attributes = transferEvents.map((ev) => ev.attributes).flat();
   const addresses = attributes
-    .filter(attr => attr.key === "recipient" || attr.key === "sender")
-    .map(attr => attr.value);
+    .filter((attr) => attr.key === "recipient" || attr.key === "sender")
+    .map((attr) => attr.value);
   return addresses;
 }

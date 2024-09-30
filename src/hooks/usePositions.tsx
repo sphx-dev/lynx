@@ -21,8 +21,7 @@ export const usePositions = (page: number = 0) => {
     },
     {
       enabled: !!selectedAddress && !!address,
-      // TODO: set a longer stale time and invalidate query from WebSocket
-      staleTime: 0, //60 * 60 * 1000,
+      staleTime: 60 * 60 * 1000,
     }
   );
 

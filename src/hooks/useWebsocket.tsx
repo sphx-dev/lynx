@@ -39,7 +39,7 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
 
       openHandler = () => {
         console.log("WS::::::::::", "connected");
-        setSubscriptions(pre => [...pre, ...subscribe(ws.current!)]);
+        setSubscriptions((pre) => [...pre, ...subscribe(ws.current!)]);
         setError(null);
       };
 
@@ -109,7 +109,7 @@ const subscribe = (websocket: WebSocket) => {
     // },
   ];
 
-  const subscriptionMessages: SubscritionMessage[] = subs.map(sub => ({
+  const subscriptionMessages: SubscritionMessage[] = subs.map((sub) => ({
     id: sub.id,
     jsonrpc: "2.0",
     method: "subscribe",
@@ -118,7 +118,7 @@ const subscribe = (websocket: WebSocket) => {
     },
   }));
 
-  subscriptionMessages.forEach(msg => {
+  subscriptionMessages.forEach((msg) => {
     websocket.send(JSON.stringify(msg));
   });
 
@@ -129,7 +129,7 @@ const unsubscribe = (
   websocket: WebSocket,
   subscriptions: { id: string; query: string }[]
 ) => {
-  const messages = subscriptions.map(sub => ({
+  const messages = subscriptions.map((sub) => ({
     id: sub.id,
     jsonrpc: "2.0",
     method: "unsubscribe",
@@ -138,7 +138,7 @@ const unsubscribe = (
     },
   }));
 
-  messages.forEach(msg => {
+  messages.forEach((msg) => {
     websocket.send(JSON.stringify(msg));
   });
 };
@@ -161,7 +161,7 @@ export type CosmosMessage = {
       };
     };
   };
-  events: { [eventName: string]: CosmposFlattenedEvent };
+  events: { [eventName: string]: CosmosFlattenedEvent };
   query: string;
 };
 
@@ -170,7 +170,7 @@ export type CosmosTransactionEvent = {
   type: string;
 };
 
-export type CosmposFlattenedEvent = string[];
+export type CosmosFlattenedEvent = string[];
 
 export type JsonRpcResultMessage = {
   id: string;
