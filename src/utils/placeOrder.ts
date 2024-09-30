@@ -95,7 +95,10 @@ export const placeMarketOrderInChain = async ({
               },
               accountId: address,
               // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
-              side,
+              side:
+                side === OrderSide.ORDER_SIDE_BUY
+                  ? OrderSide.ORDER_SIDE_SELL
+                  : OrderSide.ORDER_SIDE_BUY,
               quantity,
               price: BigInt(takeProfit),
               orderType: OrderType.ORDER_TYPE_LIMIT,
@@ -115,7 +118,10 @@ export const placeMarketOrderInChain = async ({
               },
               accountId: address,
               // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
-              side,
+              side:
+                side === OrderSide.ORDER_SIDE_BUY
+                  ? OrderSide.ORDER_SIDE_SELL
+                  : OrderSide.ORDER_SIDE_BUY,
               quantity,
               price: BigInt(stopLoss),
               orderType: OrderType.ORDER_TYPE_LIMIT,
@@ -212,7 +218,10 @@ export const placeLimitOrderInChain = async ({
               },
               accountId: address,
               // Oposit to the original order
-              side,
+              side:
+                side === OrderSide.ORDER_SIDE_BUY
+                  ? OrderSide.ORDER_SIDE_SELL
+                  : OrderSide.ORDER_SIDE_BUY,
               quantity,
               price: BigInt(takeProfit),
               // Guaranteed take-profit
@@ -235,7 +244,10 @@ export const placeLimitOrderInChain = async ({
               },
               accountId: address,
               // Oposit to the original order
-              side,
+              side:
+                side === OrderSide.ORDER_SIDE_BUY
+                  ? OrderSide.ORDER_SIDE_SELL
+                  : OrderSide.ORDER_SIDE_BUY,
               quantity,
               price: BigInt(stopLoss),
               // Guaranteed stop-loss
