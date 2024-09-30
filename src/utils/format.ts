@@ -24,3 +24,7 @@ export const displayPrice = (price: number, unit: string) =>
     value: price,
     before: unit,
   });
+
+export function formatPrice(price: number, fixed = 5): string {
+  return price.toFixed(fixed);
+}

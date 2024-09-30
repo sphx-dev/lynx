@@ -51,6 +51,10 @@ export const useChainCosmoshub = () => {
           chainId: getChain().chainId,
           walletType: WalletType.KEPLR,
         });
+        // connectAsync({
+        //   chainId: getChain().chainId,
+        //   walletType: WalletType.LEAP,
+        // });
       } catch (e) {
         console.log("-------->", e);
       }

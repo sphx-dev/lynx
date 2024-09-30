@@ -1,10 +1,12 @@
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import {
+  QueryOrderInfoRequest,
   QueryOrdersForAccountRequest,
   QueryPerpPositionsRequest_OrderStatus,
 } from "../../proto-codecs/codegen/sphx/order/query";
 import { createRPCQueryClient } from "../../proto-codecs/codegen/sphx/rpc.query";
 import { getChain } from "../config";
+import { OrderId } from "proto-codecs/codegen/sphx/order/order";
 
 export const getOrdersByAddress = async (
   address: string,
@@ -46,6 +48,20 @@ export const getOrdersByAddress = async (
   );
 
   const response = await queryClient.sphx.order.ordersForAccount(request);
+
+  return response;
+};
+
+export const getOrderByOrderId = async (orderId: OrderId) => {
+  const queryClient = await createRPCQueryClient({
+    rpcEndpoint: getChain().rpc,
+  });
+
+  const request: QueryOrderInfoRequest = {
+    orderId: orderId.marginAccountAddress + ":" + orderId.number.toString(),
+  };
+
+  const response = await queryClient.sphx.order.orderInfo(request);
 
   return response;
 };

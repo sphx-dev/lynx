@@ -8,6 +8,7 @@ import { getChain } from "../config";
 import { Registry } from "@cosmjs/proto-signing";
 import { registry as orderRegistry } from "../../proto-codecs/codegen/sphx/order/tx.registry";
 import { registry as marginaccRegistry } from "../../proto-codecs/codegen/sphx/marginacc/tx.registry";
+import { getOfflineSigner } from "./getOfflineSigner";
 
 let orderClient: SigningStargateClient | undefined;
 
@@ -30,23 +31,19 @@ export async function getSigningStargateMarginAccountClient(): Promise<SigningSt
 }
 
 async function getSigningStargateClient(registry: Registry) {
-  if (window.getOfflineSigner) {
-    const offlineSigner = window.getOfflineSigner(getChain().chainId);
-    const signingClientOptions: SigningStargateClientOptions = {
-      gasPrice: GasPrice.fromString("1uusdc"),
-      registry: registry,
-    };
+  const offlineSigner = await getOfflineSigner();
+  const signingClientOptions: SigningStargateClientOptions = {
+    gasPrice: GasPrice.fromString("1uusdc"),
+    registry: registry,
+  };
 
-    const signingClient: SigningStargateClient =
-      await SigningStargateClient.connectWithSigner(
-        getChain().rpc,
-        offlineSigner,
-        signingClientOptions
-      );
-    return signingClient;
-  } else {
-    throw Error('No method "getOfflineSigner" available');
-  }
+  const signingClient: SigningStargateClient =
+    await SigningStargateClient.connectWithSigner(
+      getChain().rpc,
+      offlineSigner,
+      signingClientOptions
+    );
+  return signingClient;
 }
 
 export const composeFee = (): StdFee => {

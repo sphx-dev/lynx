@@ -31,5 +31,21 @@
   "ORDER_STATUS_CANCELED":"Canceled",
   "ORDER_STATUS_EXPIRED":"Expired",
   "ORDER_STATUS_UNRECOGNIZED":"Unrecognized",
-  "ORDER_STATUS_UNKNOWN":"Unknown"
+  "ORDER_STATUS_UNKNOWN":"Unknown",
+  "tp_sl_title":"TP/SL",
+  "#":"#",
+  "type":"Type",
+  "quantity":"Qty",
+  "trigger_price":"Trigger Price",
+  "order_price":"Order Price",
+  "order_type":"Order Type",
+  "order_time":"Order Time",
+  "action":"Action",
+  "ORDER_TYPE_LIMIT": "Limit",
+  "ORDER_TYPE_MARKET": "Market",
+  "ORDER_TYPE_STOP_LOSS_MARKET": "SL Market",
+  "ORDER_TYPE_STOP_LOSS_LIMIT": "SL Limit",
+  "ORDER_TYPE_TAKE_PROFIT_MARKET": "TP Market",
+  "ORDER_TYPE_TAKE_PROFIT_LIMIT": "TP Limit",
+  "UNRECOGNIZED": "-"
 }

@@ -30,7 +30,11 @@ const StyledTable = styled.table`
     border: none;
     tr th {
       padding: 8px 25px;
-      text-align: left;
+      &:first-child {
+        text-align: left;
+        padding-left: 8px;
+      }
+      text-align: center;
       border: none;
       border-top: ${({ theme }) =>
         `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
@@ -40,7 +44,11 @@ const StyledTable = styled.table`
   }
   tbody {
     tr td {
-      padding: 8px 25px;
+      &:first-child {
+        text-align: left;
+      }
+      text-align: center;
+      padding: 8px;
     }
   }
 `;
@@ -55,7 +63,7 @@ const StyledRow = styled.tr`
 
 const StyledTh = styled.div<{ $canSort: boolean }>`
   cursor: ${({ $canSort }) => ($canSort ? "pointer" : "unset")};
-  display: flex;
+  display: inline-flex;
   align-items: center;
 `;
 const Table = <T extends object>({
@@ -102,11 +110,30 @@ const Table = <T extends object>({
             key={row.id}
             onClick={onClick && (() => onClick(row.original))}
           >
-            {row.getVisibleCells().map(cell => (
-              <td key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
+            {row.getVisibleCells().map(cell => {
+              console.log(cell);
+              let meta;
+              if (cell.column.columnDef?.meta) {
+                meta = cell.column.columnDef.meta as any;
+              }
+              if (meta?.background && typeof meta?.background === "function") {
+                return (
+                  <td
+                    key={cell.id}
+                    style={{
+                      background: meta?.background(cell.getContext()),
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                );
+              }
+              return (
+                <td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              );
+            })}
           </StyledRow>
         ))}
       </tbody>

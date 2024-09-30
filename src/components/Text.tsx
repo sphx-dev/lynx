@@ -17,6 +17,7 @@ interface TextProps
 }
 
 const StyledText = styled.p<TextProps>`
+  display: inline-block;
   ${({ variant, theme }) => {
     return theme.fonts.typography[variant || "textSm"];
   }};

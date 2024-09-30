@@ -1,4 +1,4 @@
-import { getOrdersByAddress } from "../utils/queryOrders";
+import { getOrderByOrderId, getOrdersByAddress } from "../utils/queryOrders";
 
 import {
   cancelOrderInChain,
@@ -8,7 +8,7 @@ import {
   PlaceMarketOrderInChainParams,
 } from "../utils/placeOrder";
 
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "react-query";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { OrderId } from "proto-codecs/codegen/sphx/order/order";
 
@@ -51,6 +51,28 @@ export const useOrders = (
     totalOrders,
     pageSize: Number(PAGE_SIZE),
   };
+};
+
+export const useOrdersById = (orderIds: OrderId[]) => {
+  const results = useQueries(
+    orderIds.map(orderId => ({
+      queryKey: [
+        "order",
+        orderId.marginAccountAddress,
+        orderId.number.toString(),
+      ],
+      queryFn: async () => {
+        const respose = await getOrderByOrderId(orderId);
+        console.log("useOrdersById response", respose);
+        return respose.order;
+      },
+      enabled:
+        !!orderId && !!orderId?.marginAccountAddress && !!orderId?.number,
+      staleTime: 1000 * 60,
+    }))
+  );
+
+  return results;
 };
 
 export const useCancelOrder = () => {
@@ -103,5 +125,10 @@ export const useCreateOrder = () => {
     });
   };
 
-  return { placeMarketOrder, placeLimitOrder };
+  return {
+    placeMarketOrder,
+    marketStatus: placeMarketMutation,
+    placeLimitOrder,
+    limitStatus: placeLimitMutation,
+  };
 };

@@ -29,6 +29,7 @@ import { Input } from "@/components/Input/Input";
 import { Checkbox } from "@/components/Input/Checkbox";
 import { useBalance } from "@/hooks/useBalance";
 import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
+import { motion, AnimatePresence } from "framer-motion";
 
 const options: [
   { label: string; value: OrderType },
@@ -252,6 +253,7 @@ function OrderInput() {
                       <Input
                         {...register("price")}
                         label="Price"
+                        placeholder="0.00"
                         rightSide="USD"
                         type="number"
                         value={watch("price")}
@@ -262,6 +264,7 @@ function OrderInput() {
                       {...register("volume")}
                       error={errors.volume?.message}
                       value={watch("volume")}
+                      placeholder="0.00"
                       type="number"
                       label="Size"
                       rightSide={selectedMarket?.baseAsset || ""}
@@ -316,26 +319,36 @@ function OrderInput() {
                         {...register("hasTPSL")}
                       />
                     </Group>
-                    {hasTPSL && (
-                      <>
-                        <Input
-                          {...register("takeProfit")}
-                          label="Take Profit"
-                          rightSide="USD"
-                          error={errors.takeProfit?.message}
-                          type="number"
-                          value={watch("takeProfit") || ""}
-                        />
-                        <Input
-                          {...register("stopLoss")}
-                          label="Stop Loss"
-                          rightSide="USD"
-                          error={errors.stopLoss?.message}
-                          type="number"
-                          value={watch("stopLoss") || ""}
-                        />
-                      </>
-                    )}
+
+                    <AnimatePresence>
+                      {hasTPSL && (
+                        <motion.div
+                          className={hasTPSL ? "hasTPSL" : "PLANE"}
+                          style={{ overflow: "hidden" }}
+                          initial={{ height: 0 }}
+                          animate={{ height: "auto" }}
+                          transition={{ duration: 0.4 }}
+                          exit={{ height: 0 }}
+                        >
+                          <Input
+                            {...register("takeProfit")}
+                            label="Take Profit"
+                            rightSide="USD"
+                            error={errors.takeProfit?.message}
+                            type="number"
+                            value={watch("takeProfit") || ""}
+                          />
+                          <Input
+                            {...register("stopLoss")}
+                            label="Stop Loss"
+                            rightSide="USD"
+                            error={errors.stopLoss?.message}
+                            type="number"
+                            value={watch("stopLoss") || ""}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
                     {!isConnected && (
                       <ConnectButton

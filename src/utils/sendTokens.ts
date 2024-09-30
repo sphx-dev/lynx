@@ -1,5 +1,6 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { getChain } from "../config";
+import { getOfflineSigner } from "./getOfflineSigner";
 
 export async function sendTokens(
   {
@@ -63,15 +64,6 @@ export async function sendTokens(
     if (onError) {
       onError((error as Error).message);
     }
-  }
-}
-
-async function getOfflineSigner() {
-  if (window.getOfflineSigner) {
-    const offlineSigner = window.getOfflineSigner(getChain().chainId);
-    return offlineSigner;
-  } else {
-    throw Error('No method "getOfflineSigner" available');
   }
 }
 

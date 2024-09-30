@@ -8,7 +8,7 @@ import { useAppSelector } from "../../hooks";
 import { account } from "../../state/accountSlice";
 import PendingOrders from "./PendingOrders";
 import ClosedOrders from "./ClosedOrders";
-import Positions from "./Positions";
+import Positions from "./Positions/Positions";
 interface TabProps {
   $isActive?: boolean;
 }

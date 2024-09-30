@@ -23,8 +23,8 @@ export type PlaceMarketOrderInChainParams = {
   leverage: bigint;
   marketId: bigint;
 
-  onSuccess: (msg: string) => {};
-  onError: (msg: string) => {};
+  onSuccess: (msg: string) => void;
+  onError: (msg: string) => void;
 };
 
 export type PlaceLimitOrderInChainParams = {
@@ -40,8 +40,8 @@ export type PlaceLimitOrderInChainParams = {
   leverage: bigint;
   marketId: bigint;
 
-  onSuccess: (msg: string) => {};
-  onError: (msg: string) => {};
+  onSuccess: (msg: string) => void;
+  onError: (msg: string) => void;
 };
 
 export const placeMarketOrderInChain = async ({

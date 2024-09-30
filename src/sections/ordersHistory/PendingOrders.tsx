@@ -122,7 +122,7 @@ const PendingOrders = () => {
       accessorFn: (row: any) => {
         return { id: row.id, status: row.status };
       },
-      header: "Cancel",
+      header: "Action",
       cell: (props: any) => {
         const status = props.getValue()?.status;
         const orderId = props.getValue()?.id;

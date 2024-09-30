@@ -1,20 +1,17 @@
 import { useMarkets } from "@/hooks/useMarkets";
-import { Button, Text } from "../../components";
-import UseTheme from "../../hooks/useTheme";
-import { dateToDisplay } from "../../utils/date";
-import { formatNumber } from "../../utils/format";
-import { getColorByPl } from "./helpers";
-import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
-
-type ClosePositionCallback = (params: {
-  size: string;
-  side: OrderSide;
-  type: OrderType;
-  leverage: number;
-}) => void;
+import { Button, Text } from "@/components";
+import UseTheme from "@/hooks/useTheme";
+import { formatNumber } from "@/utils/format";
+import { getColorByPl } from "../helpers";
+import { OrderType } from "proto-codecs/codegen/sphx/order/order";
+import {
+  PerpetualPosition,
+  PositionSide,
+} from "proto-codecs/codegen/sphx/order/perpetual_position";
 
 export const usePositionColumns = function (
-  closePosition: ClosePositionCallback
+  closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
+  showTpSl: (position: PerpetualPosition) => void
 ) {
   const { themeColors } = UseTheme();
 
@@ -22,26 +19,41 @@ export const usePositionColumns = function (
 
   return [
     {
-      accessorKey: "entryTime",
-      header: "Date",
-      cell: (props: any) => {
-        return (
-          <Text color="tertiary">
-            {dateToDisplay(Number(props.getValue()) * 1000)}
-          </Text>
-        );
-      },
-    },
-    {
       accessorKey: "marketId",
       header: "Symbol",
+      meta: {
+        background: (props: any) => {
+          if (props.row.original.side === PositionSide.POSITION_SIDE_LONG) {
+            return `linear-gradient(90deg,${themeColors.positive} 0,transparent 100%) 0px`;
+          }
+          if (props.row.original.side === PositionSide.POSITION_SIDE_SHORT) {
+            return `linear-gradient(90deg,${themeColors.negative} 0,transparent 100%) 0px`;
+          }
+          return "";
+        },
+      },
       cell: (props: any) => {
         const market = markets.find(m => m.id === props.getValue());
-        return (
-          <Text color="tertiary">{market?.ticker}</Text>
-          // <Text color="tertiary">{props.getValue() /*.replace(".P", "")*/}</Text>
-        );
+        return <Text color="tertiary">{market?.ticker}</Text>;
       },
+    },
+    // {
+    //   accessorKey: "entryTime",
+    //   header: "Date",
+    //   cell: (props: any) => {
+    //     return (
+    //       <Text color="tertiary">
+    //         {dateToDisplay(Number(props.getValue()) * 1000)}
+    //       </Text>
+    //     );
+    //   },
+    // },
+    {
+      accessorKey: "size",
+      header: "Qty",
+      cell: (props: any) => (
+        <Text color="tertiary">{Number(props.getValue() || 0) / 1e6}</Text>
+      ),
     },
     {
       accessorKey: "entryPrice",
@@ -50,13 +62,6 @@ export const usePositionColumns = function (
         <Text color="tertiary">
           {formatNumber({ value: Number(props.getValue()) / 1e6, fixed: 2 })}
         </Text>
-      ),
-    },
-    {
-      accessorKey: "size",
-      header: "Qty",
-      cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue() || 0) / 1e6}</Text>
       ),
     },
 
@@ -102,7 +107,8 @@ export const usePositionColumns = function (
                 variant="secondary"
                 size="xs"
                 onClick={() => {
-                  console.log("TODO: SHOW TP/SL", slOrderId, tpOrderId);
+                  console.log("SHOW TP/SL", slOrderId, tpOrderId);
+                  showTpSl(position);
                 }}
                 // color={themeColors.text.secondaryLink}
               >
@@ -130,7 +136,7 @@ export const usePositionColumns = function (
       header: "Close By",
       cell: (props: any) => {
         // console.log(props);
-        const { size, side, leverage } = props.row.original;
+        const position = props.row.original;
         return (
           <div
             style={{
@@ -145,12 +151,7 @@ export const usePositionColumns = function (
               size="xs"
               onClick={() => {
                 // console.log("TODO: CLOSE POSITION", { size, side, leverage });
-                closePosition({
-                  size,
-                  side,
-                  type: OrderType.ORDER_TYPE_MARKET,
-                  leverage,
-                });
+                closePosition(OrderType.ORDER_TYPE_MARKET, position);
               }}
               // color={themeColors.text.secondaryLink}
             >
@@ -161,12 +162,7 @@ export const usePositionColumns = function (
               size="xs"
               onClick={() => {
                 // console.log("TODO: CLOSE POSITION", { size, side, leverage });
-                closePosition({
-                  size,
-                  side,
-                  type: OrderType.ORDER_TYPE_LIMIT,
-                  leverage,
-                });
+                closePosition(OrderType.ORDER_TYPE_LIMIT, position);
               }}
               // color={themeColors.text.secondaryLink}
             >

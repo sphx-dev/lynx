@@ -5,7 +5,7 @@ import Stack from "../Stack";
 import Text from "../Text";
 import useTheme from "../../hooks/useTheme";
 
-interface InputProps extends React.HTMLProps<HTMLInputElement> {
+export interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: string;
   label?: string;
   rightSide?: string;
@@ -25,6 +25,7 @@ const numberRegex = /^\d*\.?\d*$/;
 
 const StyledInput = styled.input`
   ${({ theme }) => theme.fonts.typography.textNumMd}
+  text-align: right;
   border: none;
   background: none;
   outline: none;
@@ -81,6 +82,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
       getThemeColors(theme).input[variant].background.hovered};
   }
   display: flex;
+  gap: 0.5rem;
   align-items: center;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
   ${({ $error }) => $error && errorStyle}

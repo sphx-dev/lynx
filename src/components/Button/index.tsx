@@ -64,6 +64,10 @@ const StyledButton = styled.button<CssProps>`
   width: ${({ $fluid }) => ($fluid ? "100%" : "auto")};
   outline: none;
   cursor: pointer;
+  transition: 0.2s all;
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 const StyledWrapper = styled.span<Partial<CssProps>>`
   border: 1px solid rgba(255, 255, 255, 0.1);

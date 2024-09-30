@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 
@@ -64,6 +64,12 @@ interface Props<T> {
 
 function Switcher<T>({ defaultValue, options, name, onChange }: Props<T>) {
   const [value, setValue] = useState<T>(defaultValue || options[0].value);
+
+  useEffect(() => {
+    if (defaultValue !== undefined && defaultValue !== value) {
+      setValue(defaultValue);
+    }
+  }, [defaultValue, value]);
 
   const handleChange = (value: T) => {
     setValue(value);

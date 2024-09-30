@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { create } from "zustand";
+import { motion } from "framer-motion";
 
 // {
 //   DEPOSIT: "DEPOSIT",
@@ -38,7 +39,13 @@ export const Modal = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <ModalOverlay className="modal-overlay" onClick={onClose}>
+    <ModalOverlay
+      className="modal-overlay"
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <ModalContent
         className="modal-content"
         onClick={e => e.stopPropagation()}
@@ -53,7 +60,7 @@ export const Modal = ({
   );
 };
 
-const ModalOverlay = styled.div`
+const ModalOverlay = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
