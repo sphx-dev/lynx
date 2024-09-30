@@ -2,6 +2,7 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 export interface MarginAccountAsset {
   id: number;
+  denom: string;
   amount: string;
 }
 export interface MarginAccountAssetProtoMsg {
@@ -10,6 +11,7 @@ export interface MarginAccountAssetProtoMsg {
 }
 export interface MarginAccountAssetAmino {
   id?: number;
+  denom?: string;
   amount: string;
 }
 export interface MarginAccountAssetAminoMsg {
@@ -18,11 +20,13 @@ export interface MarginAccountAssetAminoMsg {
 }
 export interface MarginAccountAssetSDKType {
   id: number;
+  denom: string;
   amount: string;
 }
 function createBaseMarginAccountAsset(): MarginAccountAsset {
   return {
     id: 0,
+    denom: "",
     amount: ""
   };
 }
@@ -32,8 +36,11 @@ export const MarginAccountAsset = {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
+    if (message.denom !== "") {
+      writer.uint32(18).string(message.denom);
+    }
     if (message.amount !== "") {
-      writer.uint32(18).string(message.amount);
+      writer.uint32(26).string(message.amount);
     }
     return writer;
   },
@@ -48,6 +55,9 @@ export const MarginAccountAsset = {
           message.id = reader.uint32();
           break;
         case 2:
+          message.denom = reader.string();
+          break;
+        case 3:
           message.amount = reader.string();
           break;
         default:
@@ -60,6 +70,7 @@ export const MarginAccountAsset = {
   fromPartial(object: Partial<MarginAccountAsset>): MarginAccountAsset {
     const message = createBaseMarginAccountAsset();
     message.id = object.id ?? 0;
+    message.denom = object.denom ?? "";
     message.amount = object.amount ?? "";
     return message;
   },
@@ -67,6 +78,9 @@ export const MarginAccountAsset = {
     const message = createBaseMarginAccountAsset();
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
     }
     if (object.amount !== undefined && object.amount !== null) {
       message.amount = object.amount;
@@ -76,6 +90,7 @@ export const MarginAccountAsset = {
   toAmino(message: MarginAccountAsset): MarginAccountAssetAmino {
     const obj: any = {};
     obj.id = message.id === 0 ? undefined : message.id;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     obj.amount = message.amount ?? "";
     return obj;
   },

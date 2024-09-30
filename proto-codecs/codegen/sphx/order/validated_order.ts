@@ -57,37 +57,37 @@ export function orderStatusToJSON(object: OrderStatus): string {
       return "UNRECOGNIZED";
   }
 }
-export interface PartialFill {
+export interface Fill {
   /** Quantity of the fill */
-  quantity: bigint;
+  quantity: string;
   /** Price of the fill */
-  price: bigint;
+  price: string;
   /** Timestamp of the fill */
   timestamp: bigint;
   /** Leverage used for the fill */
   leverage: bigint;
 }
-export interface PartialFillProtoMsg {
-  typeUrl: "/sphx.order.PartialFill";
+export interface FillProtoMsg {
+  typeUrl: "/sphx.order.Fill";
   value: Uint8Array;
 }
-export interface PartialFillAmino {
+export interface FillAmino {
   /** Quantity of the fill */
-  quantity?: string;
+  quantity: string;
   /** Price of the fill */
-  price?: string;
+  price: string;
   /** Timestamp of the fill */
   timestamp?: string;
   /** Leverage used for the fill */
   leverage?: string;
 }
-export interface PartialFillAminoMsg {
-  type: "/sphx.order.PartialFill";
-  value: PartialFillAmino;
+export interface FillAminoMsg {
+  type: "/sphx.order.Fill";
+  value: FillAmino;
 }
-export interface PartialFillSDKType {
-  quantity: bigint;
-  price: bigint;
+export interface FillSDKType {
+  quantity: string;
+  price: string;
   timestamp: bigint;
   leverage: bigint;
 }
@@ -115,7 +115,7 @@ export interface ValidatedOrder {
   /** Status of the order, open, filled, cancelled etc */
   status: OrderStatus;
   /** List of partial fills if the order was partially filled or fully filled */
-  partialFills: PartialFill[];
+  fills: Fill[];
 }
 export interface ValidatedOrderProtoMsg {
   typeUrl: "/sphx.order.ValidatedOrder";
@@ -145,7 +145,7 @@ export interface ValidatedOrderAmino {
   /** Status of the order, open, filled, cancelled etc */
   status?: OrderStatus;
   /** List of partial fills if the order was partially filled or fully filled */
-  partialFills?: PartialFillAmino[];
+  fills?: FillAmino[];
 }
 export interface ValidatedOrderAminoMsg {
   type: "/sphx.order.ValidatedOrder";
@@ -163,24 +163,24 @@ export interface ValidatedOrderSDKType {
   timestamp: bigint;
   MarketId: bigint;
   status: OrderStatus;
-  partialFills: PartialFillSDKType[];
+  fills: FillSDKType[];
 }
-function createBasePartialFill(): PartialFill {
+function createBaseFill(): Fill {
   return {
-    quantity: BigInt(0),
-    price: BigInt(0),
+    quantity: "",
+    price: "",
     timestamp: BigInt(0),
     leverage: BigInt(0)
   };
 }
-export const PartialFill = {
-  typeUrl: "/sphx.order.PartialFill",
-  encode(message: PartialFill, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.quantity !== BigInt(0)) {
-      writer.uint32(8).int64(message.quantity);
+export const Fill = {
+  typeUrl: "/sphx.order.Fill",
+  encode(message: Fill, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.quantity !== "") {
+      writer.uint32(10).string(message.quantity);
     }
-    if (message.price !== BigInt(0)) {
-      writer.uint32(16).int64(message.price);
+    if (message.price !== "") {
+      writer.uint32(18).string(message.price);
     }
     if (message.timestamp !== BigInt(0)) {
       writer.uint32(24).int64(message.timestamp);
@@ -190,18 +190,18 @@ export const PartialFill = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): PartialFill {
+  decode(input: BinaryReader | Uint8Array, length?: number): Fill {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePartialFill();
+    const message = createBaseFill();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.quantity = reader.int64();
+          message.quantity = reader.string();
           break;
         case 2:
-          message.price = reader.int64();
+          message.price = reader.string();
           break;
         case 3:
           message.timestamp = reader.int64();
@@ -216,21 +216,21 @@ export const PartialFill = {
     }
     return message;
   },
-  fromPartial(object: Partial<PartialFill>): PartialFill {
-    const message = createBasePartialFill();
-    message.quantity = object.quantity !== undefined && object.quantity !== null ? BigInt(object.quantity.toString()) : BigInt(0);
-    message.price = object.price !== undefined && object.price !== null ? BigInt(object.price.toString()) : BigInt(0);
+  fromPartial(object: Partial<Fill>): Fill {
+    const message = createBaseFill();
+    message.quantity = object.quantity ?? "";
+    message.price = object.price ?? "";
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
     message.leverage = object.leverage !== undefined && object.leverage !== null ? BigInt(object.leverage.toString()) : BigInt(0);
     return message;
   },
-  fromAmino(object: PartialFillAmino): PartialFill {
-    const message = createBasePartialFill();
+  fromAmino(object: FillAmino): Fill {
+    const message = createBaseFill();
     if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = BigInt(object.quantity);
+      message.quantity = object.quantity;
     }
     if (object.price !== undefined && object.price !== null) {
-      message.price = BigInt(object.price);
+      message.price = object.price;
     }
     if (object.timestamp !== undefined && object.timestamp !== null) {
       message.timestamp = BigInt(object.timestamp);
@@ -240,27 +240,27 @@ export const PartialFill = {
     }
     return message;
   },
-  toAmino(message: PartialFill): PartialFillAmino {
+  toAmino(message: Fill): FillAmino {
     const obj: any = {};
-    obj.quantity = message.quantity !== BigInt(0) ? (message.quantity?.toString)() : undefined;
-    obj.price = message.price !== BigInt(0) ? (message.price?.toString)() : undefined;
+    obj.quantity = message.quantity ?? "";
+    obj.price = message.price ?? "";
     obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
     obj.leverage = message.leverage !== BigInt(0) ? (message.leverage?.toString)() : undefined;
     return obj;
   },
-  fromAminoMsg(object: PartialFillAminoMsg): PartialFill {
-    return PartialFill.fromAmino(object.value);
+  fromAminoMsg(object: FillAminoMsg): Fill {
+    return Fill.fromAmino(object.value);
   },
-  fromProtoMsg(message: PartialFillProtoMsg): PartialFill {
-    return PartialFill.decode(message.value);
+  fromProtoMsg(message: FillProtoMsg): Fill {
+    return Fill.decode(message.value);
   },
-  toProto(message: PartialFill): Uint8Array {
-    return PartialFill.encode(message).finish();
+  toProto(message: Fill): Uint8Array {
+    return Fill.encode(message).finish();
   },
-  toProtoMsg(message: PartialFill): PartialFillProtoMsg {
+  toProtoMsg(message: Fill): FillProtoMsg {
     return {
-      typeUrl: "/sphx.order.PartialFill",
-      value: PartialFill.encode(message).finish()
+      typeUrl: "/sphx.order.Fill",
+      value: Fill.encode(message).finish()
     };
   }
 };
@@ -277,7 +277,7 @@ function createBaseValidatedOrder(): ValidatedOrder {
     timestamp: BigInt(0),
     marketId: BigInt(0),
     status: 0,
-    partialFills: []
+    fills: []
   };
 }
 export const ValidatedOrder = {
@@ -316,8 +316,8 @@ export const ValidatedOrder = {
     if (message.status !== 0) {
       writer.uint32(88).int32(message.status);
     }
-    for (const v of message.partialFills) {
-      PartialFill.encode(v!, writer.uint32(98).fork()).ldelim();
+    for (const v of message.fills) {
+      Fill.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -362,7 +362,7 @@ export const ValidatedOrder = {
           message.status = reader.int32() as any;
           break;
         case 12:
-          message.partialFills.push(PartialFill.decode(reader, reader.uint32()));
+          message.fills.push(Fill.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -384,7 +384,7 @@ export const ValidatedOrder = {
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
     message.marketId = object.marketId !== undefined && object.marketId !== null ? BigInt(object.marketId.toString()) : BigInt(0);
     message.status = object.status ?? 0;
-    message.partialFills = object.partialFills?.map(e => PartialFill.fromPartial(e)) || [];
+    message.fills = object.fills?.map(e => Fill.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: ValidatedOrderAmino): ValidatedOrder {
@@ -422,7 +422,7 @@ export const ValidatedOrder = {
     if (object.status !== undefined && object.status !== null) {
       message.status = object.status;
     }
-    message.partialFills = object.partialFills?.map(e => PartialFill.fromAmino(e)) || [];
+    message.fills = object.fills?.map(e => Fill.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: ValidatedOrder): ValidatedOrderAmino {
@@ -438,10 +438,10 @@ export const ValidatedOrder = {
     obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
     obj.MarketId = message.marketId !== BigInt(0) ? (message.marketId?.toString)() : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
-    if (message.partialFills) {
-      obj.partialFills = message.partialFills.map(e => e ? PartialFill.toAmino(e) : undefined);
+    if (message.fills) {
+      obj.fills = message.fills.map(e => e ? Fill.toAmino(e) : undefined);
     } else {
-      obj.partialFills = message.partialFills;
+      obj.fills = message.fills;
     }
     return obj;
   },

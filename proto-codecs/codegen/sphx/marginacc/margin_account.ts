@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { MarginAccountAsset, MarginAccountAssetAmino, MarginAccountAssetSDKType } from "./margin_account_asset";
 import { BinaryReader, BinaryWriter } from "../../binary";
 export interface MarginAccountId {
   owner: string;
@@ -27,6 +28,8 @@ export interface MarginAccountInfo {
   address: string;
   /** List of addresses that can place orders on behalf of the margin account owner. */
   delegates: string[];
+  /** Margin account assets. */
+  assets: MarginAccountAsset[];
 }
 export interface MarginAccountInfoProtoMsg {
   typeUrl: "/sphx.marginacc.MarginAccountInfo";
@@ -39,6 +42,8 @@ export interface MarginAccountInfoAmino {
   address?: string;
   /** List of addresses that can place orders on behalf of the margin account owner. */
   delegates?: string[];
+  /** Margin account assets. */
+  assets?: MarginAccountAssetAmino[];
 }
 export interface MarginAccountInfoAminoMsg {
   type: "/sphx.marginacc.MarginAccountInfo";
@@ -48,6 +53,7 @@ export interface MarginAccountInfoSDKType {
   id?: MarginAccountIdSDKType;
   address: string;
   delegates: string[];
+  assets: MarginAccountAssetSDKType[];
 }
 function createBaseMarginAccountId(): MarginAccountId {
   return {
@@ -128,7 +134,8 @@ function createBaseMarginAccountInfo(): MarginAccountInfo {
   return {
     id: undefined,
     address: "",
-    delegates: []
+    delegates: [],
+    assets: []
   };
 }
 export const MarginAccountInfo = {
@@ -142,6 +149,9 @@ export const MarginAccountInfo = {
     }
     for (const v of message.delegates) {
       writer.uint32(26).string(v!);
+    }
+    for (const v of message.assets) {
+      MarginAccountAsset.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -161,6 +171,9 @@ export const MarginAccountInfo = {
         case 3:
           message.delegates.push(reader.string());
           break;
+        case 4:
+          message.assets.push(MarginAccountAsset.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -173,6 +186,7 @@ export const MarginAccountInfo = {
     message.id = object.id !== undefined && object.id !== null ? MarginAccountId.fromPartial(object.id) : undefined;
     message.address = object.address ?? "";
     message.delegates = object.delegates?.map(e => e) || [];
+    message.assets = object.assets?.map(e => MarginAccountAsset.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: MarginAccountInfoAmino): MarginAccountInfo {
@@ -184,6 +198,7 @@ export const MarginAccountInfo = {
       message.address = object.address;
     }
     message.delegates = object.delegates?.map(e => e) || [];
+    message.assets = object.assets?.map(e => MarginAccountAsset.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: MarginAccountInfo): MarginAccountInfoAmino {
@@ -194,6 +209,11 @@ export const MarginAccountInfo = {
       obj.delegates = message.delegates.map(e => e);
     } else {
       obj.delegates = message.delegates;
+    }
+    if (message.assets) {
+      obj.assets = message.assets.map(e => e ? MarginAccountAsset.toAmino(e) : undefined);
+    } else {
+      obj.assets = message.assets;
     }
     return obj;
   },
