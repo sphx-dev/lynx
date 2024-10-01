@@ -39,7 +39,7 @@ const IconWrapper = styled.div<IIconWrapperProps>`
   height: ${({ size }) => sizeMap[size]};
   width: ${({ size }) => sizeMap[size]};
   cursor: ${({ onClick }) => onClick && "pointer"};
-  transform: rotate(${({ rotate }) => rotate || 0});
+  transform: rotate(${({ rotate }) => rotate ?? 0});
   transition: 0.4s ease-in-out;
 
   & > svg {

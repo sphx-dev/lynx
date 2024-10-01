@@ -136,11 +136,9 @@ const PendingOrders = () => {
       cell: (props: any) => {
         const status = props.getValue()?.status;
         const orderId = props.getValue()?.id;
-        const isCancelling = cancellingOrders.find(
+        const isCancelling = cancellingOrders.some(
           o => o.number === orderId.number
-        )
-          ? true
-          : false;
+        );
         const onClickHandler = async () => {
           if (address && orderId?.number && orderId?.marginAccountAddress) {
             try {

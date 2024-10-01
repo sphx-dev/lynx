@@ -43,7 +43,6 @@ const datafeed = {
         .catch(error => {
           console.log("[resolveSymbol]: Cannot resolve symbol", symbolName);
           onResolveErrorCallback("Cannot resolve symbol");
-          return;
         });
     });
   },

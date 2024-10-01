@@ -11,15 +11,15 @@ export const useMarkets = () => {
 
   const { data } = useQuery("markets", getAllMarkets, { staleTime: Infinity });
   useEffect(() => {
-    setMarkets(data?.markets || []);
+    setMarkets(data?.markets ?? []);
   }, [data, setMarkets]);
 
   // TODO: use real data
   const { symbol, icon } = useMemo(() => {
     const mock = mockFutures.find(m => {
-      return m?.symbol?.startsWith(selectedMarket?.baseAsset || "");
+      return m?.symbol?.startsWith(selectedMarket?.baseAsset ?? "");
     });
-    return { symbol: mock?.symbol || "", icon: mock?.icon || "" };
+    return { symbol: mock?.symbol ?? "", icon: mock?.icon ?? "" };
   }, [selectedMarket]);
 
   return {

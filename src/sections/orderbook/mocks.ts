@@ -1167,6 +1167,6 @@ export const ORDERS_WITH_DEPTH: OrderWithDepth[] = [
     price: 15,
     leverage: 0,
     totalSum: 17,
-    depth: (17 / 17) * 100,
+    depth: 1 * 100,
   },
 ];

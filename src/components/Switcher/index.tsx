@@ -62,8 +62,13 @@ interface Props<T> {
   onChange?: (value: T) => void;
 }
 
-function Switcher<T>({ defaultValue, options, name, onChange }: Props<T>) {
-  const [value, setValue] = useState<T>(defaultValue || options[0].value);
+function Switcher<T>({
+  defaultValue,
+  options,
+  name,
+  onChange,
+}: Readonly<Props<T>>) {
+  const [value, setValue] = useState<T>(defaultValue ?? options[0].value);
 
   useEffect(() => {
     if (defaultValue !== undefined && defaultValue !== value) {

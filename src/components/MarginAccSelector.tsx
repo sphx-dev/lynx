@@ -36,7 +36,7 @@ export const MarginAccSelector = ({
     useMarginAccount(address);
 
   const balanceQueries = useMemo(() => {
-    if (marginAccounts && marginAccounts.length) {
+    if (marginAccounts?.length) {
       return marginAccounts.map(account => ({
         address: account.address,
         denom: "uusdc",
@@ -61,7 +61,7 @@ export const MarginAccSelector = ({
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
 
-  if (!marginAccounts || !marginAccounts.length) {
+  if (!marginAccounts?.length) {
     return <></>;
   }
 
