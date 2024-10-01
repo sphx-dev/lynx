@@ -6,7 +6,10 @@ import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useCancelOrder, useOrders } from "../../hooks/useOrders";
-import { OrderSide } from "../../../proto-codecs/codegen/sphx/order/order";
+import {
+  OrderId,
+  OrderSide,
+} from "../../../proto-codecs/codegen/sphx/order/order";
 import { Side } from "../../types/order";
 import { useTranslation } from "react-i18next";
 import { successAlert } from "@/utils/alerts";
@@ -42,7 +45,14 @@ const PendingOrders = () => {
 
   const [page, setPage] = useState<number>(0);
 
-  const [cancelingOrders, setCancelingOrders] = useState<any[]>([]);
+  const [cancellingOrders, setCancellingOrders] = useState<OrderId[]>([]);
+
+  const addCancellingOrder = (orderId: OrderId) => {
+    setCancellingOrders([...cancellingOrders, orderId]);
+  };
+  const removeCancellingOrder = (orderId: OrderId) => {
+    setCancellingOrders(co => co.filter(o => o.number !== orderId.number));
+  };
 
   const { orders, totalOrders, pageSize } = useOrders(
     selectedAddress,
@@ -126,11 +136,15 @@ const PendingOrders = () => {
       cell: (props: any) => {
         const status = props.getValue()?.status;
         const orderId = props.getValue()?.id;
-        const isCanceling = cancelingOrders.includes(orderId);
+        const isCancelling = cancellingOrders.find(
+          o => o.number === orderId.number
+        )
+          ? true
+          : false;
         const onClickHandler = async () => {
           if (address && orderId?.number && orderId?.marginAccountAddress) {
             try {
-              setCancelingOrders([...cancelingOrders, orderId]);
+              addCancellingOrder(orderId);
               await cancelOrder({
                 address,
                 orderId,
@@ -138,14 +152,10 @@ const PendingOrders = () => {
               });
 
               successAlert("Order canceled successfully");
-              setCancelingOrders(co =>
-                co.filter(o => o.number !== orderId.number)
-              );
             } catch (error) {
               console.error(error);
-              setCancelingOrders(co =>
-                co.filter(o => o.number !== orderId.number)
-              );
+            } finally {
+              removeCancellingOrder(orderId);
             }
           }
         };
@@ -156,10 +166,10 @@ const PendingOrders = () => {
               <Button
                 variant="error"
                 size="xs"
-                disabled={isCanceling}
+                disabled={isCancelling}
                 onClick={onClickHandler}
               >
-                {isCanceling ? "Canceling..." : "Cancel"}
+                {isCancelling ? "Canceling..." : "Cancel"}
               </Button>
             )}
           </>
