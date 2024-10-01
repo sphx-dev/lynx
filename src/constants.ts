@@ -1,5 +1,3 @@
-import config from "./config";
-
 // Mobile in in pixels
 export const MOBILE_WIDTH: number = 800;
 
@@ -12,4 +10,4 @@ export const BREAK_POINTS = {
   MOBILE_MIN_WIDTH: 600,
 };
 
-export const DENOMUSDC = "uusdc";
+export const DENOMUSDC = "usdc";
