@@ -83,7 +83,7 @@ export const sphxLocalChainInfo: ChainInfo = {
 
 export const sphxTestnetChain1Info: ChainInfo = {
   rpc: "https://rpc1.sphx.dev/",
-  rest: "https://rpc1.sphx.dev/rest/",
+  rest: "https://rest1.sphx.dev/",
   chainId: "sphx-testnet",
   chainName: "Sphinx Testnet 1",
   chainSymbolImageUrl: "https://avatars.githubusercontent.com/u/134250347",
@@ -116,7 +116,7 @@ export const sphxTestnetChain1Info: ChainInfo = {
 
 export const sphxTestnetChain2Info: ChainInfo = {
   rpc: "https://rpc2.sphx.dev/",
-  rest: "https://rpc2.sphx.dev/rest/",
+  rest: "https://rest2.sphx.dev/",
   chainId: "sphx-testnet",
   chainName: "Sphinx Testnet 2",
   chainSymbolImageUrl: "https://avatars.githubusercontent.com/u/134250347",
