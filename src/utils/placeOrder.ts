@@ -58,82 +58,85 @@ export const placeMarketOrderInChain = async ({
   onSuccess,
   onError,
 }: PlaceMarketOrderInChainParams) => {
-  if (address) {
-    const ordersMessage = [
-      sphx.order.MessageComposer.withTypeUrl.placeOrder({
-        user: address,
-        order: {
-          id: {
-            marginAccountAddress: marginAccountAddress,
-            number: orderId,
-          },
-          accountId: address,
-          // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
-          side,
-          quantity,
-          price: BigInt(0),
-          // Always OrderTypeProto.ORDER_TYPE_MARKET
-          orderType: OrderType.ORDER_TYPE_MARKET,
-          triggerPrice: BigInt(0),
-          leverage,
-          timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          marketId,
-        },
-      }),
-    ];
+  if (!address) {
+    console.error("Empty address");
+    return;
+  }
 
-    if (takeProfit && stopLoss) {
-      ordersMessage.push(
-        ...[
-          // TAKE PROFIT
-          sphx.order.MessageComposer.withTypeUrl.placeOrder({
-            user: address,
-            order: {
-              id: {
-                marginAccountAddress: marginAccountAddress,
-                number: ++orderId,
-              },
-              accountId: address,
-              // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
-              side:
-                side === OrderSide.ORDER_SIDE_BUY
-                  ? OrderSide.ORDER_SIDE_SELL
-                  : OrderSide.ORDER_SIDE_BUY,
-              quantity,
-              price: BigInt(takeProfit),
-              orderType: OrderType.ORDER_TYPE_LIMIT,
-              triggerPrice: BigInt(takeProfit),
-              leverage,
-              timestamp: BigInt(Math.floor(Date.now() / 1000)),
-              marketId,
+  const ordersMessage = [
+    sphx.order.MessageComposer.withTypeUrl.placeOrder({
+      user: address,
+      order: {
+        id: {
+          marginAccountAddress: marginAccountAddress,
+          number: orderId,
+        },
+        accountId: address,
+        // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
+        side,
+        quantity,
+        price: BigInt(0),
+        // Always OrderTypeProto.ORDER_TYPE_MARKET
+        orderType: OrderType.ORDER_TYPE_MARKET,
+        triggerPrice: BigInt(0),
+        leverage,
+        timestamp: BigInt(Math.floor(Date.now() / 1000)),
+        marketId,
+      },
+    }),
+  ];
+
+  if (takeProfit && stopLoss) {
+    ordersMessage.push(
+      ...[
+        // TAKE PROFIT
+        sphx.order.MessageComposer.withTypeUrl.placeOrder({
+          user: address,
+          order: {
+            id: {
+              marginAccountAddress: marginAccountAddress,
+              number: ++orderId,
             },
-          }),
-          // STOP LOSS
-          sphx.order.MessageComposer.withTypeUrl.placeOrder({
-            user: address,
-            order: {
-              id: {
-                marginAccountAddress: marginAccountAddress,
-                number: ++orderId,
-              },
-              accountId: address,
-              // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
-              side:
-                side === OrderSide.ORDER_SIDE_BUY
-                  ? OrderSide.ORDER_SIDE_SELL
-                  : OrderSide.ORDER_SIDE_BUY,
-              quantity,
-              price: BigInt(stopLoss),
-              orderType: OrderType.ORDER_TYPE_LIMIT,
-              triggerPrice: BigInt(stopLoss),
-              leverage,
-              timestamp: BigInt(Math.floor(Date.now() / 1000)),
-              marketId,
+            accountId: address,
+            // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
+            side:
+              side === OrderSide.ORDER_SIDE_BUY
+                ? OrderSide.ORDER_SIDE_SELL
+                : OrderSide.ORDER_SIDE_BUY,
+            quantity,
+            price: BigInt(takeProfit),
+            orderType: OrderType.ORDER_TYPE_LIMIT,
+            triggerPrice: BigInt(takeProfit),
+            leverage,
+            timestamp: BigInt(Math.floor(Date.now() / 1000)),
+            marketId,
+          },
+        }),
+        // STOP LOSS
+        sphx.order.MessageComposer.withTypeUrl.placeOrder({
+          user: address,
+          order: {
+            id: {
+              marginAccountAddress: marginAccountAddress,
+              number: ++orderId,
             },
-          }),
-        ]
-      );
-    }
+            accountId: address,
+            // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
+            side:
+              side === OrderSide.ORDER_SIDE_BUY
+                ? OrderSide.ORDER_SIDE_SELL
+                : OrderSide.ORDER_SIDE_BUY,
+            quantity,
+            price: BigInt(stopLoss),
+            orderType: OrderType.ORDER_TYPE_LIMIT,
+            triggerPrice: BigInt(stopLoss),
+            leverage,
+            timestamp: BigInt(Math.floor(Date.now() / 1000)),
+            marketId,
+          },
+        }),
+      ]
+    );
 
     console.log("orderMessage", ordersMessage);
 
@@ -177,117 +180,119 @@ export const placeLimitOrderInChain = async ({
 }: PlaceLimitOrderInChainParams) => {
   if (!address) {
     console.error("Empty address");
+    return;
   }
   if (!marginAccountAddress) {
     console.error("Empty marginAccountAddress");
+    return;
   }
-  if (address) {
-    const orderMessages = [
-      // Initial order to Buy/Sell
-      sphx.order.MessageComposer.withTypeUrl.placeOrder({
-        user: address,
-        order: {
-          id: {
-            marginAccountAddress: marginAccountAddress,
-            number: orderId,
-          },
-          accountId: address,
-          // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
-          side,
-          quantity,
-          price,
-          // Always OrderTypeProto.ORDER_TYPE_LIMIT
-          orderType: OrderType.ORDER_TYPE_LIMIT,
-          triggerPrice: BigInt(0),
-          leverage,
-          timestamp: BigInt(Math.floor(Date.now() / 1000)),
-          marketId,
+
+  const orderMessages = [
+    // Initial order to Buy/Sell
+    sphx.order.MessageComposer.withTypeUrl.placeOrder({
+      user: address,
+      order: {
+        id: {
+          marginAccountAddress: marginAccountAddress,
+          number: orderId,
         },
-      }),
-    ];
-    if (takeProfit && stopLoss) {
-      orderMessages.push(
-        ...[
-          // Take profit order
-          sphx.order.MessageComposer.withTypeUrl.placeOrder({
-            user: address,
-            order: {
-              id: {
-                marginAccountAddress: marginAccountAddress,
-                number: ++orderId,
-              },
-              accountId: address,
-              // Oposit to the original order
-              side:
-                side === OrderSide.ORDER_SIDE_BUY
-                  ? OrderSide.ORDER_SIDE_SELL
-                  : OrderSide.ORDER_SIDE_BUY,
-              quantity,
-              price: BigInt(takeProfit),
-              // Guaranteed take-profit
-              // TODO: replace market for take-profit market. Commented out due error in the chain
-              // orderType: OrderTypeProto.ORDER_TYPE_TAKE_PROFIT_MARKET,
-              orderType: OrderType.ORDER_TYPE_LIMIT,
-              triggerPrice: BigInt(takeProfit),
-              leverage,
-              timestamp: BigInt(Math.floor(Date.now() / 1000)),
-              marketId,
+        accountId: address,
+        // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
+        side,
+        quantity,
+        price,
+        // Always OrderTypeProto.ORDER_TYPE_LIMIT
+        orderType: OrderType.ORDER_TYPE_LIMIT,
+        triggerPrice: BigInt(0),
+        leverage,
+        timestamp: BigInt(Math.floor(Date.now() / 1000)),
+        marketId,
+      },
+    }),
+  ];
+
+  if (takeProfit && stopLoss) {
+    orderMessages.push(
+      ...[
+        // Take profit order
+        sphx.order.MessageComposer.withTypeUrl.placeOrder({
+          user: address,
+          order: {
+            id: {
+              marginAccountAddress: marginAccountAddress,
+              number: ++orderId,
             },
-          }),
-          // Stop loss order
-          sphx.order.MessageComposer.withTypeUrl.placeOrder({
-            user: address,
-            order: {
-              id: {
-                marginAccountAddress: marginAccountAddress,
-                number: ++orderId,
-              },
-              accountId: address,
-              // Oposit to the original order
-              side:
-                side === OrderSide.ORDER_SIDE_BUY
-                  ? OrderSide.ORDER_SIDE_SELL
-                  : OrderSide.ORDER_SIDE_BUY,
-              quantity,
-              price: BigInt(stopLoss),
-              // Guaranteed stop-loss
-              // TODO: replace market for stop-loss market. Commented out due error in the chain
-              // orderType: OrderTypeProto.ORDER_TYPE_STOP_LOSS_MARKET,
-              orderType: OrderType.ORDER_TYPE_LIMIT,
-              triggerPrice: BigInt(stopLoss),
-              leverage,
-              timestamp: BigInt(Math.floor(Date.now() / 1000)),
-              marketId,
+            accountId: address,
+            // Oposit to the original order
+            side:
+              side === OrderSide.ORDER_SIDE_BUY
+                ? OrderSide.ORDER_SIDE_SELL
+                : OrderSide.ORDER_SIDE_BUY,
+            quantity,
+            price: BigInt(takeProfit),
+            // Guaranteed take-profit
+            // TODO: replace market for take-profit market. Commented out due error in the chain
+            // orderType: OrderTypeProto.ORDER_TYPE_TAKE_PROFIT_MARKET,
+            orderType: OrderType.ORDER_TYPE_LIMIT,
+            triggerPrice: BigInt(takeProfit),
+            leverage,
+            timestamp: BigInt(Math.floor(Date.now() / 1000)),
+            marketId,
+          },
+        }),
+        // Stop loss order
+        sphx.order.MessageComposer.withTypeUrl.placeOrder({
+          user: address,
+          order: {
+            id: {
+              marginAccountAddress: marginAccountAddress,
+              number: ++orderId,
             },
-          }),
-        ]
-      );
+            accountId: address,
+            // Oposit to the original order
+            side:
+              side === OrderSide.ORDER_SIDE_BUY
+                ? OrderSide.ORDER_SIDE_SELL
+                : OrderSide.ORDER_SIDE_BUY,
+            quantity,
+            price: BigInt(stopLoss),
+            // Guaranteed stop-loss
+            // TODO: replace market for stop-loss market. Commented out due error in the chain
+            // orderType: OrderTypeProto.ORDER_TYPE_STOP_LOSS_MARKET,
+            orderType: OrderType.ORDER_TYPE_LIMIT,
+            triggerPrice: BigInt(stopLoss),
+            leverage,
+            timestamp: BigInt(Math.floor(Date.now() / 1000)),
+            marketId,
+          },
+        }),
+      ]
+    );
+  }
+
+  console.log("orderMessage", orderMessages);
+
+  try {
+    const signingClient = await getSigningStargateOrderClient();
+    const response = await signingClient?.signAndBroadcast(
+      address,
+      orderMessages,
+      composeFee(),
+      `Limit Order ${quantity} at ${price}USDC  leverage:${leverage}x${
+        takeProfit && stopLoss ? ` (tp: ${takeProfit}, sl: ${stopLoss})` : ""
+      }`
+    );
+    console.log("TxResponse", response);
+    if (response.code === 0) {
+      onSuccess("Order placed correctly");
+    } else {
+      onError(getMessageFromCode(response.code, response?.rawLog));
     }
 
-    console.log("orderMessage", orderMessages);
-
-    try {
-      const signingClient = await getSigningStargateOrderClient();
-      const response = await signingClient?.signAndBroadcast(
-        address,
-        orderMessages,
-        composeFee(),
-        `Limit Order ${quantity} at ${price}USDC  leverage:${leverage}x${
-          takeProfit && stopLoss ? ` (tp: ${takeProfit}, sl: ${stopLoss})` : ""
-        }`
-      );
-      console.log("TxResponse", response);
-      if (response.code === 0) {
-        onSuccess("Order placed correctly");
-      } else {
-        onError(getMessageFromCode(response.code, response?.rawLog));
-      }
-
-      return response;
-    } catch (err) {
-      console.log("ERR", err);
-      onError?.("" + err);
-    }
+    return response;
+  } catch (err) {
+    console.log("ERR", err);
+    onError?.("" + err);
   }
 };
 

@@ -127,6 +127,29 @@ const PendingOrders = () => {
         const status = props.getValue()?.status;
         const orderId = props.getValue()?.id;
         const isCanceling = cancelingOrders.includes(orderId);
+        const onClickHandler = async () => {
+          if (address && orderId?.number && orderId?.marginAccountAddress) {
+            try {
+              setCancelingOrders([...cancelingOrders, orderId]);
+              await cancelOrder({
+                address,
+                orderId,
+                memo: `Cancel order #${orderId.number}`,
+              });
+
+              successAlert("Order canceled successfully");
+              setCancelingOrders(co =>
+                co.filter(o => o.number !== orderId.number)
+              );
+            } catch (error) {
+              console.error(error);
+              setCancelingOrders(co =>
+                co.filter(o => o.number !== orderId.number)
+              );
+            }
+          }
+        };
+
         return (
           <>
             {status === OrderStatus.ORDER_STATUS_OPEN && (
@@ -134,32 +157,7 @@ const PendingOrders = () => {
                 variant="error"
                 size="xs"
                 disabled={isCanceling}
-                onClick={() => {
-                  setCancelingOrders([...cancelingOrders, orderId]);
-                  if (
-                    address &&
-                    orderId?.number &&
-                    orderId?.marginAccountAddress
-                  ) {
-                    cancelOrder({
-                      address,
-                      orderId,
-                      memo: `Cancel order #${orderId.number}`,
-                    })
-                      .then(() => {
-                        successAlert("Order canceled successfully");
-                        setCancelingOrders(co =>
-                          co.filter(o => o.number !== orderId.number)
-                        );
-                      })
-                      .catch(error => {
-                        console.error(error);
-                        setCancelingOrders(co =>
-                          co.filter(o => o.number !== orderId.number)
-                        );
-                      });
-                  }
-                }}
+                onClick={onClickHandler}
               >
                 {isCanceling ? "Canceling..." : "Cancel"}
               </Button>

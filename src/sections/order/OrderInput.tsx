@@ -124,11 +124,23 @@ function OrderInput() {
     console.log("PLACE_ORDER", values);
     // TODO: Add toast notifications for address, selectedAddress, and marketId
     console.log(address, selectedAddress, marketId);
-    if (!address) return;
-    if (!selectedAddress) return;
-    if (!marketId) return;
+    if (!address || !selectedAddress || !marketId) {
+      return;
+    }
 
     try {
+      const sideValue = values.isBuy
+        ? OrderSide.ORDER_SIDE_BUY
+        : OrderSide.ORDER_SIDE_SELL;
+
+      const stopLossValue = values.stopLoss
+        ? BigInt(Number(values.stopLoss) * 1e6)
+        : undefined;
+
+      const takeProfitValue = values.takeProfit
+        ? BigInt(Number(values.takeProfit) * 1e6)
+        : undefined;
+
       if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
         setIsPlacingOrder(true);
 
@@ -136,18 +148,12 @@ function OrderInput() {
           address,
           marginAccountAddress: selectedAddress,
           orderId: BigInt(Date.now() * 1000),
-          side: values.isBuy
-            ? OrderSide.ORDER_SIDE_BUY
-            : OrderSide.ORDER_SIDE_SELL,
+          side: sideValue,
           quantity: BigInt(Number(values.volume) * 1e6),
           // price: BigInt(values.price * 1e6),
           leverage: BigInt(values.leverage),
-          stopLoss: values.stopLoss
-            ? BigInt(Number(values.stopLoss) * 1e6)
-            : undefined,
-          takeProfit: values.takeProfit
-            ? BigInt(Number(values.takeProfit) * 1e6)
-            : undefined,
+          stopLoss: stopLossValue,
+          takeProfit: takeProfitValue,
           marketId: BigInt(marketId),
           onSuccess: successAlert,
           onError: errorAlert,
@@ -161,18 +167,12 @@ function OrderInput() {
           address,
           marginAccountAddress: selectedAddress,
           orderId: BigInt(Date.now() * 1000),
-          side: values.isBuy
-            ? OrderSide.ORDER_SIDE_BUY
-            : OrderSide.ORDER_SIDE_SELL,
+          side: sideValue,
           quantity: BigInt(Number(values.volume) * 1e6),
           price: BigInt(Number(values.price) * 1e6),
           leverage: BigInt(values.leverage),
-          stopLoss: values.stopLoss
-            ? BigInt(Number(values.stopLoss) * 1e6)
-            : undefined,
-          takeProfit: values.takeProfit
-            ? BigInt(Number(values.takeProfit) * 1e6)
-            : undefined,
+          stopLoss: stopLossValue,
+          takeProfit: takeProfitValue,
           marketId: BigInt(marketId),
           onSuccess: successAlert,
           onError: errorAlert,
@@ -359,7 +359,10 @@ function OrderInput() {
                     )}
                     {isConnected && (
                       <>
-                        {!selectedAddress || !amount ? (
+                        {!address ||
+                        !marketId ||
+                        !selectedAddress ||
+                        !amount ? (
                           <PlaceOrderMessage />
                         ) : (
                           <PlaceOrderButton

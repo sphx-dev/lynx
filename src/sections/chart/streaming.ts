@@ -52,39 +52,7 @@ function startStreaming(retries = 3, delay = 3000) {
       console.log(response.body);
       const reader = response.body?.getReader();
 
-      function streamData() {
-        reader
-          ?.read()
-          .then(({ value, done }) => {
-            if (done) {
-              console.error("[stream] Streaming ended.");
-              return;
-            }
-
-            // Assuming the streaming data is separated by line breaks
-            const dataStrings = new TextDecoder().decode(value).split("\n");
-            // console.log("[stream] dataStrings:", dataStrings);
-            dataStrings.forEach(dataString => {
-              const trimmedDataString = dataString.trim();
-              if (trimmedDataString) {
-                try {
-                  var jsonData = JSON.parse(trimmedDataString);
-                  handleStreamingData(jsonData);
-                } catch (e: any) {
-                  // console.error("Error parsing JSON:", e.message)
-                }
-              }
-            });
-
-            streamData(); // Continue processing the stream
-          })
-          .catch(error => {
-            console.error("[stream] Error reading from stream:", error);
-            attemptReconnect(retries, delay);
-          });
-      }
-
-      streamData();
+      streamData(reader, retries, delay);
     })
     .catch(error => {
       console.error(
@@ -92,15 +60,52 @@ function startStreaming(retries = 3, delay = 3000) {
         error
       );
     });
-  function attemptReconnect(retriesLeft: any, delay: any) {
-    if (retriesLeft > 0) {
-      console.log(`[stream] Attempting to reconnect in ${delay}ms...`);
-      setTimeout(() => {
-        startStreaming(retriesLeft - 1, delay);
-      }, delay);
-    } else {
-      console.error("[stream] Maximum reconnection attempts reached.");
-    }
+}
+
+function streamData(
+  reader: ReadableStreamDefaultReader<any> | null,
+  retries = 3,
+  delay = 3000
+) {
+  reader
+    ?.read()
+    .then(({ value, done }) => {
+      if (done) {
+        console.error("[stream] Streaming ended.");
+        return;
+      }
+
+      // Assuming the streaming data is separated by line breaks
+      const dataStrings = new TextDecoder().decode(value).split("\n");
+      // console.log("[stream] dataStrings:", dataStrings);
+      dataStrings.forEach(dataString => {
+        const trimmedDataString = dataString.trim();
+        if (trimmedDataString) {
+          try {
+            const jsonData = JSON.parse(trimmedDataString);
+            handleStreamingData(jsonData);
+          } catch (e: any) {
+            // console.error("Error parsing JSON:", e.message)
+          }
+        }
+      });
+
+      streamData(reader); // Continue processing the stream
+    })
+    .catch(error => {
+      console.error("[stream] Error reading from stream:", error);
+      attemptReconnect(retries, delay);
+    });
+}
+
+function attemptReconnect(retriesLeft: any, delay: any) {
+  if (retriesLeft > 0) {
+    console.log(`[stream] Attempting to reconnect in ${delay}ms...`);
+    setTimeout(() => {
+      startStreaming(retriesLeft - 1, delay);
+    }, delay);
+  } else {
+    console.error("[stream] Maximum reconnection attempts reached.");
   }
 }
 
