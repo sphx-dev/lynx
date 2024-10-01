@@ -6,6 +6,7 @@ import { successAlert } from "../../utils/alerts";
 import styled from "styled-components";
 import Button from "../Button";
 import { Input } from "../Input";
+import { DENOMUSDC } from "@/constants";
 
 export const WithdrawForm = () => {
   const { address } = useChainCosmoshub();
@@ -14,10 +15,10 @@ export const WithdrawForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const { formatedAmount: addressBalance } = useBalance(address, "uusdc");
+  const { formatedAmount: addressBalance } = useBalance(address, DENOMUSDC);
   const { formatedAmount: marginBalance } = useBalance(
     selectedAccount?.address,
-    "uusdc"
+    DENOMUSDC
   );
 
   const onSubmit = async () => {

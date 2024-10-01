@@ -9,6 +9,7 @@ import Divider from "../Divider";
 import { useBalance } from "../../hooks/useBalance";
 import { sendTokens } from "../../utils/sendTokens";
 import { successAlert } from "../../utils/alerts";
+import { DENOMUSDC } from "@/constants";
 
 async function depositToMarginAccount({
   address,
@@ -33,7 +34,7 @@ async function depositToMarginAccount({
         from: address,
         to: marginAccountAddress,
         amount,
-        denom: "uusdc",
+        denom: DENOMUSDC,
         memo: "Deposit to margin account",
       },
       onSuccess,
@@ -51,10 +52,10 @@ export const DepositForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const { formatedAmount: addressBalance } = useBalance(address, "uusdc");
+  const { formatedAmount: addressBalance } = useBalance(address, DENOMUSDC);
   const { formatedAmount: marginBalance } = useBalance(
     selectedAccount?.address,
-    "uusdc"
+    DENOMUSDC
   );
 
   const onSubmit = async () => {

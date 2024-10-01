@@ -11,6 +11,7 @@ import { MockKeplr } from "@keplr-wallet/provider-mock";
 import { sphxLocalChainInfo } from "../constants/chainInfo";
 import { vi } from "vitest";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { DENOMUSDC } from "@/constants";
 
 // mockGetters(MockKeplr);
 
@@ -100,7 +101,7 @@ vi.mock("../utils/getBalance", async () => {
   return {
     getBalance: async () => {
       return {
-        denom: "uusdc",
+        denom: DENOMUSDC,
         amount: "100",
       };
     },

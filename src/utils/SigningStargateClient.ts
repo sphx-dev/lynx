@@ -9,6 +9,7 @@ import { Registry } from "@cosmjs/proto-signing";
 import { registry as orderRegistry } from "../../proto-codecs/codegen/sphx/order/tx.registry";
 import { registry as marginaccRegistry } from "../../proto-codecs/codegen/sphx/marginacc/tx.registry";
 import { getOfflineSigner } from "./getOfflineSigner";
+import { DENOMUSDC } from "@/constants";
 
 let orderClient: SigningStargateClient | undefined;
 
@@ -33,7 +34,7 @@ export async function getSigningStargateMarginAccountClient(): Promise<SigningSt
 async function getSigningStargateClient(registry: Registry) {
   const offlineSigner = await getOfflineSigner();
   const signingClientOptions: SigningStargateClientOptions = {
-    gasPrice: GasPrice.fromString("1uusdc"),
+    gasPrice: GasPrice.fromString("1" + DENOMUSDC),
     registry: registry,
   };
 
@@ -48,7 +49,7 @@ async function getSigningStargateClient(registry: Registry) {
 
 export const composeFee = (): StdFee => {
   const fee = {
-    amount: [{ denom: "uusdc", amount: "100000" }],
+    amount: [{ denom: DENOMUSDC, amount: "100000" }],
     gas: "200000",
   };
   return fee;

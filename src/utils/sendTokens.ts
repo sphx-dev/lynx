@@ -1,13 +1,14 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { getChain } from "../config";
 import { getOfflineSigner } from "./getOfflineSigner";
+import { DENOMUSDC } from "@/constants";
 
 export async function sendTokens(
   {
     from,
     to,
     amount,
-    denom = "uusdc",
+    denom = DENOMUSDC,
     memo = "",
   }: {
     from: string;

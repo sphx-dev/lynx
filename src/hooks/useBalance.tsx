@@ -1,10 +1,11 @@
 import { getBalance } from "../utils/getBalance";
 import { formatCoin } from "../utils/formatCoin";
 import { useQueries, useQuery } from "react-query";
+import { DENOMUSDC } from "@/constants";
 
 export const useBalance = (
   address: string | undefined | null,
-  denom = "uusdc"
+  denom = DENOMUSDC
 ) => {
   const { data } = useQuery(
     ["balance", address, denom],

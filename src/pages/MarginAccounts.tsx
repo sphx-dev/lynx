@@ -9,6 +9,7 @@ import { Coin } from "@cosmjs/proto-signing";
 import { sendTokens } from "../utils/sendTokens";
 import { errorAlert, infoAlert, successAlert } from "../utils/alerts";
 import { Input } from "@/components/Input";
+import { DENOMUSDC } from "@/constants";
 
 const MarginAccountsPage = () => {
   const { address, reconnect } = useChainCosmoshub();
@@ -26,7 +27,7 @@ const MarginAccountsPage = () => {
   useEffect(() => {
     (async () => {
       if (address) {
-        const currentBalance = await getBalance(address, "uusdc");
+        const currentBalance = await getBalance(address, DENOMUSDC);
         console.log("currentBalance", currentBalance);
         setBalance(currentBalance);
       }
@@ -37,7 +38,7 @@ const MarginAccountsPage = () => {
   useEffect(() => {
     if (marginAccounts && marginAccounts.length) {
       const promises = marginAccounts.map(account =>
-        getBalance(account.address, "uusdc")
+        getBalance(account.address, DENOMUSDC)
       );
       Promise.all(promises).then(balances => {
         setBalances(balances);
@@ -113,7 +114,7 @@ const MarginAccountsPage = () => {
                         from: address,
                         to: marginAccounts[selectedIndex].address,
                         amount: amount,
-                        denom: "uusdc",
+                        denom: DENOMUSDC,
                         memo:
                           "Send funds to margin account #" +
                           marginAccounts[selectedIndex].id?.number,

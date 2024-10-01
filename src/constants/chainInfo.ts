@@ -1,3 +1,4 @@
+import { DENOMUSDC } from "@/constants";
 import { ChainInfo } from "@keplr-wallet/types";
 
 // https://github.com/chainapsis/keplr-wallet/blob/master/apps/mobile/src/config.ts
@@ -68,14 +69,14 @@ export const sphxLocalChainInfo: ChainInfo = {
   currencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "uusdc",
+      coinMinimalDenom: DENOMUSDC,
       coinDecimals: 6,
     },
   ],
   feeCurrencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "uusdc",
+      coinMinimalDenom: DENOMUSDC,
       coinDecimals: 6,
     },
   ],
@@ -101,14 +102,14 @@ export const sphxTestnetChain1Info: ChainInfo = {
   currencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "uusdc",
+      coinMinimalDenom: DENOMUSDC,
       coinDecimals: 6,
     },
   ],
   feeCurrencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "uusdc",
+      coinMinimalDenom: DENOMUSDC,
       coinDecimals: 6,
     },
   ],
@@ -134,14 +135,14 @@ export const sphxTestnetChain2Info: ChainInfo = {
   currencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "uusdc",
+      coinMinimalDenom: DENOMUSDC,
       coinDecimals: 6,
     },
   ],
   feeCurrencies: [
     {
       coinDenom: "USDC",
-      coinMinimalDenom: "uusdc",
+      coinMinimalDenom: DENOMUSDC,
       coinDecimals: 6,
     },
   ],

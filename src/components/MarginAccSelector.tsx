@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getThemeColors } from "../theme";
 import { useModalStore } from "./Modal/Modal";
 import { useBalances } from "../hooks/useBalance";
+import { DENOMUSDC } from "@/constants";
 
 export const MarginAccSelector = ({
   size,
@@ -39,7 +40,7 @@ export const MarginAccSelector = ({
     if (marginAccounts?.length) {
       return marginAccounts.map(account => ({
         address: account.address,
-        denom: "uusdc",
+        denom: DENOMUSDC,
       }));
     }
     return [];
