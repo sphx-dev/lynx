@@ -4,9 +4,9 @@ import Group from "../Group";
 import Nav from "../../sections/navbar";
 import headerBg from "../../assets/images/header-logo-bg.svg";
 
-const StyledHeader = styled.header`
+const StyledHeader = styled.header<{ $url: string }>`
   position: relative;
-  background-image: url(${headerBg});
+  background-image: url("${({ $url }) => $url}");
   background-repeat: no-repeat;
   //background-position: top;
   width: 320px;
@@ -21,7 +21,7 @@ const Logo = styled.img`
 const Header = () => {
   return (
     <Group fluid spacing={0} style={{ width: "100vw" }}>
-      <StyledHeader>
+      <StyledHeader $url={headerBg}>
         <Logo src={logo} />
       </StyledHeader>
       <Nav />
