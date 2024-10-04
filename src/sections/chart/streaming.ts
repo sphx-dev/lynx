@@ -63,7 +63,7 @@ function startStreaming(retries = 3, delay = 3000) {
 }
 
 function streamData(
-  reader: ReadableStreamDefaultReader<any> | null,
+  reader: ReadableStreamDefaultReader<any> | undefined,
   retries = 3,
   delay = 3000
 ) {

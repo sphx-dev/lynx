@@ -36,12 +36,12 @@ const options: [
   { label: string; value: OrderType }
 ] = [
   {
-    label: "Market",
-    value: OrderType.ORDER_TYPE_MARKET,
-  },
-  {
     label: "Limit",
     value: OrderType.ORDER_TYPE_LIMIT,
+  },
+  {
+    label: "Market",
+    value: OrderType.ORDER_TYPE_MARKET,
   },
 ];
 
@@ -64,7 +64,7 @@ const defaultValues: MarketOrderForm = {
   hasTPSL: false,
   takeProfit: "",
   stopLoss: "",
-  orderType: OrderType.ORDER_TYPE_MARKET,
+  orderType: OrderType.ORDER_TYPE_LIMIT,
 };
 
 function OrderInput() {
@@ -287,38 +287,49 @@ function OrderInput() {
                           <StyledButton
                             type="button"
                             onClick={() => handleChangeLeverage(2)}
+                            // TODO: enable when leverage is supported
+                            disabled
                           >
                             2x
                           </StyledButton>
                           <StyledButton
                             type="button"
                             onClick={() => handleChangeLeverage(5)}
+                            // TODO: enable when leverage is supported
+                            disabled
                           >
                             5x
                           </StyledButton>
                           <StyledButton
                             type="button"
                             onClick={() => handleChangeLeverage(25)}
+                            // TODO: enable when leverage is supported
+                            disabled
                           >
                             25x
                           </StyledButton>
                           <StyledButton
                             type="button"
                             onClick={() => handleChangeLeverage(50)}
+                            // TODO: enable when leverage is supported
+                            disabled
                           >
                             50x
                           </StyledButton>
                         </Group>
                       </Group>
                     </div>
-                    <Group>
-                      <Checkbox
-                        type="checkbox"
-                        left={t("Take Profit/Stop Loss")}
-                        onClick={handleClickHasTPSL}
-                        {...register("hasTPSL")}
-                      />
-                    </Group>
+                    {/* TODO: Add Take Profit/Stop Loss when chain functionality is finished */}
+                    {false && (
+                      <Group>
+                        <Checkbox
+                          type="checkbox"
+                          left={t("Take Profit/Stop Loss")}
+                          onClick={handleClickHasTPSL}
+                          {...register("hasTPSL")}
+                        />
+                      </Group>
+                    )}
 
                     <AnimatePresence>
                       {hasTPSL && (
