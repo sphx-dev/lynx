@@ -1,17 +1,9 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
 import "../i18n";
-import jest from "jest-mock";
-import { Provider } from "react-redux";
-import { store } from "../state/store";
 import Futures from "./Futures";
-import { ThemeProvider } from "styled-components";
-import { themes } from "../theme";
-import { GrazProvider } from "graz";
-import { MockKeplr } from "@keplr-wallet/provider-mock";
-import { sphxLocalChainInfo } from "../constants/chainInfo";
 import { vi } from "vitest";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { DENOMUSDC } from "@/constants";
+import { AppWrapper } from "@/testing/AppWrapper";
 
 // mockGetters(MockKeplr);
 
@@ -108,75 +100,29 @@ vi.mock("../utils/getBalance", async () => {
   };
 });
 
-const WalletExtensionMock = new MockKeplr(
-  async () => {
-    return new Uint8Array(0);
-  },
-  [
-    {
-      chainId: sphxLocalChainInfo.chainId,
-      bech32Config: { bech32PrefixAccAddr: "sphx" },
-    },
-  ],
-  "diary match wagon soccer worth planet sea stumble thought post easily want"
-);
-
-declare global {
-  var keplr: any;
-}
-
-globalThis.keplr = WalletExtensionMock;
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // turns retries off
-      retry: false,
-    },
-  },
-});
-
-const Wrapper = ({ children }: any) => {
-  return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <GrazProvider
-          grazOptions={{
-            chains: [sphxLocalChainInfo],
-          }}
-        >
-          <ThemeProvider theme={themes["dark"]}>{children}</ThemeProvider>
-        </GrazProvider>
-      </QueryClientProvider>
-    </Provider>
-  );
-};
-
 test("Futures page render properly", async () => {
   // mock for render charting library
-  global.URL.createObjectURL = jest.fn(
-    () => "https://demo_feed.tradingview.com"
-  );
-  render(<Futures />, { wrapper: Wrapper });
+  global.URL.createObjectURL = vi.fn(() => "https://demo_feed.tradingview.com");
+  render(<Futures />, { wrapper: AppWrapper });
   const button = screen.getByText("Connect");
-  expect(button).toBeInTheDocument();
+  expect(button).toBeTruthy();
 
   const table = screen.getByText("Positions");
-  expect(table).toBeInTheDocument();
+  expect(table).toBeTruthy();
 
   //order input renders correctly
   const longTab = screen.getByText("LONG");
   const shortTab = await screen.findByText("SHORT");
 
-  expect(longTab).toBeInTheDocument();
-  expect(shortTab).toBeInTheDocument();
+  expect(longTab).toBeTruthy();
+  expect(shortTab).toBeTruthy();
 
   const mainConnectButton = screen.getByText("CONNECT WALLET");
-  expect(mainConnectButton).toBeInTheDocument();
+  expect(mainConnectButton).toBeTruthy();
 
   // section with order book and trades tab renders. additionally trades tab in the table renders
   const orderBookTab = screen.getByText("Order book");
-  expect(orderBookTab).toBeInTheDocument();
+  expect(orderBookTab).toBeTruthy();
   const tradesTab = screen.getAllByText("Trades");
   expect(tradesTab).toHaveLength(2);
 

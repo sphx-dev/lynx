@@ -14,6 +14,7 @@ import {
 } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import * as yup from "yup";
 
@@ -31,6 +32,7 @@ export const ClosePositionByMarketModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { markets } = useMarkets();
   const market = markets.find(m => m.id === position.marketId);
@@ -57,13 +59,6 @@ export const ClosePositionByMarketModal = ({
   const { placeMarketOrder, marketStatus } = useCreateOrder();
   const closePosition = useCallback(
     (values: ClosePositionFromProps) => {
-      console.log(
-        "TODO: close position",
-        position,
-        values,
-        BigInt(Number(values.size) * 1e6)
-      );
-
       placeMarketOrder({
         address: address!,
         marginAccountAddress: position.marginAccount,
@@ -88,21 +83,13 @@ export const ClosePositionByMarketModal = ({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      data-testid="close-position-by-market-modal"
+    >
       <div style={{ minWidth: "400px" }}>
         <form onSubmit={handleSubmit(closePosition)}>
-          {/* <pre>
-          {JSON.stringify(
-            position,
-            (key, value) => {
-              if (typeof value === "bigint") {
-                return value.toString() + "n";
-              }
-              return value;
-            },
-            2
-          )}
-        </pre> */}
           <h1>Close By Market</h1>
 
           <h5 style={{ margin: "19px 0 10px 0" }}>Close Quantity</h5>
@@ -143,7 +130,7 @@ export const ClosePositionByMarketModal = ({
             placeholder="Qty"
             rightSide={market?.baseAsset}
             {...register("size")}
-            value={watch("size")}
+            defaultValue={watch("size")}
           />
           <ButtonWrapper>
             <Button
@@ -151,15 +138,16 @@ export const ClosePositionByMarketModal = ({
               onClick={() => onClose()}
               disabled={marketStatus.isLoading}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               size="lg"
               variant="primary"
               type="submit"
+              data-testid="confirm-button"
               disabled={marketStatus.isLoading}
             >
-              Confirm
+              {t("confirm")}
             </Button>
           </ButtonWrapper>
         </form>

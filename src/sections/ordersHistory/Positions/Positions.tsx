@@ -31,11 +31,9 @@ const Positions = () => {
   const closePosition = useCallback(
     (type: OrderType, position: PerpetualPosition) => {
       if (type === OrderType.ORDER_TYPE_LIMIT) {
-        console.log("TODO: close position LIMIT", position);
         setClosePositionByLimitModal(true);
         setPositionToClose(position);
       } else {
-        console.log("TODO: close position MARKET", position);
         setClosePositionByMarketModal(true);
         setPositionToClose(position);
       }
@@ -54,9 +52,9 @@ const Positions = () => {
 
   const positionColumns = usePositionColumns(closePosition, showTpSl);
 
-  if (!positions.length || !isConnected) {
+  if (!positions?.length || !isConnected) {
     return (
-      <PlaceHolder data-test="order-history-positions">
+      <PlaceHolder data-testid="perpetual-positions-table-empty">
         No Positions
       </PlaceHolder>
     );
@@ -64,7 +62,7 @@ const Positions = () => {
   return (
     <>
       <Table
-        data-test="order-history-positions"
+        data-testid="perpetual-positions-table"
         columns={positionColumns}
         data={positions}
       />

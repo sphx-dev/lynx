@@ -137,30 +137,28 @@ export const placeMarketOrderInChain = async ({
         }),
       ]
     );
+  }
 
-    console.log("orderMessage", ordersMessage);
+  try {
+    const signingClient = await getSigningStargateOrderClient();
+    const response = await signingClient?.signAndBroadcast(
+      address,
+      ordersMessage,
+      composeFee(),
+      `Market Order ${quantity} leverage:${leverage}x${
+        takeProfit && stopLoss ? ` (tp: ${takeProfit}, sl: ${stopLoss})` : ""
+      }`
+    );
 
-    try {
-      const signingClient = await getSigningStargateOrderClient();
-      const response = await signingClient?.signAndBroadcast(
-        address,
-        ordersMessage,
-        composeFee(),
-        `Market Order ${quantity} leverage:${leverage}x${
-          takeProfit && stopLoss ? ` (tp: ${takeProfit}, sl: ${stopLoss})` : ""
-        }`
-      );
-      console.log("TxResponse", response);
-      if (response.code === 0) {
-        onSuccess("Order placed correctly");
-      } else {
-        onError(getMessageFromCode(response.code, response?.rawLog));
-      }
-      return response;
-    } catch (err) {
-      console.log("ERR", err);
-      onError?.("" + err);
+    if (response.code === 0) {
+      onSuccess("Order placed correctly");
+    } else {
+      onError(getMessageFromCode(response.code, response?.rawLog));
     }
+    return response;
+  } catch (err) {
+    console.log("ERR", err);
+    onError?.("" + err);
   }
 };
 

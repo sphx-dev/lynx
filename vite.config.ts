@@ -33,7 +33,14 @@ export default defineConfig(({ mode }) => {
         reporter: ["text", "json", "html", "lcov"], // Report formats to generate
         reportsDirectory: "./coverage", // Directory to save coverage reports
         include: ["src/**/*.*"], // Files to include in coverage reports
-        exclude: ["node_modules", "dist"], // Files/directories to exclude
+        exclude: [
+          "node_modules",
+          "dist",
+          "src/**/*.test.ts",
+          "src/**/*.test.tsx",
+          "src/**/*.stories.ts",
+          "src/**/*.stories.tsx",
+        ], // Files/directories to exclude
       },
     },
     resolve: {

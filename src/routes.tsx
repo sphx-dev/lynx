@@ -1,5 +1,5 @@
 import Futures from "./pages/Futures";
-import BaseTemplate from "./Layouts/BaseTemplate";
+import BaseTemplate from "./ui/Layouts/BaseTemplate";
 import Page404 from "./pages/404";
 import Dashboard from "./pages/Dashboard";
 import { Navigate } from "react-router-dom";

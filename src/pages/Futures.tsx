@@ -8,7 +8,7 @@ import { Stack } from "../components";
 import PriceBorder from "../sections/priceBorder";
 import Group from "../components/Group";
 import TabComponent from "../components/Tab/Tab";
-import Surface from "../Layouts/Surface";
+import Surface from "../ui/Layouts/Surface";
 import { ActionBarContainer } from "../components/AttributionBar/ActionBar";
 import Text from "../components/Text";
 import logo from "../assets/icons/logo-small.svg";

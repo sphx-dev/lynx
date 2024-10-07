@@ -74,7 +74,7 @@ export const ConnectButton = React.memo(
           </Button>
         ) : (
           <Button
-            data-test="disconnect-button"
+            data-testid="disconnect-button"
             variant="secondary"
             size={size}
             {...props}

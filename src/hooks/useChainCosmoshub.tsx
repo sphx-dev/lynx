@@ -1,14 +1,7 @@
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  // useStargateClient,
-  WalletType,
-} from "graz";
+import { useAccount, useConnect, useDisconnect, WalletType } from "graz";
 import { Keplr } from "@keplr-wallet/types";
 import { getChain } from "../config";
 
-// export const useChainCosmoshub = () => useChain("cosmoshub");
 export const useChainCosmoshub = () => {
   const { connectAsync, status: connectionStatus, error } = useConnect();
   const {

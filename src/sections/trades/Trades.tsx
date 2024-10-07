@@ -24,7 +24,12 @@ const Trades = () => {
 
   if (!TRADES.length) {
     return (
-      <Stack fullHeight justify="center" align="center" data-test="trades-tab">
+      <Stack
+        fullHeight
+        justify="center"
+        align="center"
+        data-testid="trades-tab"
+      >
         <Text variant="textXl" color="tertiary">
           NO DATA
         </Text>
@@ -35,7 +40,7 @@ const Trades = () => {
   const records = getTradesRecords(height);
   console.log(records);
   return (
-    <Container ref={containerRef} data-test="trades-tab">
+    <Container ref={containerRef} data-testid="trades-tab">
       <Stack style={{ width: "100%" }}>
         <TableContainer>
           <TitleRow titles={HEADERS} />

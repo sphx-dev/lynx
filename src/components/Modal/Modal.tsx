@@ -41,13 +41,16 @@ export const Modal = ({
   return createPortal(
     <ModalOverlay
       className="modal-overlay"
+      role="dialog"
       onClick={onClose}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <ModalContent
+        role="button"
         className="modal-content"
+        data-testid="modal-content"
         onClick={e => e.stopPropagation()}
       >
         <CloseButton className="modal-close" onClick={onClose}>

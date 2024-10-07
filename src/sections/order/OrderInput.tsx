@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Divider, Group, Stack, Switcher, Text } from "../../components";
-import Surface from "../../Layouts/Surface";
+import Surface from "@/ui/Layouts/Surface";
 import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
 import TabButton from "../../components/TabButton";

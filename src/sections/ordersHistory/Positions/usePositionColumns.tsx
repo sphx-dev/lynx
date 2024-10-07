@@ -135,7 +135,6 @@ export const usePositionColumns = function (
     {
       header: "Close By",
       cell: (props: any) => {
-        // console.log(props);
         const position = props.row.original;
         return (
           <div
@@ -149,8 +148,8 @@ export const usePositionColumns = function (
             <Button
               variant="secondary"
               size="xs"
+              data-testid={`close-position-market-${props.row.index}`}
               onClick={() => {
-                // console.log("TODO: CLOSE POSITION", { size, side, leverage });
                 closePosition(OrderType.ORDER_TYPE_MARKET, position);
               }}
               // color={themeColors.text.secondaryLink}
@@ -160,8 +159,8 @@ export const usePositionColumns = function (
             <Button
               variant="secondary"
               size="xs"
+              data-testid={`close-position-limit-${props.row.index}`}
               onClick={() => {
-                // console.log("TODO: CLOSE POSITION", { size, side, leverage });
                 closePosition(OrderType.ORDER_TYPE_LIMIT, position);
               }}
               // color={themeColors.text.secondaryLink}

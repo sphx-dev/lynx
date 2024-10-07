@@ -52,7 +52,7 @@ const MarginAccountsPage = () => {
   const [canSend, setCanSend] = useState<boolean>(true);
 
   return (
-    <Wrapper data-test="margin-accounts-page">
+    <Wrapper data-testid="margin-accounts-page">
       <h1 style={{ color: "white" }}>
         Margin Accounts <span style={{ fontSize: "12px" }}>{status}</span>
       </h1>

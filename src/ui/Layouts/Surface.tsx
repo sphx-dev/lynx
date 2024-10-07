@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getThemeColors } from "../theme";
+import { getThemeColors } from "../../theme";
 
 const Surface = styled.div`
   background: ${({ theme }) =>

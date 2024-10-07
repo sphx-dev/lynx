@@ -17,7 +17,7 @@ interface ITableProps<T> {
   headerStyle?: CSSProperties;
   onClick?: (data: T) => void;
   enableSorting?: boolean;
-  "data-test"?: string;
+  "data-testid"?: string;
 }
 const StyledTable = styled.table`
   ${({ theme }) => theme.fonts.typography.textSm};
@@ -84,7 +84,7 @@ const Table = <T extends object>({
   const { themeColors } = useTheme();
 
   return (
-    <StyledTable data-test={rest["data-test"]}>
+    <StyledTable data-testid={rest["data-testid"]}>
       <thead style={headerStyle}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>

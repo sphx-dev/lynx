@@ -13,6 +13,7 @@ import {
 } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import * as yup from "yup";
 
@@ -31,6 +32,7 @@ export const ClosePositionByLimitModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { markets } = useMarkets();
   const market = markets.find(m => m.id === position.marketId);
@@ -61,13 +63,6 @@ export const ClosePositionByLimitModal = ({
   const { placeLimitOrder, limitStatus } = useCreateOrder();
   const closePosition = useCallback(
     (values: ClosePositionFromProps) => {
-      console.log(
-        "TODO: close position",
-        position,
-        values,
-        BigInt(Number(values.size) * 1e6)
-      );
-
       placeLimitOrder({
         address: address!,
         marginAccountAddress: position.marginAccount,
@@ -100,10 +95,11 @@ export const ClosePositionByLimitModal = ({
 
           <h5 style={{ margin: "19px 0 10px 0" }}>Close Price</h5>
           <Input
+            data-testid="input-price"
             placeholder="0.00"
             rightSide={market?.quoteAsset}
             {...register("price")}
-            value={watch("price")}
+            defaultValue={watch("price") || ""}
           />
 
           <h5 style={{ margin: "19px 0 10px 0" }}>Close Quantity</h5>
@@ -141,10 +137,11 @@ export const ClosePositionByLimitModal = ({
           </SliderButtonWrapper>
 
           <Input
+            data-testid="input-size"
             placeholder="Qty"
             rightSide={market?.baseAsset}
             {...register("size")}
-            value={watch("size")}
+            defaultValue={watch("size") || ""}
           />
           <ButtonWrapper>
             <Button
@@ -152,7 +149,7 @@ export const ClosePositionByLimitModal = ({
               onClick={() => onClose()}
               disabled={limitStatus.isLoading}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               size="lg"
@@ -160,7 +157,7 @@ export const ClosePositionByLimitModal = ({
               type="submit"
               disabled={limitStatus.isLoading}
             >
-              Confirm
+              {t("confirm")}
             </Button>
           </ButtonWrapper>
         </form>
