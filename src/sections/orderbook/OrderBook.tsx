@@ -1,6 +1,6 @@
-import { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../hooks";
-import { orderBook } from "../../state/orderBookSlice";
+import { FunctionComponent, useRef } from "react";
+// import { useAppSelector } from "../../hooks";
+// import { orderBook } from "../../state/orderBookSlice";
 import TitleRow from "./TitleRow";
 import DepthVisualizer from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
@@ -9,105 +9,62 @@ import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
 import { MOBILE_WIDTH } from "../../constants";
 import { Stack, Text } from "../../components";
 import Divider from "./Divider";
-import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
+// import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
 import { OrderType, OrderWithDepth } from "../../types/orderBook";
-import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
-import { getOrderBookRecords } from "../../utils/helpers";
-import { useResize } from "../../hooks/useResize";
+// import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
+// import { getOrderBookRecords } from "../../utils/helpers";
+// import { useResize } from "../../hooks/useResize";
 import { usePubSub } from "@/hooks/usePubSub";
+import { useMarkets } from "@/hooks/useMarkets";
+import { useQuery } from "react-query";
+import config from "@/config";
+import { asksToState, orderToState } from "./helpers";
+import styled from "styled-components";
 
 interface OrderBookProps {
   windowWidth: number;
 }
 
 const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
+const records = 9;
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
-  // console.info("rendering ORDERBOOK");
-
-  const book = useAppSelector(orderBook);
   const containerRef = useRef(null);
-  const [height, setHeight] = useState(0);
-  const { height: windowHeight } = useResize();
 
-  useEffect(() => {
-    // TODO: get rid of this and implement it in CSS
-    if (containerRef.current) {
-      setHeight(getBoundingClientRect(containerRef.current).height);
-    }
-  }, [setHeight, windowHeight]);
-
-  const records = getOrderBookRecords(height);
-  useGetOrderBookQuery(records, {
-    // pollingInterval: 10000,
-    pollingInterval: 1000,
-    skip: records <= 0,
-  });
-
-  const { publish } = usePubSub();
-
-  const buildPriceLevels = (
-    levels: OrderWithDepth[],
-    orderType: OrderType = OrderType.BIDS
-  ): React.ReactNode => {
-    return levels.map((level, idx) => {
-      const calculatedTotal: number = level.totalSum;
-      const total: string = formatNumber(calculatedTotal);
-      const depth = level.depth;
-      const size: string = formatNumber(level.quantity);
-      const price: string = formatPrice(level.price);
-
-      return (
-        <PriceLevelRowContainer
-          key={idx + depth}
-          onClick={() => publish("PRICE_SELECTED", level.price)}
-        >
-          <DepthVisualizer
-            data-testid="depth-visualizer"
-            key={depth}
-            $depth={depth}
-            $filled={0}
-            $orderType={orderType}
-          />
-          <PriceLevelRow
-            key={size + total}
-            total={total}
-            size={size}
-            price={price}
-            reversedFieldsOrder={orderType === OrderType.ASKS}
-            windowWidth={windowWidth}
-          />
-        </PriceLevelRowContainer>
-      );
-    });
-  };
+  const { data: book, isLoading } = useOrderBook(records);
 
   return (
-    <Container ref={containerRef} data-test="orderbook-tab">
-      <div>
-        Bids: {book.bids_size}, Asks: {book.asks_size}
-      </div>
-      {book.bids.length || book.asks.length ? (
+    <Container ref={containerRef} data-testid="orderbook-tab">
+      {/* {(!book || isLoading) && <Text>Loading...</Text>} */}
+
+      {!isLoading && (book?.bids?.length || book?.asks?.length) ? (
         <Stack style={{ width: "100%" }}>
           <TableContainer>
             {windowWidth > MOBILE_WIDTH && <TitleRow titles={HEADERS} />}
-            <div>
-              {buildPriceLevels(book.asks.slice(0, 10), OrderType.ASKS)}
-            </div>
+            <PriceLevelsWrapper>
+              <PriceLevels
+                levels={book.asks.slice(0, records)}
+                orderType={OrderType.ASKS}
+                windowWidth={windowWidth}
+              />
+            </PriceLevelsWrapper>
           </TableContainer>
           <Divider />
           {/*<Spread bids={book.bids} asks={book.asks} />*/}
           <TableContainer>
             {/*<TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />*/}
-            <div>
-              {buildPriceLevels(
-                book.bids.slice(
-                  book.bids.length - 10 >= 0 ? book.bids.length - 10 : 0,
+            <PriceLevelsWrapper>
+              <PriceLevels
+                levels={book.bids.slice(
+                  book.bids.length - records >= 0
+                    ? book.bids.length - records
+                    : 0,
                   book.bids.length
-                ),
-                OrderType.BIDS
-              )}
-            </div>
+                )}
+                orderType={OrderType.BIDS}
+                windowWidth={windowWidth}
+              />
+            </PriceLevelsWrapper>
           </TableContainer>
         </Stack>
       ) : (
@@ -117,7 +74,63 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
           </Text>
         </Stack>
       )}
+      <div style={{ textAlign: "center" }}>
+        Bids: {book?.bids_size}, Asks: {book?.asks_size}
+      </div>
     </Container>
+  );
+};
+
+const PriceLevelsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const PriceLevels = ({
+  levels,
+  orderType = OrderType.BIDS,
+  windowWidth,
+}: {
+  levels: OrderWithDepth[];
+  orderType: OrderType;
+  windowWidth: number;
+}) => {
+  const { publish } = usePubSub();
+
+  return (
+    <>
+      {levels.map((level, idx) => {
+        const calculatedTotal: number = level.totalSum;
+        const total: string = formatNumber(calculatedTotal);
+        const depth = level.depth;
+        const size: string = formatNumber(level.quantity);
+        const price: string = formatPrice(level.price);
+
+        return (
+          <PriceLevelRowContainer
+            key={idx + depth}
+            onClick={() => publish("PRICE_SELECTED", level.price)}
+          >
+            <DepthVisualizer
+              data-testid="depth-visualizer"
+              key={depth}
+              $depth={depth}
+              $filled={0}
+              $orderType={orderType}
+            />
+            <PriceLevelRow
+              key={size + total}
+              total={total}
+              size={size}
+              price={price}
+              reversedFieldsOrder={orderType === OrderType.ASKS}
+              windowWidth={windowWidth}
+            />
+          </PriceLevelRowContainer>
+        );
+      })}
+    </>
   );
 };
 
@@ -133,3 +146,32 @@ const formatNumber = (arg: number): string => {
 };
 
 export default OrderBook;
+
+const BASE_API = config.VITE_API_URL;
+const useOrderBook = (records: number) => {
+  const { selectedMarket } = useMarkets();
+
+  const response = useQuery({
+    queryKey: ["orderBook", selectedMarket?.ticker, records],
+    queryFn: async () => {
+      const res = await fetch(
+        `${BASE_API}/orderbook/?ticker=${selectedMarket?.ticker}`
+      );
+      const data = await res.json();
+
+      const bids = orderToState(data?.bids?.slice(0, records) ?? []);
+      const asks = asksToState(data?.asks?.slice(0, records) ?? []);
+      return {
+        bids: bids ?? [],
+        bids_size: data?.bids_size,
+        asks: asks ?? [],
+        asks_size: data?.asks_size,
+      };
+    },
+    refetchInterval: 200000,
+
+    enabled: !!selectedMarket?.ticker,
+  });
+
+  return response;
+};

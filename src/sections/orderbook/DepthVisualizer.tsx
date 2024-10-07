@@ -12,12 +12,12 @@ const DepthVisualizer = styled.div<{
       ? getThemeColors(theme).positive
       : getThemeColors(theme).negative};
 
-  height: 19px;
+  height: 98%;
   width: ${({ $depth }) => $depth}%;
   top: 0;
   right: 0;
   position: absolute;
-  transform: translateY(5px);
+  transform: translateY(1%);
   z-index: 0;
   :hover > & {
     // TODO: hover collors for depth
@@ -29,7 +29,7 @@ const DepthVisualizer = styled.div<{
   &:after {
     content: "";
     display: block;
-    height: 19px;
+    height: 98%;
     //TODO: fix this with proper width calculation of partially filled depth
     width: ${({ $filled }) => $filled}%;
     top: 0;

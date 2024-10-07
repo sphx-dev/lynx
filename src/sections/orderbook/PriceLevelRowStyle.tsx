@@ -38,7 +38,7 @@ export const PriceLevelContainer = styled.div<PriceLevelContainerProps>`
 `;
 
 export const PriceLevelRowContainer = styled.div`
-  padding: 5px 0;
+  padding: 0;
   cursor: pointer;
   position: relative;
   &:hover {
