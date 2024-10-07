@@ -1,9 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { Text } from "../../components";
-import { useAppSelector } from "../../hooks";
-import { orderBook } from "../../state/orderBookSlice";
 import { formatNumber } from "../../utils/format";
 
 const Container = styled.div`
@@ -15,8 +12,14 @@ const Container = styled.div`
   padding: 5px 10px;
 `;
 
-const Divider = () => {
-  const { spread, percentage } = useAppSelector(orderBook);
+const Divider = ({
+  spread,
+  percentage,
+}: {
+  spread: number;
+  percentage: number;
+}) => {
+  // const { spread, percentage } = useAppSelector(orderBook);
   return (
     <Container>
       <Text variant="textNumMdBold" color="secondaryActive">

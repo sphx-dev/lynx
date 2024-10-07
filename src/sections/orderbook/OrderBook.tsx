@@ -49,8 +49,7 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
               />
             </PriceLevelsWrapper>
           </TableContainer>
-          <Divider />
-          {/*<Spread bids={book.bids} asks={book.asks} />*/}
+          <Divider spread={book.spread} percentage={book.spreadPercentage} />
           <TableContainer>
             {/*<TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />*/}
             <PriceLevelsWrapper>
@@ -161,11 +160,17 @@ const useOrderBook = (records: number) => {
 
       const bids = orderToState(data?.bids?.slice(0, records) ?? []);
       const asks = asksToState(data?.asks?.slice(0, records) ?? []);
+      const maxBid = bids.length ? bids[0].price : 0;
+      const minAsk = asks.length ? asks[0].price : 0;
+      const spread = Math.abs(maxBid - minAsk);
+      const spreadPercentage = Math.abs(spread / maxBid) * 100;
       return {
         bids: bids ?? [],
         bids_size: data?.bids_size,
         asks: asks ?? [],
         asks_size: data?.asks_size,
+        spread,
+        spreadPercentage,
       };
     },
     refetchInterval: 200000,
