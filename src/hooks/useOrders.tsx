@@ -17,7 +17,7 @@ const PAGE_SIZE = 10n;
 export const useOrders = (
   address: string | undefined,
   page: number,
-  status: OrderStatus
+  status?: OrderStatus
 ) => {
   const {
     isLoading,

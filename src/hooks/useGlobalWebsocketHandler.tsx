@@ -37,11 +37,21 @@ export function useGlobalWebsocketHandler() {
         return;
       }
 
-      // Ensure message sender is the current address or MarginAcount address
-      console.log("WS_message", "message.sender", events["message.sender"]);
+      // Ensure the current address or MarginAcount address are involved in the event
+      const addresses = [
+        ...(events["message.sender"] ?? []),
+        ...(events["coin_received.receiver"] ?? []),
+        ...(events["coin_spent.spender"] ?? []),
+        ...(events["tx.fee_payer"] ?? []),
+        ...(events["order.account_id"] ?? []),
+        ...(events["place_order.account_id"] ?? []),
+        ...(events["new_position.margin_account_address"] ?? []),
+        ...(events["modify_position.margin_account_address"] ?? []),
+      ];
+      console.log("WS_message", "addresses", addresses);
       if (
-        !events["message.sender"].includes(address) &&
-        !events["message.sender"].includes(selectedAddress)
+        !addresses.includes(address) &&
+        !addresses.includes(selectedAddress)
       ) {
         return;
       }

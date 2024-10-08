@@ -21,7 +21,7 @@ export const usePositions = (page: number = 0) => {
     },
     {
       enabled: !!selectedAddress && !!address,
-      staleTime: 60 * 60 * 1000,
+      staleTime: 1.5 * 60 * 1000,
     }
   );
 

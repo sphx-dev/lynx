@@ -189,7 +189,7 @@ export const useWebsocket = (
 
     if (ws && ws?.readyState !== WebSocket.CLOSED) {
       messageHandler = (event: MessageEvent<any>) => {
-        console.log("WS::::::::::", "EVENT:", event);
+        // console.log("WS::::::::::", "EVENT:", event);
         let msg;
         try {
           msg = JSON.parse(event.data);

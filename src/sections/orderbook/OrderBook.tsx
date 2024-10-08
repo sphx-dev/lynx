@@ -173,7 +173,7 @@ const useOrderBook = (records: number) => {
         spreadPercentage,
       };
     },
-    refetchInterval: 200000,
+    refetchInterval: 2000,
 
     enabled: !!selectedMarket?.ticker,
   });

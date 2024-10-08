@@ -84,6 +84,7 @@ function fromOrderStatusToPositionOrderStatus(
       return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_PARTIALLY_FILLED;
 
     default:
-      return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_UNSPECIFIED;
+      return undefined as any;
+    // return QueryPerpPositionsRequest_OrderStatus.ORDER_STATUS_UNSPECIFIED;
   }
 }
