@@ -3,11 +3,14 @@ import PlaceHolder from "../PlaceHolder";
 
 import { useChainCosmoshub } from "../../../hooks/useChainCosmoshub";
 import { usePositionColumns } from "./usePositionColumns";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { usePositions } from "@/hooks/usePositions";
 import { Pagination } from "@/components/Pagination";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
-import { PerpetualPosition } from "proto-codecs/codegen/sphx/order/perpetual_position";
+import {
+  PerpetualPosition,
+  PositionStatus,
+} from "proto-codecs/codegen/sphx/order/perpetual_position";
 import { ClosePositionByMarketModal } from "./ClosePositionByMarket";
 import { ClosePositionByLimitModal } from "./ClosePositionByLimit";
 import { ShowTpSlModal } from "./ShowTpSlModal";
@@ -16,7 +19,12 @@ const Positions = () => {
   const { isConnected } = useChainCosmoshub();
 
   const { data } = usePositions();
-  const positions = data?.positions || [];
+  const positions = useMemo(() => {
+    // TODO: Filter out closed positions by call params when implemented in chain
+    return (data?.positions || []).filter(
+      pos => pos.status === PositionStatus.POSITION_STATUS_OPEN
+    );
+  }, [data]);
 
   const [page, setPage] = useState(0);
   const pagination = data?.pagination || { total: 0 };

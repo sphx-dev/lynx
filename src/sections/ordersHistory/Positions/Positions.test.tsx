@@ -100,7 +100,7 @@ test("Render Positions section properly", async () => {
             side: 0,
             tpOrderId: { marginAccountAddress: "", number: BigInt(0) },
             slOrderId: { marginAccountAddress: "", number: BigInt(0) },
-            status: 0,
+            status: 1,
           },
         ],
         pagination: {
@@ -148,7 +148,7 @@ test("Closes position by Market", async () => {
             side: 0,
             tpOrderId: { marginAccountAddress: "", number: BigInt(0) },
             slOrderId: { marginAccountAddress: "", number: BigInt(0) },
-            status: 0,
+            status: 1,
           },
           {
             id: "2",
@@ -161,7 +161,7 @@ test("Closes position by Market", async () => {
             side: 0,
             tpOrderId: { marginAccountAddress: "", number: BigInt(0) },
             slOrderId: { marginAccountAddress: "", number: BigInt(0) },
-            status: 0,
+            status: 1,
           },
         ],
         pagination: {
@@ -258,7 +258,7 @@ test("Closes position by Limit", async () => {
             side: 0,
             tpOrderId: { marginAccountAddress: "", number: BigInt(0) },
             slOrderId: { marginAccountAddress: "", number: BigInt(0) },
-            status: 0,
+            status: 1,
           },
           {
             id: "2",
@@ -271,7 +271,7 @@ test("Closes position by Limit", async () => {
             side: 0,
             tpOrderId: { marginAccountAddress: "", number: BigInt(0) },
             slOrderId: { marginAccountAddress: "", number: BigInt(0) },
-            status: 0,
+            status: 1,
           },
         ],
         pagination: {
