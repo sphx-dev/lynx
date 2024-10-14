@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryExecutionAuthorityRequest, QueryExecutionAuthorityResponse, QueryMarketsRequest, QueryMarketsResponse, QueryMarketRequest, QueryMarketResponse, QueryOrdersRequest, QueryOrdersResponse, QueryOrdersForAccountRequest, QueryOrdersForAccountResponse, QueryOrderInfoRequest, QueryOrderInfoResponse, QueryPerpPositionsRequest, QueryPerpPositionsResponse, QueryPerpPositionForAccountRequest, QueryPerpPositionForAccountResponse, QueryPerpPositionRequest, QueryPerpPositionResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryExecutionAuthorityRequest, QueryExecutionAuthorityResponse, QueryMarketsRequest, QueryMarketsResponse, QueryMarketRequest, QueryMarketResponse, QueryOrdersRequest, QueryOrdersResponse, QueryOrdersForAccountRequest, QueryOrdersForAccountResponse, QueryOrderInfoRequest, QueryOrderInfoResponse, QueryPerpPositionsRequest, QueryPerpPositionsResponse, QueryPerpPositionForAccountRequest, QueryPerpPositionForAccountResponse, QueryPerpPositionRequest, QueryPerpPositionResponse, QuerySpendableBalanceRequest, QuerySpendableBalanceResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -26,6 +26,8 @@ export interface Query {
   perpPositionForAccount(request: QueryPerpPositionForAccountRequest): Promise<QueryPerpPositionForAccountResponse>;
   /** Queries a perpetual position for a given position_id */
   perpPosition(request: QueryPerpPositionRequest): Promise<QueryPerpPositionResponse>;
+  /** For a given margin account address get its spendable balance */
+  spendableBalance(request: QuerySpendableBalanceRequest): Promise<QuerySpendableBalanceResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -41,6 +43,7 @@ export class QueryClientImpl implements Query {
     this.perpPositions = this.perpPositions.bind(this);
     this.perpPositionForAccount = this.perpPositionForAccount.bind(this);
     this.perpPosition = this.perpPosition.bind(this);
+    this.spendableBalance = this.spendableBalance.bind(this);
   }
   params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -98,6 +101,11 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("sphx.order.Query", "PerpPosition", data);
     return promise.then(data => QueryPerpPositionResponse.decode(new BinaryReader(data)));
   }
+  spendableBalance(request: QuerySpendableBalanceRequest): Promise<QuerySpendableBalanceResponse> {
+    const data = QuerySpendableBalanceRequest.encode(request).finish();
+    const promise = this.rpc.request("sphx.order.Query", "SpendableBalance", data);
+    return promise.then(data => QuerySpendableBalanceResponse.decode(new BinaryReader(data)));
+  }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
@@ -132,6 +140,9 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     perpPosition(request: QueryPerpPositionRequest): Promise<QueryPerpPositionResponse> {
       return queryService.perpPosition(request);
+    },
+    spendableBalance(request: QuerySpendableBalanceRequest): Promise<QuerySpendableBalanceResponse> {
+      return queryService.spendableBalance(request);
     }
   };
 };

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { setPaginationParams } from "../../helpers";
 import { LCDClient } from "@cosmology/lcd";
-import { QueryParamsRequest, QueryParamsResponseSDKType, QueryExecutionAuthorityRequest, QueryExecutionAuthorityResponseSDKType, QueryMarketsRequest, QueryMarketsResponseSDKType, QueryMarketRequest, QueryMarketResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType, QueryOrdersForAccountRequest, QueryOrdersForAccountResponseSDKType, QueryOrderInfoRequest, QueryOrderInfoResponseSDKType, QueryPerpPositionsRequest, QueryPerpPositionsResponseSDKType, QueryPerpPositionForAccountRequest, QueryPerpPositionForAccountResponseSDKType, QueryPerpPositionRequest, QueryPerpPositionResponseSDKType } from "./query";
+import { QueryParamsRequest, QueryParamsResponseSDKType, QueryExecutionAuthorityRequest, QueryExecutionAuthorityResponseSDKType, QueryMarketsRequest, QueryMarketsResponseSDKType, QueryMarketRequest, QueryMarketResponseSDKType, QueryOrdersRequest, QueryOrdersResponseSDKType, QueryOrdersForAccountRequest, QueryOrdersForAccountResponseSDKType, QueryOrderInfoRequest, QueryOrderInfoResponseSDKType, QueryPerpPositionsRequest, QueryPerpPositionsResponseSDKType, QueryPerpPositionForAccountRequest, QueryPerpPositionForAccountResponseSDKType, QueryPerpPositionRequest, QueryPerpPositionResponseSDKType, QuerySpendableBalanceRequest, QuerySpendableBalanceResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -20,6 +20,7 @@ export class LCDQueryClient {
     this.perpPositions = this.perpPositions.bind(this);
     this.perpPositionForAccount = this.perpPositionForAccount.bind(this);
     this.perpPosition = this.perpPosition.bind(this);
+    this.spendableBalance = this.spendableBalance.bind(this);
   }
   /* Parameters queries the parameters of the module. */
   async params(_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> {
@@ -118,5 +119,10 @@ export class LCDQueryClient {
   async perpPosition(params: QueryPerpPositionRequest): Promise<QueryPerpPositionResponseSDKType> {
     const endpoint = `sphx/order/perp_position/${params.positionId}`;
     return await this.req.get<QueryPerpPositionResponseSDKType>(endpoint);
+  }
+  /* For a given margin account address get its spendable balance */
+  async spendableBalance(params: QuerySpendableBalanceRequest): Promise<QuerySpendableBalanceResponseSDKType> {
+    const endpoint = `sphx/order/spendable_balance/${params.address}`;
+    return await this.req.get<QuerySpendableBalanceResponseSDKType>(endpoint);
   }
 }

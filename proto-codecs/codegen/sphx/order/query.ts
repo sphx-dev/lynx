@@ -426,6 +426,40 @@ export interface QueryPerpPositionResponseAminoMsg {
 export interface QueryPerpPositionResponseSDKType {
   position: PerpetualPositionSDKType;
 }
+export interface QuerySpendableBalanceRequest {
+  address: string;
+}
+export interface QuerySpendableBalanceRequestProtoMsg {
+  typeUrl: "/sphx.order.QuerySpendableBalanceRequest";
+  value: Uint8Array;
+}
+export interface QuerySpendableBalanceRequestAmino {
+  address?: string;
+}
+export interface QuerySpendableBalanceRequestAminoMsg {
+  type: "/sphx.order.QuerySpendableBalanceRequest";
+  value: QuerySpendableBalanceRequestAmino;
+}
+export interface QuerySpendableBalanceRequestSDKType {
+  address: string;
+}
+export interface QuerySpendableBalanceResponse {
+  spendableBalance: string;
+}
+export interface QuerySpendableBalanceResponseProtoMsg {
+  typeUrl: "/sphx.order.QuerySpendableBalanceResponse";
+  value: Uint8Array;
+}
+export interface QuerySpendableBalanceResponseAmino {
+  spendable_balance: string;
+}
+export interface QuerySpendableBalanceResponseAminoMsg {
+  type: "/sphx.order.QuerySpendableBalanceResponse";
+  value: QuerySpendableBalanceResponseAmino;
+}
+export interface QuerySpendableBalanceResponseSDKType {
+  spendable_balance: string;
+}
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
@@ -1763,6 +1797,132 @@ export const QueryPerpPositionResponse = {
     return {
       typeUrl: "/sphx.order.QueryPerpPositionResponse",
       value: QueryPerpPositionResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySpendableBalanceRequest(): QuerySpendableBalanceRequest {
+  return {
+    address: ""
+  };
+}
+export const QuerySpendableBalanceRequest = {
+  typeUrl: "/sphx.order.QuerySpendableBalanceRequest",
+  encode(message: QuerySpendableBalanceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySpendableBalanceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySpendableBalanceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySpendableBalanceRequest>): QuerySpendableBalanceRequest {
+    const message = createBaseQuerySpendableBalanceRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+  fromAmino(object: QuerySpendableBalanceRequestAmino): QuerySpendableBalanceRequest {
+    const message = createBaseQuerySpendableBalanceRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
+  },
+  toAmino(message: QuerySpendableBalanceRequest): QuerySpendableBalanceRequestAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySpendableBalanceRequestAminoMsg): QuerySpendableBalanceRequest {
+    return QuerySpendableBalanceRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySpendableBalanceRequestProtoMsg): QuerySpendableBalanceRequest {
+    return QuerySpendableBalanceRequest.decode(message.value);
+  },
+  toProto(message: QuerySpendableBalanceRequest): Uint8Array {
+    return QuerySpendableBalanceRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySpendableBalanceRequest): QuerySpendableBalanceRequestProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QuerySpendableBalanceRequest",
+      value: QuerySpendableBalanceRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySpendableBalanceResponse(): QuerySpendableBalanceResponse {
+  return {
+    spendableBalance: ""
+  };
+}
+export const QuerySpendableBalanceResponse = {
+  typeUrl: "/sphx.order.QuerySpendableBalanceResponse",
+  encode(message: QuerySpendableBalanceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.spendableBalance !== "") {
+      writer.uint32(10).string(message.spendableBalance);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySpendableBalanceResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySpendableBalanceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.spendableBalance = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySpendableBalanceResponse>): QuerySpendableBalanceResponse {
+    const message = createBaseQuerySpendableBalanceResponse();
+    message.spendableBalance = object.spendableBalance ?? "";
+    return message;
+  },
+  fromAmino(object: QuerySpendableBalanceResponseAmino): QuerySpendableBalanceResponse {
+    const message = createBaseQuerySpendableBalanceResponse();
+    if (object.spendable_balance !== undefined && object.spendable_balance !== null) {
+      message.spendableBalance = object.spendable_balance;
+    }
+    return message;
+  },
+  toAmino(message: QuerySpendableBalanceResponse): QuerySpendableBalanceResponseAmino {
+    const obj: any = {};
+    obj.spendable_balance = message.spendableBalance ?? "";
+    return obj;
+  },
+  fromAminoMsg(object: QuerySpendableBalanceResponseAminoMsg): QuerySpendableBalanceResponse {
+    return QuerySpendableBalanceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySpendableBalanceResponseProtoMsg): QuerySpendableBalanceResponse {
+    return QuerySpendableBalanceResponse.decode(message.value);
+  },
+  toProto(message: QuerySpendableBalanceResponse): Uint8Array {
+    return QuerySpendableBalanceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySpendableBalanceResponse): QuerySpendableBalanceResponseProtoMsg {
+    return {
+      typeUrl: "/sphx.order.QuerySpendableBalanceResponse",
+      value: QuerySpendableBalanceResponse.encode(message).finish()
     };
   }
 };
