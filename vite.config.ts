@@ -36,6 +36,8 @@ export default defineConfig(({ mode }) => {
         exclude: [
           "node_modules",
           "dist",
+          "**/*.d.ts",
+          "src/charting_library/**/*.*",
           "src/**/*.test.ts",
           "src/**/*.test.tsx",
           "src/**/*.stories.ts",

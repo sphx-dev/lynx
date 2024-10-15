@@ -19,17 +19,6 @@ import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
 
 const PendingOrders = () => {
-  // const { openOrders } = useAppSelector(account);
-  // const [removeOrder] = useRemoveOrderMutation();
-  // const canselOrder = async (orderId: string) => {
-  //   const response = await removeOrder(orderId);
-  //   handleApiCall(
-  //     response,
-  //     () => errorAlert("Can not cancel the order"),
-  //     () => successAlert("Order canceled")
-  //   );
-  // };
-
   const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { selectedAddress } = useMarginAccount(address);
@@ -181,7 +170,7 @@ const PendingOrders = () => {
   if (totalOrders === 0) {
     return <PlaceHolder>No Orders yet</PlaceHolder>;
   }
-  console.log("orders", orders);
+
   return (
     <>
       <Table

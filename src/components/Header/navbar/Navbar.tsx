@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
-import { NavLink } from "react-router-dom";
+import { getThemeColors } from "../../../theme";
+import { Link } from "react-router-dom";
 import { navLinks } from "./config";
-import { ConnectButton } from "../../components/ConnectButton";
-import { MarginAccButton } from "../../components/MarginAccButton";
+import { ConnectButton } from "../../ConnectButton";
+import { MarginAccButton } from "../../MarginAccButton";
 
 const Wrapper = styled.nav`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
@@ -15,7 +15,7 @@ const Wrapper = styled.nav`
   flex: 1;
   box-shadow: 0px 4px 8px 0px #00000040;
 `;
-const StyledLink = styled(NavLink)`
+const StyledLink = styled(Link)`
   ${({ theme }) => theme.fonts.typography.navigation}
   color: ${({ theme }) => getThemeColors(theme).text.secondaryLink};
   &.active {

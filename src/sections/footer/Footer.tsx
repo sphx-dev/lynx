@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { useTranslation } from "react-i18next";
-import useTheme from "../../hooks/useTheme";
-import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
+import useTheme from "@/hooks/useTheme";
+import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
+
 const Wrapper = styled.footer`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
   display: flex;

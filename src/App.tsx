@@ -4,7 +4,7 @@ import { useRoutes } from "react-router-dom";
 import { routes } from "./routes";
 import { ThemeInterface, themes } from "./theme";
 import { ThemeProvider } from "styled-components";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Footer from "./sections/footer";
 import { Toaster } from "react-hot-toast";
 import { useGetAccountQuery } from "./utils/api/accountApi";

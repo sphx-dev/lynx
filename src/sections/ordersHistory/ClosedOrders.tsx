@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Text, Table } from "../../components";
 import { getOrderStatusText, getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
-import { formatNumber } from "../../utils/format";
+import { formatPrice } from "../../utils/format";
 import { useTranslation } from "react-i18next";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
@@ -70,7 +70,7 @@ const ClosedOrders = () => {
       header: "Price",
       cell: (props: any) => (
         <Text color="tertiary">
-          {formatNumber({ value: Number(props.getValue()) / 1e6, fixed: 2 })}
+          {formatPrice(Number(props.getValue()) / 1e6, 2)}
         </Text>
       ),
     },

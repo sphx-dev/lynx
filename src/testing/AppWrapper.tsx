@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { MockKeplr } from "@keplr-wallet/provider-mock";
 import { sphxLocalChainInfo } from "../constants/chainInfo";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
+import { BrowserRouter } from "react-router-dom";
 
 const WalletExtensionMock = new MockKeplr(
   async () => {
@@ -46,20 +47,22 @@ const queryClient = new QueryClient({
 export const AppWrapper = ({ children }: any) => {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <GrazProvider
-          grazOptions={{
-            chains: [sphxLocalChainInfo],
-          }}
-        >
-          <ThemeProvider theme={themes["dark"]}>
-            <ChildrenWrapper>
-              {children}
-              <div id="modal-root"></div>
-            </ChildrenWrapper>
-          </ThemeProvider>
-        </GrazProvider>
-      </QueryClientProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <GrazProvider
+            grazOptions={{
+              chains: [sphxLocalChainInfo],
+            }}
+          >
+            <ThemeProvider theme={themes["dark"]}>
+              <ChildrenWrapper>
+                {children}
+                <div id="modal-root"></div>
+              </ChildrenWrapper>
+            </ThemeProvider>
+          </GrazProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
     </Provider>
   );
 };

@@ -1,15 +1,14 @@
 import styled from "styled-components";
 import logo from "../../assets/icons/logo-dark.svg";
 import Group from "../Group";
-import Nav from "../../sections/navbar";
+import Nav from "./navbar";
 import headerBg from "../../assets/images/header-logo-bg.svg";
 
 const StyledHeader = styled.header<{ $url: string }>`
   position: relative;
   background-image: url("${({ $url }) => $url}");
   background-repeat: no-repeat;
-  //background-position: top;
-  width: 320px;
+  min-width: 320px;
   height: 100px;
 `;
 
@@ -28,4 +27,5 @@ const Header = () => {
     </Group>
   );
 };
+
 export default Header;
