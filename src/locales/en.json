@@ -21,6 +21,8 @@
   "placeOrder": "Place order",
   "online": "online",
   "offline": "offline",
+  "deposit": "Deposit",
+  "withdraw": "Withdraw",
   "onlyDesktopScreen": "Dear Users, \n\n Our app is currently available only in the desktop version. \n Mobile versions are in development and will be available soon. \nThank you for your patience! \n\nBest regards,\n Sphinx team.",
   "getKeplrButton": "Get Keplr",
   "getKeplrMessage": "It seems you don't have Keplr wallet extension installed in your browser, get it here",

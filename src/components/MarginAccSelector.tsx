@@ -8,6 +8,7 @@ import { getThemeColors } from "../theme";
 import { useModalStore } from "./Modal/Modal";
 import { useBalances } from "../hooks/useBalance";
 import { DENOMUSDC } from "@/constants";
+import { useTranslation } from "react-i18next";
 
 export const MarginAccSelector = ({
   size,
@@ -116,6 +117,7 @@ const DropdownMenu = ({
   x: number;
   y: number;
 }) => {
+  const { t } = useTranslation();
   const { openModal } = useModalStore();
 
   return (
@@ -132,9 +134,9 @@ const DropdownMenu = ({
         ))}
       </ul>
       <ButtonWrapper>
-        <Button onClick={() => openModal("DEPOSIT")}>Deposit</Button>
+        <Button onClick={() => openModal("DEPOSIT")}>{t("deposit")}</Button>
         <Button variant="link" onClick={() => openModal("WITHDRAW")}>
-          Withdraw
+          {t("withdraw")}
         </Button>
       </ButtonWrapper>
     </DropdawnWindow>

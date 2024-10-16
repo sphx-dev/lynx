@@ -118,17 +118,6 @@ export const DepositForm = () => {
           {reduceAddress(selectedAccount?.address)}
         </StyledLabel>
         <label>Balance: {marginBalance} USDC</label>
-        {/* <select
-          value={selectedMarginAccount}
-          onChange={(e) => setSelectedMarginAccount(e.target.value)}
-        >
-          <option value="">Select Margin Account</option>
-          {marginAccounts.map((acc, ix) => (
-            <option key={acc.address} value={acc.address}>
-              Account #{acc.id?.number} ({acc.address})
-            </option>
-          ))}
-        </select> */}
       </FormRow>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <FormRow style={{ justifyContent: "space-around" }}>
