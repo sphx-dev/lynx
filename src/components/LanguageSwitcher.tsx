@@ -1,8 +1,12 @@
 import Select from "react-select";
 
 import { useTranslation } from "react-i18next";
-import { OptionType } from "./Select";
 import { useState } from "react";
+
+type OptionType = {
+  value: string;
+  label: string;
+};
 
 const LanguageSwitcher = () => {
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);

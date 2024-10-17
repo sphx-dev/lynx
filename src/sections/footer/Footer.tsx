@@ -59,9 +59,13 @@ const Footer = () => {
         {isConnected ? t("online") : t("offline")}
       </Status>
       <Nav>
-        <NavItem>{t("stats")}</NavItem>
-        <NavItem>{t("docs")}</NavItem>
-        <NavItem>{t("support")}</NavItem>
+        <NavItem rel="noopener">{t("stats")}</NavItem>
+        <NavItem href="https://docs.sphx.io/" target="_blank" rel="noopener">
+          {t("docs")}
+        </NavItem>
+        <NavItem href="mailto:info@sphx.io" target="_blank" rel="noopener">
+          {t("support")}
+        </NavItem>
       </Nav>
     </Wrapper>
   );

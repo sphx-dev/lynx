@@ -15,36 +15,36 @@ exports[`Header Component > should render the Header component correctly 1`] = `
     style="width: 100vw;"
   >
     <header
-      class="sc-fYlSAf fRfNks"
+      class="sc-UFult cqMcGZ"
     >
       <img
-        class="sc-dxjrPO PGFaC"
+        class="sc-jIYCZY gQerPj"
         src="/src/assets/icons/logo-dark.svg"
       />
     </header>
     <nav
-      class="sc-faxByu iZkUjw"
+      class="sc-fYlSAf jCiJym"
     >
       <a
-        class="sc-EFWon eLTJvr"
+        class="sc-dxjrPO ctqIaR"
         href="/dashboard"
       >
         Dashboard
       </a>
       <a
-        class="sc-EFWon eLTJvr"
+        class="sc-dxjrPO ctqIaR"
         href="/exchange"
       >
         Exchange
       </a>
       <a
-        class="sc-EFWon eLTJvr"
+        class="sc-dxjrPO ctqIaR"
         href="/leaderboard"
       >
         Leaderboard
       </a>
       <a
-        class="sc-EFWon eLTJvr"
+        class="sc-dxjrPO ctqIaR"
         href="/referrals"
       >
         referrals
@@ -75,28 +75,28 @@ exports[`Header Component > should render the Header component correctly 1`] = `
 
 exports[`Header Component > should render the Nav component 1`] = `
 <nav
-  class="sc-faxByu iZkUjw"
+  class="sc-fYlSAf jCiJym"
 >
   <a
-    class="sc-EFWon eLTJvr"
+    class="sc-dxjrPO ctqIaR"
     href="/dashboard"
   >
     Dashboard
   </a>
   <a
-    class="sc-EFWon eLTJvr"
+    class="sc-dxjrPO ctqIaR"
     href="/exchange"
   >
     Exchange
   </a>
   <a
-    class="sc-EFWon eLTJvr"
+    class="sc-dxjrPO ctqIaR"
     href="/leaderboard"
   >
     Leaderboard
   </a>
   <a
-    class="sc-EFWon eLTJvr"
+    class="sc-dxjrPO ctqIaR"
     href="/referrals"
   >
     referrals

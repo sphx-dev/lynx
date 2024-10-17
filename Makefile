@@ -1,3 +1,6 @@
+build:
+	@yarn build_server
+	@yarn build
 
 clean:
 	@rm -rf build
@@ -14,10 +17,6 @@ test:
 
 pid:
 	lsof -i|grep 3000
-
-build:
-	@yarn build_server
-	@yarn build
 
 docker:
 	docker build -t lynx . && docker run --env-file ./scripts/env_docker.sh -it -p 9899:9899 lynx

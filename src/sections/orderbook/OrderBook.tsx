@@ -2,7 +2,7 @@ import { FunctionComponent, useRef } from "react";
 // import { useAppSelector } from "../../hooks";
 // import { orderBook } from "../../state/orderBookSlice";
 import TitleRow from "./TitleRow";
-import DepthVisualizer from "./DepthVisualizer";
+import { DepthVisualizerAsk, DepthVisualizerBid } from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
 import { Container, TableContainer } from "./OrderBookStyle";
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
@@ -108,16 +108,26 @@ const PriceLevels = ({
 
         return (
           <PriceLevelRowContainer
-            key={idx + depth}
+            key={idx}
             onClick={() => publish("PRICE_SELECTED", level.price)}
           >
-            <DepthVisualizer
-              data-testid="depth-visualizer"
-              key={depth}
-              $depth={depth}
-              $filled={0}
-              $orderType={orderType}
-            />
+            {orderType === OrderType.BIDS ? (
+              <DepthVisualizerBid
+                key={idx + "-bid"}
+                style={{
+                  ["--depth" as any]: `${depth}%`,
+                  ["--filled" as any]: `${0}%`,
+                }}
+              />
+            ) : (
+              <DepthVisualizerAsk
+                key={idx + "ask"}
+                style={{
+                  ["--depth" as any]: `${depth}%`,
+                  ["--filled" as any]: `${0}%`,
+                }}
+              />
+            )}
             <PriceLevelRow
               key={size + total}
               total={total}
