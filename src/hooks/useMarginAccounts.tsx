@@ -7,6 +7,7 @@ import { create } from "zustand";
 import { useCallback, useEffect } from "react";
 import { errorAlert, successAlert } from "@/utils/alerts";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useTranslation } from "react-i18next";
 
 type MarginAccountState = {
   marginAccounts: MarginAccountInfo[];
@@ -21,6 +22,7 @@ type MarginAccountState = {
 };
 
 export const useMarginAccount = (owner: string | null | undefined) => {
+  const { t } = useTranslation();
   const store = useMarginAccountStore();
   const { setMarginAccounts } = store;
 
@@ -54,6 +56,7 @@ export const useMarginAccount = (owner: string | null | undefined) => {
       {
         address: owner!,
         number: nextMarginAccountNumber,
+        memo: t("createMarginAccount"),
       },
       {
         onSettled: () => {
@@ -71,7 +74,7 @@ export const useMarginAccount = (owner: string | null | undefined) => {
         },
       }
     );
-  }, [owner, mutation, store.marginAccounts, queryClient]);
+  }, [t, owner, mutation, store.marginAccounts, queryClient]);
 
   return {
     ...store,

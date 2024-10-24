@@ -31,9 +31,11 @@ export const getMarginAccountInfoByAddress = async (address: string) => {
 export const createMarginAccount = async ({
   address,
   number = 0,
+  memo = "",
 }: {
   address: string;
   number: number;
+  memo: string;
 }) => {
   const message =
     sphx.marginacc.MessageComposer.withTypeUrl.createMarginAccount({
@@ -46,7 +48,7 @@ export const createMarginAccount = async ({
     address,
     [message],
     composeFee(),
-    "Create Margin Account"
+    memo
   );
 
   return txResponse;
