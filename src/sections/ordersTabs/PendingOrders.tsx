@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { Table, Text, Button } from "../../components/";
+import { Table, Text, Button } from "../../components";
 import { getOrderStatusText, getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
@@ -43,11 +43,9 @@ const PendingOrders = () => {
     setCancellingOrders(co => co.filter(o => o.number !== orderId.number));
   };
 
-  const { orders, totalOrders, pageSize } = useOrders(
-    selectedAddress,
-    page,
-    OrderStatus.ORDER_STATUS_OPEN
-  );
+  const { orders, totalOrders, pageSize } = useOrders(selectedAddress, page, [
+    OrderStatus.ORDER_STATUS_OPEN,
+  ]);
 
   const { cancelOrder } = useCancelOrder();
 

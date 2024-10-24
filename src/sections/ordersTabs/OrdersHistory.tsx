@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Text, Table } from "../../components";
-import { getOrderStatusText, getSideColor } from "./helpers";
+import { getOrderStatusText, getOrderTypeText, getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { formatPrice } from "../../utils/format";
 import { useTranslation } from "react-i18next";
@@ -8,13 +8,17 @@ import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
 import { useOrders } from "@/hooks/useOrders";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
-import { OrderSide } from "proto-codecs/codegen/sphx/order/order";
+import {
+  Order,
+  OrderSide,
+  OrderType,
+} from "proto-codecs/codegen/sphx/order/order";
 import { Side } from "@/types/order";
 import { Pagination } from "@/components/Pagination";
 import { useMarkets } from "@/hooks/useMarkets";
 import dayjs from "dayjs";
 
-const ClosedOrders = () => {
+const OrdersHistory = () => {
   const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { selectedAddress } = useMarginAccount(address);
@@ -29,11 +33,11 @@ const ClosedOrders = () => {
   }, [markets]);
 
   const [page, setPage] = useState<number>(0);
-  const { orders, totalOrders, pageSize } = useOrders(
-    selectedAddress,
-    page,
-    OrderStatus.ORDER_STATUS_CANCELED
-  );
+  const { orders, totalOrders, pageSize } = useOrders(selectedAddress, page, [
+    OrderStatus.ORDER_STATUS_CANCELED,
+    OrderStatus.ORDER_STATUS_FILLED,
+    OrderStatus.ORDER_STATUS_EXPIRED,
+  ]);
 
   const columns = [
     {
@@ -59,6 +63,13 @@ const ClosedOrders = () => {
       ),
     },
     {
+      accessorKey: "orderType",
+      header: "Type",
+      cell: (props: any) => (
+        <Text color="tertiary">{getOrderTypeText(props.getValue(), t)}</Text>
+      ),
+    },
+    {
       accessorKey: "quantity",
       header: "Size",
       cell: (props: any) => (
@@ -66,11 +77,18 @@ const ClosedOrders = () => {
       ),
     },
     {
-      accessorKey: "price",
+      // accessorKey: "price",
+      accessorFn: (order: Order) => {
+        if (order.orderType === OrderType.ORDER_TYPE_MARKET) {
+          return t("marketPrice");
+        }
+        return formatPrice(Number(order.price) / 1e6, 2);
+      },
       header: "Price",
       cell: (props: any) => (
         <Text color="tertiary">
-          {formatPrice(Number(props.getValue()) / 1e6, 2)}
+          {props.getValue()}
+          {/* {formatPrice(Number(props.getValue()) / 1e6, 2)} */}
         </Text>
       ),
     },
@@ -106,6 +124,8 @@ const ClosedOrders = () => {
   if (totalOrders === 0) {
     return <PlaceHolder>No Orders yet</PlaceHolder>;
   }
+
+  // console.log(orders);
   return (
     <>
       <Table columns={columns} data={orders} />
@@ -119,4 +139,4 @@ const ClosedOrders = () => {
   );
 };
 
-export default ClosedOrders;
+export default OrdersHistory;

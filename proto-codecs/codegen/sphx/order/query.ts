@@ -236,7 +236,8 @@ export interface QueryOrdersResponseSDKType {
 /** If order status is omitted, then get all */
 export interface QueryOrdersForAccountRequest {
   address: string;
-  status?: QueryPerpPositionsRequest_OrderStatus;
+  /** status is an array of OrderStatus or null */
+  status?: QueryPerpPositionsRequest_OrderStatus[];
   pagination?: PageRequest;
 }
 export interface QueryOrdersForAccountRequestProtoMsg {
@@ -246,7 +247,8 @@ export interface QueryOrdersForAccountRequestProtoMsg {
 /** If order status is omitted, then get all */
 export interface QueryOrdersForAccountRequestAmino {
   address?: string;
-  status?: QueryPerpPositionsRequest_OrderStatus;
+  /** status is an array of OrderStatus or null */
+  status?: QueryPerpPositionsRequest_OrderStatus[];
   pagination?: PageRequestAmino;
 }
 export interface QueryOrdersForAccountRequestAminoMsg {
@@ -256,7 +258,7 @@ export interface QueryOrdersForAccountRequestAminoMsg {
 /** If order status is omitted, then get all */
 export interface QueryOrdersForAccountRequestSDKType {
   address: string;
-  status?: QueryPerpPositionsRequest_OrderStatus;
+  status?: QueryPerpPositionsRequest_OrderStatus[];
   pagination?: PageRequestSDKType;
 }
 export interface QueryOrdersForAccountResponse {
@@ -1095,7 +1097,7 @@ export const QueryOrdersResponse = {
 function createBaseQueryOrdersForAccountRequest(): QueryOrdersForAccountRequest {
   return {
     address: "",
-    status: undefined,
+    status: [],
     pagination: undefined
   };
 }
@@ -1105,9 +1107,11 @@ export const QueryOrdersForAccountRequest = {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.status !== undefined) {
-      writer.uint32(16).int32(message.status);
+    writer.uint32(18).fork();
+    for (const v of message.status) {
+      writer.int32(v);
     }
+    writer.ldelim();
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
@@ -1124,7 +1128,14 @@ export const QueryOrdersForAccountRequest = {
           message.address = reader.string();
           break;
         case 2:
-          message.status = reader.int32() as any;
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.status.push(reader.int32() as any);
+            }
+          } else {
+            message.status.push(reader.int32() as any);
+          }
           break;
         case 3:
           message.pagination = PageRequest.decode(reader, reader.uint32());
@@ -1139,7 +1150,7 @@ export const QueryOrdersForAccountRequest = {
   fromPartial(object: Partial<QueryOrdersForAccountRequest>): QueryOrdersForAccountRequest {
     const message = createBaseQueryOrdersForAccountRequest();
     message.address = object.address ?? "";
-    message.status = object.status ?? undefined;
+    message.status = object.status?.map(e => e) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -1148,9 +1159,7 @@ export const QueryOrdersForAccountRequest = {
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = object.status;
-    }
+    message.status = object.status?.map(e => e) || [];
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromAmino(object.pagination);
     }
@@ -1159,7 +1168,11 @@ export const QueryOrdersForAccountRequest = {
   toAmino(message: QueryOrdersForAccountRequest): QueryOrdersForAccountRequestAmino {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
-    obj.status = message.status === null ? undefined : message.status;
+    if (message.status) {
+      obj.status = message.status.map(e => e);
+    } else {
+      obj.status = message.status;
+    }
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     return obj;
   },

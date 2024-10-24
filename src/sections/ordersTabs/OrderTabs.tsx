@@ -1,13 +1,12 @@
-import React from "react";
 import styled from "styled-components";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Table, Stack, Icon } from "../../components";
 import useTheme from "../../hooks/useTheme";
-import { useAppSelector } from "../../hooks";
-import { account } from "../../state/accountSlice";
+// import { useAppSelector } from "../../hooks";
+// import { account } from "../../state/accountSlice";
 import PendingOrders from "./PendingOrders";
-import ClosedOrders from "./ClosedOrders";
+import OrdersHistory from "./OrdersHistory";
 import Positions from "./Positions/Positions";
 interface TabProps {
   $isActive?: boolean;
@@ -42,13 +41,13 @@ const Tabs = styled.div`
   width: 100%;
   min-width: 400px;
 `;
-const CONTENT = [Positions, PendingOrders, ClosedOrders, Table];
+const CONTENT = [Positions, PendingOrders, OrdersHistory, Table];
 
-const TableTabs = () => {
+const OrderTabs = () => {
   const [active, setActive] = useState(0);
   const { t } = useTranslation();
   const { themeColors } = useTheme();
-  const { openOrders, closedOrders, positions } = useAppSelector(account);
+  // const { openOrders, closedOrders, positions } = useAppSelector(account);
   const Content = useMemo(() => CONTENT[active], [active]);
 
   const tabs = useMemo(
@@ -56,30 +55,27 @@ const TableTabs = () => {
       {
         title: "positions",
         icon: "PositionsIcon",
-        count: positions.length,
       },
       {
         title: "pending",
         icon: "PendingIcon",
-        count: openOrders.length,
       },
       {
-        title: "orders",
+        title: "orderHistory",
         icon: "OrdersIcon",
-        count: closedOrders?.length,
       },
       {
         title: "trades",
         icon: "TradesIcon",
       },
     ],
-    [openOrders.length, closedOrders.length, positions.length]
+    []
   );
 
   return (
     <Stack spacing={0} style={{ flex: "0 1 auto" }}>
       <Tabs>
-        {tabs.map(({ icon, title, count }, index) => (
+        {tabs.map(({ icon, title }, index) => (
           <Tab
             key={index}
             $isActive={active === index}
@@ -96,7 +92,7 @@ const TableTabs = () => {
                     : themeColors.tableTabs.color
                 }
               />
-              {`${t(title)}${count ? `(${count})` : ""}`}
+              {t(title)}
             </>
           </Tab>
         ))}
@@ -108,4 +104,4 @@ const TableTabs = () => {
   );
 };
 
-export default TableTabs;
+export default OrderTabs;

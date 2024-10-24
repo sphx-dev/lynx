@@ -11,7 +11,7 @@ import { OrderId } from "proto-codecs/codegen/sphx/order/order";
 export const getOrdersByAddress = async (
   address: string,
   pagination?: { offset?: bigint; limit?: bigint },
-  status?: OrderStatus
+  statuses?: OrderStatus[]
 ) => {
   const queryClient = await createRPCQueryClient({
     rpcEndpoint: getChain().rpc,
@@ -29,7 +29,9 @@ export const getOrdersByAddress = async (
       countTotal: true,
       reverse: false,
     },
-    status: fromOrderStatusToPositionOrderStatus(status!),
+    status: statuses?.map(status =>
+      fromOrderStatusToPositionOrderStatus(status)
+    ),
   };
 
   console.log("getOrdersByAddress request:", request);

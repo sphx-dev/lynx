@@ -5,7 +5,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 
-import { mockColumns } from "../../sections/ordersHistory/constants";
+import { mockColumns } from "../../sections/ordersTabs/constants";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { CSSProperties } from "react";

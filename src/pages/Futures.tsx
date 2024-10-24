@@ -3,7 +3,7 @@ import styled from "styled-components";
 import OrderInput from "../sections/order/OrderInput";
 import { TradingViewContainer } from "../sections/chart/TradingViewContainer";
 import OrderBook from "../sections/orderbook/OrderBook";
-import OrdersHistory from "../sections/ordersHistory";
+import OrdersHistory from "../sections/ordersTabs";
 import { Stack } from "../components";
 import PriceBorder from "../sections/priceBorder";
 import Group from "../components/Group";
