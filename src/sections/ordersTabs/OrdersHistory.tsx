@@ -19,10 +19,39 @@ import { useMarkets } from "@/hooks/useMarkets";
 import dayjs from "dayjs";
 
 const OrdersHistory = () => {
-  const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { selectedAddress } = useMarginAccount(address);
 
+  const columns = useOrdersHistoryColumns();
+
+  const [page, setPage] = useState<number>(0);
+  const { orders, totalOrders, pageSize } = useOrders(selectedAddress, page, [
+    OrderStatus.ORDER_STATUS_CANCELED,
+    OrderStatus.ORDER_STATUS_FILLED,
+    OrderStatus.ORDER_STATUS_EXPIRED,
+  ]);
+
+  if (totalOrders === 0) {
+    return <PlaceHolder>No Orders yet</PlaceHolder>;
+  }
+
+  return (
+    <>
+      <Table columns={columns} data={orders} />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalItems={totalOrders}
+        pageSize={pageSize}
+      />
+    </>
+  );
+};
+
+export default OrdersHistory;
+
+const useOrdersHistoryColumns = () => {
+  const { t } = useTranslation();
   const { markets } = useMarkets();
   const marketMap = useMemo(() => {
     const map = new Map();
@@ -32,14 +61,7 @@ const OrdersHistory = () => {
     return map;
   }, [markets]);
 
-  const [page, setPage] = useState<number>(0);
-  const { orders, totalOrders, pageSize } = useOrders(selectedAddress, page, [
-    OrderStatus.ORDER_STATUS_CANCELED,
-    OrderStatus.ORDER_STATUS_FILLED,
-    OrderStatus.ORDER_STATUS_EXPIRED,
-  ]);
-
-  const columns = [
+  return [
     {
       accessorKey: "marketId",
       header: "Market",
@@ -120,23 +142,4 @@ const OrdersHistory = () => {
       ),
     },
   ];
-
-  if (totalOrders === 0) {
-    return <PlaceHolder>No Orders yet</PlaceHolder>;
-  }
-
-  // console.log(orders);
-  return (
-    <>
-      <Table columns={columns} data={orders} />
-      <Pagination
-        page={page}
-        setPage={setPage}
-        totalItems={totalOrders}
-        pageSize={pageSize}
-      />
-    </>
-  );
 };
-
-export default OrdersHistory;

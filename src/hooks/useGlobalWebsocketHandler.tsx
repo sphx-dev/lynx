@@ -18,11 +18,7 @@ export function useGlobalWebsocketHandler() {
   const handleWebSocketMessage = useCallback(
     (message: JsonRpcResultMessage) => {
       // Ensure the address is available
-      if (!address) {
-        return;
-      }
-
-      if (!selectedAddress) {
+      if (!address || !selectedAddress) {
         return;
       }
 
@@ -38,16 +34,7 @@ export function useGlobalWebsocketHandler() {
       }
 
       // Ensure the current address or MarginAcount address are involved in the event
-      const addresses = [
-        ...(events["message.sender"] ?? []),
-        ...(events["coin_received.receiver"] ?? []),
-        ...(events["coin_spent.spender"] ?? []),
-        ...(events["tx.fee_payer"] ?? []),
-        ...(events["order.account_id"] ?? []),
-        ...(events["place_order.account_id"] ?? []),
-        ...(events["new_position.margin_account_address"] ?? []),
-        ...(events["modify_position.margin_account_address"] ?? []),
-      ];
+      const addresses = getAddressesFromEvents(events);
       console.log("WS_message", "addresses", addresses);
       if (
         !addresses.includes(address) &&
@@ -132,5 +119,22 @@ function getAddresesFromTransferEvent(events: CosmosTransactionEvent[]) {
   const addresses = attributes
     .filter(attr => attr.key === "recipient" || attr.key === "sender")
     .map(attr => attr.value);
+  return addresses;
+}
+
+function getAddressesFromEvents(events: {
+  [eventName: string]: CosmosFlattenedEvent;
+}) {
+  const addresses = [
+    ...(events["message.sender"] ?? []),
+    ...(events["coin_received.receiver"] ?? []),
+    ...(events["coin_spent.spender"] ?? []),
+    ...(events["tx.fee_payer"] ?? []),
+    ...(events["order.account_id"] ?? []),
+    ...(events["place_order.account_id"] ?? []),
+    ...(events["new_position.margin_account_address"] ?? []),
+    ...(events["modify_position.margin_account_address"] ?? []),
+  ];
+
   return addresses;
 }

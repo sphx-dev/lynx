@@ -50,7 +50,7 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
         setTimeout(() => {
           console.log("WS::::::::::", "reconnecting");
           ws.current = null;
-          setConnectionRetries((prev: number) => prev + 1);
+          setConnectionRetries(add1);
         }, Math.min(1000 + connectionRetries * 1000, 30 * 1000));
       };
 
@@ -182,14 +182,12 @@ export const useWebsocket = (
   onMessage?: (message: JsonRpcResultMessage) => void
 ) => {
   const { ws, error, subscriptions, reconnect } = useContext(WsContext);
-  // const [messages, setMessages] = useState<any[]>([]);
 
   useEffect(() => {
     let messageHandler: (event: MessageEvent<any>) => void;
 
     if (ws && ws?.readyState !== WebSocket.CLOSED) {
       messageHandler = (event: MessageEvent<any>) => {
-        // console.log("WS::::::::::", "EVENT:", event);
         let msg;
         try {
           msg = JSON.parse(event.data);
@@ -210,7 +208,6 @@ export const useWebsocket = (
   }, [onMessage, ws]);
 
   return {
-    // messages,
     subscriptions,
     unsubscribe,
     reconnect,
@@ -222,3 +219,5 @@ export const useWebsocket = (
     error,
   };
 };
+
+const add1 = (prev: number) => prev + 1;
