@@ -52,19 +52,13 @@ export async function sendTokens(
     console.log("Transaction successful:", result);
 
     if (result.code === 0) {
-      if (onSuccess) {
-        onSuccess();
-      }
+      onSuccess?.();
     } else {
-      if (onError) {
-        onError(getErrorFromCode(result.code));
-      }
+      onError?.(getErrorFromCode(result.code));
     }
   } catch (error) {
     console.error("Error sending tokens:", error);
-    if (onError) {
-      onError((error as Error).message);
-    }
+    onError?.((error as Error).message);
   }
 }
 

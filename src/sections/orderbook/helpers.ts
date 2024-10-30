@@ -17,7 +17,7 @@ export const addTotalSums = (orders: Order<number>[]): OrderWithTotal[] => {
 
 export const addDepths = (orders: OrderWithTotal[]): OrderWithDepth[] => {
   const totalSums: number[] = orders.map(order => order.totalSum);
-  const maxTotal = Math.max.apply(Math, totalSums);
+  const maxTotal = Math.max(...totalSums);
   return orders.map(order => {
     const calculatedTotal: number = order.totalSum;
     const depth = (calculatedTotal / maxTotal) * 100;
