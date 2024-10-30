@@ -1,0 +1,5 @@
+{
+  "entry": ["src/main.tsx", "server.js"],
+  "project": ["src/**", "proto-codecs/**", ".storybook/**"],
+  "ignore": ["proto-codecs/**", "src/charting_library/**"]
+}

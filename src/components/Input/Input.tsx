@@ -5,7 +5,7 @@ import Stack from "../Stack";
 import Text from "../Text";
 import useTheme from "../../hooks/useTheme";
 
-export interface InputProps extends React.HTMLProps<HTMLInputElement> {
+interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: string;
   label?: string;
   rightSide?: string;

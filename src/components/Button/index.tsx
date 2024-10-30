@@ -2,7 +2,7 @@ import React, { ForwardedRef, PropsWithChildren } from "react";
 import styled, { css } from "styled-components";
 import { getThemeColors, ThemeColors } from "../../theme";
 
-export type Size = "xs" | "sm" | "lg";
+type Size = "xs" | "sm" | "lg";
 
 const SIZE_MAP = {
   xs: "0 8px",
@@ -10,7 +10,7 @@ const SIZE_MAP = {
   lg: "14px 22px",
 };
 
-export type Variant = keyof ThemeColors["button"];
+type Variant = keyof ThemeColors["button"];
 type Color = keyof ThemeColors["text"];
 interface CssProps extends Props {
   variant: Variant;
