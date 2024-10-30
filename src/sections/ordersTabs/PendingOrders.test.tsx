@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { vi } from "vitest";
+import { Mock, vi } from "vitest";
 import PendingOrders from "./PendingOrders";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
@@ -27,11 +27,11 @@ vi.mock("../../hooks/useMarkets", () => ({
 }));
 
 describe("PendingOrders", () => {
-  const mockUseChainCosmoshub = useChainCosmoshub as jest.Mock;
-  const mockUseMarginAccount = useMarginAccount as jest.Mock;
-  const mockUseOrders = useOrders as jest.Mock;
-  const mockUseCancelOrder = useCancelOrder as jest.Mock;
-  const mockUseMarkets = useMarkets as jest.Mock;
+  const mockUseChainCosmoshub = useChainCosmoshub as Mock;
+  const mockUseMarginAccount = useMarginAccount as Mock;
+  const mockUseOrders = useOrders as Mock;
+  const mockUseCancelOrder = useCancelOrder as Mock;
+  const mockUseMarkets = useMarkets as Mock;
 
   beforeEach(() => {
     vi.useFakeTimers();

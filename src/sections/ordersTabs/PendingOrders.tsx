@@ -45,6 +45,7 @@ const PendingOrders = () => {
 
   const { orders, totalOrders, pageSize } = useOrders(selectedAddress, page, [
     OrderStatus.ORDER_STATUS_OPEN,
+    OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
   ]);
 
   const { cancelOrder } = useCancelOrder();

@@ -4,7 +4,7 @@ import {
   QueryOrdersForAccountRequest,
   QueryPerpPositionsRequest_OrderStatus,
 } from "../../proto-codecs/codegen/sphx/order/query";
-import { createRPCQueryClient } from "../../proto-codecs/codegen/sphx/rpc.query";
+import { createRPCQueryClient } from "proto-codecs/codegen/sphx/rpc.query";
 import { getChain } from "../config";
 import { OrderId } from "proto-codecs/codegen/sphx/order/order";
 

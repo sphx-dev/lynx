@@ -17,14 +17,14 @@ const PAGE_SIZE = 10n;
 export const useOrders = (
   address: string | undefined,
   page: number,
-  statuses?: OrderStatus[]
+  statuses: OrderStatus[]
 ) => {
   const {
     isLoading,
     error,
     data: { orders, totalOrders } = { orders: [], totalOrders: 0 },
   } = useQuery(
-    ["orders", address, page, statuses],
+    ["orders", address, page, ...statuses],
     () => {
       return getOrdersByAddress(
         address!,
