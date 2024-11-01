@@ -1,3 +1,6 @@
+yarn_upgrade:
+	yarn set version latest
+
 build:
 	@yarn build_server
 	@yarn build
