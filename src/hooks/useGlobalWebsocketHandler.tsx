@@ -43,7 +43,7 @@ export function useGlobalWebsocketHandler() {
         return;
       }
 
-      const chainEventsNames = chainEvents.map(event => event.type);
+      const chainEventsNames = chainEvents.map((event) => event.type);
       const chainEventsMap = new Set(chainEventsNames);
 
       // ACCOUNT EVENTS
@@ -76,10 +76,12 @@ export function useGlobalWebsocketHandler() {
       if (chainEventsMap.has("new_position")) {
         console.log("WS_message", "new_position");
         queryClient.invalidateQueries(["positions"]);
+        queryClient.invalidateQueries(["balance"]);
       }
       if (chainEventsMap.has("modify_position")) {
         console.log("WS_message", "modify_position");
         queryClient.invalidateQueries(["positions"]);
+        queryClient.invalidateQueries(["balance"]);
       }
 
       // TRADE EVENTS
@@ -106,7 +108,7 @@ export function useGlobalWebsocketHandler() {
   }, [handleWebSocketMessage]);
 
   // Subscribe to WebSocket messages using the singleton pattern
-  useWebsocket(message => {
+  useWebsocket((message) => {
     if (messageHandlerRef.current) {
       messageHandlerRef.current(message);
     }
@@ -114,11 +116,11 @@ export function useGlobalWebsocketHandler() {
 }
 
 function getAddresesFromTransferEvent(events: CosmosTransactionEvent[]) {
-  const transferEvents = events.filter(ev => ev.type === "transfer");
-  const attributes = transferEvents.map(ev => ev.attributes).flat();
+  const transferEvents = events.filter((ev) => ev.type === "transfer");
+  const attributes = transferEvents.map((ev) => ev.attributes).flat();
   const addresses = attributes
-    .filter(attr => attr.key === "recipient" || attr.key === "sender")
-    .map(attr => attr.value);
+    .filter((attr) => attr.key === "recipient" || attr.key === "sender")
+    .map((attr) => attr.value);
   return addresses;
 }
 
