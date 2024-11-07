@@ -8,6 +8,7 @@ import { getOrderTypeText } from "../helpers";
 import { formatPrice } from "@/utils/format";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { OrderId } from "proto-codecs/codegen/sphx/order/order";
+import { PRECISION } from "@/constants";
 
 export const ShowTpSlModal = ({
   position,
@@ -99,14 +100,14 @@ const useTpSlColumns = (
       header: t("quantity"),
       accessorKey: "quantity",
       cell: (props: any) => (
-        <Text>{formatPrice(Number(props.getValue()) / 1e6)}</Text>
+        <Text>{formatPrice(Number(props.getValue()) / PRECISION)}</Text>
       ),
     },
     {
       header: t("trigger_price"),
       accessorKey: "triggerPrice",
       cell: (props: any) => (
-        <Text>{formatPrice(Number(props.getValue()) / 1e6, 2)}</Text>
+        <Text>{formatPrice(Number(props.getValue()) / PRECISION, 2)}</Text>
       ),
     },
     {

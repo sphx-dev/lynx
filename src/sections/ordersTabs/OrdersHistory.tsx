@@ -17,6 +17,7 @@ import { Side } from "@/types/order";
 import { Pagination } from "@/components/Pagination";
 import { useMarkets } from "@/hooks/useMarkets";
 import dayjs from "dayjs";
+import { PRECISION } from "@/constants";
 
 const OrdersHistory = () => {
   const { address } = useChainCosmoshub();
@@ -95,7 +96,7 @@ const useOrdersHistoryColumns = () => {
       accessorKey: "quantity",
       header: "Size",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / 1e6}</Text>
+        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
       ),
     },
     {
@@ -104,13 +105,13 @@ const useOrdersHistoryColumns = () => {
         if (order.orderType === OrderType.ORDER_TYPE_MARKET) {
           return t("marketPrice");
         }
-        return formatPrice(Number(order.price) / 1e6, 2);
+        return formatPrice(Number(order.price) / PRECISION, 2);
       },
       header: "Price",
       cell: (props: any) => (
         <Text color="tertiary">
           {props.getValue()}
-          {/* {formatPrice(Number(props.getValue()) / 1e6, 2)} */}
+          {/* {formatPrice(Number(props.getValue()) / PRECISION, 2)} */}
         </Text>
       ),
     },

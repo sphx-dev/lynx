@@ -9,7 +9,7 @@ import { Coin } from "@cosmjs/proto-signing";
 import { sendTokens } from "../utils/sendTokens";
 import { errorAlert, infoAlert, successAlert } from "../utils/alerts";
 import { Input } from "@/components/Input";
-import { DENOMUSDC } from "@/constants";
+import { DENOMUSDC, PRECISION } from "@/constants";
 
 const MarginAccountsPage = () => {
   const { address, reconnect } = useChainCosmoshub();
@@ -71,7 +71,7 @@ const MarginAccountsPage = () => {
             <label>Address:</label>
             <label>{address}</label>
             <label>
-              {balance && <>({Number(balance.amount) / 1e6} usdc</>})
+              {balance && <>({Number(balance.amount) / PRECISION} usdc</>})
             </label>
             <Button onClick={() => reconnect()}>Reconnect</Button>
           </RowContainer>
@@ -106,7 +106,7 @@ const MarginAccountsPage = () => {
               <Button
                 disabled={!canSend}
                 onClick={() => {
-                  const amount = Number(sendAmount) * 1e6;
+                  const amount = Number(sendAmount) * PRECISION;
                   if (!isNaN(amount) && amount > 0) {
                     setCanSend(false);
                     sendTokens(
@@ -153,7 +153,7 @@ const MarginAccountsPage = () => {
                 <div>Positions:</div>
                 <div style={{ minWidth: "70px" }}>
                   {balances[index]
-                    ? balances[index].amount / 1e6
+                    ? balances[index].amount / PRECISION
                     : "Loading..."}{" "}
                   usdc
                 </div>

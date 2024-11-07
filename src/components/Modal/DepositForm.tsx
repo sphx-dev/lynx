@@ -9,7 +9,7 @@ import Divider from "../Divider";
 import { useBalance } from "../../hooks/useBalance";
 import { sendTokens } from "../../utils/sendTokens";
 import { successAlert } from "../../utils/alerts";
-import { DENOMUSDC } from "@/constants";
+import { DENOMUSDC, PRECISION } from "@/constants";
 
 async function depositToMarginAccount({
   address,
@@ -68,7 +68,7 @@ export const DepositForm = () => {
       await depositToMarginAccount({
         address,
         marginAccountAddress: selectedAccount?.address,
-        amount: Number(depositAmount) * 1e6,
+        amount: Number(depositAmount) * PRECISION,
         onSuccess: () => {
           setIsSubmitting(false);
           setDepositAmount("");

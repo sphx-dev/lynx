@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getThemeColors } from "../theme";
 import { useModalStore } from "./Modal/Modal";
 import { useBalances } from "../hooks/useBalance";
-import { DENOMUSDC } from "@/constants";
+import { DENOMUSDC, PRECISION } from "@/constants";
 import { useTranslation } from "react-i18next";
 
 export const MarginAccSelector = ({
@@ -54,7 +54,7 @@ export const MarginAccSelector = ({
       let item = `Account #${account.id?.number}`;
       const balance = balances?.[index];
       if (balance && typeof balance?.amount === "number") {
-        item += ` (${balance?.amount / 1e6} USDC)`;
+        item += ` (${balance?.amount / PRECISION} USDC)`;
       }
       return item;
     });

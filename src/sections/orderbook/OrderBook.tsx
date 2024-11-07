@@ -109,7 +109,7 @@ const PriceLevels = ({
         return (
           <PriceLevelRowContainer
             key={idx}
-            onClick={() => publish("PRICE_SELECTED", level.price)}
+            onClick={() => publish("PRICE_SELECTED", level.price.toFixed(6))}
           >
             {orderType === OrderType.BIDS ? (
               <DepthVisualizerBid

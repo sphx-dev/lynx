@@ -4,6 +4,7 @@ import { formatNumber } from "../../utils/format";
 import { useBalance } from "@/hooks/useBalance";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
+import { PRECISION } from "@/constants";
 
 interface Label {
   label: string;
@@ -39,7 +40,7 @@ const Summary = () => {
       /> */}
       <Label
         label="Available Margin"
-        value={amount ? (amount / 1e6).toFixed(5) + " USDC" : ""}
+        value={amount ? (amount / PRECISION).toFixed(5) + " USDC" : ""}
       />
     </Stack>
   );

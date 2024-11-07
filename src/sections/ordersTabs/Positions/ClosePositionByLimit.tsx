@@ -1,6 +1,7 @@
 import { Button } from "@/components";
 import { Input } from "@/components/Input";
 import { Modal } from "@/components/Modal/Modal";
+import { PRECISION } from "@/constants";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarkets } from "@/hooks/useMarkets";
 import { useCreateOrder } from "@/hooks/useOrders";
@@ -40,7 +41,7 @@ export const ClosePositionByLimitModal = ({
   const { handleSubmit, setValue, register, watch } =
     useForm<ClosePositionFromProps>({
       defaultValues: {
-        size: Number(position.size) / 1e6,
+        size: Number(position.size) / PRECISION,
       },
       resolver: yupResolver(
         yup.object().shape({
@@ -72,8 +73,8 @@ export const ClosePositionByLimitModal = ({
           position.side === PositionSide.POSITION_SIDE_LONG
             ? OrderSide.ORDER_SIDE_SELL
             : OrderSide.ORDER_SIDE_BUY,
-        quantity: BigInt(Number(values.size) * 1e6),
-        price: BigInt(Number(values.price) * 1e6),
+        quantity: BigInt((Number(values.size) * PRECISION).toFixed(0)),
+        price: BigInt((Number(values.price) * PRECISION).toFixed(0)),
         leverage: position.leverage,
         onSuccess: msg => {
           successAlert(msg);
@@ -107,14 +108,18 @@ export const ClosePositionByLimitModal = ({
             <Button
               size="xs"
               type="button"
-              onClick={() => setValue("size", Number(position.size) / 4 / 1e6)}
+              onClick={() =>
+                setValue("size", Number(position.size) / 4 / PRECISION)
+              }
             >
               25%
             </Button>
             <Button
               size="xs"
               type="button"
-              onClick={() => setValue("size", Number(position.size) / 2 / 1e6)}
+              onClick={() =>
+                setValue("size", Number(position.size) / 2 / PRECISION)
+              }
             >
               50%
             </Button>
@@ -122,7 +127,7 @@ export const ClosePositionByLimitModal = ({
               size="xs"
               type="button"
               onClick={() =>
-                setValue("size", ((Number(position.size) / 4) * 3) / 1e6)
+                setValue("size", ((Number(position.size) / 4) * 3) / PRECISION)
               }
             >
               75%
@@ -130,7 +135,9 @@ export const ClosePositionByLimitModal = ({
             <Button
               size="xs"
               type="button"
-              onClick={() => setValue("size", Number(position.size) / 1e6)}
+              onClick={() =>
+                setValue("size", Number(position.size) / PRECISION)
+              }
             >
               100%
             </Button>

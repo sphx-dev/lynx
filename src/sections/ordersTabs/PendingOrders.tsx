@@ -17,6 +17,7 @@ import { useMarkets } from "../../hooks/useMarkets";
 import dayjs from "dayjs";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
+import { PRECISION } from "@/constants";
 
 const PendingOrders = () => {
   const { t } = useTranslation();
@@ -77,14 +78,14 @@ const PendingOrders = () => {
       accessorKey: "quantity",
       header: "Size",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / 1e6}</Text>
+        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
       ),
     },
     {
       accessorKey: "price",
       header: "Price",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / 1e6}</Text>
+        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
       ),
     },
     {

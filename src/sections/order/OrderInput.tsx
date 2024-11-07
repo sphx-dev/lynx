@@ -30,6 +30,7 @@ import { Checkbox } from "@/components/Input/Checkbox";
 import { useBalance } from "@/hooks/useBalance";
 import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { motion, AnimatePresence } from "framer-motion";
+import { PRECISION } from "@/constants";
 
 const options: [
   { label: string; value: OrderType },
@@ -107,7 +108,8 @@ function OrderInput() {
   };
 
   const setPriceFromEvent = useCallback(
-    (price: number) => {
+    (priceValue: number) => {
+      const price = Number(priceValue).toFixed(6);
       console.log("PRICE_SELECTED", price);
       setValue("orderType", OrderType.ORDER_TYPE_LIMIT);
       setValue("price", price);
@@ -134,11 +136,11 @@ function OrderInput() {
         : OrderSide.ORDER_SIDE_SELL;
 
       const stopLossValue = values.stopLoss
-        ? BigInt(Number(values.stopLoss) * 1e6)
+        ? BigInt((Number(values.stopLoss) * PRECISION).toFixed(0))
         : undefined;
 
       const takeProfitValue = values.takeProfit
-        ? BigInt(Number(values.takeProfit) * 1e6)
+        ? BigInt((Number(values.takeProfit) * PRECISION).toFixed(0))
         : undefined;
 
       if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
@@ -149,8 +151,7 @@ function OrderInput() {
           marginAccountAddress: selectedAddress,
           orderId: BigInt(Date.now() * 1000),
           side: sideValue,
-          quantity: BigInt(Number(values.volume) * 1e6),
-          // price: BigInt(values.price * 1e6),
+          quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
           leverage: BigInt(values.leverage),
           stopLoss: stopLossValue,
           takeProfit: takeProfitValue,
@@ -168,8 +169,8 @@ function OrderInput() {
           marginAccountAddress: selectedAddress,
           orderId: BigInt(Date.now() * 1000),
           side: sideValue,
-          quantity: BigInt(Number(values.volume) * 1e6),
-          price: BigInt(Number(values.price) * 1e6),
+          quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
+          price: BigInt((Number(values.price) * PRECISION).toFixed(0)),
           leverage: BigInt(values.leverage),
           stopLoss: stopLossValue,
           takeProfit: takeProfitValue,

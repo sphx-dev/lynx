@@ -6,7 +6,7 @@ import { successAlert } from "../../utils/alerts";
 import styled from "styled-components";
 import Button from "../Button";
 import { Input } from "../Input";
-import { DENOMUSDC } from "@/constants";
+import { DENOMUSDC, PRECISION } from "@/constants";
 
 export const WithdrawForm = () => {
   const { address } = useChainCosmoshub();
@@ -31,7 +31,7 @@ export const WithdrawForm = () => {
       await withdrawFromMarginAccount({
         from: selectedAccount?.address,
         to: address,
-        amount: Number(withdrawAmount) * 1e6,
+        amount: Number(withdrawAmount) * PRECISION,
         onSuccess: () => {
           setIsSubmitting(false);
           setWithdrawAmount("");

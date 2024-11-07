@@ -8,6 +8,7 @@ import {
   PerpetualPosition,
   PositionSide,
 } from "proto-codecs/codegen/sphx/order/perpetual_position";
+import { PRECISION } from "@/constants";
 
 export const usePositionColumns = function (
   closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
@@ -52,7 +53,9 @@ export const usePositionColumns = function (
       accessorKey: "size",
       header: "Qty",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue() || 0) / 1e6}</Text>
+        <Text color="tertiary">
+          {Number(props.getValue() || 0) / PRECISION}
+        </Text>
       ),
     },
     {
@@ -60,7 +63,10 @@ export const usePositionColumns = function (
       header: "Entry Price",
       cell: (props: any) => (
         <Text color="tertiary">
-          {formatNumber({ value: Number(props.getValue()) / 1e6, fixed: 2 })}
+          {formatNumber({
+            value: Number(props.getValue()) / PRECISION,
+            fixed: 2,
+          })}
         </Text>
       ),
     },
@@ -68,7 +74,9 @@ export const usePositionColumns = function (
     {
       // accessorKey: "size",
       accessorFn: (row: any) => {
-        return (Number(row.size) / 1e6) * (Number(row.entryPrice) / 1e6);
+        return (
+          (Number(row.size) / PRECISION) * (Number(row.entryPrice) / PRECISION)
+        );
       },
       header: "Value",
       cell: (props: any) => (

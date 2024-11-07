@@ -6,6 +6,7 @@ import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useBalance } from "../../hooks/useBalance";
 import { sendTokens } from "../../utils/sendTokens";
 import { AppWrapper } from "@/testing/AppWrapper";
+import { PRECISION } from "@/constants";
 
 vi.mock("../../hooks/useChainCosmoshub");
 vi.mock("../../hooks/useMarginAccounts");
@@ -58,7 +59,7 @@ describe("DepositForm", () => {
         {
           from: mockAddress,
           to: mockMarginAccount.address,
-          amount: 100 * 1e6,
+          amount: 100 * PRECISION,
           denom: "usdc",
           memo: "Deposit to margin account",
         },
