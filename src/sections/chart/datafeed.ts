@@ -1,6 +1,16 @@
+import config from "@/config.js";
 import { subscribeOnStream, unsubscribeFromStream } from "./streaming.js";
 
-const API_ENDPOINT = "https://benchmarks.pyth.network/v1/shims/tradingview";
+// const API_ENDPOINT = "https://benchmarks.pyth.network/v1/shims/tradingview";
+// TODO: configure the tradingview URL based on the environment
+// const API_ENDPOINT = "https://api.non-prod.sphx.dev/tradingview";
+const API_ENDPOINT =
+  window.location.protocol + config.VITE_API_URL + "/tradingview";
+
+console.log("API_ENDPOINT", API_ENDPOINT);
+console.log("API_ENDPOINT", API_ENDPOINT);
+console.log("API_ENDPOINT", API_ENDPOINT);
+console.log("API_ENDPOINT", API_ENDPOINT);
 
 // Use it to keep a record of the most recent bar on the chart
 const lastBarsCache = new Map();

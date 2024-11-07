@@ -31,7 +31,6 @@ export const useOrders = (
         { offset: BigInt(page) * PAGE_SIZE, limit: PAGE_SIZE },
         statuses
       ).then(response => {
-        // console.log("useOrders response", response);
         return {
           orders: response?.orders,
           totalOrders: Number(response?.pagination?.total) || 0,
@@ -63,7 +62,6 @@ export const useOrdersById = (orderIds: OrderId[]) => {
       ],
       queryFn: async () => {
         const respose = await getOrderByOrderId(orderId);
-        console.log("useOrdersById response", respose);
         return respose.order;
       },
       enabled:
@@ -90,8 +88,6 @@ export const useCancelOrder = () => {
     orderId: OrderId;
     memo: string;
   }) => {
-    console.log("cancelOrder PARAMS", params);
-
     return mutation.mutateAsync(params, {
       onSettled: () => {
         queryClient.invalidateQueries("orders");

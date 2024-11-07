@@ -76,6 +76,11 @@ export const useMarginAccount = (owner: string | null | undefined) => {
     );
   }, [t, owner, mutation, store.marginAccounts, queryClient]);
 
+  // the following line excludes ts linting
+  // eslint-disable-next-line
+  window.address = owner!;
+  // eslint-disable-next-line
+  window.marginAccountAddress = store.getSelectedAddress()!;
   return {
     ...store,
     status,

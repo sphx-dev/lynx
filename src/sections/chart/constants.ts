@@ -2,7 +2,7 @@ import { ChartingLibraryWidgetOptions } from "../../charting_library";
 
 type Interval = ChartingLibraryWidgetOptions["interval"];
 
-export const DEFAULT_INTERVAL = "D" as Interval;
+export const DEFAULT_INTERVAL = "1h" as Interval;
 export const CHART_DEFAULT_OPTIONS: Partial<ChartingLibraryWidgetOptions> = {
   library_path: "/charting_library/",
   custom_css_url: "../tv-public.css",
@@ -18,5 +18,4 @@ export const CHART_DEFAULT_OPTIONS: Partial<ChartingLibraryWidgetOptions> = {
     "timeframes_toolbar",
   ],
   theme: "dark",
-  symbol: "USO",
 };

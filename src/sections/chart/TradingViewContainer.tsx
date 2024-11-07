@@ -40,10 +40,10 @@ const getLanguageFromURL = (): LanguageCode | null => {
 };
 
 export const TradingViewContainer = () => {
-  // const marketId = useAppSelector(selectMarketId);
-  const { selectedMarket } = useMarkets();
-  const marketId = selectedMarket?.baseAsset;
-  // console.log("MARKET ID", marketId);
+  const { selectedMarket, symbol } = useMarkets();
+  // const marketId = selectedMarket?.baseAsset;
+  const marketId = symbol;
+  console.log("MARKET ID", selectedMarket, marketId);
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
@@ -53,7 +53,6 @@ export const TradingViewContainer = () => {
     }
     const widgetOptions: ChartingLibraryWidgetOptions = {
       ...CHART_DEFAULT_OPTIONS,
-      // FIXME use marketId when price API ready
       symbol: marketId,
       datafeed,
       overrides: {

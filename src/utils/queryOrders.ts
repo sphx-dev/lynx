@@ -27,7 +27,7 @@ export const getOrdersByAddress = async (
       offset: pagination?.offset ?? 0n,
       limit: pagination?.limit ?? 10n,
       countTotal: true,
-      reverse: false,
+      reverse: true,
     },
     status: statuses?.map(status =>
       fromOrderStatusToPositionOrderStatus(status)

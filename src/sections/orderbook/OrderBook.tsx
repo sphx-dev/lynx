@@ -1,6 +1,4 @@
 import { FunctionComponent, useRef } from "react";
-// import { useAppSelector } from "../../hooks";
-// import { orderBook } from "../../state/orderBookSlice";
 import TitleRow from "./TitleRow";
 import { DepthVisualizerAsk, DepthVisualizerBid } from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
@@ -9,11 +7,7 @@ import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
 import { MOBILE_WIDTH } from "../../constants";
 import { Stack, Text } from "../../components";
 import Divider from "./Divider";
-// import { useGetOrderBookQuery } from "../../utils/api/orderBookApi";
 import { OrderType, OrderWithDepth } from "../../types/orderBook";
-// import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
-// import { getOrderBookRecords } from "../../utils/helpers";
-// import { useResize } from "../../hooks/useResize";
 import { usePubSub } from "@/hooks/usePubSub";
 import { useMarkets } from "@/hooks/useMarkets";
 import { useQuery } from "react-query";
@@ -35,8 +29,6 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
 
   return (
     <Container ref={containerRef} data-testid="orderbook-tab">
-      {/* {(!book || isLoading) && <Text>Loading...</Text>} */}
-
       {!isLoading && (book?.bids?.length || book?.asks?.length) ? (
         <Stack style={{ width: "100%" }}>
           <TableContainer>
@@ -51,7 +43,6 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
           </TableContainer>
           <Divider spread={book.spread} percentage={book.spreadPercentage} />
           <TableContainer>
-            {/*<TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />*/}
             <PriceLevelsWrapper>
               <PriceLevels
                 levels={book.bids.slice(
@@ -167,9 +158,13 @@ const useOrderBook = (records: number) => {
         `${BASE_API}/orderbook/?ticker=${selectedMarket?.ticker}`
       );
       const data = await res.json();
+      console.log("ORDERBOOK", data);
 
       const bids = orderToState(data?.bids?.slice(0, records) ?? []);
-      const asks = asksToState(data?.asks?.slice(0, records) ?? []);
+      const asks = asksToState(
+        data?.asks?.slice(data?.asks?.length - records, data?.asks?.length) ??
+          []
+      );
       const maxBid = bids.length ? bids[0].price : 0;
       const minAsk = asks.length ? asks[0].price : 0;
       const spread = Math.abs(maxBid - minAsk);

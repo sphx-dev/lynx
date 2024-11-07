@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { Market } from "../../proto-codecs/codegen/sphx/order/market";
 import { getAllMarkets } from "../utils/queryMarkets";
 import { useEffect, useMemo } from "react";
-import { mockFutures } from "../constants/mock";
 import { useQuery } from "react-query";
+import { marketsIcons } from "@/constants/marketsIcons";
 
 export const useMarkets = () => {
   const { markets, selectedMarket, setMarkets, setMarketId } =
@@ -14,19 +14,20 @@ export const useMarkets = () => {
     setMarkets(data?.markets ?? []);
   }, [data, setMarkets]);
 
-  // TODO: use real data
-  const { symbol, icon } = useMemo(() => {
-    const mock = mockFutures.find(m => {
-      return m?.symbol?.startsWith(selectedMarket?.baseAsset ?? "");
-    });
-    return { symbol: mock?.symbol ?? "", icon: mock?.icon ?? "" };
+  const { icon } = useMemo(() => {
+    if (selectedMarket?.ticker)
+      if (selectedMarket?.ticker in marketsIcons) {
+        return marketsIcons[selectedMarket?.ticker];
+      }
+    return marketsIcons["default"];
   }, [selectedMarket]);
 
+  window.marketId = selectedMarket?.id || 0n;
   return {
     markets,
     selectedMarket,
     selectedMarketId: selectedMarket?.id,
-    symbol,
+    symbol: selectedMarket?.ticker,
     icon,
     setMarkets,
     setMarketId,

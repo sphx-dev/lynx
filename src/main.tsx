@@ -17,8 +17,17 @@ import { getChain } from "./config";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends KeplrWindow {}
+  interface Window extends KeplrWindow {
+    devTools: () => Promise<void>;
+  }
 }
+
+window.devTools = async function () {
+  await import("./utils/windowTooling").then(mod => {
+    console.log("*** DEV TOOLS loaded ***");
+    console.log("mod", mod);
+  });
+};
 
 function Fallback({
   error,
