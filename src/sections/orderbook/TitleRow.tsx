@@ -9,12 +9,19 @@ interface TitleRowProps {
 
 const Label = styled.div`
   flex: 1;
+  text-align: center;
+  &:first-child {
+    text-align: left;
+  }
+  &:last-child {
+    text-align: right;
+  }
 `;
 
 const TitleRow: FunctionComponent<TitleRowProps> = ({ titles }) => {
   return (
     <Container data-testid="title-row">
-      {titles.map(title => (
+      {titles.map((title, index) => (
         <Label key={title}>
           <Text variant="textXs" color="secondaryLink">
             {title}

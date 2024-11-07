@@ -13,6 +13,18 @@ interface PriceLevelRowProps {
 
 const Label = styled.div`
   flex: 1;
+  text-align: center;
+  &:first-child {
+    text-align: left;
+  }
+  &:last-child {
+    text-align: right;
+  }
+`;
+
+const Currency = styled.span`
+  color: #ffffff89;
+  margin-right: 2px;
 `;
 
 const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
@@ -30,13 +42,19 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
     >
       <>
         <Label>
-          <Text variant="textNumMd">${price}</Text>
+          <Text variant="textNumMd">
+            <Currency>$</Currency>
+            {price}
+          </Text>
         </Label>
         <Label>
           <Text variant="textNumMd">{size}</Text>
         </Label>
         <Label>
-          <Text variant="textNumMd">${total}</Text>
+          <Text variant="textNumMd">
+            <Currency>$</Currency>
+            {total}
+          </Text>
         </Label>
       </>
     </PriceLevelContainer>
