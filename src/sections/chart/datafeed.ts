@@ -7,11 +7,6 @@ import { subscribeOnStream, unsubscribeFromStream } from "./streaming.js";
 const API_ENDPOINT =
   window.location.protocol + config.VITE_API_URL + "/tradingview";
 
-console.log("API_ENDPOINT", API_ENDPOINT);
-console.log("API_ENDPOINT", API_ENDPOINT);
-console.log("API_ENDPOINT", API_ENDPOINT);
-console.log("API_ENDPOINT", API_ENDPOINT);
-
 // Use it to keep a record of the most recent bar on the chart
 const lastBarsCache = new Map();
 

@@ -11,3 +11,11 @@ export const marketsIcons: {
   "WTXUSDC.P": { icon: oilIcon },
   default: { icon: infoIcon },
 };
+
+export const marketPriority: {
+  [key: string]: number;
+} = {
+  "BTCUSDC.P": 100,
+  "ETHUSDC.P": 100,
+  "WTXUSDC.P": 1000,
+};

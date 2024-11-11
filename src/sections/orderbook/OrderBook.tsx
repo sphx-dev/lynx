@@ -158,7 +158,6 @@ const useOrderBook = (records: number) => {
         `${BASE_API}/orderbook/?ticker=${selectedMarket?.ticker}`
       );
       const data = await res.json();
-      console.log("ORDERBOOK", data);
 
       const bids = orderToState(data?.bids?.slice(0, records) ?? []);
       const asks = asksToState(

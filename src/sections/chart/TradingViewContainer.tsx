@@ -40,10 +40,10 @@ const getLanguageFromURL = (): LanguageCode | null => {
 };
 
 export const TradingViewContainer = () => {
-  const { selectedMarket, symbol } = useMarkets();
+  const { symbol } = useMarkets();
   // const marketId = selectedMarket?.baseAsset;
   const marketId = symbol;
-  console.log("MARKET ID", selectedMarket, marketId);
+
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 

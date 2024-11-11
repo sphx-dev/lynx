@@ -3,7 +3,7 @@ import { Market } from "../../proto-codecs/codegen/sphx/order/market";
 import { getAllMarkets } from "../utils/queryMarkets";
 import { useEffect, useMemo } from "react";
 import { useQuery } from "react-query";
-import { marketsIcons } from "@/constants/marketsIcons";
+import { marketPriority, marketsIcons } from "@/constants/marketsIcons";
 
 export const useMarkets = () => {
   const { markets, selectedMarket, setMarkets, setMarketId } =
@@ -11,7 +11,15 @@ export const useMarkets = () => {
 
   const { data } = useQuery("markets", getAllMarkets, { staleTime: Infinity });
   useEffect(() => {
-    setMarkets(data?.markets ?? []);
+    let m: Market[] = [];
+    if (data?.markets) {
+      m = data.markets.toSorted((a, b) => {
+        return (
+          (marketPriority[b?.ticker] ?? 0) - (marketPriority[a?.ticker] ?? 0)
+        );
+      });
+    }
+    setMarkets(m);
   }, [data, setMarkets]);
 
   const { icon } = useMemo(() => {

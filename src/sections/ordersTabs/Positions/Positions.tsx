@@ -19,7 +19,7 @@ const Positions = () => {
   const { isConnected } = useChainCosmoshub();
 
   const { data } = usePositions();
-  console.log("positions raw", data?.positions);
+
   const positions = useMemo(() => {
     // TODO: Filter out closed positions by call params when implemented in chain
     return (data?.positions || []).filter(
