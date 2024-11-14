@@ -68,6 +68,9 @@ const StyledButton = styled.button<CssProps>`
   &:active {
     transform: scale(0.95);
   }
+  &:disabled {
+    opacity: 0.7;
+  }
 `;
 const StyledWrapper = styled.span<Partial<CssProps>>`
   border: 1px solid rgba(255, 255, 255, 0.1);

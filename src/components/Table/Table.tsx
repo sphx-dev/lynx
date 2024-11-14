@@ -29,7 +29,8 @@ const StyledTable = styled.table`
     top: -1px;
     border: none;
     tr th {
-      padding: 8px 25px;
+      padding: 8px 2px;
+      white-space: nowrap;
       &:first-child {
         text-align: left;
         padding-left: 8px;
@@ -48,7 +49,8 @@ const StyledTable = styled.table`
         text-align: left;
       }
       text-align: center;
-      padding: 8px;
+      padding: 8px 2px;
+      white-space: nowrap;
     }
   }
 `;

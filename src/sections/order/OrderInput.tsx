@@ -8,7 +8,7 @@ import TabButton from "../../components/TabButton";
 import useTheme from "../../hooks/useTheme";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { errorAlert, successAlert } from "../../utils/alerts";
+import { errorAlert, promiseAlert } from "../../utils/alerts";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
@@ -31,6 +31,7 @@ import { useBalance } from "@/hooks/useBalance";
 import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { motion, AnimatePresence } from "framer-motion";
 import { PRECISION } from "@/constants";
+import styled from "styled-components";
 
 const options: [
   { label: string; value: OrderType },
@@ -82,6 +83,7 @@ function OrderInput() {
     setValue,
     watch,
     formState: { errors },
+    getValues,
   } = useForm<MarketOrderForm>({
     defaultValues,
     resolver: yupResolver<any>(schema()),
@@ -146,40 +148,47 @@ function OrderInput() {
       if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
         setIsPlacingOrder(true);
 
-        placeMarketOrder({
-          address,
-          marginAccountAddress: selectedAddress,
-          orderId: BigInt(Date.now() * 1000),
-          side: sideValue,
-          quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
-          leverage: BigInt(values.leverage),
-          stopLoss: stopLossValue,
-          takeProfit: takeProfitValue,
-          marketId: BigInt(marketId),
-          onSuccess: successAlert,
-          onError: errorAlert,
-        }).finally(() => {
-          setIsPlacingOrder(false);
-        });
+        promiseAlert(
+          placeMarketOrder({
+            address,
+            marginAccountAddress: selectedAddress,
+            orderId: BigInt(Date.now() * 1000),
+            side: sideValue,
+            quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
+            leverage: BigInt(values.leverage),
+            stopLoss: stopLossValue,
+            takeProfit: takeProfitValue,
+            marketId: BigInt(marketId),
+          }).finally(() => {
+            setIsPlacingOrder(false);
+          }),
+          <div>{t("waitingForApproval")}</div>,
+          <div>{t("orderPlacedSuccess")}</div>,
+          (txt: string) => <div>{txt}</div>
+        );
       }
       if (values.orderType === OrderType.ORDER_TYPE_LIMIT) {
         setIsPlacingOrder(true);
-        placeLimitOrder({
-          address,
-          marginAccountAddress: selectedAddress,
-          orderId: BigInt(Date.now() * 1000),
-          side: sideValue,
-          quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
-          price: BigInt((Number(values.price) * PRECISION).toFixed(0)),
-          leverage: BigInt(values.leverage),
-          stopLoss: stopLossValue,
-          takeProfit: takeProfitValue,
-          marketId: BigInt(marketId),
-          onSuccess: successAlert,
-          onError: errorAlert,
-        }).finally(() => {
-          setIsPlacingOrder(false);
-        });
+
+        promiseAlert(
+          placeLimitOrder({
+            address,
+            marginAccountAddress: selectedAddress,
+            orderId: BigInt(Date.now() * 1000),
+            side: sideValue,
+            quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
+            price: BigInt((Number(values.price) * PRECISION).toFixed(0)),
+            leverage: BigInt(values.leverage),
+            stopLoss: stopLossValue,
+            takeProfit: takeProfitValue,
+            marketId: BigInt(marketId),
+          }).finally(() => {
+            setIsPlacingOrder(false);
+          }),
+          <div>{t("waitingForApproval")}</div>,
+          () => <div>{t("orderPlacedSuccess")}</div>,
+          (txt: string) => <div>{txt}</div>
+        );
       }
     } catch (error) {
       console.error(error);
@@ -187,6 +196,14 @@ function OrderInput() {
       errorAlert("Error placing order");
     }
   };
+
+  const orderTotalValue =
+    Number(getValues().volume) *
+    Number(getValues().price) *
+    PRECISION *
+    getValues().leverage;
+
+  const insufficientFunds = orderTotalValue > (amount ?? 0);
 
   return (
     <Surface
@@ -206,9 +223,9 @@ function OrderInput() {
               <Group align="center" position="apart">
                 {!isConnected && (
                   <Stack spacing={2}>
-                    <Text variant="text2Xs">No wallet connected</Text>
+                    <Text variant="text2Xs">{t("noWalletConnected")}</Text>
                     <Text variant="text2Xs" color="primaryLink">
-                      Connect wallet to deposit margin
+                      {t("connectWalletToDeposit")}
                     </Text>
                   </Stack>
                 )}
@@ -377,12 +394,19 @@ function OrderInput() {
                         !amount ? (
                           <PlaceOrderMessage />
                         ) : (
-                          <PlaceOrderButton
-                            $isBuy={isBuyPosition}
-                            disabled={isPlacingOrder}
-                          >
-                            {t("placeOrder")}
-                          </PlaceOrderButton>
+                          <>
+                            <PlaceOrderButton
+                              $isBuy={isBuyPosition}
+                              disabled={isPlacingOrder || insufficientFunds}
+                            >
+                              {t("placeOrder")}
+                            </PlaceOrderButton>
+                            {insufficientFunds ? (
+                              <WarnInfoText>
+                                {t("insufficientBalanceInAccount")}
+                              </WarnInfoText>
+                            ) : null}
+                          </>
                         )}
                       </>
                     )}
@@ -402,3 +426,8 @@ function OrderInput() {
 }
 
 export default OrderInput;
+
+const WarnInfoText = styled.p`
+  ${({ theme }) => theme.fonts.typography.textSm};
+  color: ${({ theme }) => theme.colors.selectedTheme.text.secondaryActive};
+`;

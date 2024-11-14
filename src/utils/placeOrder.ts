@@ -1,3 +1,4 @@
+import { PRECISION } from "@/constants";
 import { sphx } from "../../proto-codecs";
 
 import {
@@ -22,9 +23,6 @@ export type PlaceMarketOrderInChainParams = {
   takeProfit?: bigint;
   leverage: bigint;
   marketId: bigint;
-
-  onSuccess: (msg: string) => void;
-  onError: (msg: string) => void;
 };
 
 export type PlaceLimitOrderInChainParams = {
@@ -39,9 +37,6 @@ export type PlaceLimitOrderInChainParams = {
   takeProfit?: bigint;
   leverage: bigint;
   marketId: bigint;
-
-  onSuccess: (msg: string) => void;
-  onError: (msg: string) => void;
 };
 
 export const placeMarketOrderInChain = async ({
@@ -55,14 +50,130 @@ export const placeMarketOrderInChain = async ({
   takeProfit,
   leverage,
   marketId,
-  onSuccess,
-  onError,
 }: PlaceMarketOrderInChainParams) => {
-  if (!address) {
-    console.error("Empty address");
-    return;
-  }
+  const ordersMessage = composeMarketOrderMessages(
+    address,
+    marginAccountAddress,
+    orderId,
+    side,
+    quantity,
+    leverage,
+    marketId,
+    takeProfit,
+    stopLoss
+  );
 
+  try {
+    const signingClient = await getSigningStargateOrderClient();
+    return await signingClient?.signAndBroadcast(
+      address,
+      ordersMessage,
+      composeFee(),
+      `Market Order ${Number(quantity) / PRECISION} leverage:${leverage}x${
+        takeProfit && stopLoss
+          ? ` (tp: ${Number(takeProfit) / PRECISION}, sl: ${
+              Number(stopLoss) / PRECISION
+            })`
+          : ""
+      }`
+    );
+  } catch (err) {
+    return Promise.reject(errorPlaceOrder);
+  }
+};
+
+export const placeLimitOrderInChain = async ({
+  address,
+  marginAccountAddress,
+  orderId,
+  side,
+  quantity,
+  price,
+  stopLoss,
+  takeProfit,
+  leverage,
+  marketId,
+}: PlaceLimitOrderInChainParams) => {
+  const orderMessages = composeLimitOrderMessages({
+    address,
+    marginAccountAddress,
+    orderId,
+    side,
+    quantity,
+    price,
+    leverage,
+    marketId,
+    takeProfit,
+    stopLoss,
+  });
+
+  const signingClient = await getSigningStargateOrderClient();
+  try {
+    const response = await signingClient?.signAndBroadcast(
+      address,
+      orderMessages,
+      composeFee(),
+      `Limit Order ${Number(quantity) / PRECISION} at ${
+        Number(price) / PRECISION
+      }USDC leverage:${leverage}x${
+        takeProfit && stopLoss
+          ? ` (tp: ${Number(takeProfit) / PRECISION}, sl: ${
+              Number(stopLoss) / PRECISION
+            })`
+          : ""
+      }`
+    );
+
+    if (response.code !== 0) {
+      return Promise.reject(
+        getMessageFromCode(response.code, response?.rawLog)
+      );
+    }
+
+    return response;
+  } catch (err) {
+    return Promise.reject(errorPlaceOrder);
+  }
+};
+
+export const cancelOrderInChain = async ({
+  address,
+  orderId,
+  memo,
+}: {
+  address: string;
+  orderId: OrderId;
+  memo: string;
+}) => {
+  const message = sphx.order.MessageComposer.withTypeUrl.cancelOrder({
+    user: address,
+    orderId,
+  });
+
+  const signingClient = await getSigningStargateOrderClient();
+  const response = await signingClient?.signAndBroadcast(
+    address,
+    [message],
+    composeFee(),
+    memo
+  );
+
+  console.log("TxResponse CANCEL", response);
+
+  return response;
+};
+
+function composeMarketOrderMessages(
+  address: string,
+  marginAccountAddress: string,
+  orderId: bigint,
+  side: OrderSide,
+  quantity: bigint,
+  leverage: bigint,
+  marketId: bigint,
+  takeProfit: bigint | undefined,
+  stopLoss: bigint | undefined
+) {
   const ordersMessage = [
     sphx.order.MessageComposer.withTypeUrl.placeOrder({
       user: address,
@@ -95,7 +206,7 @@ export const placeMarketOrderInChain = async ({
           order: {
             id: {
               marginAccountAddress: marginAccountAddress,
-              number: ++orderId,
+              number: orderId + 1n,
             },
             accountId: address,
             // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
@@ -118,7 +229,7 @@ export const placeMarketOrderInChain = async ({
           order: {
             id: {
               marginAccountAddress: marginAccountAddress,
-              number: ++orderId,
+              number: orderId + 2n,
             },
             accountId: address,
             // OrderSide.ORDER_SIDE_BUY or OrderSide.ORDER_SIDE_SELL
@@ -138,53 +249,32 @@ export const placeMarketOrderInChain = async ({
       ]
     );
   }
+  return ordersMessage;
+}
 
-  try {
-    const signingClient = await getSigningStargateOrderClient();
-    const response = await signingClient?.signAndBroadcast(
-      address,
-      ordersMessage,
-      composeFee(),
-      `Market Order ${quantity} leverage:${leverage}x${
-        takeProfit && stopLoss ? ` (tp: ${takeProfit}, sl: ${stopLoss})` : ""
-      }`
-    );
-
-    if (response.code === 0) {
-      onSuccess("Order placed correctly");
-    } else {
-      onError(getMessageFromCode(response.code, response?.rawLog));
-    }
-    return response;
-  } catch (err) {
-    console.log("ERR", err);
-    onError?.("" + err);
-  }
-};
-
-export const placeLimitOrderInChain = async ({
+function composeLimitOrderMessages({
   address,
   marginAccountAddress,
   orderId,
   side,
   quantity,
   price,
-  stopLoss,
-  takeProfit,
   leverage,
   marketId,
-  onSuccess,
-  onError,
-}: PlaceLimitOrderInChainParams) => {
-  if (!address) {
-    console.error("Empty address");
-    return;
-  }
-  if (!marginAccountAddress) {
-    console.error("Empty marginAccountAddress");
-    return;
-  }
-
+  takeProfit,
+  stopLoss,
+}: {
+  address: string;
+  marginAccountAddress: string;
+  orderId: bigint;
+  side: OrderSide;
+  quantity: bigint;
+  price: bigint;
+  leverage: bigint;
+  marketId: bigint;
+  takeProfit: bigint | undefined;
+  stopLoss: bigint | undefined;
+}) {
   const orderMessages = [
     // Initial order to Buy/Sell
     sphx.order.MessageComposer.withTypeUrl.placeOrder({
@@ -218,7 +308,7 @@ export const placeLimitOrderInChain = async ({
           order: {
             id: {
               marginAccountAddress: marginAccountAddress,
-              number: ++orderId,
+              number: orderId + 1n,
             },
             accountId: address,
             // Oposit to the original order
@@ -244,7 +334,7 @@ export const placeLimitOrderInChain = async ({
           order: {
             id: {
               marginAccountAddress: marginAccountAddress,
-              number: ++orderId,
+              number: orderId + 2n,
             },
             accountId: address,
             // Oposit to the original order
@@ -267,34 +357,12 @@ export const placeLimitOrderInChain = async ({
       ]
     );
   }
+  return orderMessages;
+}
 
-  console.log("orderMessage", orderMessages);
+const errorPlaceOrder = "Error placing order. Please try again";
 
-  try {
-    const signingClient = await getSigningStargateOrderClient();
-    const response = await signingClient?.signAndBroadcast(
-      address,
-      orderMessages,
-      composeFee(),
-      `Limit Order ${quantity} at ${price}USDC  leverage:${leverage}x${
-        takeProfit && stopLoss ? ` (tp: ${takeProfit}, sl: ${stopLoss})` : ""
-      }`
-    );
-    console.log("TxResponse", response);
-    if (response.code === 0) {
-      onSuccess("Order placed correctly");
-    } else {
-      onError(getMessageFromCode(response.code, response?.rawLog));
-    }
-
-    return response;
-  } catch (err) {
-    console.log("ERR", err);
-    onError?.("" + err);
-  }
-};
-
-const getMessageFromCode = (code: number, rawLog = ""): string => {
+export const getMessageFromCode = (code: number, rawLog = ""): string => {
   // TODO: move this to translations
   switch (code) {
     case 1:
@@ -306,36 +374,11 @@ const getMessageFromCode = (code: number, rawLog = ""): string => {
       }
 
       return "Internal error";
+    case 1101:
+      return "Insufficient Funds: Spendable balance in margin account is less than required amount";
     case 111222:
       return "111222 error";
     default:
-      return "Error placing order. Please try again";
+      return errorPlaceOrder;
   }
-};
-
-export const cancelOrderInChain = async ({
-  address,
-  orderId,
-  memo,
-}: {
-  address: string;
-  orderId: OrderId;
-  memo: string;
-}) => {
-  const message = sphx.order.MessageComposer.withTypeUrl.cancelOrder({
-    user: address,
-    orderId,
-  });
-
-  const signingClient = await getSigningStargateOrderClient();
-  const response = await signingClient?.signAndBroadcast(
-    address,
-    [message],
-    composeFee(),
-    memo
-  );
-
-  console.log("TxResponse CANCEL", response);
-
-  return response;
 };

@@ -11,7 +11,7 @@ export const usePositions = (page: number = 0) => {
   const { selectedAddress } = useMarginAccount(address);
 
   const result = useQuery(
-    ["positions", address],
+    ["positions", address, selectedAddress, page],
     async () => {
       const response = await getPerpetualPositionsByAddress(selectedAddress!, {
         offset: BigInt(page) * PAGE_SIZE,

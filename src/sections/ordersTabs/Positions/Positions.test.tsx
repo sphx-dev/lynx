@@ -234,8 +234,6 @@ test("Closes position by Market", async () => {
       marginAccountAddress: "sphx1123456789",
       marketId: 1n,
       orderId: expect.any(BigInt),
-      onSuccess: expect.any(Function),
-      onError: expect.any(Function),
       quantity: 250n,
       side: 1,
     })
@@ -348,8 +346,6 @@ test("Closes position by Limit", async () => {
       marginAccountAddress: "sphx1123456789",
       marketId: 1n,
       orderId: expect.any(BigInt),
-      onSuccess: expect.any(Function),
-      onError: expect.any(Function),
       quantity: 2500n,
       side: 1,
     })

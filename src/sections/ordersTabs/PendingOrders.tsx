@@ -7,9 +7,11 @@ import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useCancelOrder, useOrders } from "../../hooks/useOrders";
 import {
+  Order,
   OrderId,
   OrderSide,
-} from "../../../proto-codecs/codegen/sphx/order/order";
+  OrderType,
+} from "proto-codecs/codegen/sphx/order/order";
 import { Side } from "../../types/order";
 import { useTranslation } from "react-i18next";
 import { successAlert } from "@/utils/alerts";
@@ -18,6 +20,7 @@ import dayjs from "dayjs";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
 import { PRECISION } from "@/constants";
+import { formatPrice } from "@/utils/format";
 
 const PendingOrders = () => {
   const { t } = useTranslation();
@@ -82,11 +85,15 @@ const PendingOrders = () => {
       ),
     },
     {
-      accessorKey: "price",
+      // accessorKey: "price",
+      accessorFn: (order: Order) => {
+        if (order.orderType === OrderType.ORDER_TYPE_MARKET) {
+          return t("marketPrice");
+        }
+        return formatPrice(Number(order.price) / PRECISION, 2);
+      },
       header: "Price",
-      cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
-      ),
+      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
     },
     {
       accessorKey: "leverage",

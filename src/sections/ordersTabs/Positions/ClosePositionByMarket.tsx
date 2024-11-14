@@ -6,7 +6,7 @@ import { PRECISION } from "@/constants";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarkets } from "@/hooks/useMarkets";
 import { useCreateOrder } from "@/hooks/useOrders";
-import { errorAlert, successAlert } from "@/utils/alerts";
+import { promiseAlert } from "@/utils/alerts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { OrderSide } from "proto-codecs/codegen/sphx/order/order";
 import {
@@ -60,27 +60,33 @@ export const ClosePositionByMarketModal = ({
   const { placeMarketOrder, marketStatus } = useCreateOrder();
   const closePosition = useCallback(
     (values: ClosePositionFromProps) => {
-      placeMarketOrder({
-        address: address!,
-        marginAccountAddress: position.marginAccount,
-        marketId: position.marketId,
-        orderId: BigInt(Date.now() * 1000),
-        side:
-          position.side === PositionSide.POSITION_SIDE_LONG
-            ? OrderSide.ORDER_SIDE_SELL
-            : OrderSide.ORDER_SIDE_BUY,
-        quantity: BigInt((Number(values.size) * PRECISION).toFixed(0)),
-        leverage: position.leverage,
-        onSuccess: msg => {
-          successAlert(msg);
+      promiseAlert(
+        placeMarketOrder({
+          address: address!,
+          marginAccountAddress: position.marginAccount,
+          marketId: position.marketId,
+          orderId: BigInt(Date.now() * 1000),
+          side:
+            position.side === PositionSide.POSITION_SIDE_LONG
+              ? OrderSide.ORDER_SIDE_SELL
+              : OrderSide.ORDER_SIDE_BUY,
+          quantity: BigInt((Number(values.size) * PRECISION).toFixed(0)),
+          leverage: position.leverage,
+          // onSuccess: (msg) => {
+          //   successAlert(msg);
+          // },
+          // onError: (msg) => {
+          //   errorAlert(msg);
+          // },
+        }).then(() => {
           onClose();
-        },
-        onError: msg => {
-          errorAlert(msg);
-        },
-      });
+        }),
+        <div>{t("waitingForApproval")}</div>,
+        () => <div>{t("orderPlacedSuccess")}</div>,
+        (txt: string) => <div>{txt}</div>
+      );
     },
-    [placeMarketOrder, position, address, onClose]
+    [placeMarketOrder, position, address, onClose, t]
   );
 
   return (

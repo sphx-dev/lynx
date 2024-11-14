@@ -104,7 +104,7 @@ describe("PendingOrders", () => {
     expect(screen.getByText("BTC/USD")).toBeInTheDocument();
     expect(screen.getByText("2021-10-01")).toBeInTheDocument();
     expect(screen.getByText("1")).toBeInTheDocument();
-    expect(screen.getByText("0.5")).toBeInTheDocument();
+    expect(screen.getByText("0.50")).toBeInTheDocument();
     expect(screen.getByText("x10")).toBeInTheDocument();
     expect(screen.getByText("buy")).toBeInTheDocument();
     expect(screen.getByText("Open")).toBeInTheDocument();

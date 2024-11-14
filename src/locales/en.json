@@ -54,5 +54,10 @@
   "ORDER_TYPE_TAKE_PROFIT_LIMIT": "TP Limit",
   "UNRECOGNIZED": "-",
   "cancel":"Cancel",
-  "confirm":"Confirm"
+  "confirm":"Confirm",
+  "noWalletConnected":"No wallet connected",
+  "connectWalletToDeposit":"Connect wallet to deposit margin",
+  "orderPlacedSuccess":"Order placed successfully",
+  "waitingForApproval":"Waiting for approval",
+  "insufficientBalanceInAccount": "Your margin account balance is insufficient for this action."
 }
