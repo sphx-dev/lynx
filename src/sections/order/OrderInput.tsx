@@ -159,9 +159,16 @@ function OrderInput() {
             stopLoss: stopLossValue,
             takeProfit: takeProfitValue,
             marketId: BigInt(marketId),
-          }).finally(() => {
-            setIsPlacingOrder(false);
-          }),
+          })
+            .then(() => {
+              setValue("price", "");
+              setValue("volume", "");
+              setValue("takeProfit", "");
+              setValue("stopLoss", "");
+            })
+            .finally(() => {
+              setIsPlacingOrder(false);
+            }),
           <div>{t("waitingForApproval")}</div>,
           <div>{t("orderPlacedSuccess")}</div>,
           (txt: string) => <div>{txt}</div>
@@ -182,9 +189,16 @@ function OrderInput() {
             stopLoss: stopLossValue,
             takeProfit: takeProfitValue,
             marketId: BigInt(marketId),
-          }).finally(() => {
-            setIsPlacingOrder(false);
-          }),
+          })
+            .then(() => {
+              setValue("price", "");
+              setValue("volume", "");
+              setValue("takeProfit", "");
+              setValue("stopLoss", "");
+            })
+            .finally(() => {
+              setIsPlacingOrder(false);
+            }),
           <div>{t("waitingForApproval")}</div>,
           () => <div>{t("orderPlacedSuccess")}</div>,
           (txt: string) => <div>{txt}</div>

@@ -22,6 +22,9 @@ function handleStreamingData(data: any) {
 
   const lastDailyBar = subscriptionItem.lastDailyBar;
   const nextDailyBarTime = getNextDailyBarTime(lastDailyBar.time);
+  console.log("--------------tradeTime", new Date(tradeTime).toJSON());
+  console.log("----------LAST BAR TIME", new Date(lastDailyBar.time).toJSON());
+  console.log("----NEXT DAYLY BAR TIME", new Date(nextDailyBarTime).toJSON());
 
   let bar: any;
   if (tradeTime >= nextDailyBarTime) {

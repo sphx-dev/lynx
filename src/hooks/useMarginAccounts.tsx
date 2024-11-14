@@ -41,10 +41,9 @@ export const useMarginAccount = (owner: string | null | undefined) => {
       staleTime: 1000 * 60 * 60,
     }
   );
+
   useEffect(() => {
-    if (data) {
-      setMarginAccounts(data);
-    }
+    setMarginAccounts(data || []);
   }, [data, setMarginAccounts]);
 
   // Mutation for creating margin account

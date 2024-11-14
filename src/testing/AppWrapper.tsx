@@ -47,7 +47,14 @@ const queryClient = new QueryClient({
 export const AppWrapper = ({ children }: any) => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter
+        future={
+          {
+            // v7_startTransition: true,
+            // v7_relativeSplatPath: true,
+          }
+        }
+      >
         <QueryClientProvider client={queryClient}>
           <GrazProvider
             grazOptions={{

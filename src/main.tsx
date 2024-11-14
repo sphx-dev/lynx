@@ -71,7 +71,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       }}
     >
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter
+          future={{
+            v7_startTransition: false,
+            v7_relativeSplatPath: false,
+          }}
+        >
           <QueryClientProvider client={queryClient}>
             <GrazProvider
               grazOptions={{
