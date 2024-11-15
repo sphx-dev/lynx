@@ -22,9 +22,10 @@ function handleStreamingData(data: any) {
 
   const lastDailyBar = subscriptionItem.lastDailyBar;
   const nextDailyBarTime = getNextDailyBarTime(lastDailyBar.time);
-  console.log("--------------tradeTime", new Date(tradeTime).toJSON());
-  console.log("----------LAST BAR TIME", new Date(lastDailyBar.time).toJSON());
-  console.log("----NEXT DAYLY BAR TIME", new Date(nextDailyBarTime).toJSON());
+  // const nextDailyBarTime = getNextBarTime(lastDailyBar.time, globalResolution);
+  // console.log("--------------tradeTime", new Date(tradeTime).toJSON());
+  // console.log("----------LAST BAR TIME", new Date(lastDailyBar.time).toJSON());
+  // console.log("----NEXT DAYLY BAR TIME", new Date(nextDailyBarTime).toJSON());
 
   let bar: any;
   if (tradeTime >= nextDailyBarTime) {
@@ -53,15 +54,24 @@ function handleStreamingData(data: any) {
   channelToSubscription.set(channelString, subscriptionItem);
 }
 
-function startStreaming(retries = 3, delay = 3000) {
-  fetch(streamingUrl)
-    .then(response => {
-      console.log(response.body);
+let globalSymbol = "";
+let globalResolution = 1;
+function startStreaming(
+  retries = 3,
+  delay = 3000,
+  symbol: string,
+  resolution: number
+) {
+  globalSymbol = symbol;
+  globalResolution = resolution;
+  fetch(streamingUrl + `?symbol=${symbol}&resolution=${resolution}`)
+    .then((response) => {
+      // console.log(response.body);
       const reader = response.body?.getReader();
 
       streamData(reader, retries, delay);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(
         "[stream] Error fetching from the streaming endpoint:",
         error
@@ -85,7 +95,7 @@ function streamData(
       // Assuming the streaming data is separated by line breaks
       const dataStrings = new TextDecoder().decode(value).split("\n");
       // console.log("[stream] dataStrings:", dataStrings);
-      dataStrings.forEach(dataString => {
+      dataStrings.forEach((dataString) => {
         const trimmedDataString = dataString.trim();
         if (trimmedDataString) {
           try {
@@ -98,22 +108,34 @@ function streamData(
       });
 
       streamData(reader); // Continue processing the stream
+      //setTimeout(() => streamData(reader), 2000); // Continue processing the stream
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("[stream] Error reading from stream:", error);
-      attemptReconnect(retries, delay);
+      attemptReconnect(retries, delay, globalSymbol, globalResolution);
     });
 }
 
-function attemptReconnect(retriesLeft: any, delay: any) {
+function attemptReconnect(
+  retriesLeft: any,
+  delay: any,
+  symbol: string,
+  resolution: number
+) {
   if (retriesLeft > 0) {
     console.log(`[stream] Attempting to reconnect in ${delay}ms...`);
     setTimeout(() => {
-      startStreaming(retriesLeft - 1, delay);
+      startStreaming(retriesLeft - 1, delay, symbol, resolution);
     }, delay);
   } else {
     console.error("[stream] Maximum reconnection attempts reached.");
   }
+}
+
+function getNextBarTime(barTime: any, resolution: number) {
+  const date = new Date(barTime * 1000);
+  date.setSeconds(date.getTime() + resolution * 1000);
+  return date.getTime() / 1000;
 }
 
 function getNextDailyBarTime(barTime: any) {
@@ -147,9 +169,35 @@ export function subscribeOnStream(
     "[subscribeBars]: Subscribe to streaming. Channel:",
     channelString
   );
+  console.log(
+    "[subscribeBars]: \n",
+    "=================================================================\n",
+    "\n",
+    "symbolInfo:",
+    symbolInfo,
+    "\n",
+    "resolution:",
+    resolution,
+    "\n",
+    "onRealtimeCallback:",
+    !!onRealtimeCallback,
+    "\n",
+    "subscriberUID:",
+    subscriberUID,
+    "\n",
+    "onResetCacheNeededCallback:",
+    !!onResetCacheNeededCallback,
+    "\n",
+    "lastDailyBar:",
+    lastDailyBar,
+    "\n",
+    "\n",
+    "\n",
+    "=================================================================\n"
+  );
 
   // Start streaming when the first subscription is made
-  startStreaming();
+  startStreaming(3, 3000, channelString, resolution);
 }
 
 export function unsubscribeFromStream(subscriberUID: string) {

@@ -14,6 +14,7 @@ import { useQuery } from "react-query";
 import config from "@/config";
 import { asksToState, orderToState } from "./helpers";
 import styled from "styled-components";
+import { useLocalStreaming } from "../chart/localStreaming";
 
 interface OrderBookProps {
   windowWidth: number;
@@ -24,6 +25,7 @@ const records = 9;
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
   const containerRef = useRef(null);
+  const data = useLocalStreaming();
 
   const { data: book, isLoading } = useOrderBook(records);
 
@@ -67,6 +69,15 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
       <div style={{ textAlign: "center" }}>
         Bids: {book?.bids_size}, Asks: {book?.asks_size}
       </div>
+      <div style={{ textAlign: "center", fontSize: "14px" }}>
+        {data?.ticker}: {data?.p}
+      </div>
+      <div style={{ textAlign: "center", fontSize: "14px" }}>
+        {(new Date(data?.t * 1000).toJSON() || "")
+          .replace("T", " ")
+          .replace("Z", "")}
+      </div>
+      {/* <div style={{ textAlign: "center" }}>{JSON.stringify(data)}</div> */}
     </Container>
   );
 };
