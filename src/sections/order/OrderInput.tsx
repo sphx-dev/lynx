@@ -290,6 +290,7 @@ function OrderInput() {
                         type="number"
                         value={watch("price")}
                         error={errors.price?.message}
+                        autocomplete="off"
                       />
                     )}
                     <Input
@@ -300,6 +301,7 @@ function OrderInput() {
                       type="number"
                       label="Size"
                       rightSide={selectedMarket?.baseAsset || ""}
+                      autocomplete="off"
                     />
                     <div style={{ position: "relative" }}>
                       <Group align="end">

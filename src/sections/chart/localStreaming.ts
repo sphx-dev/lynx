@@ -17,13 +17,13 @@ function startStreaming(
   resolution: number
 ) {
   fetch(streamingUrl)
-    .then((response) => {
+    .then(response => {
       // console.log(response.body);
       const reader = response.body?.getReader();
 
       streamData(reader, retries, delay);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(
         "[LOCAL stream] Error fetching from the streaming endpoint:",
         error
@@ -47,7 +47,7 @@ function streamData(
       // Assuming the streaming data is separated by line breaks
       const dataStrings = new TextDecoder().decode(value).split("\n");
       // console.log("[stream] dataStrings:", dataStrings);
-      dataStrings.forEach((dataString) => {
+      dataStrings.forEach(dataString => {
         const trimmedDataString = dataString.trim();
         if (trimmedDataString) {
           try {
@@ -62,7 +62,7 @@ function streamData(
       //   streamData(reader, 3, 3000); // Continue processing the stream
       setTimeout(() => streamData(reader, 3, 3000), 2000); // Continue processing the stream
     })
-    .catch((error) => {
+    .catch(error => {
       attemptReconnect(retries, delay, symbol, resolution);
     });
 }
@@ -93,7 +93,7 @@ export function useLocalStreaming() {
   const { selectedMarket } = useMarkets();
 
   useEffect(() => {
-    updateCallback = (data) => {
+    updateCallback = data => {
       if (data.id === selectedMarket?.ticker) {
         setData(data);
       }

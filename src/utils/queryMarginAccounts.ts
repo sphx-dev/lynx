@@ -47,7 +47,7 @@ export const createMarginAccount = async ({
   const txResponse = await signingClient.signAndBroadcast(
     address,
     [message],
-    composeFee(),
+    await composeFee(signingClient, address, [message]),
     memo
   );
 

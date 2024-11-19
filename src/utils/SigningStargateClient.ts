@@ -5,7 +5,7 @@ import {
   StdFee,
 } from "@cosmjs/stargate";
 import { getChain } from "../config";
-import { Registry } from "@cosmjs/proto-signing";
+import { EncodeObject, Registry } from "@cosmjs/proto-signing";
 import { registry as orderRegistry } from "../../proto-codecs/codegen/sphx/order/tx.registry";
 import { registry as marginaccRegistry } from "../../proto-codecs/codegen/sphx/marginacc/tx.registry";
 import { getOfflineSigner } from "./getOfflineSigner";
@@ -47,10 +47,21 @@ async function getSigningStargateClient(registry: Registry) {
   return signingClient;
 }
 
-export const composeFee = (): StdFee => {
+export const composeFee = async (
+  client: SigningStargateClient,
+  signingAddress: string,
+  messages: EncodeObject[],
+  memo?: string
+): Promise<StdFee> => {
+  const gasEstimation =
+    1 * (await client.simulate(signingAddress, messages, memo));
+
+  const gasString = Math.max(2 * gasEstimation, 200000).toFixed(0);
+
+  console.log("Gas estimation:", gasEstimation, gasString);
   const fee = {
     amount: [{ denom: DENOMUSDC, amount: "100000" }],
-    gas: "200000",
+    gas: gasString,
   };
   return fee;
 };

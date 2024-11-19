@@ -65,13 +65,13 @@ function startStreaming(
   globalSymbol = symbol;
   globalResolution = resolution;
   fetch(streamingUrl + `?symbol=${symbol}&resolution=${resolution}`)
-    .then((response) => {
+    .then(response => {
       // console.log(response.body);
       const reader = response.body?.getReader();
 
       streamData(reader, retries, delay);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(
         "[stream] Error fetching from the streaming endpoint:",
         error
@@ -95,7 +95,7 @@ function streamData(
       // Assuming the streaming data is separated by line breaks
       const dataStrings = new TextDecoder().decode(value).split("\n");
       // console.log("[stream] dataStrings:", dataStrings);
-      dataStrings.forEach((dataString) => {
+      dataStrings.forEach(dataString => {
         const trimmedDataString = dataString.trim();
         if (trimmedDataString) {
           try {
@@ -110,7 +110,7 @@ function streamData(
       streamData(reader); // Continue processing the stream
       //setTimeout(() => streamData(reader), 2000); // Continue processing the stream
     })
-    .catch((error) => {
+    .catch(error => {
       console.error("[stream] Error reading from stream:", error);
       attemptReconnect(retries, delay, globalSymbol, globalResolution);
     });
@@ -132,11 +132,11 @@ function attemptReconnect(
   }
 }
 
-function getNextBarTime(barTime: any, resolution: number) {
-  const date = new Date(barTime * 1000);
-  date.setSeconds(date.getTime() + resolution * 1000);
-  return date.getTime() / 1000;
-}
+// function getNextBarTime(barTime: any, resolution: number) {
+//   const date = new Date(barTime * 1000);
+//   date.setSeconds(date.getTime() + resolution * 1000);
+//   return date.getTime() / 1000;
+// }
 
 function getNextDailyBarTime(barTime: any) {
   const date = new Date(barTime * 1000);

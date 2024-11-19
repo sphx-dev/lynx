@@ -68,7 +68,7 @@ export const placeMarketOrderInChain = async ({
     return await signingClient?.signAndBroadcast(
       address,
       ordersMessage,
-      composeFee(),
+      await composeFee(signingClient, address, ordersMessage),
       `Market Order ${Number(quantity) / PRECISION} leverage:${leverage}x${
         takeProfit && stopLoss
           ? ` (tp: ${Number(takeProfit) / PRECISION}, sl: ${
@@ -112,7 +112,7 @@ export const placeLimitOrderInChain = async ({
     const response = await signingClient?.signAndBroadcast(
       address,
       orderMessages,
-      composeFee(),
+      await composeFee(signingClient, address, orderMessages),
       `Limit Order ${Number(quantity) / PRECISION} at ${
         Number(price) / PRECISION
       }USDC leverage:${leverage}x${
@@ -151,16 +151,27 @@ export const cancelOrderInChain = async ({
   });
 
   const signingClient = await getSigningStargateOrderClient();
-  const response = await signingClient?.signAndBroadcast(
-    address,
-    [message],
-    composeFee(),
-    memo
-  );
+  try {
+    const response = await signingClient?.signAndBroadcast(
+      address,
+      [message],
+      await composeFee(signingClient, address, [message]),
+      memo
+    );
 
-  console.log("TxResponse CANCEL", response);
+    console.log("TxResponse CANCEL", response);
 
-  return response;
+    if (response.code !== 0) {
+      return Promise.reject(
+        getMessageFromCode(response.code, response?.rawLog)
+      );
+    }
+
+    return response;
+  } catch (err) {
+    console.error(err);
+    return Promise.reject(errorCancelingOrder);
+  }
 };
 
 function composeMarketOrderMessages(
@@ -360,10 +371,12 @@ function composeLimitOrderMessages({
   return orderMessages;
 }
 
+const errorCancelingOrder = "Error canceling order. Please try again";
 const errorPlaceOrder = "Error placing order. Please try again";
 
 export const getMessageFromCode = (code: number, rawLog = ""): string => {
   // TODO: move this to translations
+  console.log("getMessageFromCode", code, rawLog);
   switch (code) {
     case 1:
       if (rawLog.includes("balance")) {
@@ -374,6 +387,8 @@ export const getMessageFromCode = (code: number, rawLog = ""): string => {
       }
 
       return "Internal error";
+    case 11:
+      return "Out of gas";
     case 1101:
       return "Insufficient Funds: Spendable balance in margin account is less than required amount";
     case 111222:
