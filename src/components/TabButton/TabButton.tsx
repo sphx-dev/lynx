@@ -19,6 +19,11 @@ export const TabButton = styled.button<Props>`
   padding: 14px 20px;
   color: ${({ theme }) => getThemeColors(theme).text.primary};
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 1px solid
+      ${({ theme }) => getThemeColors(theme).input.primary.border.focused};
+  }
 `;
 
 export default TabButton;

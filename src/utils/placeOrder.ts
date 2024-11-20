@@ -63,19 +63,24 @@ export const placeMarketOrderInChain = async ({
     stopLoss
   );
 
+  let memo = `Market Order `;
+  memo += (side === OrderSide.ORDER_SIDE_BUY ? "BUY" : "SELL") + " ";
+  memo += Number(quantity) / PRECISION + " ";
+  memo += `leverage:${leverage}x`;
+  memo +=
+    takeProfit && stopLoss
+      ? ` (tp: ${Number(takeProfit) / PRECISION}, sl: ${
+          Number(stopLoss) / PRECISION
+        })`
+      : "";
+
   try {
     const signingClient = await getSigningStargateOrderClient();
     return await signingClient?.signAndBroadcast(
       address,
       ordersMessage,
       await composeFee(signingClient, address, ordersMessage),
-      `Market Order ${Number(quantity) / PRECISION} leverage:${leverage}x${
-        takeProfit && stopLoss
-          ? ` (tp: ${Number(takeProfit) / PRECISION}, sl: ${
-              Number(stopLoss) / PRECISION
-            })`
-          : ""
-      }`
+      memo
     );
   } catch (err) {
     return Promise.reject(errorPlaceOrder);
@@ -107,21 +112,25 @@ export const placeLimitOrderInChain = async ({
     stopLoss,
   });
 
+  let memo = `Limit Order `;
+  memo += (side === OrderSide.ORDER_SIDE_BUY ? "BUY" : "SELL") + " ";
+  memo += Number(quantity) / PRECISION + " at ";
+  memo += Number(price) / PRECISION + "USDC ";
+  memo += `leverage:${leverage}x`;
+  memo +=
+    takeProfit && stopLoss
+      ? ` (tp: ${Number(takeProfit) / PRECISION}, sl: ${
+          Number(stopLoss) / PRECISION
+        })`
+      : "";
+
   const signingClient = await getSigningStargateOrderClient();
   try {
     const response = await signingClient?.signAndBroadcast(
       address,
       orderMessages,
       await composeFee(signingClient, address, orderMessages),
-      `Limit Order ${Number(quantity) / PRECISION} at ${
-        Number(price) / PRECISION
-      }USDC leverage:${leverage}x${
-        takeProfit && stopLoss
-          ? ` (tp: ${Number(takeProfit) / PRECISION}, sl: ${
-              Number(stopLoss) / PRECISION
-            })`
-          : ""
-      }`
+      memo
     );
 
     if (response.code !== 0) {

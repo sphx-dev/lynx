@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 
-const StyledLabel = styled.label<{ $isActive?: boolean }>`
+const Radio = styled.button<{ $isActive?: boolean }>`
   ${({ theme, $isActive }) =>
     $isActive
       ? theme.fonts.typography.actionSmBold
@@ -14,30 +14,20 @@ const StyledLabel = styled.label<{ $isActive?: boolean }>`
       : getThemeColors(theme).text.secondary};
   background-color: ${({ theme, $isActive }) =>
     $isActive ? getThemeColors(theme).background.button : "transparent"};
-  border: ${({ theme, $isActive }) =>
-    $isActive && `1px solid ${getThemeColors(theme).border.default}`};
-  padding: 5px 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ theme, $isActive }) =>
+    $isActive ? `${getThemeColors(theme).border.default}` : "transparent"};
+  padding: 4px 0px;
   flex: 1;
   text-align: center;
   cursor: pointer;
-`;
 
-const Radio = (props: any) => {
-  return (
-    <StyledLabel htmlFor={props.label} $isActive={props.isActive}>
-      {props.label}
-      <input
-        id={props.label}
-        style={{ width: 0, height: 0 }}
-        name={props.name}
-        checked={props.checked}
-        type="radio"
-        onChange={props.onChange}
-        value={props.value}
-      />
-    </StyledLabel>
-  );
-};
+  &:focus-visible {
+    outline: 1px solid
+      ${({ theme }) => getThemeColors(theme).input.primary.border.focused};
+  }
+`;
 
 const Container = styled.div`
   border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
@@ -86,12 +76,14 @@ function Switcher<T>({
     <Container>
       {options.map(option => (
         <Radio
+          type="button"
           name={name}
           key={option.label}
-          {...option}
-          isActive={value === option.value}
-          onChange={() => handleChange(option.value)}
-        />
+          $isActive={value === option.value}
+          onClick={() => handleChange(option.value)}
+        >
+          {option.label}
+        </Radio>
       ))}
     </Container>
   );

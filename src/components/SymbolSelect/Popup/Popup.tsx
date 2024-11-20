@@ -23,6 +23,10 @@ const Trigger = styled.button`
   outline: none;
   display: block;
   width: 100%;
+  &:focus-visible {
+    outline: 1px solid
+      ${({ theme }) => getThemeColors(theme).input.primary.border.focused};
+  }
 `;
 
 const Popup: React.FC<CustomPopoverProps> = ({

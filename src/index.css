@@ -14,25 +14,31 @@ code {
 
 @font-face {
   font-family: "Poppins-Regular";
-  src: local("Poppins-Regular"), url("./assets/fonts/Poppins-Regular.ttf") format('truetype');
+  src: local("Poppins-Regular"),
+    url("./assets/fonts/Poppins-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "Poppins-Medium";
-  src: local("Poppins-Medium"), url("./assets/fonts/Poppins-Medium.ttf") format('truetype');
+  src: local("Poppins-Medium"),
+    url("./assets/fonts/Poppins-Medium.ttf") format("truetype");
 }
 @font-face {
   font-family: "Poppins-Bold";
-  src: local("Poppins-Bold"), url("./assets/fonts/Poppins-Bold.ttf") format('truetype');
+  src: local("Poppins-Bold"),
+    url("./assets/fonts/Poppins-Bold.ttf") format("truetype");
 }
 @font-face {
   font-family: "Poppins-SemiBold";
-  src: local("Poppins-SemiBold"), url("./assets/fonts/Poppins-SemiBold.ttf") format('truetype');
+  src: local("Poppins-SemiBold"),
+    url("./assets/fonts/Poppins-SemiBold.ttf") format("truetype");
 }
 @font-face {
   font-family: "RobotoMono-Regular";
-  src: local("RobotoMono-Regular"), url("./assets/fonts/RobotoMono-Regular.ttf") format('truetype');
+  src: local("RobotoMono-Regular"),
+    url("./assets/fonts/RobotoMono-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "RobotoMono-Bold";
-  src: local("RobotoMono-Bold"), url("./assets/fonts/RobotoMono-Bold.ttf") format('truetype');
+  src: local("RobotoMono-Bold"),
+    url("./assets/fonts/RobotoMono-Bold.ttf") format("truetype");
 }

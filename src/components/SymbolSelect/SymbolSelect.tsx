@@ -63,6 +63,7 @@ const SymbolContent = ({ close }: SymbolContentProps) => {
       <ul>
         {futures.map(item => (
           <MenuItem
+            tabIndex={0}
             key={item.ticker}
             onClick={() => {
               setMarketId(item.id);
@@ -122,6 +123,10 @@ const MenuItem = styled.li`
     background-color: ${({ theme }) =>
       getThemeColors(theme)?.input?.primary?.background?.hovered};
     color: ${({ theme }) => getThemeColors(theme)?.text?.primary};
+  }
+  &:focus-visible {
+    outline: 1px solid
+      ${({ theme }) => getThemeColors(theme)?.input?.primary?.border?.focused};
   }
 `;
 
