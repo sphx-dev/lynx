@@ -80,6 +80,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <QueryClientProvider client={queryClient}>
             <GrazProvider
               grazOptions={{
+                // TODO: Replace graz.sh for in house implementation
+                // @ts-ignore:next-line
                 chains: [getChain()],
               }}
             >

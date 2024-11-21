@@ -51,7 +51,7 @@ export const placeMarketOrderInChain = async ({
   leverage,
   marketId,
 }: PlaceMarketOrderInChainParams) => {
-  const ordersMessage = composeMarketOrderMessages(
+  const ordersMessages = composeMarketOrderMessages(
     address,
     marginAccountAddress,
     orderId,
@@ -78,8 +78,8 @@ export const placeMarketOrderInChain = async ({
     const signingClient = await getSigningStargateOrderClient();
     return await signingClient?.signAndBroadcast(
       address,
-      ordersMessage,
-      await composeFee(signingClient, address, ordersMessage),
+      ordersMessages,
+      await composeFee(signingClient, address, ordersMessages),
       memo
     );
   } catch (err) {
@@ -99,7 +99,7 @@ export const placeLimitOrderInChain = async ({
   leverage,
   marketId,
 }: PlaceLimitOrderInChainParams) => {
-  const orderMessages = composeLimitOrderMessages({
+  const ordersMessages = composeLimitOrderMessages({
     address,
     marginAccountAddress,
     orderId,
@@ -128,8 +128,8 @@ export const placeLimitOrderInChain = async ({
   try {
     const response = await signingClient?.signAndBroadcast(
       address,
-      orderMessages,
-      await composeFee(signingClient, address, orderMessages),
+      ordersMessages,
+      await composeFee(signingClient, address, ordersMessages),
       memo
     );
 

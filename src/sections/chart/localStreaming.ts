@@ -10,12 +10,16 @@ const streamingUrl =
 
 let updateCallback: (data: any) => void;
 
+let globalSymbol = "";
+let globalResolution = 1;
 function startStreaming(
   retries = 3,
   delay = 3000,
   symbol: string,
   resolution: number
 ) {
+  globalSymbol = symbol;
+  globalResolution = resolution;
   fetch(streamingUrl)
     .then(response => {
       // console.log(response.body);
@@ -63,7 +67,7 @@ function streamData(
       setTimeout(() => streamData(reader, 3, 3000), 2000); // Continue processing the stream
     })
     .catch(error => {
-      attemptReconnect(retries, delay, symbol, resolution);
+      attemptReconnect(retries, delay, globalSymbol, globalResolution);
     });
 }
 
@@ -99,7 +103,7 @@ export function useLocalStreaming() {
       }
     };
     setData({});
-    startStreaming(3, 3000, selectedMarket?.ticker, 1);
+    startStreaming(3, 3000, selectedMarket?.ticker!, 1);
   }, [selectedMarket, selectedMarket?.ticker]);
 
   return { ticker: selectedMarket?.ticker, ...data };

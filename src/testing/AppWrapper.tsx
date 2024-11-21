@@ -58,6 +58,8 @@ export const AppWrapper = ({ children }: any) => {
         <QueryClientProvider client={queryClient}>
           <GrazProvider
             grazOptions={{
+              // TODO: Replace graz.sh for in house implementation
+              // @ts-ignore:next-line
               chains: [sphxLocalChainInfo],
             }}
           >

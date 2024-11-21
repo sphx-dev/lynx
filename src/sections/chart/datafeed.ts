@@ -87,6 +87,10 @@ const datafeed = {
               close: data.c[i],
             });
           }
+
+          // TODO: remove this when the API /tradingview/history is fixed
+          bars.sort((a, b) => a.time - b.time);
+
           if (firstDataRequest) {
             lastBarsCache.set(symbolInfo.ticker, {
               ...bars[bars.length - 1],
