@@ -147,7 +147,7 @@ export const usePositionColumns = function (
         return (
           <div
             style={{
-              display: "flex",
+              display: "inline-flex",
               flexDirection: "column",
               gap: "2px",
               width: "75px",

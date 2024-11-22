@@ -86,7 +86,6 @@ function attemptReconnect(
 
 function handleStreamingData(data: any) {
   const { id, p, t } = data;
-  // console.log(`[LOCAL stream] Received data:`, id, p, t);
   if (!!id) {
     updateCallback?.({ id, p, t });
   }
