@@ -29,7 +29,7 @@ const Summary = () => {
     <Stack>
       <Label
         label="Total Fees"
-        value={formatNumber({ value: 2.21, after: " USDC" })}
+        value={formatNumber({ value: 2.21, after: " USD" })}
       />
       <Label label="Liquidation Price" />
       <Label label="Fill Price" />
@@ -40,7 +40,7 @@ const Summary = () => {
       /> */}
       <Label
         label="Available Margin"
-        value={amount ? (amount / PRECISION).toFixed(5) + " USDC" : ""}
+        value={amount ? (amount / PRECISION).toFixed(5) + " USD" : ""}
       />
     </Stack>
   );

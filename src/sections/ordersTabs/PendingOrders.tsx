@@ -31,10 +31,10 @@ const PendingOrders = () => {
   const marketMap = useMemo(() => {
     const map = new Map();
     markets.forEach(m => {
-      map.set(m.id, m.baseAsset + "/" + m.quoteAsset);
+      map.set(m.id, t(m.baseAsset) + "/" + t(m.quoteAsset));
     });
     return map;
-  }, [markets]);
+  }, [markets, t]);
 
   const [page, setPage] = useState<number>(0);
 

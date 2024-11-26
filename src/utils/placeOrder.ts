@@ -115,7 +115,7 @@ export const placeLimitOrderInChain = async ({
   let memo = `Limit Order `;
   memo += (side === OrderSide.ORDER_SIDE_BUY ? "BUY" : "SELL") + " ";
   memo += Number(quantity) / PRECISION + " at ";
-  memo += Number(price) / PRECISION + "USDC ";
+  memo += Number(price) / PRECISION + " USD ";
   memo += `leverage:${leverage}x`;
   memo +=
     takeProfit && stopLoss

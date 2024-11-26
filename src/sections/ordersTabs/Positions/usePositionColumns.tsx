@@ -9,11 +9,13 @@ import {
   PositionSide,
 } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import { PRECISION } from "@/constants";
+import { useTranslation } from "react-i18next";
 
 export const usePositionColumns = function (
   closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
   showTpSl: (position: PerpetualPosition) => void
 ) {
+  const { t } = useTranslation();
   const { themeColors } = UseTheme();
 
   const { markets } = useMarkets();
@@ -35,7 +37,7 @@ export const usePositionColumns = function (
       },
       cell: (props: any) => {
         const market = markets.find(m => m.id === props.getValue());
-        return <Text color="tertiary">{market?.ticker}</Text>;
+        return <Text color="tertiary">{t(market?.ticker || "")}</Text>;
       },
     },
     // {

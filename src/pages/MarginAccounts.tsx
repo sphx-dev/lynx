@@ -71,7 +71,7 @@ const MarginAccountsPage = () => {
             <label>Address:</label>
             <label>{address}</label>
             <label>
-              {balance && <>({Number(balance.amount) / PRECISION} usdc</>})
+              {balance && <>({Number(balance.amount) / PRECISION} usd</>})
             </label>
             <Button onClick={() => reconnect()}>Reconnect</Button>
           </RowContainer>
@@ -95,14 +95,14 @@ const MarginAccountsPage = () => {
                 <Button disabled>Creating...</Button>
               )}
               <Input
-                placeholder="10usdc"
+                placeholder="10usd"
                 type="number"
                 value={sendAmount}
                 onChange={event => {
                   setSendAmount((event.target as HTMLInputElement).value);
                 }}
               />
-              <label>{sendAmount} usdc</label>
+              <label>{sendAmount} usd</label>
               <Button
                 disabled={!canSend}
                 onClick={() => {

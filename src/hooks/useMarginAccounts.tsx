@@ -136,7 +136,7 @@ const getTextFromError = (message: string) => {
   if (
     message.includes("Send some tokens there before trying to query sequence")
   ) {
-    return "Seems like you’re using new wallet. You must have at least 0.01 USDC for transaction fee";
+    return "Seems like you’re using new wallet. You must have at least 0.01 USD for transaction fee";
   }
 
   return "Something went wrong. Please try again";

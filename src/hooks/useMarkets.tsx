@@ -31,6 +31,7 @@ export const useMarkets = () => {
   }, [selectedMarket]);
 
   window.marketId = selectedMarket?.id || 0n;
+
   return {
     markets,
     selectedMarket,

@@ -54,7 +54,7 @@ export const MarginAccSelector = ({
       let item = `Account #${account.id?.number}`;
       const balance = balances?.[index];
       if (balance && typeof balance?.amount === "number") {
-        item += ` (${balance?.amount / PRECISION} USDC)`;
+        item += ` (${balance?.amount / PRECISION} USD)`;
       }
       return item;
     });

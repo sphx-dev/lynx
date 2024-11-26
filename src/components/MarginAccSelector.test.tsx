@@ -66,8 +66,8 @@ describe("MarginAccSelector", () => {
     render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
     const button = screen.getByText("Account #1");
     fireEvent.click(button);
-    expect(screen.getByText("Account #1 (1 USDC)")).toBeInTheDocument();
-    expect(screen.getByText("Account #2 (2 USDC)")).toBeInTheDocument();
+    expect(screen.getByText("Account #1 (1 USD)")).toBeInTheDocument();
+    expect(screen.getByText("Account #2 (2 USD)")).toBeInTheDocument();
   });
 
   test("selects an account from the dropdown menu", () => {
@@ -76,7 +76,7 @@ describe("MarginAccSelector", () => {
     });
     const button = screen.getByText("Account #1");
     fireEvent.click(button);
-    const account2 = screen.getByText("Account #2 (2 USDC)");
+    const account2 = screen.getByText("Account #2 (2 USD)");
 
     fireEvent.click(account2);
     expect(mockSetSelectedIndex).toHaveBeenCalledWith(1);

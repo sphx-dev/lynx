@@ -39,10 +39,10 @@ describe("DepositForm", () => {
   it("renders the form correctly", () => {
     render(<DepositForm />, { wrapper: AppWrapper });
     expect(screen.getByText("Deposit to Margin Account")).toBeInTheDocument();
-    expect(screen.getByText("Availabe balance: 1000 USDC")).toBeInTheDocument();
+    expect(screen.getByText("Availabe balance: 1000 USD")).toBeInTheDocument();
     expect(screen.getByLabelText("Amount")).toBeInTheDocument();
     expect(screen.getByText("Margin Account #1")).toBeInTheDocument();
-    expect(screen.getByText("Balance: 500 USDC")).toBeInTheDocument();
+    expect(screen.getByText("Balance: 500 USD")).toBeInTheDocument();
   });
 
   it("handles form submission successfully", async () => {

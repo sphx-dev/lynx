@@ -336,19 +336,11 @@ function OrderInput() {
                           </StyledButton>
                           <StyledButton
                             type="button"
-                            onClick={() => handleChangeLeverage(25)}
+                            onClick={() => handleChangeLeverage(10)}
                             // TODO: enable when leverage is supported
                             disabled
                           >
-                            25x
-                          </StyledButton>
-                          <StyledButton
-                            type="button"
-                            onClick={() => handleChangeLeverage(50)}
-                            // TODO: enable when leverage is supported
-                            disabled
-                          >
-                            50x
+                            10x
                           </StyledButton>
                         </Group>
                       </Group>

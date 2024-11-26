@@ -95,7 +95,7 @@ export const DepositForm = () => {
       <Header>Deposit to Margin Account</Header>
       <Divider />
       <FormRow>
-        <label>Availabe balance: {addressBalance} USDC</label>
+        <label>Availabe balance: {addressBalance} USD</label>
       </FormRow>
       <Divider />
       <FormRow>
@@ -117,7 +117,7 @@ export const DepositForm = () => {
         <StyledLabel title={selectedAccount?.address}>
           {reduceAddress(selectedAccount?.address)}
         </StyledLabel>
-        <label>Balance: {marginBalance} USDC</label>
+        <label>Balance: {marginBalance} USD</label>
       </FormRow>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <FormRow style={{ justifyContent: "space-around" }}>

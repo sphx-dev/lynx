@@ -88,11 +88,11 @@ export const WithdrawForm = () => {
 
       <FormRow style={{ display: "flex", justifyContent: "space-between" }}>
         <Label>Available Balance:</Label>
-        <Label>{marginBalance} USDC</Label>
+        <Label>{marginBalance} USD</Label>
       </FormRow>
       <FormRow style={{ display: "flex", justifyContent: "space-between" }}>
         <Label>Address Balance:</Label>
-        <Label>{addressBalance} USDC</Label>
+        <Label>{addressBalance} USD</Label>
       </FormRow>
       <FormRow style={{ display: "flex", justifyContent: "space-around" }}>
         <Button type="submit" disabled={!isSuccess || isSubmitting}>

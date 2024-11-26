@@ -59,5 +59,9 @@
   "connectWalletToDeposit":"Connect wallet to deposit margin",
   "orderPlacedSuccess":"Order placed successfully",
   "waitingForApproval":"Waiting for approval",
-  "insufficientBalanceInAccount": "Your margin account balance is insufficient for this action."
+  "insufficientBalanceInAccount": "Your margin account balance is insufficient for this action.",
+  "USDC": "USD",
+  "BTCUSDC.P": "BTCUSD.P",
+  "ETHUSDC.P": "ETHUSD.P",
+  "WTXUSDC.P": "WTXUSD.P"
 }
