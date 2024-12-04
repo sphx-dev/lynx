@@ -5,6 +5,9 @@ import Dashboard from "./pages/Dashboard";
 import { Navigate } from "react-router-dom";
 import MarginAccountsPage from "./pages/MarginAccounts";
 import MarketsPage from "./pages/Markets";
+import { Funding } from "./pages/DashboardSections/Funding";
+import { Orders } from "./pages/DashboardSections/Orders";
+import { Transfers } from "./pages/DashboardSections/Transfers";
 
 export const ROUTES = {
   futures: "futures",
@@ -14,6 +17,9 @@ export const ROUTES = {
   dashboard: "dashboard",
   marginAccounts: "accounts",
   markets: "markets",
+  dashboardFunding: "funding",
+  dashboardOrders: "orders",
+  dashboardTransfers: "transfers",
 };
 
 export const routes = [
@@ -28,6 +34,11 @@ export const routes = [
       {
         path: ROUTES.dashboard,
         element: <Dashboard />,
+        children: [
+          { path: ROUTES.dashboardFunding, element: <Funding /> },
+          { path: ROUTES.dashboardOrders, element: <Orders /> },
+          { path: ROUTES.dashboardTransfers, element: <Transfers /> },
+        ],
       },
       {
         path: ROUTES.exchange,

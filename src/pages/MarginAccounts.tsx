@@ -173,6 +173,7 @@ const Wrapper = styled.div`
   grid-template-rows: 1fr 5fr;
   min-height: calc(100vh - 28px - 100px);
   color: white;
+  gap: 16px;
 `;
 
 const RowContainer = styled.div`

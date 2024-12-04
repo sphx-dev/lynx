@@ -26,3 +26,6 @@ screen.getAllByQuerySelector = function (selector: string) {
   }
   return elements as HTMLElement[];
 };
+
+// Set the timezone to UTC for consistent tests
+process.env.TZ = "UTC";

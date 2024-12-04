@@ -13,11 +13,7 @@ describe("Header Component", () => {
   });
 
   it("should render the Nav component", () => {
-    const { getByRole } = render(
-      <AppWrapper>
-        <Header />
-      </AppWrapper>
-    );
+    const { getByRole } = render(<Header />, { wrapper: AppWrapper });
 
     // Check if the Nav component is rendered
     const nav = getByRole("navigation");

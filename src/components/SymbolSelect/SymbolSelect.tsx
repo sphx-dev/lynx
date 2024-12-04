@@ -1,5 +1,6 @@
 // TODO: clean up and redo the markup based on the new design
 
+import React from "react";
 import Popup from "./Popup/Popup";
 import Group from "../Group";
 import Text from "../Text";
@@ -65,31 +66,40 @@ const MenuItem = styled.li`
 `;
 
 const SymbolSelect = () => {
-  const { t } = useTranslation();
-
   const { selectedMarket, symbol, icon } = useMarkets();
 
   if (!selectedMarket) return null;
 
-  return (
-    <Popup
-      content={closePopup => <SymbolContent close={closePopup} />}
-      placement="bottom-start"
-    >
-      <Group
-        style={{ cursor: "pointer" }}
-        fluid
-        align="center"
-        position="apart"
-      >
-        <Group align="center">
-          <img src={icon} alt="pairIcon" width={30} />
-          <Text variant="textMd">{t(symbol || "")}</Text>
-        </Group>
-        <Icon icon="ChevronIcon" color="white" rotate="90deg" />
-      </Group>
-    </Popup>
-  );
+  return <SymbolSelectView icon={icon} symbol={symbol!} />;
 };
 
 export default SymbolSelect;
+const SymbolSelectView = React.memo(
+  ({ icon, symbol }: { icon: string; symbol: string }) => {
+    const { t } = useTranslation();
+    return (
+      <Popup
+        content={closePopup => <SymbolContent close={closePopup} />}
+        placement="bottom-start"
+      >
+        <Group
+          style={{ cursor: "pointer" }}
+          fluid
+          align="center"
+          position="apart"
+        >
+          <Group align="center">
+            <img
+              src={icon}
+              alt="pairIcon"
+              width={30}
+              style={{ minHeight: "30px" }}
+            />
+            <Text variant="textMd">{t(symbol || "---")}</Text>
+          </Group>
+          <Icon icon="ChevronIcon" color="white" rotate="90deg" />
+        </Group>
+      </Popup>
+    );
+  }
+);

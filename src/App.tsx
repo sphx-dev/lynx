@@ -7,11 +7,11 @@ import { ThemeProvider } from "styled-components";
 import Header from "./components/Header/Header";
 import Footer from "./sections/footer";
 import { Toaster } from "react-hot-toast";
-import { useGetAccountQuery } from "./utils/api/accountApi";
+
 import { useMediaQuery } from "react-responsive";
 import OnlyDesktopMessage from "./components/OnlyDesktopMessage";
 import { BREAK_POINTS } from "./constants";
-import { useChainCosmoshub } from "./hooks/useChainCosmoshub";
+// import { useChainCosmoshub } from "./hooks/useChainCosmoshub";
 import { Modal, useModalStore } from "./components/Modal/Modal";
 import { DepositForm } from "./components/Modal/DepositForm";
 import { WithdrawForm } from "./components/Modal/WithdrawForm";
@@ -30,9 +30,9 @@ const AnotherDevices = ({ children }: PropsWithChildren) => {
 };
 
 const AppInitializtion = ({ children }: PropsWithChildren) => {
-  const { isConnected } = useChainCosmoshub();
+  // const { isConnected } = useChainCosmoshub();
 
-  useGetAccountQuery(undefined, { skip: !isConnected });
+  // useGetAccountQuery(undefined, { skip: !isConnected });
 
   return children;
 };

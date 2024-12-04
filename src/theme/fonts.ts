@@ -14,6 +14,12 @@ const typography = {
     "font-weight": 700,
     "line-height": "18px",
   },
+  textLg: {
+    fontFamily: fontStyles.regular,
+    fontSize: "18px",
+    fontWeight: 400,
+    lineHeight: "24px",
+  },
   textMd: {
     fontFamily: fontStyles.regular,
     fontSize: "14px",

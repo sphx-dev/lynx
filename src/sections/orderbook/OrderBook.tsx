@@ -166,15 +166,19 @@ const useOrderBook = (records: number) => {
     queryKey: ["orderBook", selectedMarket?.ticker, records],
     queryFn: async () => {
       const res = await fetch(
-        `${BASE_API}/orderbook/?ticker=${selectedMarket?.ticker}`
+        `${BASE_API}/orderbook/?ticker=${selectedMarket?.ticker}`,
+        { credentials: "include" }
       );
       const data = await res.json();
 
       const bids = orderToState(data?.bids?.slice(0, records) ?? []);
       const asks = asksToState(
-        data?.asks?.slice(data?.asks?.length - records, data?.asks?.length) ??
-          []
+        data?.asks?.slice(
+          Math.max(0, data?.asks?.length - records),
+          data?.asks?.length
+        ) ?? []
       );
+
       const maxBid = bids.length ? bids[0].price : 0;
       const minAsk = asks.length ? asks[0].price : 0;
       const spread = Math.abs(maxBid - minAsk);

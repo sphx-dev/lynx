@@ -74,10 +74,9 @@ test("Renders empty table in Positions section", async () => {
   const { default: Positions } = await import("./Positions");
 
   render(<Positions />, { wrapper: AppWrapper });
-  act(() => {
-    // Connect wallet
-    screen.getByTestId("connect-test-button").click();
-  });
+
+  // Connect wallet
+  screen.getByTestId("connect-test-button").click();
 
   await screen.findByTestId("perpetual-positions-table-empty");
   const content = screen.getByTestId("perpetual-positions-table-empty");
@@ -114,10 +113,9 @@ test("Render Positions section properly", async () => {
   const { default: Positions } = await import("./Positions");
 
   render(<Positions />, { wrapper: AppWrapper });
-  act(() => {
-    // Connect wallet
-    screen.getByTestId("connect-test-button").click();
-  });
+
+  // Connect wallet
+  screen.getAllByTestId("connect-test-button")[0].click();
 
   await waitFor(
     () => {

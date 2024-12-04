@@ -9,6 +9,7 @@ import { MockKeplr } from "@keplr-wallet/provider-mock";
 import { sphxLocalChainInfo } from "../constants/chainInfo";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { BrowserRouter } from "react-router-dom";
+import { PropsWithChildren } from "react";
 
 const WalletExtensionMock = new MockKeplr(
   async () => {
@@ -44,16 +45,14 @@ const queryClient = new QueryClient({
   },
 });
 
-export const AppWrapper = ({ children }: any) => {
+export const AppWrapper = ({ children }: PropsWithChildren) => {
   return (
     <Provider store={store}>
       <BrowserRouter
-        future={
-          {
-            // v7_startTransition: true,
-            // v7_relativeSplatPath: true,
-          }
-        }
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
       >
         <QueryClientProvider client={queryClient}>
           <GrazProvider

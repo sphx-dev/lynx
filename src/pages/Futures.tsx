@@ -19,6 +19,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   min-height: calc(100vh - 28px - 100px);
+  gap: 16px;
 `;
 const Logo = () => {
   const { themeColors } = useTheme();
@@ -47,10 +48,7 @@ const Futures = () => {
   return (
     <Wrapper>
       <OrderInput />
-      <Stack
-        margin-top="100px"
-        style={{ marginTop: "-50px", paddingLeft: "16px" }}
-      >
+      <Stack margin-top="100px" style={{ marginTop: "-50px" }}>
         <PriceBorder />
         <Group style={{ flex: 1 }}>
           <Stack style={{ flex: 1 }} fullHeight>

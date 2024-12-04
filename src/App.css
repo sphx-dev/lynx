@@ -7,6 +7,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   background: center / cover no-repeat url("assets/glow-up.png"), #031a28 35% !important;
+  color: #e5e5e5;
 }
 
 .App {

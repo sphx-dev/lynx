@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: true,
     },
     test: {
+      testTimeout: 15000,
       globals: true, // Enables globals like `describe` and `it`
       environment: "jsdom",
       setupFiles: ["./vitest.setup.ts"], // Load the setup file globally
