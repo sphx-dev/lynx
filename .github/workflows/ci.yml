@@ -2,7 +2,7 @@ on: [pull_request]
 name: Continuous Integration
 jobs:
   build:
-    runs-on: arc-runner-set
+    runs-on: blacksmith-2vcpu-ubuntu-2204
     timeout-minutes: 15
     container:
       image: node:20
@@ -14,7 +14,7 @@ jobs:
       - name: Build
         run: yarn build_server && yarn build
   lint:
-    runs-on: arc-runner-set
+    runs-on: blacksmith-2vcpu-ubuntu-2204
     timeout-minutes: 15
     container:
       image: node:20
@@ -28,7 +28,7 @@ jobs:
     - name: Lint
       run: yarn lint
   test:
-    runs-on: arc-runner-set
+    runs-on: blacksmith-2vcpu-ubuntu-2204
     timeout-minutes: 15
     container:
       image: node:20
@@ -41,7 +41,7 @@ jobs:
       run: yarn test
   sonarcloud:
     name: SonarCloud
-    runs-on: arc-runner-set
+    runs-on: blacksmith-2vcpu-ubuntu-2204
     steps:
       - uses: actions/checkout@v4
         with:
