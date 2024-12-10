@@ -1,6 +1,6 @@
 import config from "@/config.js";
 import { useMarkets } from "@/hooks/useMarkets";
-import { useEffect, useState } from "react";
+import { create } from "zustand";
 // Assuming you're working in a browser environment that supports fetch and ReadableStream
 // const streamingUrl =
 //   "https://benchmarks.pyth.network/v1/shims/tradingview/streaming";
@@ -10,19 +10,12 @@ const streamingUrl =
 
 let updateCallback: (data: any) => void;
 
-let globalSymbol = "";
-let globalResolution = 1;
-function startStreaming(
-  retries = 3,
-  delay = 3000,
-  symbol: string,
-  resolution: number
-) {
-  globalSymbol = symbol;
-  globalResolution = resolution;
+let startStreamingTimes = 0;
+function startStreaming(retries = 3, delay = 3000) {
+  console.log("[LOCAL stream] Starting streaming... " + ++startStreamingTimes);
+
   fetch(streamingUrl)
     .then(response => {
-      // console.log(response.body);
       const reader = response.body?.getReader();
 
       streamData(reader, retries, delay);
@@ -50,7 +43,7 @@ function streamData(
 
       // Assuming the streaming data is separated by line breaks
       const dataStrings = new TextDecoder().decode(value).split("\n");
-      // console.log("[stream] dataStrings:", dataStrings);
+
       dataStrings.forEach(dataString => {
         const trimmedDataString = dataString.trim();
         if (trimmedDataString) {
@@ -63,23 +56,17 @@ function streamData(
         }
       });
 
-      //   streamData(reader, 3, 3000); // Continue processing the stream
       setTimeout(() => streamData(reader, 3, 3000), 2000); // Continue processing the stream
     })
     .catch(error => {
-      attemptReconnect(retries, delay, globalSymbol, globalResolution);
+      attemptReconnect(retries, delay);
     });
 }
 
-function attemptReconnect(
-  retriesLeft: any,
-  delay: any,
-  symbol: string,
-  resolution: number
-) {
+function attemptReconnect(retriesLeft: any, delay: any) {
   if (retriesLeft > 0) {
     setTimeout(() => {
-      startStreaming(retriesLeft - 1, delay, symbol, resolution);
+      startStreaming(retriesLeft - 1, delay);
     }, delay);
   }
 }
@@ -91,19 +78,67 @@ function handleStreamingData(data: any) {
   }
 }
 
-export function useLocalStreaming() {
-  const [data, setData] = useState<any>(null);
-  const { selectedMarket } = useMarkets();
-
-  useEffect(() => {
-    updateCallback = data => {
-      if (data.id === selectedMarket?.ticker) {
-        setData(data);
-      }
+const useStreamingData = create<{
+  info: {
+    [key: string]: {
+      ticker?: string;
+      p?: number;
+      t?: number;
+      id?: string;
     };
-    setData({});
-    startStreaming(3, 3000, selectedMarket?.ticker!, 1);
-  }, [selectedMarket, selectedMarket?.ticker]);
+  };
+  setInfo: (info: any) => void;
+  isStreaming: boolean;
+  setIsStreaming: (isStreaming: boolean) => void;
+  stream: () => void;
+}>((set, get) => ({
+  info: {},
+  setInfo: data => {
+    const currentinfo = get().info;
+    set({ info: { ...currentinfo, [data.id]: { ticker: data.id, ...data } } });
+  },
+  isStreaming: false,
+  setIsStreaming: isStreaming => set({ isStreaming }),
+  stream: () => {
+    // Execute only once
+    if (!get().isStreaming) {
+      updateCallback = data => {
+        get().setInfo(data);
+      };
+      startStreaming(3, 3000);
+      set({ isStreaming: true });
+    }
+  },
+}));
 
-  return { ticker: selectedMarket?.ticker, ...data };
+/**
+ *
+ * @returns {StreamDelta} - The streaming data for the selected market
+ *
+ * @typedef {Object} StreamDelta
+ * @property {string} ticker - The ticker of the selected market
+ * @property {number} p - The price of the selected market
+ * @property {number} t - The timestamp of the selected market
+ * @property {string} id - The id of the selected market
+ *
+ */
+export function useLocalStreaming() {
+  const { info, stream } = useStreamingData();
+  const { selectedMarket } = useMarkets();
+  stream();
+
+  return selectedMarket?.ticker ? info[selectedMarket?.ticker] : {};
+}
+
+/**
+ *
+ * @returns {StreamDeltaMap} - The streaming data for the All the available markets
+ *
+ * @typedef {Object.<string, StreamDelta> StreamDeltaMap
+ *
+ */
+export function useLocalStreamingData() {
+  const { info, stream } = useStreamingData();
+  stream();
+  return info;
 }

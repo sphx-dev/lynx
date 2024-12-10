@@ -8,7 +8,7 @@ import {
 import { mockColumns } from "../../sections/ordersTabs/constants";
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
-import { CSSProperties } from "react";
+import React, { CSSProperties } from "react";
 import Icon from "../Icon";
 import useTheme from "../../hooks/useTheme";
 interface ITableProps<T> {
@@ -90,19 +90,26 @@ const Table = <T extends object>({
       <thead style={headerStyle}>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header: any) => (
-              <th
-                onClick={header.column.getToggleSortingHandler()}
-                key={header.column?.id}
-              >
-                <StyledTh $canSort={header.column.getCanSort()}>
-                  {header.column.columnDef.header}
-                  {header.column.getCanSort() && (
-                    <Icon icon="SortIcon" color={themeColors.tertiary} />
-                  )}
-                </StyledTh>
-              </th>
-            ))}
+            {headerGroup.headers.map((header: any) => {
+              const HeaderWrapperComponent =
+                header.column.columnDef?.HeaderWrapperComponent ||
+                React.Fragment;
+              return (
+                <th
+                  onClick={header.column.getToggleSortingHandler()}
+                  key={header.column?.id}
+                >
+                  <StyledTh $canSort={header.column.getCanSort()}>
+                    <HeaderWrapperComponent>
+                      {header.column.columnDef.header}
+                      {header.column.getCanSort() && (
+                        <Icon icon="SortIcon" color={themeColors.tertiary} />
+                      )}
+                    </HeaderWrapperComponent>
+                  </StyledTh>
+                </th>
+              );
+            })}
           </tr>
         ))}
       </thead>

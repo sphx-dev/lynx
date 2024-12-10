@@ -68,5 +68,8 @@
   "USDC": "USD",
   "BTCUSDC.P": "BTCUSD.P",
   "ETHUSDC.P": "ETHUSD.P",
-  "WTXUSDC.P": "WTXUSD.P"
+  "WTXUSDC.P": "WTXUSD.P",
+  "loading": "Loading",
+  "noData": "No data",
+  "upnlHeaderInfo": "The Unrealized Profit and Loss displayed value is an estimation. Actual profit and loss are based on completed transactions. It does not affect how the margin rate is calculated."
 }

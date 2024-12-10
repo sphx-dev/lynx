@@ -44,6 +44,7 @@ const tabs = [
     content: <Trades />,
   },
 ];
+
 const Futures = () => {
   return (
     <Wrapper>

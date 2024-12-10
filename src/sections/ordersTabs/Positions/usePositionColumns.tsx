@@ -10,6 +10,9 @@ import {
 } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import { PRECISION } from "@/constants";
 import { useTranslation } from "react-i18next";
+import { Tooltip } from "react-tooltip";
+import React, { PropsWithChildren } from "react";
+import { useLocalStreamingData } from "@/sections/chart/localStreaming";
 
 export const usePositionColumns = function (
   closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
@@ -88,15 +91,61 @@ export const usePositionColumns = function (
       ),
     },
     {
-      accessorKey: "unrealizedPl",
-      header: "PNL",
-      cell: (props: any) => (
-        <Text color={getColorByPl(props.getValue())}>
-          {isNaN(props.getValue())
-            ? "-"
-            : formatNumber({ value: +props.getValue(), fixed: 2 })}
-        </Text>
-      ),
+      accessorKey: "unrealizedPnL",
+      HeaderWrapperComponent: React.memo(({ children }: PropsWithChildren) => {
+        return (
+          <>
+            <Tooltip
+              anchorSelect="#unrealizedPnLHeader"
+              style={{
+                backgroundColor: "#0a202c",
+                boxShadow: "0 0 15px #000, 0 0 2px #000",
+                fontWeight: "200",
+              }}
+            >
+              <div
+                style={{
+                  width: "250px",
+                  whiteSpace: "wrap",
+                  textAlign: "justify",
+                  fontSize: "12px",
+                }}
+              >
+                {t("upnlHeaderInfo")}
+              </div>
+            </Tooltip>
+            <span
+              id="unrealizedPnLHeader"
+              style={{
+                display: "inline-block",
+                cursor: "help",
+                borderBottom: "1px dotted",
+              }}
+            >
+              {children}
+            </span>
+          </>
+        );
+      }),
+      accessorFn: (row: any) => {
+        const market = markets.find(m => m.id === row.marketId);
+        let size = Number(row.size) / PRECISION;
+        let entryPrice = Number(row.entryPrice) / PRECISION;
+
+        return {
+          size,
+          entryPrice,
+          ticker: market?.ticker,
+        };
+      },
+      header: "uPNL",
+      cell: (props: any) => {
+        const { size, entryPrice, ticker } = props.getValue();
+
+        return (
+          <UnrealizedPnL size={size} entryPrice={entryPrice} ticker={ticker} />
+        );
+      },
       width: "100px",
     },
     {
@@ -182,4 +231,37 @@ export const usePositionColumns = function (
       },
     },
   ];
+};
+
+const UnrealizedPnL = ({
+  size,
+  entryPrice,
+  ticker,
+}: {
+  size: number;
+  entryPrice: number;
+  ticker: string;
+}) => {
+  const streamingData = useLocalStreamingData();
+  const currentPrice = streamingData[ticker]?.p;
+
+  if (!currentPrice) {
+    return <>-</>;
+  }
+
+  // P&Lvalue​=(currentPrice - entryPrice)×quantity
+  let pnlValue = (currentPrice - entryPrice) * size;
+
+  // P&Lpercentage​=(entryPrice - currentPrice / entryPrice​)×100
+  let pnlPercent = ((currentPrice - entryPrice) / entryPrice) * 100;
+
+  let sign = pnlValue < 0 ? "-" : "+";
+  return (
+    <Text color={getColorByPl(pnlValue.toFixed(10))}>
+      <>
+        {sign}${pnlValue.toFixed(5).replace(/0+$/, "")} ({sign}
+        {pnlPercent.toFixed(2)}%)
+      </>
+    </Text>
+  );
 };

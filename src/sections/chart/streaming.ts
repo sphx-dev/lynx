@@ -56,6 +56,7 @@ function handleStreamingData(data: any) {
 
 let globalSymbol = "";
 let globalResolution = 1;
+let globalReader: ReadableStreamDefaultReader<Uint8Array> | undefined;
 function startStreaming(
   retries = 3,
   delay = 3000,
@@ -69,6 +70,7 @@ function startStreaming(
       // console.log(response.body);
       const reader = response.body?.getReader();
 
+      globalReader = reader;
       streamData(reader, retries, delay);
     })
     .catch(error => {
@@ -218,4 +220,6 @@ export function unsubscribeFromStream(subscriberUID: string) {
       break;
     }
   }
+  globalReader?.cancel();
+  globalReader = undefined;
 }

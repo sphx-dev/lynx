@@ -2,7 +2,13 @@ import { FunctionComponent, useRef } from "react";
 import TitleRow from "./TitleRow";
 import { DepthVisualizerAsk, DepthVisualizerBid } from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
-import { Container, TableContainer } from "./OrderBookStyle";
+import {
+  Asks,
+  Bids,
+  Container,
+  TableContainer,
+  TextContainer,
+} from "./OrderBookStyle";
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
 import { MOBILE_WIDTH } from "../../constants";
 import { Stack, Text } from "../../components";
@@ -15,6 +21,8 @@ import config from "@/config";
 import { asksToState, orderToState } from "./helpers";
 import styled from "styled-components";
 import { useLocalStreaming } from "../chart/localStreaming";
+import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 interface OrderBookProps {
   windowWidth: number;
@@ -24,15 +32,15 @@ const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
 const records = 9;
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
+  const { t } = useTranslation();
   const containerRef = useRef(null);
-  const data = useLocalStreaming();
 
   const { data: book, isLoading } = useOrderBook(records);
 
   return (
     <Container ref={containerRef} data-testid="orderbook-tab">
       {!isLoading && (book?.bids?.length || book?.asks?.length) ? (
-        <Stack style={{ width: "100%" }}>
+        <Stack style={{ width: "100%", flex: "1 0 auto" }}>
           <TableContainer>
             {windowWidth > MOBILE_WIDTH && <TitleRow titles={HEADERS} />}
             <PriceLevelsWrapper>
@@ -60,25 +68,61 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
           </TableContainer>
         </Stack>
       ) : (
-        <Stack fullHeight justify="center" align="center">
+        <Stack justify="center" align="center" style={{ flex: "1 0 auto" }}>
           <Text variant="textXl" color="tertiary">
-            NO DATA
+            {isLoading ? t("loading") : t("noData")}
           </Text>
         </Stack>
       )}
-      <div style={{ textAlign: "center" }}>
-        Bids: {book?.bids_size}, Asks: {book?.asks_size}
+      <div>
+        <BidsAsksSize bidsSize={book?.bids_size} asksSize={book?.asks_size} />
+        <StreamingInfo />
       </div>
-      <div style={{ textAlign: "center", fontSize: "14px" }}>
-        {data?.ticker}: {data?.p}
-      </div>
-      <div style={{ textAlign: "center", fontSize: "14px" }}>
-        {(new Date(data?.t * 1000).toJSON() || "")
-          .replace("T", " ")
-          .replace("Z", "")}
-      </div>
-      {/* <div style={{ textAlign: "center" }}>{JSON.stringify(data)}</div> */}
     </Container>
+  );
+};
+
+const MIN_SIDE = 27;
+const MAX_SIDE = 100 - MIN_SIDE - MIN_SIDE;
+const BidsAsksSize = ({
+  bidsSize,
+  asksSize,
+}: {
+  bidsSize: number;
+  asksSize: number;
+}) => {
+  let bidsWidth = (bidsSize / (bidsSize + asksSize)) * MAX_SIDE + MIN_SIDE;
+  let asksWidth = (asksSize / (bidsSize + asksSize)) * MAX_SIDE + MIN_SIDE;
+  if (!bidsSize && !asksSize) {
+    bidsWidth = 50;
+    asksWidth = 50;
+  }
+
+  return (
+    <div style={{ position: "relative", height: "20px", margin: "15px 0 7px" }}>
+      <Bids style={{ width: bidsWidth + "%" }}></Bids>
+      <Asks style={{ width: asksWidth + "%" }}></Asks>
+      <TextContainer style={{ left: 0, width: "40px" }}>Bids</TextContainer>
+      <TextContainer style={{ left: "40px" }}>{bidsSize}</TextContainer>
+      <TextContainer style={{ right: 0, width: "40px" }}>Asks</TextContainer>
+      <TextContainer style={{ right: "40px" }}>{asksSize}</TextContainer>
+    </div>
+  );
+};
+
+const StreamingInfo = () => {
+  const { t } = useTranslation();
+  const data = useLocalStreaming();
+
+  return (
+    <>
+      <div style={{ textAlign: "center", fontSize: "10px" }}>
+        {t(data?.ticker || "")}: {data?.p}
+      </div>
+      <div style={{ textAlign: "center", fontSize: "10px" }}>
+        {dayjs(new Date((data?.t || 0) * 1000)).format("YYYY-MM-DD HH:mm:ss")}
+      </div>
+    </>
   );
 };
 

@@ -31,7 +31,6 @@ const Tab = styled.button<TabProps>`
 
 const ScrollContent = styled.div`
   height: 300px;
-  overflow-y: auto;
   width: 100%;
 `;
 

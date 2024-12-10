@@ -1,4 +1,3 @@
-import { PropsWithChildren } from "react";
 import "./App.css";
 import { useRoutes } from "react-router-dom";
 import { routes } from "./routes";
@@ -7,35 +6,10 @@ import { ThemeProvider } from "styled-components";
 import Header from "./components/Header/Header";
 import Footer from "./sections/footer";
 import { Toaster } from "react-hot-toast";
-
-import { useMediaQuery } from "react-responsive";
-import OnlyDesktopMessage from "./components/OnlyDesktopMessage";
-import { BREAK_POINTS } from "./constants";
-// import { useChainCosmoshub } from "./hooks/useChainCosmoshub";
 import { Modal, useModalStore } from "./components/Modal/Modal";
 import { DepositForm } from "./components/Modal/DepositForm";
 import { WithdrawForm } from "./components/Modal/WithdrawForm";
 import { useGlobalWebsocketHandler } from "./hooks/useGlobalWebsocketHandler";
-
-const Desktop = ({ children }: PropsWithChildren) => {
-  const isDesktop = useMediaQuery({ minWidth: BREAK_POINTS.MOBILE_MIN_WIDTH });
-  return isDesktop ? children : null;
-};
-
-const AnotherDevices = ({ children }: PropsWithChildren) => {
-  const isBelowDesktop = useMediaQuery({
-    maxWidth: BREAK_POINTS.MOBILE_MIN_WIDTH - 1,
-  });
-  return isBelowDesktop ? children : null;
-};
-
-const AppInitializtion = ({ children }: PropsWithChildren) => {
-  // const { isConnected } = useChainCosmoshub();
-
-  // useGetAccountQuery(undefined, { skip: !isConnected });
-
-  return children;
-};
 
 function App() {
   const content = useRoutes(routes);
@@ -47,21 +21,14 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppInitializtion>
-        <Desktop>
-          <Header />
-          {content}
-          <Footer />
-          <Toaster />
-          <Modal isOpen={isOpen} onClose={closeModal}>
-            {openModalType === "DEPOSIT" && <DepositForm />}
-            {openModalType === "WITHDRAW" && <WithdrawForm />}
-          </Modal>
-        </Desktop>
-        <AnotherDevices>
-          <OnlyDesktopMessage />
-        </AnotherDevices>
-      </AppInitializtion>
+      <Header />
+      {content}
+      <Footer />
+      <Toaster />
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        {openModalType === "DEPOSIT" && <DepositForm />}
+        {openModalType === "WITHDRAW" && <WithdrawForm />}
+      </Modal>
     </ThemeProvider>
   );
 }

@@ -2769,7 +2769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1":
+"@floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1, @floating-ui/dom@npm:^1.6.1":
   version: 1.6.12
   resolution: "@floating-ui/dom@npm:1.6.12"
   dependencies:
@@ -8067,6 +8067,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.0":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -13218,6 +13225,7 @@ __metadata:
     react-router-dom: "npm:^6.22.3"
     react-select: "npm:^5.8.0"
     react-tabs: "npm:^6.0.2"
+    react-tooltip: "npm:^5.28.0"
     storybook: "npm:^8.0.5"
     styled-components: "npm:^6.0.7"
     typescript: "npm:5.6.3"
@@ -15391,6 +15399,19 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
   checksum: 10c0/caa17465d1482b07dd9c59d27caf7f4b8e4025f17a22ba49dee373faee6f05955de9400e02053cf8295e6ac05351633641e49cbc988d5a56e6e91f1930f8d94a
+  languageName: node
+  linkType: hard
+
+"react-tooltip@npm:^5.28.0":
+  version: 5.28.0
+  resolution: "react-tooltip@npm:5.28.0"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.6.1"
+    classnames: "npm:^2.3.0"
+  peerDependencies:
+    react: ">=16.14.0"
+    react-dom: ">=16.14.0"
+  checksum: 10c0/817909584adf4d84d70768e41c7fdf66bf9affd980499742a2da54378e5c8be53a0867bf72bdfb441fa4aa35c79847585990b6e31c91e6647e789ba68e9b08a2
   languageName: node
   linkType: hard
 

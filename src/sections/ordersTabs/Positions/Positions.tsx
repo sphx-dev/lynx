@@ -60,7 +60,7 @@ const Positions = () => {
   }, []);
 
   const positionColumns = usePositionColumns(closePosition, showTpSl);
-  // console.log("positions", positions);
+
   if (!positions?.length || !isConnected) {
     return (
       <PlaceHolder data-testid="perpetual-positions-table-empty">
