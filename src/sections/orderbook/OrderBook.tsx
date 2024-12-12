@@ -224,7 +224,7 @@ const useOrderBook = (records: number) => {
       );
 
       const maxBid = bids.length ? bids[0].price : 0;
-      const minAsk = asks.length ? asks[0].price : 0;
+      const minAsk = asks.length ? asks[asks.length - 1].price : 0;
       const spread = Math.abs(maxBid - minAsk);
       const spreadPercentage = Math.abs(spread / maxBid) * 100;
       return {
