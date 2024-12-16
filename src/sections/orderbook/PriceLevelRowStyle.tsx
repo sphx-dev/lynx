@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 interface PriceLevelContainerProps {
   $isRight: boolean;
-  $windowWidth: number;
 }
 
 export const PriceLevelContainer = styled.div<PriceLevelContainerProps>`

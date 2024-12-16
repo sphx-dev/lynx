@@ -37,7 +37,7 @@ const Logo = () => {
 const tabs = [
   {
     title: "Order book",
-    content: <OrderBook windowWidth={2000} />,
+    content: <OrderBook />,
   },
   {
     title: "Trades",

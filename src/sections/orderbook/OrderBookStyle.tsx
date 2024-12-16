@@ -16,6 +16,8 @@ export const TableContainer = styled.div`
 `;
 
 export const TextContainer = styled.div`
+  text-transform: capitalize;
+  font-variant: small-caps;
   position: absolute;
   top: 0px;
   bottom: 0px;

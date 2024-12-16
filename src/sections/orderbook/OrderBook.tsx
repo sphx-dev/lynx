@@ -1,4 +1,10 @@
-import { FunctionComponent, useRef } from "react";
+import {
+  FunctionComponent,
+  RefObject,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import TitleRow from "./TitleRow";
 import { DepthVisualizerAsk, DepthVisualizerBid } from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
@@ -10,7 +16,6 @@ import {
   TextContainer,
 } from "./OrderBookStyle";
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
-import { MOBILE_WIDTH } from "../../constants";
 import { Stack, Text } from "../../components";
 import Divider from "./Divider";
 import { OrderType, OrderWithDepth } from "../../types/orderBook";
@@ -23,31 +28,28 @@ import styled from "styled-components";
 import { useLocalStreaming } from "../chart/localStreaming";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-
-interface OrderBookProps {
-  windowWidth: number;
-}
+import { t } from "i18next";
 
 const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
-const records = 9;
+const MIN_RECORDS = 9;
 
-const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
+const OrderBook: FunctionComponent = () => {
   const { t } = useTranslation();
   const containerRef = useRef(null);
-
-  const { data: book, isLoading } = useOrderBook(records);
+  const asksBidsRef = useRef(null);
+  const { data: book, isLoading } = useOrderBook(asksBidsRef);
 
   return (
     <Container ref={containerRef} data-testid="orderbook-tab">
       {!isLoading && (book?.bids?.length || book?.asks?.length) ? (
-        <Stack style={{ width: "100%", flex: "1 0 auto" }}>
+        <AsksBidsContainer ref={asksBidsRef}>
           <TableContainer>
-            {windowWidth > MOBILE_WIDTH && <TitleRow titles={HEADERS} />}
+            <TitleRow titles={HEADERS} />
             <PriceLevelsWrapper>
               <PriceLevels
-                levels={book.asks.slice(0, records)}
+                // levels={book.asks.slice(0, records)}
+                levels={book.asks}
                 orderType={OrderType.ASKS}
-                windowWidth={windowWidth}
               />
             </PriceLevelsWrapper>
           </TableContainer>
@@ -55,18 +57,18 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ windowWidth }) => {
           <TableContainer>
             <PriceLevelsWrapper>
               <PriceLevels
-                levels={book.bids.slice(
-                  book.bids.length - records >= 0
-                    ? book.bids.length - records
-                    : 0,
-                  book.bids.length
-                )}
+                // levels={book.bids.slice(
+                //   book.bids.length - records >= 0
+                //     ? book.bids.length - records
+                //     : 0,
+                //   book.bids.length
+                // )}
+                levels={book.bids}
                 orderType={OrderType.BIDS}
-                windowWidth={windowWidth}
               />
             </PriceLevelsWrapper>
           </TableContainer>
-        </Stack>
+        </AsksBidsContainer>
       ) : (
         <Stack justify="center" align="center" style={{ flex: "1 0 auto" }}>
           <Text variant="textXl" color="tertiary">
@@ -102,9 +104,13 @@ const BidsAsksSize = ({
     <div style={{ position: "relative", height: "20px", margin: "15px 0 7px" }}>
       <Bids style={{ width: bidsWidth + "%" }}></Bids>
       <Asks style={{ width: asksWidth + "%" }}></Asks>
-      <TextContainer style={{ left: 0, width: "40px" }}>Bids</TextContainer>
+      <TextContainer style={{ left: 0, width: "40px" }}>
+        {t("bids")}
+      </TextContainer>
       <TextContainer style={{ left: "40px" }}>{bidsSize}</TextContainer>
-      <TextContainer style={{ right: 0, width: "40px" }}>Asks</TextContainer>
+      <TextContainer style={{ right: 0, width: "40px" }}>
+        {t("asks")}
+      </TextContainer>
       <TextContainer style={{ right: "40px" }}>{asksSize}</TextContainer>
     </div>
   );
@@ -126,6 +132,13 @@ const StreamingInfo = () => {
   );
 };
 
+const AsksBidsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1 0 auto;
+`;
+
 const PriceLevelsWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -135,11 +148,9 @@ const PriceLevelsWrapper = styled.div`
 const PriceLevels = ({
   levels,
   orderType = OrderType.BIDS,
-  windowWidth,
 }: {
   levels: OrderWithDepth[];
   orderType: OrderType;
-  windowWidth: number;
 }) => {
   const { publish } = usePubSub();
 
@@ -180,7 +191,6 @@ const PriceLevels = ({
               size={size}
               price={price}
               reversedFieldsOrder={orderType === OrderType.ASKS}
-              windowWidth={windowWidth}
             />
           </PriceLevelRowContainer>
         );
@@ -203,43 +213,62 @@ const formatNumber = (arg: number): string => {
 export default OrderBook;
 
 const BASE_API = config.VITE_API_URL;
-const useOrderBook = (records: number) => {
+const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
+  const [records, setRecords] = useState(MIN_RECORDS);
   const { selectedMarket } = useMarkets();
 
+  const responseData = useOrderBookData({ ticker: selectedMarket?.ticker });
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      const r = Math.floor((ref.current?.clientHeight - 60) / 26 / 2);
+      setRecords(r ? r : MIN_RECORDS);
+    }
+  }, [responseData, ref]);
+
+  return {
+    ...responseData,
+    data: parseOrderBokData(responseData.data, records),
+  };
+};
+
+const useOrderBookData = ({ ticker }: { ticker: string | undefined }) => {
   const response = useQuery({
-    queryKey: ["orderBook", selectedMarket?.ticker, records],
+    queryKey: ["orderBook", ticker],
     queryFn: async () => {
-      const res = await fetch(
-        `${BASE_API}/orderbook/?ticker=${selectedMarket?.ticker}`,
-        { credentials: "include" }
-      );
+      const res = await fetch(`${BASE_API}/orderbook/?ticker=${ticker}`, {
+        credentials: "include",
+      });
       const data = await res.json();
-
-      const bids = orderToState(data?.bids?.slice(0, records) ?? []);
-      const asks = asksToState(
-        data?.asks?.slice(
-          Math.max(0, data?.asks?.length - records),
-          data?.asks?.length
-        ) ?? []
-      );
-
-      const maxBid = bids.length ? bids[0].price : 0;
-      const minAsk = asks.length ? asks[asks.length - 1].price : 0;
-      const spread = Math.abs(maxBid - minAsk);
-      const spreadPercentage = Math.abs(spread / maxBid) * 100;
-      return {
-        bids: bids ?? [],
-        bids_size: data?.bids_size,
-        asks: asks ?? [],
-        asks_size: data?.asks_size,
-        spread,
-        spreadPercentage,
-      };
+      return data;
     },
     refetchInterval: 2000,
 
-    enabled: !!selectedMarket?.ticker,
+    enabled: !!ticker,
   });
 
   return response;
 };
+
+function parseOrderBokData(data: any, records: number = MIN_RECORDS) {
+  const bids = orderToState(data?.bids?.slice(0, records) ?? []);
+  const asks = asksToState(
+    data?.asks?.slice(
+      Math.max(0, data?.asks?.length - records),
+      data?.asks?.length
+    ) ?? []
+  );
+
+  const maxBid = bids.length ? bids[0].price : 0;
+  const minAsk = asks.length ? asks[asks.length - 1].price : 0;
+  const spread = Math.abs(maxBid - minAsk);
+  const spreadPercentage = Math.abs(spread / maxBid) * 100;
+  return {
+    bids: bids ?? [],
+    bids_size: data?.bids_size,
+    asks: asks ?? [],
+    asks_size: data?.asks_size,
+    spread,
+    spreadPercentage,
+  };
+}

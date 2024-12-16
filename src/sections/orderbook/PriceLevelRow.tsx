@@ -8,7 +8,6 @@ interface PriceLevelRowProps {
   size: string;
   price: string;
   reversedFieldsOrder: boolean;
-  windowWidth: number;
 }
 
 const Label = styled.div`
@@ -32,13 +31,11 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
   size,
   price,
   reversedFieldsOrder = false,
-  windowWidth,
 }) => {
   return (
     <PriceLevelContainer
       data-testid="price-level-row"
       $isRight={!reversedFieldsOrder}
-      $windowWidth={windowWidth}
     >
       <>
         <Label>
