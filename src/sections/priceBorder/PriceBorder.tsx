@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Stack, Text } from "../../components";
 import useTheme from "../../hooks/useTheme";
-import { formatNumber } from "../../utils/format";
+import { formatNumber } from "@/utils/format";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useLocalStreaming } from "../chart/localStreaming";
 import { useMarkets } from "@/hooks/useMarkets";
@@ -110,10 +110,10 @@ const PriceBorder = () => {
         }
         type={changeLastDay > 0 ? ValueType.ACTIVE : ValueType.ERROR}
       />
-      <PriceView
+      {/* <PriceView
         label="Open Interest"
         value={formatNumber({ value: 22987672, before: unit })}
-      />
+      /> */}
       <PriceView
         label="24h Volume"
         value={formatNumber({ value: volume, before: unit })}
