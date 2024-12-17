@@ -39,8 +39,10 @@ export const Funding = () => {
     const data = await fetchFundingRateLogs(
       selectedAddress!,
       selectedMarket?.ticker,
-      Math.floor(fromDate.getTime() / 1000),
-      Math.floor(toDate.getTime() + (24 * 60) / 1000)
+      Math.floor(dayjs(fromDate).startOf("day").toDate().getTime() / 1000),
+      Math.floor(
+        dayjs(toDate).endOf("day").toDate().getTime() + (24 * 60) / 1000
+      )
     );
     setData(data);
   }, [isConnected, selectedAddress, selectedMarket, fromDate, toDate]);
