@@ -19,6 +19,7 @@ import {
   StyledButton,
   Wrapper,
   PlaceOrderMessage,
+  PriceEstimation,
 } from "./style";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useCreateOrder } from "../../hooks/useOrders";
@@ -32,6 +33,7 @@ import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { motion, AnimatePresence } from "framer-motion";
 import { PRECISION } from "@/constants";
 import styled from "styled-components";
+import { useLocalStreaming } from "../chart/localStreaming";
 
 const options: [
   { label: string; value: OrderType },
@@ -281,7 +283,7 @@ function OrderInput() {
                       name="orderType"
                     />
 
-                    {orderType !== OrderType.ORDER_TYPE_MARKET && (
+                    {orderType !== OrderType.ORDER_TYPE_MARKET ? (
                       <Input
                         {...register("price")}
                         label="Price"
@@ -292,6 +294,8 @@ function OrderInput() {
                         error={errors.price?.message}
                         autoComplete="off"
                       />
+                    ) : (
+                      <FakeInput />
                     )}
                     <Input
                       {...register("volume")}
@@ -439,3 +443,13 @@ const WarnInfoText = styled.p`
   ${({ theme }) => theme.fonts.typography.textSm};
   color: ${({ theme }) => theme.colors.selectedTheme.text.secondaryActive};
 `;
+
+const FakeInput = () => {
+  const data = useLocalStreaming();
+  const price = data?.p ?? 0;
+  return <PriceEstimation label="Price" value={formatNumber(price)} />;
+};
+
+const formatNumber = (arg: number): string => {
+  return new Intl.NumberFormat("en-US").format(arg);
+};

@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { Button } from "../../components";
+import { Button, Text } from "../../components";
 import { css } from "styled-components";
 import { getThemeColors } from "../../theme";
+import { InputLabel } from "@/components/Input";
+import { useTranslation } from "react-i18next";
 
 export const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
@@ -57,4 +59,47 @@ export const PlaceHolder = styled.div`
   border: 1px solid ${({ theme }) => getThemeColors(theme).border.default};
   border-radius: 8px;
   margin: 6px;
+`;
+
+export const PriceEstimation = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) => {
+  const { t } = useTranslation();
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+      <InputLabel>{label}</InputLabel>
+      <InputWrapper>
+        <StyledNonInput>{value}</StyledNonInput>
+        <Text>{t("USDC")}</Text>
+      </InputWrapper>
+    </div>
+  );
+};
+
+const InputWrapper = styled.div`
+  border: 1px solid transparent;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  width: 100%;
+  padding: 7px 12px;
+
+  background-color: ${({ theme }) =>
+    getThemeColors(theme).input["primary"].background.disabled};
+
+  background: ${({ theme }) =>
+    getThemeColors(theme).input["primary"].background.hovered};
+
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+`;
+
+const StyledNonInput = styled.div`
+  text-align: right;
+  width: 100%;
+  color: #17eee3;
+  ${({ theme }) => theme.fonts.typography.textNumMd}
 `;

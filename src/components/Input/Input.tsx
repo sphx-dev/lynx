@@ -1,4 +1,4 @@
-import React, { useState, FocusEvent, forwardRef, ChangeEvent } from "react";
+import React, { FocusEvent, forwardRef, ChangeEvent } from "react";
 import styled, { css } from "styled-components";
 import { getThemeColors, ThemeColors } from "../../theme";
 import Stack from "../Stack";
@@ -54,7 +54,7 @@ const StyledInput = styled.input`
   }
 `;
 
-export const InputLabel = styled.label<{ $isFocused: boolean }>`
+export const InputLabel = styled.label`
   ${({ theme }) => theme.fonts.typography.textSm}
   color: ${({ theme }) => getThemeColors(theme).text.primary};
   text-align: left;
@@ -64,7 +64,7 @@ const errorStyle = css`
   border: ${({ theme }) => `1px solid ${getThemeColors(theme).text.error}`};
 `;
 
-const InputWrapper = styled.div<InputWrapperProps>`
+export const InputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.borderRadius.md};
   width: 100%;
@@ -106,15 +106,13 @@ export const Input = forwardRef<Ref, InputProps>(
     ref
   ) => {
     const { themeColors } = useTheme();
-    const [isFocused, setIsFocused] = useState(false);
+
     const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
-      setIsFocused(true);
       if (onFocus) {
         onFocus(e);
       }
     };
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false);
       if (onBlur) {
         onBlur(e);
       }
@@ -138,7 +136,7 @@ export const Input = forwardRef<Ref, InputProps>(
           ...style,
         }}
       >
-        {label && <InputLabel $isFocused={isFocused}>{label}</InputLabel>}
+        {label && <InputLabel>{label}</InputLabel>}
         <InputWrapper
           style={{ position: "relative" }}
           variant={variant}
