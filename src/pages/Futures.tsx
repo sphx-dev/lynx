@@ -6,7 +6,6 @@ import OrderBook from "../sections/orderbook/OrderBook";
 import OrdersHistory from "../sections/ordersTabs";
 import { Stack } from "../components";
 import PriceBorder from "../sections/priceBorder";
-import Group from "../components/Group";
 import TabComponent from "../components/Tab/Tab";
 import Surface from "../ui/Layouts/Surface";
 import { ActionBarContainer } from "../components/AttributionBar/ActionBar";
@@ -49,9 +48,9 @@ const Futures = () => {
   return (
     <Wrapper>
       <OrderInput />
-      <Stack margin-top="100px" style={{ marginTop: "-50px" }}>
+      <LeftGroup>
         <PriceBorder />
-        <Group style={{ flex: 1 }}>
+        <MainGroup>
           <Stack style={{ flex: 1 }} fullHeight>
             <TradingViewContainer />
             <OrdersHistory />
@@ -59,7 +58,6 @@ const Futures = () => {
           <Surface
             style={{
               width: "320px",
-              marginLeft: "16px",
               paddingBottom: "32px",
             }}
           >
@@ -70,10 +68,31 @@ const Futures = () => {
               <Logo />
             </Stack>
           </Surface>
-        </Group>
-      </Stack>
+        </MainGroup>
+      </LeftGroup>
     </Wrapper>
   );
 };
 
 export default Futures;
+
+const LeftGroup = styled.div`
+  margin-top: -50px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  row-gap: 16px;
+  height: auto;
+`;
+
+const MainGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 0%;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  column-gap: 16px;
+`;

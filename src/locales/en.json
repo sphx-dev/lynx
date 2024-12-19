@@ -65,6 +65,7 @@
   "conectWalletToViewFundingRateLogs": "Connect wallet and select a margin account to view funding rate logs",
   "overview": "Overview",
   "funding": "Funding",
+  "estimatedPrice": "Est. Price",
   "USDC": "USD",
   "BTCUSDC.P": "BTCUSD.P",
   "ETHUSDC.P": "ETHUSD.P",

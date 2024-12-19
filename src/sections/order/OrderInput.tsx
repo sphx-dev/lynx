@@ -445,9 +445,12 @@ const WarnInfoText = styled.p`
 `;
 
 const FakeInput = () => {
+  const { t } = useTranslation();
   const data = useLocalStreaming();
   const price = data?.p ?? 0;
-  return <PriceEstimation label="Price" value={formatNumber(price)} />;
+  return (
+    <PriceEstimation label={t("estimatedPrice")} value={formatNumber(price)} />
+  );
 };
 
 const formatNumber = (arg: number): string => {

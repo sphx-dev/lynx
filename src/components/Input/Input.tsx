@@ -101,10 +101,13 @@ export const Input = forwardRef<Ref, InputProps>(
       type,
       onFocus,
       onBlur,
+      min,
+      max,
       ...restProps
     },
     ref
   ) => {
+    // const [value, setValue] = React.useState<string>("");
     const { themeColors } = useTheme();
 
     const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
@@ -119,6 +122,12 @@ export const Input = forwardRef<Ref, InputProps>(
     };
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       if (type === "number") {
+        // if (min && Number(event.target.value) < Number(min)) {
+        //   setValue(min.toString());
+        // }
+        // if (max && Number(event.target.value) > Number(max)) {
+        //   setValue(max.toString());
+        // }
         if (numberRegex.test(event.target.value)) {
           return onChange && onChange(event);
         }

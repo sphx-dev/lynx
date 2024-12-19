@@ -259,8 +259,8 @@ const UnrealizedPnL = ({
   return (
     <Text color={getColorByPl(pnlValue.toFixed(10))}>
       <>
-        {sign}${pnlValue.toFixed(5).replace(/0+$/, "")} ({sign}
-        {pnlPercent.toFixed(2)}%)
+        {sign}${Math.abs(pnlValue).toFixed(5).replace(/0+$/, "")} ({sign}
+        {Math.abs(pnlPercent).toFixed(2)}%)
       </>
     </Text>
   );
