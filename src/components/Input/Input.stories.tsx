@@ -7,11 +7,16 @@ import { Provider } from "react-redux";
 
 const meta: Meta<typeof Input> = {
   component: Input,
+  title: "Components/Input",
   argTypes: {
     label: { control: "text" },
+    variant: { control: "text" },
+    rightSide: { control: "text" },
   },
   args: {
     label: "Name",
+    variant: "primary",
+    rightSide: "USD",
   },
 };
 
@@ -25,6 +30,21 @@ export const TextInput: Story = {
       <ThemeProvider theme={themes["dark"]}>
         <Input {...args} />
       </ThemeProvider>
+    </Provider>
+  ),
+  args: {
+    label: "Name",
+    variant: "primary",
+    rightSide: "",
+  },
+};
+
+export const NumberInput: Story = {
+  render: args => (
+    <Provider store={store}>
+      {/* <ThemeProvider theme={themes["dark"]}> */}
+      <Input {...args} type="number" min={10} max={100} />
+      {/* </ThemeProvider> */}
     </Provider>
   ),
 };

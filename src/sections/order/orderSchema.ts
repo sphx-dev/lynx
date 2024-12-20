@@ -2,12 +2,20 @@ import * as yup from "yup";
 import { MESSAGE } from "../../constants/validation";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
 
-export const schema = () =>
+export const schema = (minimumVolume: number) =>
   yup.object().shape({
     volume: yup
       .number()
       .typeError(MESSAGE.number)
-      .moreThan(0)
+      .test(
+        "isGreaterOrEqualThan",
+        MESSAGE.moreThanMin(minimumVolume),
+        value => {
+          console.log("VALUE", value, minimumVolume);
+          return value! >= minimumVolume;
+        }
+      )
+      // .moreThan(minimumVolume, MESSAGE.moreThanMin(minimumVolume))
       .required(MESSAGE.required),
     price: yup
       .number()

@@ -80,6 +80,14 @@ function OrderInput() {
 
   const { t } = useTranslation();
   const {
+    selectedMarketId: marketId,
+    selectedMarket,
+    minimumVolume,
+    pricePerContract,
+  } = useMarkets();
+  console.log("Minimum quantity:", minimumVolume);
+
+  const {
     handleSubmit,
     register,
     setValue,
@@ -88,10 +96,8 @@ function OrderInput() {
     getValues,
   } = useForm<MarketOrderForm>({
     defaultValues,
-    resolver: yupResolver<any>(schema()),
+    resolver: yupResolver<any>(schema(minimumVolume)),
   });
-
-  const { selectedMarketId: marketId, selectedMarket } = useMarkets();
 
   const handleSwitchOrderType = (type: OrderType) => {
     setValue("orderType", type);
@@ -156,7 +162,9 @@ function OrderInput() {
             marginAccountAddress: selectedAddress,
             orderId: BigInt(Date.now() * 1000),
             side: sideValue,
-            quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
+            quantity:
+              BigInt((Number(values.volume) * PRECISION).toFixed(0)) *
+              BigInt(pricePerContract),
             leverage: BigInt(values.leverage),
             stopLoss: stopLossValue,
             takeProfit: takeProfitValue,
@@ -185,7 +193,9 @@ function OrderInput() {
             marginAccountAddress: selectedAddress,
             orderId: BigInt(Date.now() * 1000),
             side: sideValue,
-            quantity: BigInt((Number(values.volume) * PRECISION).toFixed(0)),
+            quantity:
+              BigInt((Number(values.volume) * PRECISION).toFixed(0)) *
+              BigInt(pricePerContract),
             price: BigInt((Number(values.price) * PRECISION).toFixed(0)),
             leverage: BigInt(values.leverage),
             stopLoss: stopLossValue,
@@ -422,7 +432,13 @@ function OrderInput() {
                         )}
                       </>
                     )}
-                    <Summary />
+                    <Summary
+                      limitPrice={Number(watch("price"))}
+                      orderType={orderType}
+                      pricePerContract={pricePerContract}
+                      volume={Number(watch("volume"))}
+                      minimumVolume={minimumVolume}
+                    />
                   </Stack>
                 </Container>
               </Stack>

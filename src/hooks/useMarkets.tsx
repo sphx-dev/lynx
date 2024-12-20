@@ -32,6 +32,11 @@ export const useMarkets = () => {
 
   window.marketId = selectedMarket?.id || 0n;
 
+  let selectedMarketMeta: any = {};
+  if (selectedMarket?.ticker) {
+    selectedMarketMeta = MARKETS_META[selectedMarket?.ticker] || {};
+  }
+
   return {
     markets,
     selectedMarket,
@@ -40,6 +45,8 @@ export const useMarkets = () => {
     icon,
     setMarkets,
     setMarketId,
+    minimumVolume: selectedMarketMeta?.minimumVolume || 0,
+    pricePerContract: selectedMarketMeta?.pricePerContract || 1,
   };
 };
 
@@ -86,4 +93,19 @@ const equal = (a: Market[], b: Market[]) => {
       m.baseAsset === b[i]?.baseAsset &&
       m.quoteAsset === b[i]?.quoteAsset
   );
+};
+
+const MARKETS_META: Record<string, any> = {
+  "BTCUSDC.P": {
+    minimumVolume: 0,
+    pricePerContract: 1,
+  },
+  "ETHUSDC.P": {
+    minimumVolume: 0,
+    pricePerContract: 1,
+  },
+  "WTXUSDC.P": {
+    minimumVolume: 0.1,
+    pricePerContract: 10,
+  },
 };
