@@ -56,7 +56,11 @@ function handleStreamingData(data: any) {
 
 let globalSymbol = "";
 let globalResolution = 1;
-let globalReader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+let globalReader: Map<
+  string,
+  ReadableStreamDefaultReader<Uint8Array> | undefined
+> = new Map();
+
 function startStreaming(
   retries = 3,
   delay = 3000,
@@ -67,10 +71,9 @@ function startStreaming(
   globalResolution = resolution;
   fetch(streamingUrl + `?symbol=${symbol}&resolution=${resolution}`)
     .then(response => {
-      // console.log(response.body);
       const reader = response.body?.getReader();
 
-      globalReader = reader;
+      globalReader.set(symbol + "_#_" + resolution, reader);
       streamData(reader, retries, delay);
     })
     .catch(error => {
@@ -96,7 +99,7 @@ function streamData(
 
       // Assuming the streaming data is separated by line breaks
       const dataStrings = new TextDecoder().decode(value).split("\n");
-      // console.log("[stream] dataStrings:", dataStrings);
+
       dataStrings.forEach(dataString => {
         const trimmedDataString = dataString.trim();
         if (trimmedDataString) {
@@ -203,6 +206,14 @@ export function subscribeOnStream(
 }
 
 export function unsubscribeFromStream(subscriberUID: string) {
+  console.log(
+    "\n=================================================================\n",
+    "\n=================================================================\n",
+    "\n=================================================================\n",
+    "\n=================================================================\n",
+    "------->>>>>>[unsubscribeBars]: Unsubscribe from streaming. UID:",
+    subscriberUID
+  );
   // Find a subscription with id === subscriberUID
   for (const channelString of channelToSubscription.keys()) {
     const subscriptionItem = channelToSubscription.get(channelString);
@@ -220,6 +231,5 @@ export function unsubscribeFromStream(subscriberUID: string) {
       break;
     }
   }
-  globalReader?.cancel();
-  globalReader = undefined;
+  globalReader.get(subscriberUID)?.cancel();
 }

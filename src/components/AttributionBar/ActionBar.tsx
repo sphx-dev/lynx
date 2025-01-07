@@ -1,7 +1,7 @@
 // Import React and styled-components
 import React from "react";
 import styled from "styled-components";
-import heart from "../../assets/icons/heart.svg";
+// import heart from "../../assets/icons/heart.svg";
 import graph from "../../assets/icons/graph.svg";
 import settings from "../../assets/icons/setting.svg";
 import Group from "../Group";
@@ -19,6 +19,7 @@ export const ActionBarContainer = styled(Group)`
   font-size: 10px;
   font-weight: 600;
   height: var(--height);
+  justify-content: space-around;
 `;
 const Divider = styled.div`
   border-left: 1px solid #071c27;
@@ -38,6 +39,8 @@ const Button = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 45px;
 `;
 // The React component that uses the styled components
 const ActionBar = () => {
@@ -47,7 +50,7 @@ const ActionBar = () => {
       {/* You can replace these with the actual icons you need */}
       <Button>
         {t("makeWithHonor")}
-        <Icon src={heart} alt="Heart Icon" />
+        {/* <Icon src={heart} alt="Heart Icon" /> */}
       </Button>
       <Divider />
       <Button>

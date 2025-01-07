@@ -85,7 +85,6 @@ function OrderInput() {
     minimumVolume,
     pricePerContract,
   } = useMarkets();
-  console.log("Minimum quantity:", minimumVolume);
 
   const {
     handleSubmit,

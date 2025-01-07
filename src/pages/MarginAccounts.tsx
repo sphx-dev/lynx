@@ -28,7 +28,6 @@ const MarginAccountsPage = () => {
     (async () => {
       if (address) {
         const currentBalance = await getBalance(address, DENOMUSDC);
-        console.log("currentBalance", currentBalance);
         setBalance(currentBalance);
       }
     })();
