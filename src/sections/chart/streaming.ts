@@ -1,4 +1,5 @@
 import config from "@/config.js";
+import dayjs from "dayjs";
 // Assuming you're working in a browser environment that supports fetch and ReadableStream
 // const streamingUrl =
 //   "https://benchmarks.pyth.network/v1/shims/tradingview/streaming";
@@ -7,8 +8,12 @@ const streamingUrl =
   window.location.protocol + config.VITE_API_URL + "/tradingview/streaming";
 const channelToSubscription = new Map();
 
-function handleStreamingData(data: any) {
+function handleStreamingData(UID: string, data: any) {
   const { id, p, t } = data;
+  if (!id || !p || !t) {
+    return;
+  }
+  // console.log(id, p, t, new Date(t * 1000).toJSON());
 
   const tradePrice = p;
   const tradeTime = t * 1000; // Multiplying by 1000 to get milliseconds
@@ -21,30 +26,34 @@ function handleStreamingData(data: any) {
   }
 
   const lastDailyBar = subscriptionItem.lastDailyBar;
-  const nextDailyBarTime = getNextDailyBarTime(lastDailyBar.time);
-  // const nextDailyBarTime = getNextBarTime(lastDailyBar.time, globalResolution);
-  // console.log("--------------tradeTime", new Date(tradeTime).toJSON());
-  // console.log("----------LAST BAR TIME", new Date(lastDailyBar.time).toJSON());
-  // console.log("----NEXT DAYLY BAR TIME", new Date(nextDailyBarTime).toJSON());
+
+  console.log(
+    "Delta[" + id + "][" + UID + "]",
+    "comming->" + dayjs(tradeTime).format("YYYY-MM-DD HH:mm:ss"),
+    "|",
+    "prev->" + dayjs(lastDailyBar.time).format("YYYY-MM-DD HH:mm:ss"),
+    tradeTime > lastDailyBar.time ? "[NEW]" : "[same]",
+    `(${p})`
+  );
 
   let bar: any;
-  if (tradeTime >= nextDailyBarTime) {
+  if (tradeTime > lastDailyBar.time) {
     bar = {
-      time: nextDailyBarTime,
-      open: tradePrice,
+      time: tradeTime,
+      open: lastDailyBar.close,
       high: tradePrice,
       low: tradePrice,
       close: tradePrice,
     };
-    // console.log("[stream] Generate new bar", bar);
-  } else {
+  } else if (tradeTime === lastDailyBar.time) {
     bar = {
       ...lastDailyBar,
       high: Math.max(lastDailyBar.high, tradePrice),
       low: Math.min(lastDailyBar.low, tradePrice),
       close: tradePrice,
     };
-    // console.log("[stream] Update the latest bar by price", tradePrice);
+  } else {
+    return;
   }
 
   subscriptionItem.lastDailyBar = bar;
@@ -67,6 +76,7 @@ function startStreaming(
   symbol: string,
   resolution: number
 ) {
+  // Start a new reader
   globalSymbol = symbol;
   globalResolution = resolution;
   fetch(streamingUrl + `?symbol=${symbol}&resolution=${resolution}`)
@@ -74,7 +84,7 @@ function startStreaming(
       const reader = response.body?.getReader();
 
       globalReader.set(symbol + "_#_" + resolution, reader);
-      streamData(reader, retries, delay);
+      streamData(symbol + "_#_" + resolution, reader, retries, delay);
     })
     .catch(error => {
       console.error(
@@ -85,6 +95,7 @@ function startStreaming(
 }
 
 function streamData(
+  id: string,
   reader?: ReadableStreamDefaultReader<Uint8Array>,
   retries = 3,
   delay = 3000
@@ -93,7 +104,7 @@ function streamData(
     ?.read()
     .then(({ value, done }) => {
       if (done) {
-        console.error("[stream] Streaming ended.");
+        console.error("[stream] Streaming ended.", id);
         return;
       }
 
@@ -105,15 +116,15 @@ function streamData(
         if (trimmedDataString) {
           try {
             const jsonData = JSON.parse(trimmedDataString);
-            handleStreamingData(jsonData);
+            handleStreamingData(id, jsonData);
           } catch (e: any) {
             // console.error("Error parsing JSON:", e.message)
           }
         }
       });
 
-      streamData(reader); // Continue processing the stream
-      //setTimeout(() => streamData(reader), 2000); // Continue processing the stream
+      streamData(id, reader); // Continue processing the stream
+      //setTimeout(() => streamData(id, reader), 2000); // Continue processing the stream
     })
     .catch(error => {
       console.error("[stream] Error reading from stream:", error);
@@ -135,18 +146,6 @@ function attemptReconnect(
   } else {
     console.error("[stream] Maximum reconnection attempts reached.");
   }
-}
-
-// function getNextBarTime(barTime: any, resolution: number) {
-//   const date = new Date(barTime * 1000);
-//   date.setSeconds(date.getTime() + resolution * 1000);
-//   return date.getTime() / 1000;
-// }
-
-function getNextDailyBarTime(barTime: any) {
-  const date = new Date(barTime * 1000);
-  date.setDate(date.getDate() + 1);
-  return date.getTime() / 1000;
 }
 
 export function subscribeOnStream(
@@ -206,14 +205,6 @@ export function subscribeOnStream(
 }
 
 export function unsubscribeFromStream(subscriberUID: string) {
-  console.log(
-    "\n=================================================================\n",
-    "\n=================================================================\n",
-    "\n=================================================================\n",
-    "\n=================================================================\n",
-    "------->>>>>>[unsubscribeBars]: Unsubscribe from streaming. UID:",
-    subscriberUID
-  );
   // Find a subscription with id === subscriberUID
   for (const channelString of channelToSubscription.keys()) {
     const subscriptionItem = channelToSubscription.get(channelString);
@@ -231,5 +222,11 @@ export function unsubscribeFromStream(subscriberUID: string) {
       break;
     }
   }
+  // Cancel the previous reader
+  console.log(
+    "[unsubscribeBars]: Canceling reader for",
+    subscriberUID,
+    globalReader.get(subscriberUID)
+  );
   globalReader.get(subscriberUID)?.cancel();
 }

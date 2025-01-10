@@ -38,6 +38,7 @@ function streamData(
     .then(({ value, done }) => {
       if (done) {
         console.error("[LOCAL stream] Streaming ended.");
+        setTimeout(() => attemptReconnect(retries, delay), 5000);
         return;
       }
 

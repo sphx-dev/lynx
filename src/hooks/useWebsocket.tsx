@@ -194,7 +194,7 @@ export const useWebsocket = (
         } catch (e) {
           console.log("WS::::::::::", "msg-error", e);
         }
-        console.log("WS::::::::::", "EVENT data:", msg);
+        // console.log("WS::::::::::", "EVENT data:", msg);
         onMessage?.(msg);
       };
 

@@ -35,13 +35,13 @@ export function useGlobalWebsocketHandler() {
 
       // Ensure the current address or MarginAcount address are involved in the event
       const addresses = getAddressesFromEvents(events);
-      console.log("WS_message", "addresses", addresses);
       if (
         !addresses.includes(address) &&
         !addresses.includes(selectedAddress)
       ) {
         return;
       }
+      console.log("WS_message", "addresses", addresses);
 
       const chainEventsNames = chainEvents.map(event => event.type);
       const chainEventsMap = new Set(chainEventsNames);
@@ -87,7 +87,7 @@ export function useGlobalWebsocketHandler() {
       // TRADE EVENTS
       // "transfer"
       if (chainEventsMap.has("transfer")) {
-        const addresses = getAddresesFromTransferEvent(chainEvents);
+        const addresses = getAddressesFromTransferEvent(chainEvents);
         console.log(
           "WS_message",
           "transfer event",
@@ -115,7 +115,7 @@ export function useGlobalWebsocketHandler() {
   });
 }
 
-function getAddresesFromTransferEvent(events: CosmosTransactionEvent[]) {
+function getAddressesFromTransferEvent(events: CosmosTransactionEvent[]) {
   const transferEvents = events.filter(ev => ev.type === "transfer");
   const attributes = transferEvents.map(ev => ev.attributes).flat();
   const addresses = attributes
