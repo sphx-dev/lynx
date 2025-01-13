@@ -15,8 +15,42 @@ export const Pagination = ({
   pageSize?: number;
 }) => {
   const totalPages = Math.ceil(Number(totalItems) / pageSize);
+  const pages = useMemo(
+    () => Array.from({ length: totalPages }, (_, i) => i),
+    [totalPages]
+  );
 
   if (totalItems <= pageSize) return null;
+
+  if (totalPages <= SIDE_PAGES * 2) {
+    return (
+      <PagesContainer>
+        <PageButton
+          key={"prev"}
+          onClick={() => setPage(page - 1 < 0 ? 0 : page - 1)}
+        >
+          {"<"}
+        </PageButton>
+        {pages.map(p => (
+          <PageButton
+            key={p}
+            onClick={() => setPage(p)}
+            className={p === page ? "selected" : ""}
+          >
+            {p + 1}
+          </PageButton>
+        ))}
+        <PageButton
+          key={"next"}
+          onClick={() =>
+            setPage(page + 1 > totalPages - 1 ? totalPages - 1 : page + 1)
+          }
+        >
+          {">"}
+        </PageButton>
+      </PagesContainer>
+    );
+  }
 
   return (
     <PagesContainer>

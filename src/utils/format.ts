@@ -11,9 +11,10 @@ export const formatNumber = ({
   after = "",
 }: FormatNumber): string => {
   try {
-    const formattedValue = Number(value?.toString()).toFixed(fixed);
+    const formattedValue = Number(Math.abs(value)?.toString()).toFixed(fixed);
     const localeValue = Number(formattedValue).toLocaleString("en-GB");
-    return String(before || "") + localeValue + String(after || "");
+    const sign = value < 0 ? "-" : "";
+    return sign + String(before || "") + localeValue + String(after || "");
   } catch (e) {
     return value?.toString();
   }

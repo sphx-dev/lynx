@@ -51,7 +51,11 @@ const PriceView = ({
       <Text color="tertiary">{label}</Text>
       <Text variant="textNumSm" color={colorsByType[type]}>
         {/* {value} */}
-        <NumberDisplay value={+value} before={before} after={after} />
+        {typeof value === "string" ? (
+          value
+        ) : (
+          <NumberDisplay value={+value} before={before} after={after} />
+        )}
       </Text>
     </Stack>
   );
@@ -124,9 +128,9 @@ const PriceBorder = () => {
       </MainPrice>
       <PriceView
         label="Last Price"
-        // value={formatNumber({ value: +lastPrice, before: unit })}
-        value={+lastPrice}
-        before={unit}
+        value={formatNumber({ value: +lastPrice, before: unit })}
+        // value={+lastPrice}
+        // before={unit}
         type={ValueType.ACTIVE}
       />
       {/* <PriceView
@@ -139,25 +143,23 @@ const PriceBorder = () => {
       /> */}
       <PriceView
         label="24h Change"
-        value={
-          // (changeLastDay > 0 ? "+" : "") +
-          // formatNumber({ value: changeLastDay, after: "%" })
-          changeLastDay
-        }
-        before={changeLastDay > 0 ? "+" : ""}
-        after="%"
+        value={formatNumber({ value: changeLastDay, before: unit })}
+        // before={changeLastDay > 0 ? "+" : ""}
+        // after="%"
         type={changeLastDay > 0 ? ValueType.ACTIVE : ValueType.ERROR}
       />
       {/* <PriceView
         label="Open Interest"
         value={formatNumber({ value: 22987672, before: unit })}
       /> */}
-      <PriceView label="24h Volume" value={volume} before={unit} />
+      <PriceView
+        label="24h Volume"
+        value={formatNumber({ value: volume, before: unit })}
+      />
       <PriceView
         label="8h Funding"
-        // value={formatNumber({ value: 0.0032, after: "%" })}
-        // value={fundingRate + " %"}
-        value={fundingRate}
+        value={+fundingRate}
+        before={fundingRate > 0 ? "+" : "-"}
         after="%"
         type={fundingRate > 0 ? ValueType.ACTIVE : ValueType.ERROR}
       />

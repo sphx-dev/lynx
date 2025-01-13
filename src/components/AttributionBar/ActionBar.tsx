@@ -6,6 +6,8 @@ import graph from "../../assets/icons/graph.svg";
 import settings from "../../assets/icons/setting.svg";
 import Group from "../Group";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import config from "@/config";
 
 // Define styled components for the action bar and icons
 export const ActionBarContainer = styled(Group)`
@@ -42,6 +44,15 @@ const Button = styled.div`
   justify-content: center;
   min-width: 45px;
 `;
+
+const ButtonLink = styled(Link)`
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 45px;
+`;
 // The React component that uses the styled components
 const ActionBar = () => {
   const { t } = useTranslation();
@@ -49,13 +60,17 @@ const ActionBar = () => {
     <ActionBarContainer spacing={10}>
       {/* You can replace these with the actual icons you need */}
       <Button>
-        {t("makeWithHonor")}
+        {t("madeWithHonor")}
         {/* <Icon src={heart} alt="Heart Icon" /> */}
       </Button>
       <Divider />
-      <Button>
-        <Icon src={graph} alt="Message Icon" />
-      </Button>
+      <ButtonLink
+        to={config.VITE_EXPLORER_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Icon src={graph} alt="Explorer Icon" />
+      </ButtonLink>
       <Divider />
       <Button>
         <Icon src={settings} alt="Settings Icon" />
