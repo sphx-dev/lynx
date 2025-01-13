@@ -8,7 +8,7 @@ const streamingUrl =
   window.location.protocol + config.VITE_API_URL + "/tradingview/streaming";
 const channelToSubscription = new Map();
 
-function handleStreamingData(UID: string, data: any) {
+function handleStreamingData(UID: string, resolution: number, data: any) {
   const { id, p, t } = data;
   if (!id || !p || !t) {
     return;
@@ -17,6 +17,7 @@ function handleStreamingData(UID: string, data: any) {
 
   const tradePrice = p;
   const tradeTime = t * 1000; // Multiplying by 1000 to get milliseconds
+  const nomalizedTradeTime = tradeTime - (tradeTime % (resolution * 60 * 1000));
 
   const channelString = id;
   const subscriptionItem = channelToSubscription.get(channelString);
@@ -30,22 +31,23 @@ function handleStreamingData(UID: string, data: any) {
   console.log(
     "Delta[" + id + "][" + UID + "]",
     "comming->" + dayjs(tradeTime).format("YYYY-MM-DD HH:mm:ss"),
+    "N{" + dayjs(nomalizedTradeTime).format("YYYY-MM-DD HH:mm:ss") + "}",
     "|",
     "prev->" + dayjs(lastDailyBar.time).format("YYYY-MM-DD HH:mm:ss"),
-    tradeTime > lastDailyBar.time ? "[NEW]" : "[same]",
+    nomalizedTradeTime > lastDailyBar.time ? "[NEW]" : "[same]",
     `(${p})`
   );
 
   let bar: any;
-  if (tradeTime > lastDailyBar.time) {
+  if (nomalizedTradeTime > lastDailyBar.time) {
     bar = {
-      time: tradeTime,
-      open: lastDailyBar.close,
+      time: nomalizedTradeTime,
+      open: tradePrice,
       high: tradePrice,
       low: tradePrice,
       close: tradePrice,
     };
-  } else if (tradeTime === lastDailyBar.time) {
+  } else if (nomalizedTradeTime === lastDailyBar.time) {
     bar = {
       ...lastDailyBar,
       high: Math.max(lastDailyBar.high, tradePrice),
@@ -84,7 +86,13 @@ function startStreaming(
       const reader = response.body?.getReader();
 
       globalReader.set(symbol + "_#_" + resolution, reader);
-      streamData(symbol + "_#_" + resolution, reader, retries, delay);
+      streamData(
+        symbol + "_#_" + resolution,
+        resolution,
+        reader,
+        retries,
+        delay
+      );
     })
     .catch(error => {
       console.error(
@@ -96,6 +104,7 @@ function startStreaming(
 
 function streamData(
   id: string,
+  resolution: number,
   reader?: ReadableStreamDefaultReader<Uint8Array>,
   retries = 3,
   delay = 3000
@@ -116,15 +125,15 @@ function streamData(
         if (trimmedDataString) {
           try {
             const jsonData = JSON.parse(trimmedDataString);
-            handleStreamingData(id, jsonData);
+            handleStreamingData(id, resolution, jsonData);
           } catch (e: any) {
             // console.error("Error parsing JSON:", e.message)
           }
         }
       });
 
-      streamData(id, reader); // Continue processing the stream
-      //setTimeout(() => streamData(id, reader), 2000); // Continue processing the stream
+      streamData(id, resolution, reader); // Continue processing the stream
+      //setTimeout(() => streamData(id, resolution, reader), 2000); // Continue processing the stream
     })
     .catch(error => {
       console.error("[stream] Error reading from stream:", error);

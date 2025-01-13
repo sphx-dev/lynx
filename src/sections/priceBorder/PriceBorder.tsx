@@ -3,7 +3,7 @@ import { Stack, Text } from "../../components";
 import useTheme from "../../hooks/useTheme";
 import { formatNumber } from "@/utils/format";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
-import { useLocalStreaming } from "../chart/localStreaming";
+// import { useLocalStreaming } from "../chart/localStreaming";
 import { useMarkets } from "@/hooks/useMarkets";
 import { useQuery } from "react-query";
 import config from "@/config";
@@ -29,11 +29,15 @@ interface PriceViewParam {
   label: string;
   value: string | number;
   type?: ValueType;
+  before?: string;
+  after?: string;
 }
 
 const PriceView = ({
   label,
   value,
+  before = "",
+  after = "",
   type = ValueType.DEFAULT,
 }: PriceViewParam) => {
   const { themeColors } = useTheme();
@@ -46,9 +50,42 @@ const PriceView = ({
     <Stack>
       <Text color="tertiary">{label}</Text>
       <Text variant="textNumSm" color={colorsByType[type]}>
-        {value}
+        {/* {value} */}
+        <NumberDisplay value={+value} before={before} after={after} />
       </Text>
     </Stack>
+  );
+};
+
+const NumberDisplay = ({
+  value,
+  before = "",
+  after = "",
+}: {
+  value: number;
+  before?: string;
+  after?: string;
+}) => {
+  const numStr = value.toFixed(10);
+  let [intPart, decimalPart] = numStr.split(".");
+  decimalPart = decimalPart?.replace(/0+$/, "");
+  const decimalsNotZero = decimalPart?.replace(/^0+/, "");
+
+  const zerosLength = decimalPart?.indexOf(decimalsNotZero);
+  const zeros = Array(zerosLength).fill(0).join("");
+
+  return (
+    <>
+      {before}
+      {formatNumber({ value: +intPart })}
+      {decimalPart && (
+        <>
+          .<span style={{ fontSize: "0.8em" }}>{zeros}</span>
+          {decimalsNotZero}
+        </>
+      )}
+      {after}
+    </>
   );
 };
 
@@ -68,12 +105,11 @@ const MainPriceUnit = styled.span`
 `;
 
 const PriceBorder = () => {
-  const data = useLocalStreaming();
   const unit = "$";
-  const price = data?.p ?? 0;
 
   const { data: assetInfo } = useAssetInfo();
   const volume = assetInfo?.volume24h ?? 0;
+  const lastPrice = assetInfo?.last_price ?? 0;
   const changeLastDay = assetInfo?.price24h ?? 0;
   const fundingRate = assetInfo?.funding_rate ?? 0.0001;
 
@@ -81,16 +117,16 @@ const PriceBorder = () => {
     <Wrapper>
       <SymbolSelect />
       <MainPrice>
-        {data?.p && (
-          <>
-            <MainPriceUnit>{unit}</MainPriceUnit>
-            {formatNumber({ value: +price })}
-          </>
-        )}
+        <>
+          <MainPriceUnit>{unit}</MainPriceUnit>
+          {formatNumber({ value: +lastPrice })}
+        </>
       </MainPrice>
       <PriceView
         label="Last Price"
-        value={formatNumber({ value: +price, before: unit })}
+        // value={formatNumber({ value: +lastPrice, before: unit })}
+        value={+lastPrice}
+        before={unit}
         type={ValueType.ACTIVE}
       />
       {/* <PriceView
@@ -104,24 +140,26 @@ const PriceBorder = () => {
       <PriceView
         label="24h Change"
         value={
-          (changeLastDay > 0 ? "+" : "") +
-          formatNumber({ value: changeLastDay, after: "%" })
+          // (changeLastDay > 0 ? "+" : "") +
+          // formatNumber({ value: changeLastDay, after: "%" })
+          changeLastDay
         }
+        before={changeLastDay > 0 ? "+" : ""}
+        after="%"
         type={changeLastDay > 0 ? ValueType.ACTIVE : ValueType.ERROR}
       />
       {/* <PriceView
         label="Open Interest"
         value={formatNumber({ value: 22987672, before: unit })}
       /> */}
-      <PriceView
-        label="24h Volume"
-        value={formatNumber({ value: volume, before: unit })}
-      />
+      <PriceView label="24h Volume" value={volume} before={unit} />
       <PriceView
         label="8h Funding"
         // value={formatNumber({ value: 0.0032, after: "%" })}
-        value={fundingRate + " %"}
-        type={ValueType.ACTIVE}
+        // value={fundingRate + " %"}
+        value={fundingRate}
+        after="%"
+        type={fundingRate > 0 ? ValueType.ACTIVE : ValueType.ERROR}
       />
     </Wrapper>
   );
@@ -131,6 +169,7 @@ export default PriceBorder;
 
 type AssetInfo = {
   volume24h: number; // 24h Volume
+  last_price: number;
   price24h: number; // 24h price Change
   funding_rate: number; // 8h Funding
 };
