@@ -15,39 +15,47 @@ exports[`Header Component > should render the Header component correctly 1`] = `
     style="width: 100vw;"
   >
     <header
-      class="sc-iRVXky eOIFFu"
+      class="sc-dqCRwF iTnpec"
     >
       <img
-        class="sc-ljhlHD hUbIth"
+        class="sc-eXvyUU fTMtiV"
         src="/src/assets/icons/logo-dark.svg"
       />
     </header>
     <nav
-      class="sc-jQybuE jmDjTD"
+      class="sc-klYcpz eBOjiM"
     >
       <a
-        class="sc-erSfwj inMCXb"
+        class="sc-DvaoS khPjbb"
         href="/dashboard"
       >
         Dashboard
       </a>
       <a
-        class="sc-erSfwj inMCXb"
+        class="sc-DvaoS khPjbb"
         href="/exchange"
       >
         Exchange
       </a>
       <a
-        class="sc-erSfwj inMCXb"
-        href="/leaderboard"
+        class="sc-DvaoS khPjbb"
+        href="/dashboard/faucet"
       >
-        Leaderboard
+        Faucet
       </a>
       <a
-        class="sc-erSfwj inMCXb"
-        href="/referrals"
+        class="sc-DvaoS khPjbb"
+        href="https://station.non-prod.sphx.dev"
+        target="_blank"
       >
-        referrals
+        Station
+      </a>
+      <a
+        class="sc-DvaoS khPjbb"
+        href="https://explorer.sphx.dev"
+        target="_blank"
+      >
+        Explorer
       </a>
       <button
         class="sc-fAUdSK dztAJe"
@@ -75,31 +83,39 @@ exports[`Header Component > should render the Header component correctly 1`] = `
 
 exports[`Header Component > should render the Nav component 1`] = `
 <nav
-  class="sc-jQybuE jmDjTD"
+  class="sc-klYcpz eBOjiM"
 >
   <a
-    class="sc-erSfwj inMCXb"
+    class="sc-DvaoS khPjbb"
     href="/dashboard"
   >
     Dashboard
   </a>
   <a
-    class="sc-erSfwj inMCXb"
+    class="sc-DvaoS khPjbb"
     href="/exchange"
   >
     Exchange
   </a>
   <a
-    class="sc-erSfwj inMCXb"
-    href="/leaderboard"
+    class="sc-DvaoS khPjbb"
+    href="/dashboard/faucet"
   >
-    Leaderboard
+    Faucet
   </a>
   <a
-    class="sc-erSfwj inMCXb"
-    href="/referrals"
+    class="sc-DvaoS khPjbb"
+    href="https://station.non-prod.sphx.dev"
+    target="_blank"
   >
-    referrals
+    Station
+  </a>
+  <a
+    class="sc-DvaoS khPjbb"
+    href="https://explorer.sphx.dev"
+    target="_blank"
+  >
+    Explorer
   </a>
   <button
     class="sc-fAUdSK dztAJe"

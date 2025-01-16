@@ -29,6 +29,7 @@ import { useLocalStreaming } from "../chart/localStreaming";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { t } from "i18next";
+import { formatDollars } from "@/utils/format";
 
 const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
 const MIN_RECORDS = 9;
@@ -38,6 +39,9 @@ const OrderBook: FunctionComponent = () => {
   const containerRef = useRef(null);
   const asksBidsRef = useRef(null);
   const { data: book, isLoading } = useOrderBook(asksBidsRef);
+  const { selectedMarket } = useMarkets();
+  const symbol = selectedMarket?.baseAsset;
+  const [sizeOption, setSizeOption] = useState(0);
 
   return (
     <Container ref={containerRef} data-testid="orderbook-tab">
@@ -76,8 +80,24 @@ const OrderBook: FunctionComponent = () => {
           </Text>
         </Stack>
       )}
-      <div>
-        <BidsAsksSize bidsSize={book?.bids_size} asksSize={book?.asks_size} />
+      <div onClick={() => setSizeOption(x => (x + 1) % 3)}>
+        {sizeOption === 0 && (
+          <BidsAsksSize bidsSize={book?.bids_size} asksSize={book?.asks_size} />
+        )}
+        {sizeOption === 1 && (
+          <BidsAsksSize
+            bidsSize={book?.bids_size_sum}
+            asksSize={book?.asks_size_sum}
+            formatFn={(value: number) => value.toFixed(2) + " " + symbol}
+          />
+        )}
+        {sizeOption === 2 && (
+          <BidsAsksSize
+            bidsSize={book?.bids_size_sum_value}
+            asksSize={book?.asks_size_sum_value}
+            formatFn={formatDollars}
+          />
+        )}
         <StreamingInfo />
       </div>
     </Container>
@@ -89,9 +109,11 @@ const MAX_SIDE = 100 - MIN_SIDE - MIN_SIDE;
 const BidsAsksSize = ({
   bidsSize,
   asksSize,
+  formatFn,
 }: {
   bidsSize: number;
   asksSize: number;
+  formatFn?: (value: number) => string;
 }) => {
   let bidsWidth = (bidsSize / (bidsSize + asksSize)) * MAX_SIDE + MIN_SIDE;
   let asksWidth = (asksSize / (bidsSize + asksSize)) * MAX_SIDE + MIN_SIDE;
@@ -104,14 +126,22 @@ const BidsAsksSize = ({
     <div style={{ position: "relative", height: "20px", margin: "15px 0 7px" }}>
       <Bids style={{ width: bidsWidth + "%" }}></Bids>
       <Asks style={{ width: asksWidth + "%" }}></Asks>
-      <TextContainer style={{ left: 0, width: "40px" }}>
-        {t("bids")}
+      {!formatFn && (
+        <TextContainer style={{ left: 0, width: "40px" }}>
+          {t("bids")}
+        </TextContainer>
+      )}
+      <TextContainer style={{ left: !formatFn ? "40px" : "5px" }}>
+        {formatFn ? formatFn(bidsSize) : bidsSize}
       </TextContainer>
-      <TextContainer style={{ left: "40px" }}>{bidsSize}</TextContainer>
-      <TextContainer style={{ right: 0, width: "40px" }}>
-        {t("asks")}
+      {!formatFn && (
+        <TextContainer style={{ right: 0, width: "40px" }}>
+          {t("asks")}
+        </TextContainer>
+      )}
+      <TextContainer style={{ right: !formatFn ? "40px" : "5px" }}>
+        {formatFn ? formatFn(asksSize) : asksSize}
       </TextContainer>
-      <TextContainer style={{ right: "40px" }}>{asksSize}</TextContainer>
     </div>
   );
 };
@@ -162,15 +192,17 @@ const PriceLevels = ({
         const depth = level.depth;
         const size: string = formatNumber(level.quantity);
         const price: string = formatPrice(level.price);
+        const amount: string = formatPriceInBook(level.amount);
+        const amountSum: string = formatPriceInBook(level.amountSum);
 
         return (
           <PriceLevelRowContainer
-            key={idx}
+            key={calculatedTotal}
             onClick={() => publish("PRICE_SELECTED", level.price.toFixed(6))}
           >
             {orderType === OrderType.BIDS ? (
               <DepthVisualizerBid
-                key={idx + "-bid"}
+                key={calculatedTotal + "-bid"}
                 style={{
                   ["--depth" as any]: `${depth}%`,
                   ["--filled" as any]: `${0}%`,
@@ -178,7 +210,7 @@ const PriceLevels = ({
               />
             ) : (
               <DepthVisualizerAsk
-                key={idx + "ask"}
+                key={calculatedTotal + "ask"}
                 style={{
                   ["--depth" as any]: `${depth}%`,
                   ["--filled" as any]: `${0}%`,
@@ -187,8 +219,10 @@ const PriceLevels = ({
             )}
             <PriceLevelRow
               key={size + total}
-              total={total}
-              size={size}
+              // total={total}
+              // size={size}
+              total={amountSum}
+              size={amount}
               price={price}
               reversedFieldsOrder={orderType === OrderType.ASKS}
             />
@@ -203,7 +237,21 @@ const formatPrice = (arg: number): string => {
   return arg.toLocaleString("en", {
     useGrouping: true,
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
+};
+
+const formatPriceInBook = (arg: number): string => {
+  if (arg > 1_000_000_000) {
+    return formatPrice(arg / 1_000_000_000) + "b";
+  }
+  if (arg > 1_000_000) {
+    return formatPrice(arg / 1_000_000) + "m";
+  }
+  if (arg > 1_000) {
+    return formatPrice(arg / 1_000) + "k";
+  }
+  return formatPrice(arg);
 };
 
 const formatNumber = (arg: number): string => {
@@ -251,7 +299,23 @@ const useOrderBookData = ({ ticker }: { ticker: string | undefined }) => {
 };
 
 function parseOrderBokData(data: any, records: number = MIN_RECORDS) {
+  let bidsSizeSum = 0;
+  let bidsSizeSumValue = 0;
+  data?.bids?.forEach((bid: any) => {
+    bid.amount = Number(bid.quantity) * Number(bid.price);
+    bidsSizeSum += Number(bid.quantity);
+    bidsSizeSumValue += Number(bid.quantity) * Number(bid.price);
+  });
+
   const bids = orderToState(data?.bids?.slice(0, records) ?? []);
+  let asksSizeSum = 0;
+  let asksSizeSumValue = 0;
+  data?.asks?.forEach((ask: any) => {
+    ask.amount = Number(ask.quantity) * Number(ask.price);
+    asksSizeSum += Number(ask.quantity);
+    asksSizeSumValue += Number(ask.quantity) * Number(ask.price);
+  });
+
   const asks = asksToState(
     data?.asks?.slice(
       Math.max(0, data?.asks?.length - records),
@@ -266,8 +330,12 @@ function parseOrderBokData(data: any, records: number = MIN_RECORDS) {
   return {
     bids: bids ?? [],
     bids_size: data?.bids_size,
+    bids_size_sum: bidsSizeSum,
+    bids_size_sum_value: bidsSizeSumValue,
     asks: asks ?? [],
     asks_size: data?.asks_size,
+    asks_size_sum: asksSizeSum,
+    asks_size_sum_value: asksSizeSumValue,
     spread,
     spreadPercentage,
   };

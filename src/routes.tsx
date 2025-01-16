@@ -8,6 +8,7 @@ import MarketsPage from "./pages/Markets";
 import { Funding } from "./pages/DashboardSections/Funding";
 import { Orders } from "./pages/DashboardSections/Orders";
 import { Transfers } from "./pages/DashboardSections/Transfers";
+import { Faucet } from "./pages/DashboardSections/Faucet";
 
 export const ROUTES = {
   futures: "futures",
@@ -20,6 +21,7 @@ export const ROUTES = {
   dashboardFunding: "funding",
   dashboardOrders: "orders",
   dashboardTransfers: "transfers",
+  dashboardFaucet: "faucet",
 };
 
 export const routes = [
@@ -38,6 +40,7 @@ export const routes = [
           { path: ROUTES.dashboardFunding, element: <Funding /> },
           { path: ROUTES.dashboardOrders, element: <Orders /> },
           { path: ROUTES.dashboardTransfers, element: <Transfers /> },
+          { path: ROUTES.dashboardFaucet, element: <Faucet /> },
         ],
       },
       {

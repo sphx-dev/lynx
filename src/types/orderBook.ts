@@ -8,6 +8,8 @@ export interface Order<T> {
 
 export interface OrderWithTotal extends Order<number> {
   totalSum: number;
+  amount: number;
+  amountSum: number;
 }
 export interface OrderWithDepth extends OrderWithTotal {
   depth: number;

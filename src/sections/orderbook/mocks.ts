@@ -438,6 +438,8 @@ export const BIDS = [
 
 export const STATE_BIDS = [
   {
+    amount: 1361.36,
+    amountSum: 1361.36,
     quantity: 17,
     price: 80.08,
     leverage: 0,
@@ -445,6 +447,8 @@ export const STATE_BIDS = [
     depth: 0.00012028360042778509,
   },
   {
+    amount: 14431046.86,
+    amountSum: 14432408.219999999,
     quantity: 180343,
     price: 80.02,
     leverage: 0,
@@ -452,6 +456,8 @@ export const STATE_BIDS = [
     depth: 1.2761382454797248,
   },
   {
+    amount: 56628311.67999999,
+    amountSum: 71060719.89999999,
     quantity: 708208,
     price: 79.96,
     leverage: 0,
@@ -459,6 +465,8 @@ export const STATE_BIDS = [
     depth: 6.2870681332303615,
   },
   {
+    amount: 56771506.800000004,
+    amountSum: 127832226.69999999,
     quantity: 710532,
     price: 79.9,
     leverage: 0,
@@ -466,6 +474,8 @@ export const STATE_BIDS = [
     depth: 11.314441496710065,
   },
   {
+    amount: 56301835.74999999,
+    amountSum: 184134062.45,
     quantity: 705095,
     price: 79.85,
     leverage: 0,
@@ -473,6 +483,8 @@ export const STATE_BIDS = [
     depth: 16.303345334570604,
   },
   {
+    amount: 56967393.42,
+    amountSum: 241101455.87,
     quantity: 715491,
     price: 79.62,
     leverage: 0,
@@ -480,6 +492,8 @@ export const STATE_BIDS = [
     depth: 21.365806131845684,
   },
   {
+    amount: 56116503.78999999,
+    amountSum: 297217959.65999997,
     quantity: 705247,
     price: 79.57,
     leverage: 0,
@@ -487,6 +501,8 @@ export const STATE_BIDS = [
     depth: 26.355785446604163,
   },
   {
+    amount: 56374999.56,
+    amountSum: 353592959.21999997,
     quantity: 708852,
     price: 79.53,
     leverage: 0,
@@ -494,6 +510,8 @@ export const STATE_BIDS = [
     depth: 31.37127196015924,
   },
   {
+    amount: 56604590.529999994,
+    amountSum: 410197549.74999994,
     quantity: 712097,
     price: 79.49,
     leverage: 0,
@@ -501,6 +519,8 @@ export const STATE_BIDS = [
     depth: 36.409718490384215,
   },
   {
+    amount: 55965082.8,
+    amountSum: 466162632.54999995,
     quantity: 704495,
     price: 79.44,
     leverage: 0,
@@ -508,6 +528,8 @@ export const STATE_BIDS = [
     depth: 41.39437702470023,
   },
   {
+    amount: 56517998.480000004,
+    amountSum: 522680631.03,
     quantity: 712891,
     price: 79.28,
     leverage: 0,
@@ -515,6 +537,8 @@ export const STATE_BIDS = [
     depth: 46.438441506615774,
   },
   {
+    amount: 55809038.75,
+    amountSum: 578489669.78,
     quantity: 704215,
     price: 79.25,
     leverage: 0,
@@ -522,6 +546,8 @@ export const STATE_BIDS = [
     depth: 51.421118899277694,
   },
   {
+    amount: 56524895.96,
+    amountSum: 635014565.74,
     quantity: 713518,
     price: 79.22,
     leverage: 0,
@@ -529,6 +555,8 @@ export const STATE_BIDS = [
     depth: 56.469619723397244,
   },
   {
+    amount: 56038011.6,
+    amountSum: 691052577.34,
     quantity: 707640,
     price: 79.19,
     leverage: 0,
@@ -536,6 +564,8 @@ export const STATE_BIDS = [
     depth: 61.47653072379241,
   },
   {
+    amount: 18718509.36,
+    amountSum: 709771086.7,
     quantity: 236524,
     price: 79.14,
     leverage: 0,
@@ -543,6 +573,8 @@ export const STATE_BIDS = [
     depth: 63.15005768306191,
   },
   {
+    amount: 55553290.54,
+    amountSum: 765324377.24,
     quantity: 702406,
     price: 79.09,
     leverage: 0,
@@ -550,6 +582,8 @@ export const STATE_BIDS = [
     depth: 68.11993548553713,
   },
   {
+    amount: 55790843.16,
+    amountSum: 821115220.4,
     quantity: 705588,
     price: 79.07,
     leverage: 0,
@@ -557,6 +591,8 @@ export const STATE_BIDS = [
     depth: 73.11232754781007,
   },
   {
+    amount: 56278940.06,
+    amountSum: 877394160.46,
     quantity: 711851,
     price: 79.06,
     leverage: 0,
@@ -564,6 +600,8 @@ export const STATE_BIDS = [
     depth: 78.1490335035818,
   },
   {
+    amount: 56542844.800000004,
+    amountSum: 933937005.26,
     quantity: 715370,
     price: 79.04,
     leverage: 0,
@@ -571,6 +609,8 @@ export const STATE_BIDS = [
     depth: 83.21063816464206,
   },
   {
+    amount: 56492066.54,
+    amountSum: 990429071.8,
     quantity: 714818,
     price: 79.03,
     leverage: 0,
@@ -578,6 +618,8 @@ export const STATE_BIDS = [
     depth: 88.26833714644138,
   },
   {
+    amount: 18995979.25,
+    amountSum: 1009425051.05,
     quantity: 240425,
     price: 79.01,
     leverage: 0,
@@ -585,6 +627,8 @@ export const STATE_BIDS = [
     depth: 89.96946565425611,
   },
   {
+    amount: 111993718,
+    amountSum: 1121418769.05,
     quantity: 1417642,
     price: 79,
     leverage: 0,
@@ -595,6 +639,8 @@ export const STATE_BIDS = [
 
 export const STATE_ASKS = [
   {
+    amount: 64826125,
+    amountSum: 1284272912.65,
     quantity: 712375,
     price: 91,
     leverage: 0,
@@ -602,6 +648,8 @@ export const STATE_ASKS = [
     depth: 100,
   },
   {
+    amount: 128416461.75,
+    amountSum: 1219446787.65,
     quantity: 1411325,
     price: 90.99,
     leverage: 0,
@@ -609,6 +657,8 @@ export const STATE_ASKS = [
     depth: 94.97044006098943,
   },
   {
+    amount: 21265210.3,
+    amountSum: 1091030325.9,
     quantity: 233735,
     price: 90.98,
     leverage: 0,
@@ -616,6 +666,8 @@ export const STATE_ASKS = [
     depth: 85.00610430956065,
   },
   {
+    amount: 63756865.67999999,
+    amountSum: 1069765115.6,
     quantity: 700933,
     price: 90.96,
     leverage: 0,
@@ -623,6 +675,8 @@ export const STATE_ASKS = [
     depth: 83.35587206903476,
   },
   {
+    amount: 64566399.66,
+    amountSum: 1006008249.9200001,
     quantity: 709989,
     price: 90.94,
     leverage: 0,
@@ -630,6 +684,8 @@ export const STATE_ASKS = [
     depth: 78.4070957409344,
   },
   {
+    amount: 64598126.88,
+    amountSum: 941441850.2600001,
     quantity: 710416,
     price: 90.93,
     leverage: 0,
@@ -637,6 +693,8 @@ export const STATE_ASKS = [
     depth: 73.39438160647127,
   },
   {
+    amount: 64339461.57,
+    amountSum: 876843723.3800001,
     quantity: 707727,
     price: 90.91,
     leverage: 0,
@@ -644,6 +702,8 @@ export const STATE_ASKS = [
     depth: 68.37865273665955,
   },
   {
+    amount: 21050580.720000003,
+    amountSum: 812504261.8100001,
     quantity: 231656,
     price: 90.87,
     leverage: 0,
@@ -651,6 +711,8 @@ export const STATE_ASKS = [
     depth: 63.38190893324685,
   },
   {
+    amount: 64442680.83,
+    amountSum: 791453681.09,
     quantity: 709643,
     price: 90.81,
     leverage: 0,
@@ -658,6 +720,8 @@ export const STATE_ASKS = [
     depth: 61.74635499433625,
   },
   {
+    amount: 64075338.18,
+    amountSum: 727011000.26,
     quantity: 705831,
     price: 90.78,
     leverage: 0,
@@ -665,6 +729,8 @@ export const STATE_ASKS = [
     depth: 56.736083713340605,
   },
   {
+    amount: 64251091.480000004,
+    amountSum: 662935662.08,
     quantity: 707923,
     price: 90.76,
     leverage: 0,
@@ -672,6 +738,8 @@ export const STATE_ASKS = [
     depth: 51.75272618210809,
   },
   {
+    amount: 64593590.36,
+    amountSum: 598684570.6,
     quantity: 711932,
     price: 90.73,
     leverage: 0,
@@ -679,6 +747,8 @@ export const STATE_ASKS = [
     depth: 46.75459856574848,
   },
   {
+    amount: 64231555.26,
+    amountSum: 534090980.24,
     quantity: 708254,
     price: 90.69,
     leverage: 0,
@@ -686,6 +756,8 @@ export const STATE_ASKS = [
     depth: 41.72816632640872,
   },
   {
+    amount: 22092900.599999998,
+    amountSum: 469859424.98,
     quantity: 243851,
     price: 90.6,
     leverage: 0,
@@ -693,6 +765,8 @@ export const STATE_ASKS = [
     depth: 36.727701760633686,
   },
   {
+    amount: 63667395.22,
+    amountSum: 447766524.38,
     quantity: 703274,
     price: 90.53,
     leverage: 0,
@@ -700,6 +774,8 @@ export const STATE_ASKS = [
     depth: 35.00604782739955,
   },
   {
+    amount: 64113585.120000005,
+    amountSum: 384099129.15999997,
     quantity: 708594,
     price: 90.48,
     leverage: 0,
@@ -707,6 +783,8 @@ export const STATE_ASKS = [
     depth: 30.04074340690794,
   },
   {
+    amount: 63766892.559999995,
+    amountSum: 319985544.03999996,
     quantity: 705074,
     price: 90.44,
     leverage: 0,
@@ -714,6 +792,8 @@ export const STATE_ASKS = [
     depth: 25.037878349286245,
   },
   {
+    amount: 64220016.03,
+    amountSum: 256218651.48,
     quantity: 710477,
     price: 90.39,
     leverage: 0,
@@ -721,6 +801,8 @@ export const STATE_ASKS = [
     depth: 20.05986544254762,
   },
   {
+    amount: 64120788.7,
+    amountSum: 191998635.45,
     quantity: 711110,
     price: 90.17,
     leverage: 0,
@@ -728,6 +810,8 @@ export const STATE_ASKS = [
     depth: 15.04370589625752,
   },
   {
+    amount: 63593150.08,
+    amountSum: 127877846.75,
     quantity: 705728,
     price: 90.11,
     leverage: 0,
@@ -735,6 +819,8 @@ export const STATE_ASKS = [
     depth: 10.023077198970556,
   },
   {
+    amount: 63102790.5,
+    amountSum: 64284696.67,
     quantity: 700675,
     price: 90.06,
     leverage: 0,
@@ -742,6 +828,8 @@ export const STATE_ASKS = [
     depth: 5.040446875562174,
   },
   {
+    amount: 887670,
+    amountSum: 1181906.17,
     quantity: 9863,
     price: 90,
     leverage: 0,
@@ -749,6 +837,8 @@ export const STATE_ASKS = [
     depth: 0.09349209715722459,
   },
   {
+    amount: 25453.02,
+    amountSum: 294236.17000000004,
     quantity: 283,
     price: 89.94,
     leverage: 0,
@@ -756,6 +846,8 @@ export const STATE_ASKS = [
     depth: 0.023856652793706534,
   },
   {
+    amount: 2155.68,
+    amountSum: 268783.15,
     quantity: 24,
     price: 89.82,
     leverage: 0,
@@ -763,6 +855,8 @@ export const STATE_ASKS = [
     depth: 0.021858596344869908,
   },
   {
+    amount: 26270.379999999997,
+    amountSum: 266627.47000000003,
     quantity: 293,
     price: 89.66,
     leverage: 0,
@@ -770,6 +864,8 @@ export const STATE_ASKS = [
     depth: 0.021689149861576343,
   },
   {
+    amount: 11109.16,
+    amountSum: 240357.09000000003,
     quantity: 124,
     price: 89.59,
     leverage: 0,
@@ -777,6 +873,8 @@ export const STATE_ASKS = [
     depth: 0.019620490711367403,
   },
   {
+    amount: 8952,
+    amountSum: 229247.93000000002,
     quantity: 100,
     price: 89.52,
     leverage: 0,
@@ -784,6 +882,8 @@ export const STATE_ASKS = [
     depth: 0.018745017214350648,
   },
   {
+    amount: 3935.8,
+    amountSum: 220295.93000000002,
     quantity: 44,
     price: 89.45,
     leverage: 0,
@@ -791,6 +891,8 @@ export const STATE_ASKS = [
     depth: 0.01803899020062746,
   },
   {
+    amount: 2592.02,
+    amountSum: 216360.13000000003,
     quantity: 29,
     price: 89.38,
     leverage: 0,
@@ -798,6 +900,8 @@ export const STATE_ASKS = [
     depth: 0.017728338314589257,
   },
   {
+    amount: 11416.32,
+    amountSum: 213768.11000000004,
     quantity: 128,
     price: 89.19,
     leverage: 0,
@@ -805,6 +909,8 @@ export const STATE_ASKS = [
     depth: 0.017523590480609533,
   },
   {
+    amount: 8013.6,
+    amountSum: 202351.79000000004,
     quantity: 90,
     price: 89.04,
     leverage: 0,
@@ -812,6 +918,8 @@ export const STATE_ASKS = [
     depth: 0.01661987590304385,
   },
   {
+    amount: 9251.84,
+    amountSum: 194338.19000000003,
     quantity: 104,
     price: 88.96,
     leverage: 0,
@@ -819,6 +927,8 @@ export const STATE_ASKS = [
     depth: 0.015984451590692984,
   },
   {
+    amount: 4621.76,
+    amountSum: 185086.35000000003,
     quantity: 52,
     price: 88.88,
     leverage: 0,
@@ -826,6 +936,8 @@ export const STATE_ASKS = [
     depth: 0.015250183496420868,
   },
   {
+    amount: 9322.95,
+    amountSum: 180464.59000000003,
     quantity: 105,
     price: 88.79,
     leverage: 0,
@@ -833,6 +945,8 @@ export const STATE_ASKS = [
     depth: 0.014883049449284808,
   },
   {
+    amount: 4420.5,
+    amountSum: 171141.64,
     quantity: 50,
     price: 88.41,
     leverage: 0,
@@ -840,6 +954,8 @@ export const STATE_ASKS = [
     depth: 0.01414172108487546,
   },
   {
+    amount: 12189.539999999999,
+    amountSum: 166721.14,
     quantity: 138,
     price: 88.33,
     leverage: 0,
@@ -847,6 +963,8 @@ export const STATE_ASKS = [
     depth: 0.013788707578013868,
   },
   {
+    amount: 4495.650000000001,
+    amountSum: 154531.6,
     quantity: 51,
     price: 88.15,
     leverage: 0,
@@ -854,6 +972,8 @@ export const STATE_ASKS = [
     depth: 0.012814390299075867,
   },
   {
+    amount: 5195.54,
+    amountSum: 150035.95,
     quantity: 59,
     price: 88.06,
     leverage: 0,
@@ -861,6 +981,8 @@ export const STATE_ASKS = [
     depth: 0.012454316522077041,
   },
   {
+    amount: 1402.24,
+    amountSum: 144840.41,
     quantity: 16,
     price: 87.64,
     leverage: 0,
@@ -868,6 +990,8 @@ export const STATE_ASKS = [
     depth: 0.012037760583980359,
   },
   {
+    amount: 2013.42,
+    amountSum: 143438.17,
     quantity: 23,
     price: 87.54,
     leverage: 0,
@@ -875,6 +999,8 @@ export const STATE_ASKS = [
     depth: 0.01192479626178465,
   },
   {
+    amount: 8831.44,
+    amountSum: 141424.75,
     quantity: 101,
     price: 87.44,
     leverage: 0,
@@ -882,6 +1008,8 @@ export const STATE_ASKS = [
     depth: 0.011762410048628316,
   },
   {
+    amount: 5765.099999999999,
+    amountSum: 132593.31,
     quantity: 66,
     price: 87.35,
     leverage: 0,
@@ -889,6 +1017,8 @@ export const STATE_ASKS = [
     depth: 0.011049322764767897,
   },
   {
+    amount: 11210.1,
+    amountSum: 126828.20999999999,
     quantity: 129,
     price: 86.9,
     leverage: 0,
@@ -896,6 +1026,8 @@ export const STATE_ASKS = [
     depth: 0.010583344935710592,
   },
   {
+    amount: 3906,
+    amountSum: 115618.10999999999,
     quantity: 45,
     price: 86.8,
     leverage: 0,
@@ -903,6 +1035,8 @@ export const STATE_ASKS = [
     depth: 0.00967257008800768,
   },
   {
+    amount: 1472.03,
+    amountSum: 111712.10999999999,
     quantity: 17,
     price: 86.59,
     leverage: 0,
@@ -910,6 +1044,8 @@ export const STATE_ASKS = [
     depth: 0.009354857931832244,
   },
   {
+    amount: 11589.66,
+    amountSum: 110240.07999999999,
     quantity: 134,
     price: 86.49,
     leverage: 0,
@@ -917,6 +1053,8 @@ export const STATE_ASKS = [
     depth: 0.009234833339499303,
   },
   {
+    amount: 9721.39,
+    amountSum: 98650.41999999998,
     quantity: 113,
     price: 86.03,
     leverage: 0,
@@ -924,6 +1062,8 @@ export const STATE_ASKS = [
     depth: 0.00828875714111023,
   },
   {
+    amount: 9451.2,
+    amountSum: 88929.02999999998,
     quantity: 110,
     price: 85.92,
     leverage: 0,
@@ -931,6 +1071,8 @@ export const STATE_ASKS = [
     depth: 0.007490946615603028,
   },
   {
+    amount: 1114.23,
+    amountSum: 79477.82999999999,
     quantity: 13,
     price: 85.71,
     leverage: 0,
@@ -938,6 +1080,8 @@ export const STATE_ASKS = [
     depth: 0.006714316900507521,
   },
   {
+    amount: 5880.87,
+    amountSum: 78363.59999999999,
     quantity: 69,
     price: 85.23,
     leverage: 0,
@@ -945,6 +1089,8 @@ export const STATE_ASKS = [
     depth: 0.006622533388723506,
   },
   {
+    amount: 2213.38,
+    amountSum: 72482.73,
     quantity: 26,
     price: 85.13,
     leverage: 0,
@@ -952,6 +1098,8 @@ export const STATE_ASKS = [
     depth: 0.0061353747492545055,
   },
   {
+    amount: 1698.4,
+    amountSum: 70269.34999999999,
     quantity: 20,
     price: 84.92,
     leverage: 0,
@@ -959,6 +1107,8 @@ export const STATE_ASKS = [
     depth: 0.005951807725686477,
   },
   {
+    amount: 2544.3,
+    amountSum: 68570.95,
     quantity: 30,
     price: 84.81,
     leverage: 0,
@@ -966,6 +1116,8 @@ export const STATE_ASKS = [
     depth: 0.00581060232294184,
   },
   {
+    amount: 7083.72,
+    amountSum: 66026.65,
     quantity: 84,
     price: 84.33,
     leverage: 0,
@@ -973,6 +1125,8 @@ export const STATE_ASKS = [
     depth: 0.005598794218824883,
   },
   {
+    amount: 8928.380000000001,
+    amountSum: 58942.92999999999,
     quantity: 106,
     price: 84.23,
     leverage: 0,
@@ -980,6 +1134,8 @@ export const STATE_ASKS = [
     depth: 0.005005731527297405,
   },
   {
+    amount: 4285.0199999999995,
+    amountSum: 50014.549999999996,
     quantity: 51,
     price: 84.02,
     leverage: 0,
@@ -987,6 +1143,8 @@ export const STATE_ASKS = [
     depth: 0.004257342892750825,
   },
   {
+    amount: 6461.07,
+    amountSum: 45729.53,
     quantity: 77,
     price: 83.91,
     leverage: 0,
@@ -994,6 +1152,8 @@ export const STATE_ASKS = [
     depth: 0.0038972691157519996,
   },
   {
+    amount: 2753.85,
+    amountSum: 39268.46,
     quantity: 33,
     price: 83.45,
     leverage: 0,
@@ -1001,6 +1161,8 @@ export const STATE_ASKS = [
     depth: 0.0033536283151851445,
   },
   {
+    amount: 8729.7,
+    amountSum: 36514.61,
     quantity: 105,
     price: 83.14,
     leverage: 0,
@@ -1008,6 +1170,8 @@ export const STATE_ASKS = [
     depth: 0.003120639400656492,
   },
   {
+    amount: 8103.62,
+    amountSum: 27784.91,
     quantity: 98,
     price: 82.69,
     leverage: 0,
@@ -1015,6 +1179,8 @@ export const STATE_ASKS = [
     depth: 0.0023793110362471444,
   },
   {
+    amount: 1321.6,
+    amountSum: 19681.29,
     quantity: 16,
     price: 82.6,
     leverage: 0,
@@ -1022,6 +1188,8 @@ export const STATE_ASKS = [
     depth: 0.00168740456279842,
   },
   {
+    amount: 6592,
+    amountSum: 18359.690000000002,
     quantity: 80,
     price: 82.4,
     leverage: 0,
@@ -1029,6 +1197,8 @@ export const STATE_ASKS = [
     depth: 0.00157444024060271,
   },
   {
+    amount: 10864.92,
+    amountSum: 11767.69,
     quantity: 132,
     price: 82.31,
     leverage: 0,
@@ -1036,6 +1206,8 @@ export const STATE_ASKS = [
     depth: 0.0010096186296241593,
   },
   {
+    amount: 902.77,
+    amountSum: 902.77,
     quantity: 11,
     price: 82.07,
     leverage: 0,
@@ -1052,6 +1224,8 @@ export const mockOrderBookWithIntPrice = {
       leverage: 0,
       totalSum: 527262,
       depth: 5.293079870933105,
+      amount: 47899982, // 527262 * 91
+      amountSum: 47899982,
     },
   ],
   bids: [
@@ -1061,6 +1235,8 @@ export const mockOrderBookWithIntPrice = {
       leverage: 0,
       totalSum: 79,
       depth: 0.0009724814822291935,
+      amount: 6399, // 79 * 81
+      amountSum: 6399,
     },
   ],
 };
@@ -1073,6 +1249,8 @@ export const mockOrderBookWithDecimalsPrice = {
       leverage: 0,
       totalSum: 527262,
       depth: 5.293079870933105,
+      amount: 2.63631, // 527262 * 0.000005
+      amountSum: 2.63631,
     },
   ],
   bids: [
@@ -1082,6 +1260,8 @@ export const mockOrderBookWithDecimalsPrice = {
       leverage: 0,
       totalSum: 79,
       depth: 0.0009724814822291935,
+      amount: 0.0003555, // 79 * 0.0000045
+      amountSum: 0.0003555,
     },
   ],
 };
@@ -1113,6 +1293,7 @@ export const ORDERS: Order<number>[] = [
   },
 ];
 
+let amountSumOrdersWithTotal = 0;
 export const ORDERS_WITH_TOTAL: OrderWithTotal[] = [
   {
     quantity: 2,
@@ -1138,8 +1319,13 @@ export const ORDERS_WITH_TOTAL: OrderWithTotal[] = [
     leverage: 0,
     totalSum: 17,
   },
-];
+].map((order, index) => ({
+  ...order,
+  amount: order.price * order.quantity,
+  amountSum: (amountSumOrdersWithTotal += order.price * order.quantity),
+}));
 
+let amountSumOrdersWithDepth = 0;
 export const ORDERS_WITH_DEPTH: OrderWithDepth[] = [
   {
     quantity: 2,
@@ -1169,4 +1355,8 @@ export const ORDERS_WITH_DEPTH: OrderWithDepth[] = [
     totalSum: 17,
     depth: 1 * 100,
   },
-];
+].map((order, index) => ({
+  ...order,
+  amount: order.price * order.quantity,
+  amountSum: (amountSumOrdersWithDepth += order.price * order.quantity),
+}));

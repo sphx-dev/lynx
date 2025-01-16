@@ -31,6 +31,9 @@ export const Sidebar = () => {
               <NavLink to={"/" + ROUTES.dashboard}>{t("overview")}</NavLink>
             </ListItem>
             <ListItem>
+              <NavLink to={ROUTES.dashboardFaucet}>{t("faucet")}</NavLink>
+            </ListItem>
+            <ListItem>
               <NavLink to={ROUTES.dashboardFunding}>{t("funding")}</NavLink>
             </ListItem>
             <ListItem>

@@ -1,5 +1,5 @@
 import { Group, Stack, Text } from "../../components";
-import { formatNumber } from "../../utils/format";
+import { formatDollars } from "@/utils/format";
 
 import { useBalance } from "@/hooks/useBalance";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
@@ -54,12 +54,9 @@ const Summary = ({
     <Stack>
       <Label
         label={t("pricePerContract")}
-        value={formatNumber({ value: pricePerContract, after: " USD" })}
+        value={formatDollars(pricePerContract)}
       />
-      <Label
-        label={t("notionalValue")}
-        value={formatNumber({ value: notional, after: " USD" })}
-      />
+      <Label label={t("notionalValue")} value={formatDollars(notional)} />
       {/* <Label
         label="Total Fees"
         value={formatNumber({ value: 2.21, after: " USD" })}
@@ -73,7 +70,7 @@ const Summary = ({
       /> */}
       <Label
         label="Available Margin"
-        value={amount ? (amount / PRECISION).toFixed(5) + " USD" : ""}
+        value={amount ? formatDollars(amount / PRECISION) : ""}
       />
     </Stack>
   );

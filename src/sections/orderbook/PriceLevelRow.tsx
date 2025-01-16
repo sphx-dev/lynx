@@ -45,9 +45,11 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
           </Text>
         </Label>
         <Label>
+          <Currency>$</Currency>
           <Text variant="textNumMd">{size}</Text>
         </Label>
         <Label>
+          <Currency>$</Currency>
           <Text variant="textNumMd">{total}</Text>
         </Label>
       </>

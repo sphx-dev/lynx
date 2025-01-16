@@ -28,8 +28,8 @@ const StyledLink = styled(Link)`
 const Navbar = () => {
   return (
     <Wrapper>
-      {navLinks.map(({ title, path }) => (
-        <StyledLink to={path} key={title}>
+      {navLinks.map(({ title, path, target }) => (
+        <StyledLink to={path} key={title} target={target}>
           {title}
         </StyledLink>
       ))}

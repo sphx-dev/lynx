@@ -70,7 +70,7 @@ export const usePositionColumns = function (
         <Text color="tertiary">
           {formatNumber({
             value: Number(props.getValue()) / PRECISION,
-            fixed: 2,
+            fixed: 3,
           })}
         </Text>
       ),

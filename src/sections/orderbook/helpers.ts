@@ -3,13 +3,22 @@ import Decimal from "decimal.js";
 import { pipe } from "../../utils/pipe";
 export const addTotalSums = (orders: Order<number>[]): OrderWithTotal[] => {
   const totalSums: number[] = [];
+  let amountSum = 0;
 
-  return orders.map((order, idx) => {
-    const { quantity } = order;
-    const updatedLevel: OrderWithTotal = { ...order, totalSum: 0 };
+  return orders.map((order, idx, orders) => {
+    const { price, quantity } = order;
+    const updatedLevel: OrderWithTotal = {
+      ...order,
+      totalSum: 0,
+      amount: 0,
+      amountSum: 0,
+    };
     const totalSum: number =
       idx === 0 ? quantity : quantity + totalSums[idx - 1];
     updatedLevel.totalSum = totalSum;
+    updatedLevel.amount = Number(price) * Number(quantity);
+    amountSum += updatedLevel.amount;
+    updatedLevel.amountSum = amountSum;
     totalSums.push(totalSum);
     return updatedLevel;
   });

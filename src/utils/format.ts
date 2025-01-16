@@ -29,3 +29,13 @@ export const displayPrice = (price: number, unit: string) =>
 export function formatPrice(price: number, fixed = 5): string {
   return price.toFixed(fixed);
 }
+
+///
+export function formatDollars(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    // currencyDisplay values can be: "code", "symbol", "narrowSymbol", or "name"
+    currencyDisplay: "code",
+  }).format(value);
+}

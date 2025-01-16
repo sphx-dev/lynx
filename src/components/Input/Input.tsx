@@ -11,6 +11,7 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
   rightSide?: string;
   fluid?: boolean;
   variant?: keyof ThemeColors["input"];
+  inputStyle?: React.CSSProperties;
 }
 
 type Ref = HTMLInputElement;
@@ -96,6 +97,7 @@ export const Input = forwardRef<Ref, InputProps>(
       rightSide,
       fluid,
       style,
+      inputStyle,
       variant = "primary",
       onChange,
       type,
@@ -147,6 +149,7 @@ export const Input = forwardRef<Ref, InputProps>(
             data-error={error ? "true" : "false"}
             ref={ref}
             type={type}
+            style={inputStyle}
             {...restProps}
             onFocus={handleFocus}
             onBlur={handleBlur}

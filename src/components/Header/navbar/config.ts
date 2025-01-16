@@ -1,3 +1,4 @@
+import config from "@/config";
 import { ROUTES } from "../../../routes";
 
 export const navLinks = [
@@ -12,13 +13,30 @@ export const navLinks = [
     icon: null,
   },
   {
-    title: "Leaderboard",
-    path: ROUTES.leaderBoard,
+    title: "Faucet",
+    path: ROUTES.dashboard + "/" + ROUTES.dashboardFaucet,
     icon: null,
   },
   {
-    title: "referrals",
-    path: ROUTES.referrals,
+    title: "Station",
+    path: config.VITE_STATION_URL,
     icon: null,
+    target: "_blank",
   },
+  {
+    title: "Explorer",
+    path: config.VITE_EXPLORER_URL,
+    icon: null,
+    target: "_blank",
+  },
+  // {
+  //   title: "Leaderboard",
+  //   path: ROUTES.leaderBoard,
+  //   icon: null,
+  // },
+  // {
+  //   title: "referrals",
+  //   path: ROUTES.referrals,
+  //   icon: null,
+  // },
 ];

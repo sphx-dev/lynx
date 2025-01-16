@@ -65,6 +65,7 @@
   "conectWalletToViewFundingRateLogs": "Connect wallet and select a margin account to view funding rate logs",
   "overview": "Overview",
   "funding": "Funding",
+  "faucet": "Faucet",
   "estimatedPrice": "Est. Price",
   "USDC": "USD",
   "BTCUSDC.P": "BTCUSD.P",
@@ -74,5 +75,13 @@
   "noData": "No data",
   "upnlHeaderInfo": "The Unrealized Profit and Loss displayed value is an estimation. Actual profit and loss are based on completed transactions. It does not affect how the margin rate is calculated.",
   "notionalValue": "Notional Value",
-  "pricePerContract": "Price per contract"
+  "pricePerContract": "Price per contract",
+  "address": "Address",
+  "getTokens": "Get Tokens",
+  "enterAddress": "Enter your address",
+  "invalidAddress": "The address is invalid. Please enter a valid Sphx address.",
+  "faucetMessage": "You can get free tokens from the faucet. Please enter your address below to receive funds.",
+  "faucetError": "An error occurred while getting funds from the faucet.",
+  "fundsDeposited": "Funds deposited successfully.",
+  "checkTransaction": "Check transaction"
 }
