@@ -1,28 +1,61 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Container, TableContainer } from "../orderbook/OrderBookStyle";
+import { TableContainer } from "../orderbook/OrderBookStyle";
 import { Stack, Text } from "../../components";
 import TitleRow from "../orderbook/TitleRow";
-import { TRADES } from "./mock";
-import { TradesItem } from "../../types/orderBook";
 import TradeItem from "./TradeItem";
-import getBoundingClientRect from "@popperjs/core/lib/dom-utils/getBoundingClientRect";
-import { getTradesRecords } from "../../utils/helpers";
-import { useResize } from "../../hooks/useResize";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import config from "@/config";
+import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
-const HEADERS = ["PRICE", "AMOUNT", "TIME"];
+const HEADERS = ["price", "amount", "time"];
 
-const Trades = () => {
+const websocketURL =
+  config.VITE_WS_PROTOCOL +
+  "://" +
+  config.VITE_API_HOST +
+  ":" +
+  config.VITE_API_PORT +
+  "/orderbook/ws";
+
+const MAX_RECORDS = 500;
+
+const Trades = React.memo(() => {
+  const { t } = useTranslation();
+  const [messages, setMessages] = useState<any[]>([]);
   const containerRef = useRef(null);
-  const [height, setHeight] = useState(0);
-  const { height: windowHeight } = useResize();
+
+  const wsConnection = useWebSocket(websocketURL, {
+    share: true,
+    onOpen: e => console.log("opened", e),
+    onClose: e => {
+      console.log("closed", e);
+    },
+    onError: e => console.log("error", e),
+    onMessage: msg => {
+      const data = JSON.parse(msg.data);
+      const messageType = data.message_type;
+      const info = JSON.parse(data.body);
+      const parsedMessage = { messageType, ...info };
+
+      setMessages(prev => [parsedMessage, ...prev.slice(0, MAX_RECORDS)]);
+    },
+  });
+
+  const { sendMessage, readyState } = wsConnection;
+  const isLoading = readyState === ReadyState.CONNECTING;
 
   useEffect(() => {
-    if (containerRef.current) {
-      setHeight(getBoundingClientRect(containerRef.current).height);
-    }
-  }, [windowHeight, setHeight]);
+    // Ping the server every 15 seconds to keep the connection alive
+    const interval = setInterval(() => {
+      sendMessage(JSON.stringify({ type: "ping", id: Date.now() }));
+    }, 15 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [sendMessage]);
 
-  if (!TRADES.length) {
+  if (!messages || messages.length === 0) {
     return (
       <Stack
         fullHeight
@@ -31,28 +64,44 @@ const Trades = () => {
         data-testid="trades-tab"
       >
         <Text variant="textXl" color="tertiary">
-          NO DATA
+          {readyState}
+        </Text>
+        <Text variant="textXl" color="tertiary">
+          {isLoading ? t("loading") : t("noData")}
         </Text>
       </Stack>
     );
   }
 
-  const records = getTradesRecords(height);
-  console.log(records);
   return (
     <Container ref={containerRef} data-testid="trades-tab">
       <Stack style={{ width: "100%" }}>
         <TableContainer>
           <TitleRow titles={HEADERS} />
         </TableContainer>
-        <TableContainer>
-          {TRADES.slice(0, records).map(({ id, ...tradeProps }) => (
-            <TradeItem key={id} {...(tradeProps as TradesItem)} />
+        <TableContainer
+          style={{ overflowY: "hidden", height: "calc(100vh - 340px)" }}
+        >
+          {messages.map(msg => (
+            <TradeItem
+              key={msg.id}
+              price={msg.price}
+              quantity={Number(msg.quantity)}
+              date={msg.timestamp}
+              side={msg.side}
+            />
           ))}
         </TableContainer>
       </Stack>
     </Container>
   );
-};
+});
 
 export default Trades;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-color: #263946;
+  padding: 10px 10px 0;
+`;

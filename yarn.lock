@@ -6287,7 +6287,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/utils@npm:2.1.8, @vitest/utils@npm:^2.1.1":
+"@vitest/utils@npm:2.1.8, @vitest/utils@npm:^2.0.3, @vitest/utils@npm:^2.1.1":
   version: 2.1.8
   resolution: "@vitest/utils@npm:2.1.8"
   dependencies:
@@ -13308,6 +13308,7 @@ __metadata:
     react-select: "npm:^5.8.0"
     react-tabs: "npm:^6.0.2"
     react-tooltip: "npm:^5.28.0"
+    react-use-websocket: "npm:^4.11.1"
     storybook: "npm:^8.4.7"
     strip-ansi: "npm:^7.1.0"
     styled-components: "npm:^6.0.7"
@@ -13317,6 +13318,7 @@ __metadata:
     vite-plugin-svgr: "npm:^4.2.0"
     vitest: "npm:^2.1.1"
     vitest-localstorage-mock: "npm:^0.1.2"
+    vitest-websocket-mock: "npm:^0.4.0"
     webpack: "npm:^5.75.0"
     yup: "npm:^1.4.0"
     zustand: "npm:^4.5.5"
@@ -13773,6 +13775,13 @@ __metadata:
   version: 6.13.5
   resolution: "mobx@npm:6.13.5"
   checksum: 10c0/43691c836363aa1f13c44e43c86ab89fc8f4b83ef408bc6c68d799260e74b4ff08ebba2ef16bda447c6b7bca3558768e15927c0b21ffbb10e99b610783f28859
+  languageName: node
+  linkType: hard
+
+"mock-socket@npm:^9.2.1":
+  version: 9.3.1
+  resolution: "mock-socket@npm:9.3.1"
+  checksum: 10c0/0c53baa4acca12ed1ff9bddfdd4bc0cabe0fc96a3ed25a42a00d23b7a111eb6edfc2b44d93aef9a0c93a4a000b4d2d8dcff028488cd2a1e9cc416477ee341ce0
   languageName: node
   linkType: hard
 
@@ -15542,6 +15551,13 @@ __metadata:
     react: ">=16.6.0"
     react-dom: ">=16.6.0"
   checksum: 10c0/2ba754ba748faefa15f87c96dfa700d5525054a0141de8c75763aae6734af0740e77e11261a1e8f4ffc08fd9ab78510122e05c21c2d79066c38bb6861a886c82
+  languageName: node
+  linkType: hard
+
+"react-use-websocket@npm:^4.11.1":
+  version: 4.11.1
+  resolution: "react-use-websocket@npm:4.11.1"
+  checksum: 10c0/c60a6976b8944f049871ecd86306b0fffa4aa4412090dec11ee8ed037bde49c8f21689525ff0fa8e0a2a50aa8787c8f4ef044cadc80fc5b6be009a51d58d4347
   languageName: node
   linkType: hard
 
@@ -18050,6 +18066,18 @@ __metadata:
   peerDependencies:
     vitest: "*"
   checksum: 10c0/c3991bfa908124c3ccc5614d016d9d35de56445de4e7a4634fe18c0c4ee53b8cebac352eeb73ee2321af3805db62c9353900952c0bb119915b5225d37482f2f9
+  languageName: node
+  linkType: hard
+
+"vitest-websocket-mock@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "vitest-websocket-mock@npm:0.4.0"
+  dependencies:
+    "@vitest/utils": "npm:^2.0.3"
+    mock-socket: "npm:^9.2.1"
+  peerDependencies:
+    vitest: ">=2"
+  checksum: 10c0/c12d8c30903a54273c2d5432cc63d9e457415073a58669c4bb1355b24a68bd45579a116b303ef7f308399f399a1c59fcb256c85423e54920f5832442d43b1f6f
   languageName: node
   linkType: hard
 

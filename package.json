@@ -72,6 +72,7 @@
     "react-select": "^5.8.0",
     "react-tabs": "^6.0.2",
     "react-tooltip": "^5.28.0",
+    "react-use-websocket": "^4.11.1",
     "styled-components": "^6.0.7",
     "vite-plugin-svgr": "^4.2.0",
     "webpack": "^5.75.0",
@@ -127,7 +128,8 @@
     "vite": "^5.4.8",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^2.1.1",
-    "vitest-localstorage-mock": "^0.1.2"
+    "vitest-localstorage-mock": "^0.1.2",
+    "vitest-websocket-mock": "^0.4.0"
   },
   "eslintConfig": {
     "extends": [

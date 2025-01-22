@@ -30,7 +30,7 @@ import { t } from "i18next";
 import { formatDollars } from "@/utils/format";
 import { useOrderBookData } from "./useOrderBookData";
 
-const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
+const HEADERS = ["price", "amount", "total"];
 const MIN_RECORDS = 9;
 
 const OrderBook: FunctionComponent = () => {

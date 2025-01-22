@@ -1,5 +1,6 @@
 import config from "@/config.js";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
+
 // Assuming you're working in a browser environment that supports fetch and ReadableStream
 // const streamingUrl =
 //   "https://benchmarks.pyth.network/v1/shims/tradingview/streaming";
@@ -28,15 +29,15 @@ function handleStreamingData(UID: string, resolution: number, data: any) {
 
   const lastDailyBar = subscriptionItem.lastDailyBar;
 
-  console.log(
-    "Delta[" + id + "][" + UID + "]",
-    "comming->" + dayjs(tradeTime).format("YYYY-MM-DD HH:mm:ss"),
-    "N{" + dayjs(nomalizedTradeTime).format("YYYY-MM-DD HH:mm:ss") + "}",
-    "|",
-    "prev->" + dayjs(lastDailyBar.time).format("YYYY-MM-DD HH:mm:ss"),
-    nomalizedTradeTime > lastDailyBar.time ? "[NEW]" : "[same]",
-    `(${p})`
-  );
+  // console.log(
+  //   "Delta[" + id + "][" + UID + "]",
+  //   "comming->" + dayjs(tradeTime).format("YYYY-MM-DD HH:mm:ss"),
+  //   "N{" + dayjs(nomalizedTradeTime).format("YYYY-MM-DD HH:mm:ss") + "}",
+  //   "|",
+  //   "prev->" + dayjs(lastDailyBar.time).format("YYYY-MM-DD HH:mm:ss"),
+  //   nomalizedTradeTime > lastDailyBar.time ? "[NEW]" : "[same]",
+  //   `(${p})`
+  // );
 
   let bar: any;
   if (nomalizedTradeTime > lastDailyBar.time) {

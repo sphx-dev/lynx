@@ -1,4 +1,8 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse, WebSocketLink, ws } from "msw";
+
+export const tradesWS: WebSocketLink = ws.link(
+  "ws://localhost:3010/orderbook/ws"
+);
 
 export const handlers = [
   http.get("http://localhost:3010/orderbook/", ({ request }) => {
@@ -53,5 +57,8 @@ export const handlers = [
 {"id":"BTCUSDC.P","p":90656.12496276255,"t":1732309200,"f":"t","s":0}
 {"s":"ok","t":[],"o":[],"h":[],"l":[],"c":[],"v":[]}`;
     return HttpResponse.text(streamingData);
+  }),
+  tradesWS.addEventListener("connection", () => {
+    console.log("Websocket Connected to '/orderbook/ws'");
   }),
 ];

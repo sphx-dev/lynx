@@ -9,6 +9,7 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     VITE_API_HOST: "localhost",
     VITE_API_PORT: 3010,
     VITE_API_URL: "//localhost:3010",
+    VITE_WS_PROTOCOL: "ws",
     VITE_EXPLORER_URL: "https://explorer.sphx.dev",
     VITE_STATION_URL: "https://station.non-prod.sphx.dev",
     VITE_FAUCET_URL: "https://faucet.non-prod.sphx.dev",
@@ -17,6 +18,7 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
   // config.VITE_API_HOST = "api.non-prod.sphx.dev";
   // config.VITE_API_PORT = 443;
   // config.VITE_API_URL = "//api.non-prod.sphx.dev";
+  // config.VITE_WS_PROTOCOL = "wss";
   // config.VITE_EXPLORER_URL = "https://explorer.sphx.dev";
   // config.VITE_STATION_URL = "https://station.non-prod.sphx.dev";
   // config.VITE_FAUCET_URL = "http://0.0.0.0:9898";
@@ -44,6 +46,7 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     config.VITE_API_HOST = "api.non-prod.sphx.dev";
     config.VITE_API_PORT = 443;
     config.VITE_API_URL = "//api.non-prod.sphx.dev";
+    config.VITE_WS_PROTOCOL = "wss";
     config.VITE_EXPLORER_URL = "https://explorer.sphx.dev";
     config.VITE_STATION_URL = "https://station.non-prod.sphx.dev";
     config.VITE_FAUCET_URL = "https://faucet.non-prod.sphx.dev";

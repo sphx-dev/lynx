@@ -87,6 +87,7 @@
   "total": "Total",
   "amount": "Amount",
   "price": "Price",
+  "time": "Time",
   "asks": "Asks",
   "bids": "Bids"
 }
