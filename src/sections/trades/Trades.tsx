@@ -24,8 +24,9 @@ const Trades = React.memo(() => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<any[]>([]);
   const containerRef = useRef(null);
+  const didUnmount = useRef(false);
 
-  const wsConnection = useWebSocket(websocketURL, {
+  const { sendMessage, readyState } = useWebSocket(websocketURL, {
     share: true,
     onOpen: e => console.log("opened", e),
     onClose: e => {
@@ -40,9 +41,17 @@ const Trades = React.memo(() => {
 
       setMessages(prev => [parsedMessage, ...prev.slice(0, MAX_RECORDS)]);
     },
+    shouldReconnect: () => didUnmount.current === false,
+    reconnectAttempts: 10,
+    reconnectInterval: 5000,
   });
 
-  const { sendMessage, readyState } = wsConnection;
+  useEffect(() => {
+    return () => {
+      didUnmount.current = true;
+    };
+  }, []);
+
   const isLoading = readyState === ReadyState.CONNECTING;
 
   useEffect(() => {
@@ -63,9 +72,6 @@ const Trades = React.memo(() => {
         align="center"
         data-testid="trades-tab"
       >
-        <Text variant="textXl" color="tertiary">
-          {readyState}
-        </Text>
         <Text variant="textXl" color="tertiary">
           {isLoading ? t("loading") : t("noData")}
         </Text>
