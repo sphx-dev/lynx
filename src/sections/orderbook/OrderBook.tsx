@@ -21,8 +21,6 @@ import Divider from "./Divider";
 import { OrderType, OrderWithDepth } from "../../types/orderBook";
 import { usePubSub } from "@/hooks/usePubSub";
 import { useMarkets } from "@/hooks/useMarkets";
-import { useQuery } from "react-query";
-import config from "@/config";
 import { asksToState, orderToState } from "./helpers";
 import styled from "styled-components";
 import { useLocalStreaming } from "../chart/localStreaming";
@@ -30,6 +28,7 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { t } from "i18next";
 import { formatDollars } from "@/utils/format";
+import { useOrderBookData } from "./useOrderBookData";
 
 const HEADERS = ["PRICE", "AMOUNT", "TOTAL"];
 const MIN_RECORDS = 9;
@@ -260,7 +259,6 @@ const formatNumber = (arg: number): string => {
 
 export default OrderBook;
 
-const BASE_API = config.VITE_API_URL;
 const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
   const [records, setRecords] = useState(MIN_RECORDS);
   const { selectedMarket } = useMarkets();
@@ -278,24 +276,6 @@ const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
     ...responseData,
     data: parseOrderBokData(responseData.data, records),
   };
-};
-
-const useOrderBookData = ({ ticker }: { ticker: string | undefined }) => {
-  const response = useQuery({
-    queryKey: ["orderBook", ticker],
-    queryFn: async () => {
-      const res = await fetch(`${BASE_API}/orderbook/?ticker=${ticker}`, {
-        credentials: "include",
-      });
-      const data = await res.json();
-      return data;
-    },
-    refetchInterval: 2000,
-
-    enabled: !!ticker,
-  });
-
-  return response;
 };
 
 function parseOrderBokData(data: any, records: number = MIN_RECORDS) {

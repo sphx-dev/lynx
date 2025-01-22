@@ -12,9 +12,10 @@ export const Container = styled.div`
     theme.colors.common.palette.gradient.darkPrimary}; */
 
   background: linear-gradient(180deg, #0a2536 0%, #14494f 100%);
-  width: 100%;
-  height: 100%;
+  width: 99%;
+  height: calc(100vh - 100px);
   padding: 16px;
+  overflow-y: auto;
 `;
 
 export const Title = styled.h2`

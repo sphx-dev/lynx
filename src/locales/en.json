@@ -83,5 +83,10 @@
   "faucetMessage": "You can get free tokens from the faucet. Please enter your address below to receive funds.",
   "faucetError": "An error occurred while getting funds from the faucet.",
   "fundsDeposited": "Funds deposited successfully.",
-  "checkTransaction": "Check transaction"
+  "checkTransaction": "Check transaction",
+  "total": "Total",
+  "amount": "Amount",
+  "price": "Price",
+  "asks": "Asks",
+  "bids": "Bids"
 }

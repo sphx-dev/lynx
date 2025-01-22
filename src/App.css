@@ -56,7 +56,7 @@ body {
   margin: 0;
 }
 
-::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
 }
 .custom-tab-list {

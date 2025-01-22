@@ -31,11 +31,11 @@ export function formatPrice(price: number, fixed = 5): string {
 }
 
 ///
-export function formatDollars(value: number) {
+export function formatDollars(value: number, currencyDisplay?: any): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     // currencyDisplay values can be: "code", "symbol", "narrowSymbol", or "name"
-    currencyDisplay: "code",
+    currencyDisplay: currencyDisplay || "code",
   }).format(value);
 }
