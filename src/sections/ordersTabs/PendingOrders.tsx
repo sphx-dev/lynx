@@ -68,10 +68,10 @@ const PendingOrders = () => {
       header: "Date",
       cell: (props: any) => (
         <Text color="tertiary">
-          {dayjs(Date.now()).diff(
+          {!dayjs(Date.now()).isSame(
             dayjs(Number(props.getValue()) * 1000),
             "day"
-          ) > 1
+          )
             ? dayjs(Number(props.getValue()) * 1000).format("YYYY-MM-DD")
             : dayjs(Number(props.getValue()) * 1000).format("HH:mm:ss")}
         </Text>
