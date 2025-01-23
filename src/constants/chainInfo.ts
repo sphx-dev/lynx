@@ -82,11 +82,44 @@ export const sphxLocalChainInfo: ChainInfo = {
   ],
 };
 
-export const sphxTestnetChain1Info: ChainInfo = {
+export const sphxTestnetChainGenericInfo: ChainInfo = {
   rpc: "https://rpc.sphx.dev/",
-  rest: "https://rest1.sphx.dev/",
+  rest: "https://rest.sphx.dev/",
   chainId: "sphx-testnet",
-  chainName: "Sphinx Testnet 1",
+  chainName: "Sphinx Testnet",
+  chainSymbolImageUrl: "https://avatars.githubusercontent.com/u/134250347",
+  bip44: {
+    coinType: 118,
+  },
+  bech32Config: {
+    bech32PrefixAccAddr: "sphx",
+    bech32PrefixAccPub: "sphxpub",
+    bech32PrefixValAddr: "sphxvaloper",
+    bech32PrefixValPub: "sphxvaloperpub",
+    bech32PrefixConsAddr: "sphxvalcons",
+    bech32PrefixConsPub: "sphxvalconspub",
+  },
+  currencies: [
+    {
+      coinDenom: "USDC",
+      coinMinimalDenom: DENOMUSDC,
+      coinDecimals: 6,
+    },
+  ],
+  feeCurrencies: [
+    {
+      coinDenom: "USDC",
+      coinMinimalDenom: DENOMUSDC,
+      coinDecimals: 6,
+    },
+  ],
+};
+
+export const sphxTestnetChain1Info: ChainInfo = {
+  rpc: "https://rpc1.sphx.dev/",
+  rest: "https://rest1.sphx.dev/",
+  chainId: "sphx-testnet-1",
+  chainName: "Sphinx Testnet #1",
   chainSymbolImageUrl: "https://avatars.githubusercontent.com/u/134250347",
   bip44: {
     coinType: 118,
@@ -118,8 +151,8 @@ export const sphxTestnetChain1Info: ChainInfo = {
 export const sphxTestnetChain2Info: ChainInfo = {
   rpc: "https://rpc2.sphx.dev/",
   rest: "https://rest2.sphx.dev/",
-  chainId: "sphx-testnet",
-  chainName: "Sphinx Testnet 2",
+  chainId: "sphx-testnet-2",
+  chainName: "Sphinx Testnet #2",
   chainSymbolImageUrl: "https://avatars.githubusercontent.com/u/134250347",
   bip44: {
     coinType: 118,

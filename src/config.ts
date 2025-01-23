@@ -1,7 +1,7 @@
 import {
   sphxLocalChainInfo,
   sphxTestnetChain1Info,
-  sphxTestnetChain2Info,
+  sphxTestnetChainGenericInfo,
 } from "./constants/chainInfo";
 
 export function getEnvVARs(location: { hostname: string | string[] }) {
@@ -59,18 +59,19 @@ export default config;
 
 export const getChain = () => {
   // return sphxLocalChainInfo;
+  // return sphxTestnetChainGenericInfo;
   // return sphxTestnetChain1Info;
   // return sphxTestnetChain2Info;
   if (window.location.hostname.includes("localhost")) {
     return sphxLocalChainInfo;
   }
   if (window.location.hostname.includes("non-prod.sphx.dev")) {
-    return sphxTestnetChain1Info;
+    return sphxTestnetChainGenericInfo;
   }
   if (window.location.hostname.includes("demo.sphx.dev")) {
     return sphxTestnetChain1Info;
   }
-  return sphxTestnetChain2Info;
+  return sphxTestnetChainGenericInfo;
 };
 
 export const getChainWS = () => {
