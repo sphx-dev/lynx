@@ -13,7 +13,7 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     VITE_EXPLORER_URL: "https://explorer.sphx.dev",
     VITE_STATION_URL: "https://station.non-prod.sphx.dev",
     VITE_FAUCET_URL: "https://faucet.non-prod.sphx.dev",
-    FAUCET_API_KEY: "test123",
+    FAUCET_API_KEY: "Ujem5Y8uRGqKSQEM4X2CVF3ADx6vhLWn",
   };
   // config.VITE_API_HOST = "api.non-prod.sphx.dev";
   // config.VITE_API_PORT = 443;
