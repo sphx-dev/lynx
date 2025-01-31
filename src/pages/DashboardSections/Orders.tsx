@@ -18,6 +18,7 @@ export const Orders = () => {
   const [asks, asksTotalQuantity] = useMemo(() => {
     let asks = data?.asks ?? [];
     if (!asks) return [];
+    asks = asks.toReversed();
 
     let len = Math.min(MAX_ROWS, asks.length);
     let asksSizeSum = 0;
@@ -40,6 +41,7 @@ export const Orders = () => {
   const [bids, bidsTotalQuantity] = useMemo(() => {
     let bids = data?.bids ?? [];
     if (!bids) return [];
+    bids = bids.toReversed();
 
     let len = Math.min(MAX_ROWS, bids.length);
     let bidsSizeSum = 0;
