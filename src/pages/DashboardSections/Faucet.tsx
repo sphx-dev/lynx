@@ -9,6 +9,7 @@ import config, { getChain } from "@/config";
 import { getThemeColors } from "@/theme";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { Link } from "react-router-dom";
+import { LoaderBar } from "@/components/LoaderBar";
 
 export const Faucet = () => {
   const { t } = useTranslation();
@@ -164,26 +165,5 @@ const StyledLink = styled(Link)`
   text-decoration: unset;
   &:hover {
     text-decoration: underline;
-  }
-`;
-
-const LoaderBar = styled.div`
-  height: 3px;
-  width: 100%;
-  --c: no-repeat linear-gradient(#082536 0 0);
-  background: var(--c), var(--c), #0e474d;
-  background-size: 60% 100%;
-  animation: l16 1.8s infinite;
-
-  @keyframes l16 {
-    0% {
-      background-position: -150% 0, -150% 0;
-    }
-    66% {
-      background-position: 250% 0, -150% 0;
-    }
-    100% {
-      background-position: 250% 0, 250% 0;
-    }
   }
 `;

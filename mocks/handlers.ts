@@ -61,4 +61,18 @@ export const handlers = [
   tradesWS.addEventListener("connection", () => {
     console.log("Websocket Connected to '/orderbook/ws'");
   }),
+  http.get("http://localhost:3010/other/asset_info", ({ request }) => {
+    const search = new URL(request.url);
+    const symbol = search.searchParams.get("symbol");
+    return HttpResponse.json({
+      symbol,
+      volume24h: "26.69",
+      last_price: "72.43",
+      price24h: "-0.2699273",
+      funding_rate: "-0.00002712",
+    });
+  }),
+  http.get("http://localhost:3077/healthcheck", () => {
+    return new HttpResponse("", { status: 400 });
+  }),
 ];

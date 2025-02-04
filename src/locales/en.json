@@ -58,6 +58,8 @@
   "noWalletConnected":"No wallet connected",
   "connectWalletToDeposit":"Connect wallet to deposit margin",
   "orderPlacedSuccess":"Order placed successfully",
+  "sendingOrder":"Sending order...",
+  "errorPlacingOrder": "Error placing order",
   "waitingForApproval":"Waiting for approval",
   "insufficientBalanceInAccount": "Your margin account balance is insufficient for this action.",
   "fundingRateLogs": "Funding Rate Logs",
@@ -89,5 +91,8 @@
   "price": "Price",
   "time": "Time",
   "asks": "Asks",
-  "bids": "Bids"
+  "bids": "Bids",
+  "smartSignActive": "Smart Sign On",
+  "activatesmartsign": "Activate Smart Sign"
+  
 }

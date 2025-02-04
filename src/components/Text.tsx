@@ -35,9 +35,16 @@ const Text = ({
   align = "left",
   children,
   as = "p",
+  ...props
 }: TextProps) => {
   return (
-    <StyledText as={as} align={align} variant={variant} color={color}>
+    <StyledText
+      as={as}
+      align={align}
+      variant={variant}
+      color={color}
+      {...props}
+    >
       {children}
     </StyledText>
   );

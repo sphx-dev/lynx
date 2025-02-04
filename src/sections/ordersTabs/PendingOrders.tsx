@@ -5,7 +5,11 @@ import { getOrderStatusText, getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
-import { useCancelOrder, useOrders } from "../../hooks/useOrders";
+import {
+  useCancelOrder,
+  useCancelOrderSmart,
+  useOrders,
+} from "../../hooks/useOrders";
 import {
   Order,
   OrderId,
@@ -14,13 +18,16 @@ import {
 } from "proto-codecs/codegen/sphx/order/order";
 import { Side } from "../../types/order";
 import { useTranslation } from "react-i18next";
-import { successAlert } from "@/utils/alerts";
+import { errorAlert, successAlert } from "@/utils/alerts";
 import { useMarkets } from "../../hooks/useMarkets";
 import dayjs from "dayjs";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
 import { PRECISION } from "@/constants";
 import { formatPrice } from "@/utils/format";
+import { useSmartSign } from "@/components/SmartSignButton";
+
+const FF_SMART_SIGN = false;
 
 const PendingOrders = () => {
   const { t } = useTranslation();
@@ -47,12 +54,20 @@ const PendingOrders = () => {
     setCancellingOrders(co => co.filter(o => o.number !== orderId.number));
   };
 
-  const { orders, totalOrders, pageSize } = useOrders(selectedAddress, page, [
+  const {
+    orders: originalOrders,
+    totalOrders,
+    pageSize,
+  } = useOrders(selectedAddress, page, [
     OrderStatus.ORDER_STATUS_OPEN,
     OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
   ]);
+  const orders = originalOrders.toReversed();
+
+  const { smartSign } = useSmartSign();
 
   const { cancelOrder } = useCancelOrder();
+  const { cancelOrder: cancelOrderSmart } = useCancelOrderSmart();
 
   const columns = [
     {
@@ -139,13 +154,26 @@ const PendingOrders = () => {
           if (address && orderId?.number && orderId?.marginAccountAddress) {
             try {
               addCancellingOrder(orderId);
-              await cancelOrder({
-                address,
-                orderId,
-                memo: `Cancel order #${orderId.number}`,
-              });
-
-              successAlert("Order canceled successfully");
+              if (FF_SMART_SIGN && smartSign) {
+                console.log("smartSign", orderId);
+                let response = await cancelOrderSmart({
+                  marginAccountAddress: orderId.marginAccountAddress,
+                  number: orderId.number.toString(),
+                });
+                console.log("response", response);
+                if (response.status === 200) {
+                  successAlert("Order canceled successfully");
+                } else {
+                  errorAlert("Order cancel failed");
+                }
+              } else {
+                await cancelOrder({
+                  address,
+                  orderId,
+                  memo: `Cancel order #${orderId.number}`,
+                });
+                successAlert("Order canceled successfully");
+              }
             } catch (error) {
               console.error(error);
             } finally {

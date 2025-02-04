@@ -2,11 +2,14 @@ import React, { FunctionComponent } from "react";
 import { PriceLevelContainer } from "./PriceLevelRowStyle";
 import { Text } from "../../components";
 import styled from "styled-components";
+import { useMarkets } from "@/hooks/useMarkets";
 
 interface PriceLevelRowProps {
   total: string;
   size: string;
   price: string;
+  amount: string;
+  amountSum: string;
   reversedFieldsOrder: boolean;
 }
 
@@ -30,8 +33,12 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
   total,
   size,
   price,
+  amount,
+  amountSum,
   reversedFieldsOrder = false,
 }) => {
+  const { selectedMarket } = useMarkets();
+  const symbol = selectedMarket?.baseAsset;
   return (
     <PriceLevelContainer
       data-testid="price-level-row"
@@ -46,11 +53,23 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
         </Label>
         <Label>
           <Currency>$</Currency>
-          <Text variant="textNumMd">{size}</Text>
+          <Text
+            variant="textNumMd"
+            data-tooltip={size + " " + symbol}
+            data-tooltip-top
+          >
+            {amount}
+          </Text>
         </Label>
         <Label>
           <Currency>$</Currency>
-          <Text variant="textNumMd">{total}</Text>
+          <Text
+            variant="textNumMd"
+            data-tooltip={total + " " + symbol}
+            data-tooltip-top
+          >
+            {amountSum}
+          </Text>
         </Label>
       </>
     </PriceLevelContainer>

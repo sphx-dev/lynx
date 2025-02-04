@@ -1,12 +1,13 @@
-import config from "@/config.js";
+import { getStreamingUrl } from "@/config.js";
 // import dayjs from "dayjs";
 
 // Assuming you're working in a browser environment that supports fetch and ReadableStream
 // const streamingUrl =
 //   "https://benchmarks.pyth.network/v1/shims/tradingview/streaming";
 // const streamingUrl = "https://api.non-prod.sphx.dev/tradingview/streaming";
-const streamingUrl =
-  window.location.protocol + config.VITE_API_URL + "/tradingview/streaming";
+
+const streamingUrl = getStreamingUrl();
+
 const channelToSubscription = new Map();
 
 function handleStreamingData(UID: string, resolution: number, data: any) {

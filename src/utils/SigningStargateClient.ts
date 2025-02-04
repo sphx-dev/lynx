@@ -31,6 +31,24 @@ export async function getSigningStargateMarginAccountClient(): Promise<SigningSt
   return marginClient;
 }
 
+/**
+ * Generates a Stargate Signing Client without registry
+ */
+export async function getDefaultSigningStargateClient() {
+  const offlineSigner = await getOfflineSigner();
+  const signingClientOptions: SigningStargateClientOptions = {
+    gasPrice: GasPrice.fromString("1" + DENOMUSDC),
+  };
+
+  const signingClient: SigningStargateClient =
+    await SigningStargateClient.connectWithSigner(
+      getChain().rpc,
+      offlineSigner,
+      signingClientOptions
+    );
+  return signingClient;
+}
+
 async function getSigningStargateClient(registry: Registry) {
   const offlineSigner = await getOfflineSigner();
   const signingClientOptions: SigningStargateClientOptions = {

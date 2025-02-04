@@ -220,8 +220,10 @@ const PriceLevels = ({
               key={size + total}
               // total={total}
               // size={size}
-              total={amountSum}
-              size={amount}
+              total={total}
+              size={size}
+              amount={amount}
+              amountSum={amountSum}
               price={price}
               reversedFieldsOrder={orderType === OrderType.ASKS}
             />

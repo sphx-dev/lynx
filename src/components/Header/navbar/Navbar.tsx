@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { navLinks } from "./config";
 import { ConnectButton } from "../../ConnectButton";
 import { MarginAccButton } from "../../MarginAccButton";
+import { SmartSignButton } from "@/components/SmartSignButton";
 
 const Wrapper = styled.nav`
   background-color: ${({ theme }) => getThemeColors(theme).background.primary};
@@ -35,6 +36,7 @@ const Navbar = () => {
       ))}
       <ConnectButton size="xs" />
       <MarginAccButton size="xs" />
+      <SmartSignButton />
     </Wrapper>
   );
 };

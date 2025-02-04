@@ -28,11 +28,11 @@ const Trades = React.memo(() => {
 
   const { sendMessage, readyState } = useWebSocket(websocketURL, {
     share: true,
-    onOpen: e => console.log("opened", e),
-    onClose: e => {
-      console.log("closed", e);
-    },
-    onError: e => console.log("error", e),
+    // onOpen: e => console.log("opened", e),
+    // onClose: e => {
+    //   console.log("closed", e);
+    // },
+    // onError: e => console.log("error", e),
     onMessage: msg => {
       const data = JSON.parse(msg.data);
       const messageType = data.message_type;

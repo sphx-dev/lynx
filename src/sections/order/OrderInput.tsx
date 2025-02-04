@@ -8,7 +8,7 @@ import TabButton from "../../components/TabButton";
 import useTheme from "../../hooks/useTheme";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { errorAlert, promiseAlert } from "../../utils/alerts";
+import { errorAlert, promiseAlert, successAlert } from "../../utils/alerts";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
@@ -22,7 +22,7 @@ import {
   PriceEstimation,
 } from "./style";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
-import { useCreateOrder } from "../../hooks/useOrders";
+import { useCreateOrder, useCreateOrderSmart } from "../../hooks/useOrders";
 import { useCallback, useState } from "react";
 import { useMarkets } from "../../hooks/useMarkets";
 import { useSub } from "@/hooks/usePubSub";
@@ -34,6 +34,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PRECISION } from "@/constants";
 import styled from "styled-components";
 import { useLocalStreaming } from "../chart/localStreaming";
+import { useSmartSign } from "@/components/SmartSignButton";
+import { PlaceLimitOrderInChainParams } from "@/utils/placeOrder";
+import { LoaderBar } from "@/components/LoaderBar";
 
 const options: [
   { label: string; value: OrderType },
@@ -130,6 +133,12 @@ function OrderInput() {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const { placeMarketOrder, placeLimitOrder } = useCreateOrder();
+  const {
+    placeLimitOrder: placeLimitOrderSmart,
+    placeMarketOrder: placeMarketOrderSmart,
+  } = useCreateOrderSmart();
+
+  const { smartSign } = useSmartSign();
 
   const placeOrder = async (values: MarketOrderForm) => {
     console.log("PLACE_ORDER", values);
@@ -152,23 +161,52 @@ function OrderInput() {
         ? BigInt((Number(values.takeProfit) * PRECISION).toFixed(0))
         : undefined;
 
+      const quantity =
+        Math.floor(Number(values.volume) * PRECISION) * pricePerContract;
+      const price = Math.floor(Number(values.price) * PRECISION);
+      const leverage = Number(values.leverage);
+
       if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
         setIsPlacingOrder(true);
 
-        promiseAlert(
-          placeMarketOrder({
-            address,
-            marginAccountAddress: selectedAddress,
-            orderId: BigInt(Date.now() * 1000),
-            side: sideValue,
-            quantity:
-              BigInt((Number(values.volume) * PRECISION).toFixed(0)) *
-              BigInt(pricePerContract),
-            leverage: BigInt(values.leverage),
-            stopLoss: stopLossValue,
-            takeProfit: takeProfitValue,
-            marketId: BigInt(marketId),
-          })
+        if (smartSign) {
+          try {
+            await placeMarketOrderSmart({
+              marginAccountAddress: selectedAddress,
+              side: sideValue,
+              quantity: quantity,
+              leverage: Number(values.leverage),
+              marketTicker: selectedMarket?.ticker!,
+            });
+
+            setValue("price", "");
+            setValue("volume", "");
+            setValue("takeProfit", "");
+            setValue("stopLoss", "");
+            successAlert(t("orderPlacedSuccess"));
+          } catch (error) {
+            console.error(error);
+            errorAlert(t("errorPlacingOrder"));
+          } finally {
+            setIsPlacingOrder(false);
+          }
+        } else {
+          promiseAlert(
+            placeMarketOrder({
+              address,
+              marginAccountAddress: selectedAddress,
+              orderId: BigInt(Date.now() * 1000),
+              side: sideValue,
+              quantity: BigInt(quantity),
+              leverage: BigInt(leverage),
+              stopLoss: stopLossValue,
+              takeProfit: takeProfitValue,
+              marketId: BigInt(marketId),
+            }),
+            <div>{t("waitingForApproval")}</div>,
+            <div>{t("orderPlacedSuccess")}</div>,
+            (txt: string) => <div>{txt}</div>
+          )
             .then(() => {
               setValue("price", "");
               setValue("volume", "");
@@ -177,30 +215,49 @@ function OrderInput() {
             })
             .finally(() => {
               setIsPlacingOrder(false);
-            }),
-          <div>{t("waitingForApproval")}</div>,
-          <div>{t("orderPlacedSuccess")}</div>,
-          (txt: string) => <div>{txt}</div>
-        );
+            });
+        }
       }
       if (values.orderType === OrderType.ORDER_TYPE_LIMIT) {
         setIsPlacingOrder(true);
 
-        promiseAlert(
-          placeLimitOrder({
+        if (smartSign) {
+          try {
+            await placeLimitOrderSmart({
+              marginAccountAddress: selectedAddress,
+              side: sideValue,
+              quantity:
+                Math.floor(Number(values.volume) * PRECISION) *
+                pricePerContract,
+              price: Math.floor(Number(values.price) * PRECISION),
+              leverage: Number(values.leverage),
+              marketTicker: selectedMarket?.ticker!,
+            });
+            setValue("price", "");
+            setValue("volume", "");
+            setValue("takeProfit", "");
+            setValue("stopLoss", "");
+            successAlert(t("orderPlacedSuccess"));
+          } catch (error) {
+            console.error(1234, error);
+            errorAlert(t("errorPlacingOrder"));
+          } finally {
+            setIsPlacingOrder(false);
+          }
+        } else {
+          sendLimitOrderToChain(
+            placeLimitOrder,
             address,
-            marginAccountAddress: selectedAddress,
-            orderId: BigInt(Date.now() * 1000),
-            side: sideValue,
-            quantity:
-              BigInt((Number(values.volume) * PRECISION).toFixed(0)) *
-              BigInt(pricePerContract),
-            price: BigInt((Number(values.price) * PRECISION).toFixed(0)),
-            leverage: BigInt(values.leverage),
-            stopLoss: stopLossValue,
-            takeProfit: takeProfitValue,
-            marketId: BigInt(marketId),
-          })
+            selectedAddress,
+            sideValue,
+            BigInt(quantity),
+            BigInt(price),
+            BigInt(leverage),
+            stopLossValue,
+            takeProfitValue,
+            BigInt(marketId),
+            t
+          )
             .then(() => {
               setValue("price", "");
               setValue("volume", "");
@@ -209,16 +266,13 @@ function OrderInput() {
             })
             .finally(() => {
               setIsPlacingOrder(false);
-            }),
-          <div>{t("waitingForApproval")}</div>,
-          () => <div>{t("orderPlacedSuccess")}</div>,
-          (txt: string) => <div>{txt}</div>
-        );
+            });
+        }
       }
     } catch (error) {
       console.error(error);
       setIsPlacingOrder(false);
-      errorAlert("Error placing order");
+      errorAlert(t("errorPlacingOrder"));
     }
   };
 
@@ -416,12 +470,31 @@ function OrderInput() {
                           <PlaceOrderMessage />
                         ) : (
                           <>
-                            <PlaceOrderButton
-                              $isBuy={isBuyPosition}
-                              disabled={isPlacingOrder || insufficientFunds}
+                            <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "4px",
+                                marginBottom: "-4px",
+                              }}
                             >
-                              {t("placeOrder")}
-                            </PlaceOrderButton>
+                              <PlaceOrderButton
+                                $isBuy={isBuyPosition}
+                                disabled={isPlacingOrder || insufficientFunds}
+                                smartSign={smartSign}
+                              >
+                                {t("placeOrder")}
+                              </PlaceOrderButton>
+                              <LoaderBar
+                                style={{
+                                  width: "100%",
+                                  visibility: isPlacingOrder
+                                    ? "visible"
+                                    : "hidden",
+                                }}
+                              />
+                            </div>
                             {insufficientFunds ? (
                               <WarnInfoText>
                                 {t("insufficientBalanceInAccount")}
@@ -471,3 +544,35 @@ const FakeInput = () => {
 const formatNumber = (arg: number): string => {
   return new Intl.NumberFormat("en-US").format(arg);
 };
+
+function sendLimitOrderToChain(
+  placeLimitOrder: (params: PlaceLimitOrderInChainParams) => Promise<any>,
+  address: string,
+  selectedAddress: string,
+  sideValue: OrderSide,
+  quantity: bigint,
+  price: bigint,
+  leverage: bigint,
+  stopLossValue: bigint | undefined,
+  takeProfitValue: bigint | undefined,
+  marketId: bigint,
+  t: (key: string) => string
+) {
+  return promiseAlert(
+    placeLimitOrder({
+      address,
+      marginAccountAddress: selectedAddress,
+      orderId: BigInt(Date.now() * 1000),
+      side: sideValue,
+      quantity,
+      price,
+      leverage,
+      stopLoss: stopLossValue,
+      takeProfit: takeProfitValue,
+      marketId: BigInt(marketId),
+    }),
+    <div>{t("waitingForApproval")}</div>,
+    () => <div>{t("orderPlacedSuccess")}</div>,
+    (txt: string) => <div>{txt}</div>
+  );
+}

@@ -11,6 +11,13 @@ import {
 import { useMutation, useQueries, useQuery, useQueryClient } from "react-query";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { OrderId } from "proto-codecs/codegen/sphx/order/order";
+import {
+  cancelOrderSmart,
+  placeLimitOrderSmart,
+  PlaceLimitOrderSmartParams,
+  placeMarketOrderSmart,
+  PlaceMarketOrderSmartParams,
+} from "@/utils/placeOrderSmart";
 
 const PAGE_SIZE = 10n;
 
@@ -97,6 +104,24 @@ export const useCancelOrder = () => {
   return { cancelOrder };
 };
 
+export const useCancelOrderSmart = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: cancelOrderSmart,
+  });
+  const cancelOrder = (params: {
+    marginAccountAddress: string;
+    number: string;
+  }) => {
+    return mutation.mutateAsync(params, {
+      onSettled: () => {
+        queryClient.invalidateQueries("orders");
+      },
+    });
+  };
+  return { cancelOrder };
+};
+
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
   const placeMarketMutation = useMutation({
@@ -114,6 +139,38 @@ export const useCreateOrder = () => {
     mutationFn: placeLimitOrderInChain,
   });
   const placeLimitOrder = async (params: PlaceLimitOrderInChainParams) => {
+    return placeLimitMutation.mutateAsync(params, {
+      onSettled: () => {
+        queryClient.invalidateQueries("orders");
+      },
+    });
+  };
+
+  return {
+    placeMarketOrder,
+    marketStatus: placeMarketMutation,
+    placeLimitOrder,
+    limitStatus: placeLimitMutation,
+  };
+};
+
+export const useCreateOrderSmart = () => {
+  const queryClient = useQueryClient();
+  const placeMarketMutation = useMutation({
+    mutationFn: placeMarketOrderSmart,
+  });
+  const placeMarketOrder = async (params: PlaceMarketOrderSmartParams) => {
+    return placeMarketMutation.mutateAsync(params, {
+      onSettled: () => {
+        queryClient.invalidateQueries("orders");
+      },
+    });
+  };
+
+  const placeLimitMutation = useMutation({
+    mutationFn: placeLimitOrderSmart,
+  });
+  const placeLimitOrder = async (params: PlaceLimitOrderSmartParams) => {
     return placeLimitMutation.mutateAsync(params, {
       onSettled: () => {
         queryClient.invalidateQueries("orders");

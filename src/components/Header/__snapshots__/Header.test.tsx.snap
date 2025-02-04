@@ -15,50 +15,50 @@ exports[`Header Component > should render the Header component correctly 1`] = `
     style="width: 100vw;"
   >
     <header
-      class="sc-txhaY cjjIIJ"
+      class="sc-ePpfBx lawXdI"
     >
       <img
-        class="sc-ePpfBx caOPae"
+        class="sc-dwGkES hTiEqK"
         src="/src/assets/icons/logo-dark.svg"
       />
     </header>
     <nav
-      class="sc-etPtWW hEphJi"
+      class="sc-iPHsxv dDrHvz"
     >
       <a
-        class="sc-iPHsxv cvvDQo"
+        class="sc-txhaY bcohPY"
         href="/dashboard"
       >
         Dashboard
       </a>
       <a
-        class="sc-iPHsxv cvvDQo"
+        class="sc-txhaY bcohPY"
         href="/exchange"
       >
         Exchange
       </a>
       <a
-        class="sc-iPHsxv cvvDQo"
+        class="sc-txhaY bcohPY"
         href="/dashboard/faucet"
       >
         Faucet
       </a>
       <a
-        class="sc-iPHsxv cvvDQo"
+        class="sc-txhaY bcohPY"
         href="https://station.non-prod.sphx.dev"
         target="_blank"
       >
         Station
       </a>
       <a
-        class="sc-iPHsxv cvvDQo"
+        class="sc-txhaY bcohPY"
         href="https://explorer.sphx.dev"
         target="_blank"
       >
         Explorer
       </a>
       <button
-        class="sc-fAUdSK dztAJe"
+        class="sc-fAUdSK iHBsqq"
         variant="secondary"
       >
         Add Chain
@@ -67,7 +67,7 @@ exports[`Header Component > should render the Header component correctly 1`] = `
         class="sc-dntaoT hkozYz"
       >
         <button
-          class="sc-fAUdSK lchHyL"
+          class="sc-fAUdSK gxMJIT"
           variant="primary"
         >
           Connect
@@ -83,42 +83,42 @@ exports[`Header Component > should render the Header component correctly 1`] = `
 
 exports[`Header Component > should render the Nav component 1`] = `
 <nav
-  class="sc-etPtWW hEphJi"
+  class="sc-iPHsxv dDrHvz"
 >
   <a
-    class="sc-iPHsxv cvvDQo"
+    class="sc-txhaY bcohPY"
     href="/dashboard"
   >
     Dashboard
   </a>
   <a
-    class="sc-iPHsxv cvvDQo"
+    class="sc-txhaY bcohPY"
     href="/exchange"
   >
     Exchange
   </a>
   <a
-    class="sc-iPHsxv cvvDQo"
+    class="sc-txhaY bcohPY"
     href="/dashboard/faucet"
   >
     Faucet
   </a>
   <a
-    class="sc-iPHsxv cvvDQo"
+    class="sc-txhaY bcohPY"
     href="https://station.non-prod.sphx.dev"
     target="_blank"
   >
     Station
   </a>
   <a
-    class="sc-iPHsxv cvvDQo"
+    class="sc-txhaY bcohPY"
     href="https://explorer.sphx.dev"
     target="_blank"
   >
     Explorer
   </a>
   <button
-    class="sc-fAUdSK dztAJe"
+    class="sc-fAUdSK iHBsqq"
     variant="secondary"
   >
     Add Chain
@@ -127,7 +127,7 @@ exports[`Header Component > should render the Nav component 1`] = `
     class="sc-dntaoT hkozYz"
   >
     <button
-      class="sc-fAUdSK lchHyL"
+      class="sc-fAUdSK gxMJIT"
       variant="primary"
     >
       Connect

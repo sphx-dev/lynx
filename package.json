@@ -21,7 +21,8 @@
     "test-storybook": "test-storybook",
     "build_server": "node --max_old_space_size=8192 ./scripts/build.server.js",
     "server": "node ./server-comp.cjs",
-    "knip": "knip"
+    "knip": "knip",
+    "locales": "npx i18next-parser 'src/**/*.{js,jsx,ts,tsx}' -o locales.json"
   },
   "no-dependencies": {
     "@keplr-wallet/cosmos": "^0.12.121"

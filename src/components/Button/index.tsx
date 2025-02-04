@@ -65,6 +65,7 @@ const StyledButton = styled.button<CssProps>`
   outline: none;
   cursor: pointer;
   transition: 0.2s all;
+  white-space: nowrap;
   &:active {
     transform: scale(0.95);
   }

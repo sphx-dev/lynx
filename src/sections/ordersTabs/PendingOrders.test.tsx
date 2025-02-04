@@ -3,7 +3,11 @@ import { Mock, vi } from "vitest";
 import PendingOrders from "./PendingOrders";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
-import { useCancelOrder, useOrders } from "../../hooks/useOrders";
+import {
+  useCancelOrderSmart,
+  useCancelOrder,
+  useOrders,
+} from "../../hooks/useOrders";
 import { useMarkets } from "../../hooks/useMarkets";
 import { OrderSide } from "proto-codecs/codegen/sphx/order/order";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
@@ -20,6 +24,7 @@ vi.mock("../../hooks/useMarginAccounts", () => ({
 vi.mock("../../hooks/useOrders", () => ({
   useOrders: vi.fn(),
   useCancelOrder: vi.fn(),
+  useCancelOrderSmart: vi.fn(),
 }));
 
 vi.mock("../../hooks/useMarkets", () => ({
@@ -31,6 +36,7 @@ describe("PendingOrders", () => {
   const mockUseMarginAccount = useMarginAccount as Mock;
   const mockUseOrders = useOrders as Mock;
   const mockUseCancelOrder = useCancelOrder as Mock;
+  const mockUseCancelOrderSmart = useCancelOrderSmart as Mock;
   const mockUseMarkets = useMarkets as Mock;
 
   beforeEach(() => {
@@ -68,6 +74,7 @@ describe("PendingOrders", () => {
     const cancelOrder = vi.fn();
     cancelOrder.mockReturnValue(new Promise(() => {}));
     mockUseCancelOrder.mockReturnValue({ cancelOrder: cancelOrder });
+    mockUseCancelOrderSmart.mockReturnValue({ cancelOrderSmart: cancelOrder });
     mockUseMarkets.mockReturnValue({
       markets: [{ id: "1", baseAsset: "BTC", quoteAsset: "USD" }],
     });

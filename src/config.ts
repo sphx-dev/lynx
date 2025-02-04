@@ -14,6 +14,11 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     VITE_STATION_URL: "https://station.non-prod.sphx.dev",
     VITE_FAUCET_URL: "https://faucet.non-prod.sphx.dev",
     FAUCET_API_KEY: "Ujem5Y8uRGqKSQEM4X2CVF3ADx6vhLWn",
+    // EXECUTION_AUTHORITY: "sphx1fzgwc3s2q9hqsjj07y45fe6rn9d5mz9cm2w4kn",
+    EXECUTION_AUTHORITY: "sphx1qr302dcg8k0lakekel375zfv3l3z59rdmzv5d5",
+    VITE_SMART_API_PROTOCOL: "http",
+    VITE_SMART_API_HOST: "localhost",
+    VITE_SMART_API_PORT: "3077",
   };
   // config.VITE_API_HOST = "api.non-prod.sphx.dev";
   // config.VITE_API_PORT = 443;
@@ -81,3 +86,15 @@ export const getChainWS = () => {
     protocol + "://" + host + (host.endsWith("/") ? "" : "/") + "websocket"
   );
 };
+
+export function getTradingViewUrl() {
+  // return "https://api.non-prod.sphx.dev/tradingview";
+
+  const streamingUrl =
+    window.location.protocol + config.VITE_API_URL + "/tradingview";
+  return streamingUrl;
+}
+
+export function getStreamingUrl() {
+  return getTradingViewUrl() + "/streaming";
+}

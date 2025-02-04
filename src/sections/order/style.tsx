@@ -40,8 +40,17 @@ export const sellStyle = css`
   }
 `;
 
-export const PlaceOrderButton = styled(Button)<{ $isBuy: boolean }>`
+export const PlaceOrderButton = styled(Button)<{
+  $isBuy: boolean;
+  smartSign: boolean;
+}>`
   ${({ $isBuy }) => ($isBuy ? buyStyle : sellStyle)}
+  ${({ $isBuy, smartSign }) =>
+    smartSign &&
+    css`
+      border-bottom: 1px solid;
+      border-bottom-color: ${({ theme }) => ($isBuy ? "#90f767" : "#ffa700")};
+    `}
 `;
 
 export const PlaceOrderMessage = () => {
