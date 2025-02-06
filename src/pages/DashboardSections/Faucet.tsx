@@ -33,7 +33,7 @@ export const Faucet = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "test123",
+          "x-api-key": "Ujem5Y8uRGqKSQEM4X2CVF3ADx6vhLWn",
         },
         body: JSON.stringify({
           chain: getChain().chainId,
@@ -42,14 +42,14 @@ export const Faucet = () => {
           denom: "usdc",
           amount: ["1000000"],
         }),
-      }).then(res => {
+      }).then((res) => {
         return res.json();
       });
     },
     onError: (error: any) => {
       setErrorMessage(error?.message || t("faucetError"));
     },
-    onSuccess: data => {
+    onSuccess: (data) => {
       if (data.error) {
         setErrorMessage(data.error);
       }
@@ -71,7 +71,7 @@ export const Faucet = () => {
               style={{ width: "400px" }}
               inputStyle={{ textAlign: "left" }}
               value={selectedAddress}
-              onChange={e => {
+              onChange={(e) => {
                 setErrorMessage("");
                 const target = e.target as HTMLInputElement;
                 setSelectedAddress(target.value);
