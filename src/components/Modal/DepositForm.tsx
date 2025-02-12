@@ -52,11 +52,10 @@ export const DepositForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const { formatedAmount: addressBalance } = useBalance(address, DENOMUSDC);
-  const { formatedAmount: marginBalance } = useBalance(
-    selectedAccount?.address,
-    DENOMUSDC
-  );
+  const { formatedAmount: addressBalance, amount: addressBalanceAmount } =
+    useBalance(address, DENOMUSDC);
+  const { formatedAmount: marginBalance, amount: marginBalanceAmount } =
+    useBalance(selectedAccount?.address, DENOMUSDC);
 
   const onSubmit = async () => {
     if (!address) return;
@@ -95,7 +94,16 @@ export const DepositForm = () => {
       <Header>Deposit to Margin Account</Header>
       <Divider />
       <FormRow>
-        <label>Availabe balance: {addressBalance} USD</label>
+        <label>
+          Availabe balance:{" "}
+          <span
+            data-testid="deposit-form-wallet-balance"
+            data-amount={addressBalanceAmount}
+          >
+            {addressBalance}
+          </span>{" "}
+          USD
+        </label>
       </FormRow>
       <Divider />
       <FormRow>
@@ -117,7 +125,16 @@ export const DepositForm = () => {
         <StyledLabel title={selectedAccount?.address}>
           {reduceAddress(selectedAccount?.address)}
         </StyledLabel>
-        <label>Balance: {marginBalance} USD</label>
+        <label>
+          Balance:{" "}
+          <span
+            data-testid="deposit-form-margin-balance"
+            data-amount={marginBalanceAmount}
+          >
+            {marginBalance}
+          </span>{" "}
+          USD
+        </label>
       </FormRow>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <FormRow style={{ justifyContent: "space-around" }}>
