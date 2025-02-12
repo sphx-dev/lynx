@@ -76,6 +76,7 @@ const OrderTabs = () => {
       <Tabs>
         {tabs.map(({ icon, title }, index) => (
           <Tab
+            data-testid={`order-tab-${title}`}
             key={index}
             $isActive={active === index}
             onClick={() => setActive(index)}

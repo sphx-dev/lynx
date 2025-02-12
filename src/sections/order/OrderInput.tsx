@@ -348,6 +348,7 @@ function OrderInput() {
 
                     {orderType !== OrderType.ORDER_TYPE_MARKET ? (
                       <Input
+                        data-testid="order-input-price"
                         {...register("price")}
                         label="Price"
                         placeholder="0.00"
@@ -361,6 +362,7 @@ function OrderInput() {
                       <FakeInput />
                     )}
                     <Input
+                      data-testid="order-input-volume"
                       {...register("volume")}
                       error={errors.volume?.message}
                       value={watch("volume")}
@@ -380,12 +382,14 @@ function OrderInput() {
                         />
                         <Group align="end" style={{ flex: 1 }}>
                           <StyledButton
+                            data-testid="order-input-leverate-1x"
                             type="button"
                             onClick={() => handleChangeLeverage(1)}
                           >
                             1x
                           </StyledButton>
                           <StyledButton
+                            data-testid="order-input-leverate-2x"
                             type="button"
                             onClick={() => handleChangeLeverage(2)}
                             // TODO: enable when leverage is supported
@@ -394,6 +398,7 @@ function OrderInput() {
                             2x
                           </StyledButton>
                           <StyledButton
+                            data-testid="order-input-leverate-5x"
                             type="button"
                             onClick={() => handleChangeLeverage(5)}
                             // TODO: enable when leverage is supported
@@ -402,6 +407,7 @@ function OrderInput() {
                             5x
                           </StyledButton>
                           <StyledButton
+                            data-testid="order-input-leverate-10x"
                             type="button"
                             onClick={() => handleChangeLeverage(10)}
                             // TODO: enable when leverage is supported
@@ -480,6 +486,7 @@ function OrderInput() {
                               }}
                             >
                               <PlaceOrderButton
+                                data-testid="order-input-place-order-button"
                                 $isBuy={isBuyPosition}
                                 disabled={isPlacingOrder || insufficientFunds}
                                 smartSign={smartSign}
