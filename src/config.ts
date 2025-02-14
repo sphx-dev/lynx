@@ -48,9 +48,11 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     config.VITE_FAUCET_URL = "https://faucet.non-prod.sphx.dev";
   }
   if (location.hostname.indexOf("non-prod.sphx.dev") > -1) {
-    config.VITE_API_HOST = "api.non-prod.sphx.dev";
+    // config.VITE_API_HOST = "api.non-prod.sphx.dev";
+    config.VITE_API_HOST = "api.sphx.dev";
     config.VITE_API_PORT = 443;
-    config.VITE_API_URL = "//api.non-prod.sphx.dev";
+    // config.VITE_API_URL = "//api.non-prod.sphx.dev";
+    config.VITE_API_URL = "//api.sphx.dev";
     config.VITE_WS_PROTOCOL = "wss";
     config.VITE_EXPLORER_URL = "https://explorer.sphx.dev";
     config.VITE_STATION_URL = "https://station.non-prod.sphx.dev";
