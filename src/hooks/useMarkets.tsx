@@ -60,7 +60,7 @@ type MarketsStore = {
 
 const useMarketsStore = create<MarketsStore>((set, get) => ({
   markets: [],
-  selectedMarketId: 0n,
+  selectedMarketId: getLocalStorageSelectedMarket(),
   selectedMarket: null,
   setMarkets: (markets: Market[]) => {
     if (equal(get().markets, markets)) return;
@@ -68,6 +68,7 @@ const useMarketsStore = create<MarketsStore>((set, get) => ({
     const selectedId =
       get().selectedMarketId === 0n ? markets[0]?.id : get().selectedMarketId;
 
+    setLocalStorageSelectedMarket(selectedId);
     set({
       markets,
       selectedMarketId: selectedId,
@@ -78,6 +79,7 @@ const useMarketsStore = create<MarketsStore>((set, get) => ({
     const selectedMarket = get().markets.find(market => market.id === id);
     if (selectedMarket) {
       set({ selectedMarketId: id, selectedMarket });
+      setLocalStorageSelectedMarket(id);
     }
   },
 }));
@@ -109,3 +111,16 @@ const MARKETS_META: Record<string, any> = {
     pricePerContract: 10,
   },
 };
+
+function getLocalStorageSelectedMarket() {
+  let strMarket = localStorage.getItem("selectedMarket") ?? 0;
+  try {
+    return BigInt(strMarket);
+  } catch (e) {
+    return BigInt(0);
+  }
+}
+
+function setLocalStorageSelectedMarket(id: bigint) {
+  localStorage.setItem("selectedMarket", id.toString());
+}
