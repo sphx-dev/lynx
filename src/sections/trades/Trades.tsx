@@ -1,50 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { TableContainer } from "../orderbook/OrderBookStyle";
 import { Stack, Text } from "../../components";
 import TitleRow from "../orderbook/TitleRow";
 import TradeItem from "./TradeItem";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import config from "@/config";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { useTradesData } from "./useTradesWebsocket";
+import { useMarkets } from "@/hooks/useMarkets";
+import { ReadyState } from "react-use-websocket";
 
 const HEADERS = ["price", "amount", "time"];
 
-const websocketURL =
-  config.VITE_WS_PROTOCOL +
-  "://" +
-  config.VITE_API_HOST +
-  ":" +
-  config.VITE_API_PORT +
-  "/orderbook/ws";
-
-const MAX_RECORDS = 500;
-
 const Trades = React.memo(() => {
   const { t } = useTranslation();
-  const [messages, setMessages] = useState<any[]>([]);
+  const { symbol } = useMarkets();
   const containerRef = useRef(null);
   const didUnmount = useRef(false);
 
-  const { sendMessage, readyState } = useWebSocket(websocketURL, {
-    share: true,
-    // onOpen: e => console.log("opened", e),
-    // onClose: e => {
-    //   console.log("closed", e);
-    // },
-    // onError: e => console.log("error", e),
-    onMessage: msg => {
-      const data = JSON.parse(msg.data);
-      const messageType = data.message_type;
-      const info = JSON.parse(data.body);
-      const parsedMessage = { messageType, ...info };
-
-      setMessages(prev => [parsedMessage, ...prev.slice(0, MAX_RECORDS)]);
-    },
-    shouldReconnect: () => didUnmount.current === false,
-    reconnectAttempts: 10,
-    reconnectInterval: 5000,
-  });
+  const { messagesByTicker, sendMessage, readyState } = useTradesData();
+  const messages = symbol ? messagesByTicker[symbol] ?? [] : [];
 
   useEffect(() => {
     return () => {
@@ -88,7 +62,7 @@ const Trades = React.memo(() => {
         <TableContainer
           style={{ overflowY: "hidden", height: "calc(100vh - 340px)" }}
         >
-          {messages.map(msg => (
+          {messages.map((msg: any) => (
             <TradeItem
               key={msg.id}
               price={msg.price}

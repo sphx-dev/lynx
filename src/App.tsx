@@ -10,6 +10,7 @@ import { Modal, useModalStore } from "./components/Modal/Modal";
 import { DepositForm } from "./components/Modal/DepositForm";
 import { WithdrawForm } from "./components/Modal/WithdrawForm";
 import { useGlobalWebsocketHandler } from "./hooks/useGlobalWebsocketHandler";
+import { useTradesWebsocket } from "./sections/trades/useTradesWebsocket";
 
 function App() {
   const content = useRoutes(routes);
@@ -18,6 +19,7 @@ function App() {
 
   // Query invalidator needed to be called only in a single place
   useGlobalWebsocketHandler();
+  useTradesWebsocket();
 
   return (
     <ThemeProvider theme={theme}>

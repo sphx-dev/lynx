@@ -20,9 +20,9 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     VITE_SMART_API_HOST: "localhost",
     VITE_SMART_API_PORT: "3077",
   };
-  // config.VITE_API_HOST = "api.non-prod.sphx.dev";
+  // config.VITE_API_HOST = "api.sphx.dev";
   // config.VITE_API_PORT = 443;
-  // config.VITE_API_URL = "//api.non-prod.sphx.dev";
+  // config.VITE_API_URL = "//api.sphx.dev";
   // config.VITE_WS_PROTOCOL = "wss";
   // config.VITE_EXPLORER_URL = "https://explorer.sphx.dev";
   // config.VITE_STATION_URL = "https://station.non-prod.sphx.dev";
