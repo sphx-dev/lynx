@@ -9,6 +9,9 @@ import { useModalStore } from "./Modal/Modal";
 import { useBalances } from "../hooks/useBalance";
 import { DENOMUSDC, PRECISION } from "@/constants";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import config from "@/config";
+import { formatDollars } from "@/utils/format";
 
 export const MarginAccSelector = ({
   size,
@@ -51,12 +54,10 @@ export const MarginAccSelector = ({
 
   const itemList = useMemo(() => {
     return marginAccounts?.map((account, index) => {
-      let item = `Account #${account.id?.number}`;
-      const balance = balances?.[index];
-      if (balance && typeof balance?.amount === "number") {
-        item += ` (${balance?.amount / PRECISION} USD)`;
-      }
-      return item;
+      let label = `Account #${account.id?.number}`;
+      const balance = balances?.[index]?.amount;
+
+      return { label, balance, address: account.address };
     });
   }, [marginAccounts, balances]);
 
@@ -71,6 +72,7 @@ export const MarginAccSelector = ({
     <>
       {!!selectedAccount && (
         <Button
+          data-testid="margin-acc-selector"
           ref={buttonRef}
           onClick={() => {
             const buttonCoords = buttonRef.current?.getBoundingClientRect();
@@ -110,7 +112,7 @@ const DropdownMenu = ({
   x,
   y,
 }: {
-  items: string[];
+  items: { label: string; balance: number | undefined; address: string }[];
   selectedIndex: number;
   show: boolean;
   onSelect: (index: number) => void;
@@ -125,11 +127,25 @@ const DropdownMenu = ({
       <ul>
         {items.map((item, index) => (
           <MenuItem
-            key={item}
+            key={item.address}
             className={selectedIndex === index ? "selected" : ""}
-            onClick={() => onSelect(index)}
           >
-            {item}
+            <MenuItemLabel
+              data-testid={"margin-acc-selector-item-" + (index + 1)}
+              onClick={() => onSelect(index)}
+            >
+              <span>{item.label}</span>{" "}
+              <span style={{ fontWeight: "bold" }}>
+                {item?.balance ? formatDollars(item?.balance / PRECISION) : ""}
+              </span>
+            </MenuItemLabel>
+            <Link
+              style={{ color: "#00ffee", padding: "5px 0" }}
+              to={`${config.VITE_EXPLORER_URL}/accounts/${item.address}`}
+              target="_blank"
+            >
+              ⧉
+            </Link>
           </MenuItem>
         ))}
       </ul>
@@ -160,10 +176,13 @@ const DropdawnWindow = styled.div<{ $show: boolean }>`
 `;
 
 const MenuItem = styled.li`
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
   ${({ theme }) => theme?.fonts?.typography?.actionMd}
   cursor: pointer;
   list-style-type: none;
-  padding: 4px 16px;
+  padding: 0px 16px;
   &.selected {
     background-color: ${({ theme }) =>
       getThemeColors(theme)?.input?.primary?.background?.hovered};
@@ -176,8 +195,17 @@ const MenuItem = styled.li`
   }
 `;
 
+const MenuItemLabel = styled.label`
+  padding: 5px 0px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 230px;
+`;
+
 const ButtonWrapper = styled.div`
   display: flex;
+  justify-content: space-around;
   gap: 8px;
   padding: 10px 16px 0 16px;
 `;

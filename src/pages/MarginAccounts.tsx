@@ -10,6 +10,8 @@ import { sendTokens } from "../utils/sendTokens";
 import { errorAlert, infoAlert, successAlert } from "../utils/alerts";
 import { Input } from "@/components/Input";
 import { DENOMUSDC, PRECISION } from "@/constants";
+import { Link } from "react-router-dom";
+import config from "@/config";
 
 const MarginAccountsPage = () => {
   const { address, reconnect } = useChainCosmoshub();
@@ -56,12 +58,7 @@ const MarginAccountsPage = () => {
         Margin Accounts <span style={{ fontSize: "12px" }}>{status}</span>
       </h1>
 
-      <Stack
-        fullHeight
-        // justify="center"
-        // align="center"
-        // style={{ minHeight: "calc(100vh - 98px - 25px)" }}
-      >
+      <Stack fullHeight>
         <RowContainer>
           <ConnectButton />
         </RowContainer>
@@ -69,8 +66,15 @@ const MarginAccountsPage = () => {
           <RowContainer>
             <label>Address:</label>
             <label>{address}</label>
+            <Link
+              style={{ color: "#00ffee" }}
+              to={`${config.VITE_EXPLORER_URL}/accounts/${address}`}
+              target="_blank"
+            >
+              ⧉
+            </Link>
             <label>
-              {balance && <>({Number(balance.amount) / PRECISION} usd</>})
+              {balance && <>({Number(balance.amount) / PRECISION} USD)</>}
             </label>
             <Button onClick={() => reconnect()}>Reconnect</Button>
           </RowContainer>
@@ -94,14 +98,14 @@ const MarginAccountsPage = () => {
                 <Button disabled>Creating...</Button>
               )}
               <Input
-                placeholder="10usd"
+                placeholder="10.00 USD"
                 type="number"
                 value={sendAmount}
                 onChange={event => {
                   setSendAmount((event.target as HTMLInputElement).value);
                 }}
               />
-              <label>{sendAmount} usd</label>
+              <label>{sendAmount} USD</label>
               <Button
                 disabled={!canSend}
                 onClick={() => {
@@ -149,6 +153,13 @@ const MarginAccountsPage = () => {
                 <div title="Send funds" style={{ minWidth: "600px" }}>
                   {account.address}
                 </div>
+                <Link
+                  style={{ color: "#00ffee" }}
+                  to={`${config.VITE_EXPLORER_URL}/accounts/${account.address}`}
+                  target="_blank"
+                >
+                  ⧉
+                </Link>
                 <div>Positions:</div>
                 <div style={{ minWidth: "70px" }}>
                   {balances[index]

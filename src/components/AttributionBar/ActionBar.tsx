@@ -8,6 +8,7 @@ import Group from "../Group";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import config from "@/config";
+import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 
 // Define styled components for the action bar and icons
 export const ActionBarContainer = styled(Group)`
@@ -56,6 +57,12 @@ const ButtonLink = styled(Link)`
 // The React component that uses the styled components
 const ActionBar = () => {
   const { t } = useTranslation();
+  const { address } = useChainCosmoshub();
+
+  const explorerLink = address
+    ? `${config.VITE_EXPLORER_URL}/accounts/${address}`
+    : `${config.VITE_EXPLORER_URL}`;
+
   return (
     <ActionBarContainer spacing={10}>
       {/* You can replace these with the actual icons you need */}
@@ -64,11 +71,7 @@ const ActionBar = () => {
         {/* <Icon src={heart} alt="Heart Icon" /> */}
       </Button>
       <Divider />
-      <ButtonLink
-        to={config.VITE_EXPLORER_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <ButtonLink to={explorerLink} target="_blank" rel="noopener noreferrer">
         <Icon src={graph} alt="Explorer Icon" />
       </ButtonLink>
       <Divider />

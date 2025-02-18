@@ -26,11 +26,16 @@ const OrdersHistory = () => {
   const columns = useOrdersHistoryColumns();
 
   const [page, setPage] = useState<number>(0);
-  const { orders, totalOrders, pageSize } = useOrders(selectedAddress, page, [
+  const {
+    orders: originalOrders,
+    totalOrders,
+    pageSize,
+  } = useOrders(selectedAddress, page, [
     OrderStatus.ORDER_STATUS_CANCELED,
     OrderStatus.ORDER_STATUS_FILLED,
     OrderStatus.ORDER_STATUS_EXPIRED,
   ]);
+  const orders = originalOrders.toReversed();
 
   if (totalOrders === 0) {
     return <PlaceHolder>No Orders yet</PlaceHolder>;

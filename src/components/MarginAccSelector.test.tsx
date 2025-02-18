@@ -59,24 +59,27 @@ describe("MarginAccSelector", () => {
 
   test("renders the selected account button", () => {
     render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
-    expect(screen.getByText("Account #1")).toBeInTheDocument();
+    expect(screen.getByTestId("margin-acc-selector")).toBeInTheDocument();
   });
 
   test("toggles the dropdown menu on button click", () => {
     render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
-    const button = screen.getByText("Account #1");
+    const button = screen.getByTestId("margin-acc-selector");
     fireEvent.click(button);
-    expect(screen.getByText("Account #1 (1 USD)")).toBeInTheDocument();
-    expect(screen.getByText("Account #2 (2 USD)")).toBeInTheDocument();
+    const acc1 = screen.getByTestId("margin-acc-selector-item-1");
+    const acc2 = screen.getByTestId("margin-acc-selector-item-2");
+
+    expect(acc1.textContent).toBe("Account #1 USD 1.00");
+    expect(acc2.textContent).toBe("Account #2 USD 2.00");
   });
 
   test("selects an account from the dropdown menu", () => {
     render(<MarginAccSelector size="sm" />, {
       wrapper: AppWrapper,
     });
-    const button = screen.getByText("Account #1");
+    const button = screen.getByTestId("margin-acc-selector");
     fireEvent.click(button);
-    const account2 = screen.getByText("Account #2 (2 USD)");
+    const account2 = screen.getByTestId("margin-acc-selector-item-2");
 
     fireEvent.click(account2);
     expect(mockSetSelectedIndex).toHaveBeenCalledWith(1);
@@ -85,7 +88,7 @@ describe("MarginAccSelector", () => {
   test("opens the deposit modal", async () => {
     render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
 
-    const button = screen.getByText("Account #1");
+    const button = screen.getByTestId("margin-acc-selector");
     await userEvent.click(button);
 
     const depositButton = screen.getByText("Deposit");
@@ -98,7 +101,7 @@ describe("MarginAccSelector", () => {
   test("opens the withdraw modal", () => {
     render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
 
-    const button = screen.getByText("Account #1");
+    const button = screen.getByTestId("margin-acc-selector");
     fireEvent.click(button);
 
     const withdrawButton = screen.getByText("Withdraw");

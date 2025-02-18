@@ -9,6 +9,7 @@
   "positions": "Positions",
   "pending": "Pending",
   "orders": "Orders",
+  "orderbook": "Orderbook",
   "orderHistory": "Order History",
   "trades": "Trades",
   "uP&L": "uP&L",

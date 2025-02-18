@@ -122,7 +122,7 @@ export const Orders = () => {
 
   return (
     <div>
-      <Title>{t("orders")}</Title>
+      <Title>{t("orderbook")}</Title>
 
       <TR style={{ marginRight: "16px" }}>
         <TH>{t("total")}</TH>
