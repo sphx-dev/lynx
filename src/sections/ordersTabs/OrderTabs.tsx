@@ -32,6 +32,7 @@ const Tab = styled.button<TabProps>`
 const ScrollContent = styled.div`
   height: 300px;
   width: 100%;
+  position: relative;
 `;
 
 const Tabs = styled.div`
@@ -63,10 +64,10 @@ const OrderTabs = () => {
         title: "orderHistory",
         icon: "OrdersIcon",
       },
-      {
-        title: "trades",
-        icon: "TradesIcon",
-      },
+      // {
+      //   title: "trades",
+      //   icon: "TradesIcon",
+      // },
     ],
     []
   );

@@ -14,11 +14,13 @@ import {
 import { ClosePositionByMarketModal } from "./ClosePositionByMarket";
 import { ClosePositionByLimitModal } from "./ClosePositionByLimit";
 import { ShowTpSlModal } from "./ShowTpSlModal";
+import { ReloadButton } from "../components/ReloadButton";
+import { LoaderBar } from "@/components/LoaderBar";
 
 const Positions = () => {
   const { isConnected } = useChainCosmoshub();
 
-  const { data } = usePositions();
+  const { data, refetch, isFetching } = usePositions();
 
   const positions = useMemo(() => {
     // TODO: Filter out closed positions by call params when implemented in chain
@@ -63,13 +65,19 @@ const Positions = () => {
 
   if (!positions?.length || !isConnected) {
     return (
-      <PlaceHolder data-testid="perpetual-positions-table-empty">
-        No Positions
-      </PlaceHolder>
+      <>
+        <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
+        <ReloadButton onClick={() => refetch()} />
+        <PlaceHolder data-testid="perpetual-positions-table-empty">
+          No Positions
+        </PlaceHolder>
+      </>
     );
   }
   return (
     <>
+      <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
+      <ReloadButton onClick={() => refetch()} />
       <Table
         data-testid="perpetual-positions-table"
         columns={positionColumns}

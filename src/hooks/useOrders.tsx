@@ -26,11 +26,7 @@ export const useOrders = (
   page: number,
   statuses: OrderStatus[]
 ) => {
-  const {
-    isLoading,
-    error,
-    data: { orders, totalOrders } = { orders: [], totalOrders: 0 },
-  } = useQuery(
+  const queryResult = useQuery(
     ["orders", address, page, ...statuses],
     () => {
       return getOrdersByAddress(
@@ -50,9 +46,12 @@ export const useOrders = (
     }
   );
 
+  const { data: { orders, totalOrders } = { orders: [], totalOrders: 0 } } =
+    queryResult;
+
   return {
-    isLoading,
-    error,
+    ...queryResult,
+
     orders,
     totalOrders,
     pageSize: Number(PAGE_SIZE),

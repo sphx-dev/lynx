@@ -124,7 +124,7 @@ test("Futures page render properly", async () => {
   const orderBookTab = screen.getByText("Order book");
   expect(orderBookTab).toBeTruthy();
   const tradesTab = screen.getAllByText("Trades");
-  expect(tradesTab).toHaveLength(2);
+  expect(tradesTab).toHaveLength(1);
 
   // Click on connect button opens wallet modal and close button closes the modal
   act(() => {

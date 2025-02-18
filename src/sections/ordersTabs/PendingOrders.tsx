@@ -26,6 +26,8 @@ import { Pagination } from "@/components/Pagination";
 import { PRECISION } from "@/constants";
 import { formatPrice } from "@/utils/format";
 import { useSmartSign } from "@/components/SmartSignButton";
+import { ReloadButton } from "./components/ReloadButton";
+import { LoaderBar } from "@/components/LoaderBar";
 
 const FF_SMART_SIGN = false;
 
@@ -58,6 +60,8 @@ const PendingOrders = () => {
     orders: originalOrders,
     totalOrders,
     pageSize,
+    refetch,
+    isFetching,
   } = useOrders(selectedAddress, page, [
     OrderStatus.ORDER_STATUS_OPEN,
     OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
@@ -203,11 +207,19 @@ const PendingOrders = () => {
   // if (!openOrders.length) {
   // if (!sortedOrders.length) {
   if (totalOrders === 0) {
-    return <PlaceHolder>No Orders yet</PlaceHolder>;
+    return (
+      <>
+        <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
+        <ReloadButton onClick={() => refetch()} />
+        <PlaceHolder>No Orders yet</PlaceHolder>
+      </>
+    );
   }
 
   return (
     <>
+      <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
+      <ReloadButton onClick={() => refetch()} />
       <Table
         columns={columns}
         // data={openOrders}

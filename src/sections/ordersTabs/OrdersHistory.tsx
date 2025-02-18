@@ -18,6 +18,8 @@ import { Pagination } from "@/components/Pagination";
 import { useMarkets } from "@/hooks/useMarkets";
 import dayjs from "dayjs";
 import { PRECISION } from "@/constants";
+import { ReloadButton } from "./components/ReloadButton";
+import { LoaderBar } from "@/components/LoaderBar";
 
 const OrdersHistory = () => {
   const { address } = useChainCosmoshub();
@@ -30,6 +32,8 @@ const OrdersHistory = () => {
     orders: originalOrders,
     totalOrders,
     pageSize,
+    refetch,
+    isFetching,
   } = useOrders(selectedAddress, page, [
     OrderStatus.ORDER_STATUS_CANCELED,
     OrderStatus.ORDER_STATUS_FILLED,
@@ -38,11 +42,19 @@ const OrdersHistory = () => {
   const orders = originalOrders.toReversed();
 
   if (totalOrders === 0) {
-    return <PlaceHolder>No Orders yet</PlaceHolder>;
+    return (
+      <>
+        <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
+        <ReloadButton onClick={() => refetch()} />
+        <PlaceHolder>No Orders yet</PlaceHolder>
+      </>
+    );
   }
 
   return (
     <>
+      <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
+      <ReloadButton onClick={() => refetch()} />
       <Table columns={columns} data={orders} />
       <Pagination
         page={page}
