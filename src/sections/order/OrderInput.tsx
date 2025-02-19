@@ -63,15 +63,22 @@ export interface MarketOrderForm {
   orderType: OrderType;
 }
 
+const defaultIsBuy =
+  localStorage.getItem("order-input-isBuy") === "true" || false;
+const defaultOrderType: OrderType =
+  localStorage.getItem("order-input-orderType") === "1"
+    ? OrderType.ORDER_TYPE_MARKET
+    : OrderType.ORDER_TYPE_LIMIT;
+
 const defaultValues: MarketOrderForm = {
   volume: "",
-  isBuy: true,
+  isBuy: defaultIsBuy,
   leverage: 1,
   price: "",
   hasTPSL: false,
   takeProfit: "",
   stopLoss: "",
-  orderType: OrderType.ORDER_TYPE_LIMIT,
+  orderType: defaultOrderType,
 };
 
 function OrderInput() {
@@ -103,16 +110,26 @@ function OrderInput() {
 
   const handleSwitchOrderType = (type: OrderType) => {
     setValue("orderType", type);
+    localStorage.setItem("order-input-orderType", type.toString());
     if (type === OrderType.ORDER_TYPE_MARKET) {
       setValue("price", "");
     }
   };
 
   const isBuyPosition = watch("isBuy");
+  console.log("isBuyPosition", isBuyPosition);
+  console.log("isBuyPosition", isBuyPosition);
+  console.log("isBuyPosition", isBuyPosition);
+  console.log("isBuyPosition", isBuyPosition);
+  console.log("isBuyPosition", isBuyPosition);
+  console.log("isBuyPosition", isBuyPosition);
   const orderType: OrderType = watch("orderType");
   const hasTPSL = watch("hasTPSL");
 
-  const handleChangeOrderSide = (value: boolean) => setValue("isBuy", value);
+  const handleChangeOrderSide = (value: boolean) => {
+    setValue("isBuy", value);
+    localStorage.setItem("order-input-isBuy", value.toString());
+  };
   const handleChangeLeverage = (value: number) => setValue("leverage", value);
   const handleClickHasTPSL = () => {
     setValue("takeProfit", "");
@@ -124,6 +141,10 @@ function OrderInput() {
       const price = Number(priceValue).toFixed(6);
       console.log("PRICE_SELECTED", price);
       setValue("orderType", OrderType.ORDER_TYPE_LIMIT);
+      localStorage.setItem(
+        "order-input-orderType",
+        OrderType.ORDER_TYPE_LIMIT.toString()
+      );
       setValue("price", price);
     },
     [setValue]

@@ -63,7 +63,7 @@ const Futures = () => {
           >
             <Stack justify="apart" fullHeight>
               <div style={{ flex: 1 }}>
-                <TabComponent tabs={tabs} />
+                <TabComponent id="futures-tabs" tabs={tabs} />
               </div>
               <Logo />
             </Stack>

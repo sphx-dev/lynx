@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Table, Stack, Icon } from "../../components";
 import useTheme from "../../hooks/useTheme";
@@ -8,6 +8,7 @@ import useTheme from "../../hooks/useTheme";
 import PendingOrders from "./PendingOrders";
 import OrdersHistory from "./OrdersHistory";
 import Positions from "./Positions/Positions";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 interface TabProps {
   $isActive?: boolean;
 }
@@ -44,7 +45,7 @@ const Tabs = styled.div`
 const CONTENT = [Positions, PendingOrders, OrdersHistory, Table];
 
 const OrderTabs = () => {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useLocalStorage("selectedOrderTab", 0);
   const { t } = useTranslation();
   const { themeColors } = useTheme();
   // const { openOrders, closedOrders, positions } = useAppSelector(account);

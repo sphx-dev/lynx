@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import {
   TabList,
   Tabs as BaseTabs,
@@ -7,6 +7,7 @@ import {
 } from "react-tabs";
 import TabButton from "../TabButton";
 import "react-tabs/style/react-tabs.css";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface TabsProps {
   title: string;
@@ -14,11 +15,12 @@ interface TabsProps {
 }
 
 interface Props {
+  id: string;
   tabs: TabsProps[];
 }
 
-const Tabs = ({ tabs }: Props) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+const Tabs = ({ id, tabs }: Props) => {
+  const [selectedIndex, setSelectedIndex] = useLocalStorage(id, 0);
   return (
     <BaseTabs selectedIndex={selectedIndex} onSelect={setSelectedIndex}>
       <TabList className="custom-tab-list">
