@@ -1,4 +1,5 @@
 import {
+  sphxDevnetChain1Info,
   sphxLocalChainInfo,
   sphxTestnetChain1Info,
   sphxTestnetChainGenericInfo,
@@ -86,6 +87,9 @@ export const getChain = () => {
   }
   if (window.location.hostname.includes("demo.sphx.dev")) {
     return sphxTestnetChain1Info;
+  }
+  if (window.location.hostname.includes("devnet.sphx.dev")) {
+    return sphxDevnetChain1Info;
   }
   return sphxTestnetChainGenericInfo;
 };
