@@ -139,13 +139,10 @@ const DropdownMenu = ({
                 {item?.balance ? formatDollars(item?.balance / PRECISION) : ""}
               </span>
             </MenuItemLabel>
-            <Link
-              style={{ color: "#00ffee", padding: "5px 0" }}
+            <ExternalLink
               to={`${config.VITE_EXPLORER_URL}/accounts/${item.address}`}
               target="_blank"
-            >
-              ⧉
-            </Link>
+            ></ExternalLink>
           </MenuItem>
         ))}
       </ul>
@@ -201,6 +198,28 @@ const MenuItemLabel = styled.label`
   justify-content: space-between;
   width: 100%;
   min-width: 230px;
+`;
+
+const ExternalLink = styled(Link)`
+  display: inline-block;
+  color: #00ffee;
+  width: 30px;
+  text-decoration: none;
+  position: relative;
+  height: 30px;
+
+  &:before {
+    position: absolute;
+    content: "⧉";
+    font-size: 15px;
+    top: 50%;
+    left: 50%;
+    transition: transform 0.25s;
+    transform: translate(-50%, -50%);
+  }
+  &:hover::before {
+    transform: translate(-50%, -50%) scale(1.25);
+  }
 `;
 
 const ButtonWrapper = styled.div`
