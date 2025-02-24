@@ -111,11 +111,18 @@ const MainPriceUnit = styled.span`
 const PriceBorder = () => {
   const unit = "$";
 
+  const { selectedMarketId } = useMarkets();
+
   const { data: assetInfo } = useAssetInfo();
   const volume = assetInfo?.volume24h ?? 0;
   const lastPrice = assetInfo?.last_price ?? 0;
   const changeLastDay = assetInfo?.price24h ?? 0;
   const fundingRate = assetInfo?.funding_rate ?? 0.0001;
+  const hasOpenInterest = !!assetInfo?.open_interest;
+  const openInterest =
+    assetInfo?.open_interest?.find(
+      oi => oi.MarketID === selectedMarketId?.toString()
+    )?.OI ?? 0;
 
   return (
     <Wrapper>
@@ -163,6 +170,12 @@ const PriceBorder = () => {
         after="%"
         type={fundingRate > 0 ? ValueType.ACTIVE : ValueType.ERROR}
       />
+      {hasOpenInterest && (
+        <PriceView
+          label="Open Interest"
+          value={formatBigNumber(openInterest)}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -174,6 +187,8 @@ type AssetInfo = {
   last_price: number;
   price24h: number; // 24h price Change
   funding_rate: number; // 8h Funding
+  // open_interest is an array of objects like [{Side: "POSITION_SIDE_LONG", MarketID: "1", OI: 10}, ...]
+  open_interest: { Side: string; MarketID: string; OI: number }[];
 };
 
 const BASE_API = config.VITE_API_URL;
@@ -196,3 +211,26 @@ const useAssetInfo = () => {
 
   return queryResult;
 };
+
+function formatBigNumber(strNumber: number | string) {
+  const num = BigInt(parseInt(strNumber.toString()));
+  if (num > 1_000_000_000_000_000_000n) {
+    return `${num / 1_000_000_000_000_000_000n}Q`;
+  }
+  if (num > 1_000_000_000_000_000n) {
+    return `${num / 1_000_000_000_000_000n}q`;
+  }
+  if (num > 1_000_000_000_000n) {
+    return `${num / 1_000_000_000_000n}T`;
+  }
+  if (num > 1_000_000_000n) {
+    return `${num / 1_000_000_000n}B`;
+  }
+  if (num > 1_000_000n) {
+    return `${num / 1_000_000n}M`;
+  }
+  if (num > 1_000n) {
+    return `${num / 1_000n}K`;
+  }
+  return Number(strNumber).toFixed(2);
+}

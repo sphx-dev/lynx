@@ -148,8 +148,6 @@ export const sphxTestnetChain1Info: ChainInfo = {
   ],
 };
 
-
-
 export const sphxDevnetChain1Info: ChainInfo = {
   rpc: "https://rpc1-devnet.sphx.dev/",
   rest: "https://rest1-devnet.sphx.dev/",

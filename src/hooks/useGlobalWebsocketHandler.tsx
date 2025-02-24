@@ -75,11 +75,13 @@ export function useGlobalWebsocketHandler() {
       // "new_position" and "modify_position"
       if (chainEventsMap.has("new_position")) {
         console.log("WS_message", "new_position");
+        queryClient.invalidateQueries(["orders"]);
         queryClient.invalidateQueries(["positions"]);
         queryClient.invalidateQueries(["balance"]);
       }
       if (chainEventsMap.has("modify_position")) {
         console.log("WS_message", "modify_position");
+        queryClient.invalidateQueries(["orders"]);
         queryClient.invalidateQueries(["positions"]);
         queryClient.invalidateQueries(["balance"]);
       }

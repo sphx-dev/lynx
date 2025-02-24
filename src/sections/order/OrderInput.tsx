@@ -117,12 +117,6 @@ function OrderInput() {
   };
 
   const isBuyPosition = watch("isBuy");
-  console.log("isBuyPosition", isBuyPosition);
-  console.log("isBuyPosition", isBuyPosition);
-  console.log("isBuyPosition", isBuyPosition);
-  console.log("isBuyPosition", isBuyPosition);
-  console.log("isBuyPosition", isBuyPosition);
-  console.log("isBuyPosition", isBuyPosition);
   const orderType: OrderType = watch("orderType");
   const hasTPSL = watch("hasTPSL");
 

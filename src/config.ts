@@ -79,6 +79,7 @@ export const getChain = () => {
   // return sphxTestnetChainGenericInfo;
   // return sphxTestnetChain1Info;
   // return sphxTestnetChain2Info;
+  // return sphxDevnetChain1Info;
   if (window.location.hostname.includes("localhost")) {
     return sphxLocalChainInfo;
   }
