@@ -11,7 +11,6 @@ import {
   useOrders,
 } from "../../hooks/useOrders";
 import {
-  Order,
   OrderId,
   OrderSide,
   OrderType,
@@ -21,10 +20,13 @@ import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "@/utils/alerts";
 import { useMarkets } from "../../hooks/useMarkets";
 import dayjs from "dayjs";
-import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
+import {
+  OrderStatus,
+  ValidatedOrder,
+} from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
 import { PRECISION } from "@/constants";
-import { formatPrice } from "@/utils/format";
+import { formatDollars } from "@/utils/format";
 import { useSmartSign } from "@/components/SmartSignButton";
 import { ReloadButton } from "./components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
@@ -104,14 +106,62 @@ const PendingOrders = () => {
       ),
     },
     {
+      accessorFn: (order: ValidatedOrder) => {
+        return order;
+      },
+      header: "Pending Size",
+      cell: (props: any) => {
+        const order = props.getValue();
+        const fills = order.fills;
+        const pendingSize = fills?.reduce(
+          (acc: number, fill: any) => acc + Number(fill.quantity),
+          0
+        );
+        const quantity = order.quantity;
+        return (
+          <Text color="tertiary">
+            {(Number(quantity) - Number(pendingSize)) / PRECISION}
+          </Text>
+        );
+      },
+    },
+    {
       // accessorKey: "price",
-      accessorFn: (order: Order) => {
+      accessorFn: (order: ValidatedOrder) => {
         if (order.orderType === OrderType.ORDER_TYPE_MARKET) {
           return t("marketPrice");
         }
-        return formatPrice(Number(order.price) / PRECISION, 2);
+        return formatDollars(Number(order.price) / PRECISION, "");
+        // return formatPrice(Number(order.price) / PRECISION, 2);
       },
-      header: "Price",
+      header: "Req. Price",
+      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+    },
+    {
+      // accessorKey: "price",
+      accessorFn: (order: ValidatedOrder) => {
+        const fills = order.fills;
+        let total = fills?.reduce(
+          (acc: bigint, fill: any) =>
+            acc + BigInt(fill.quantity) * BigInt(fill.price),
+          0n
+        );
+        const totalQuantity = fills?.reduce(
+          (acc: bigint, fill: any) => acc + BigInt(fill.quantity),
+          0n
+        );
+        total = total / totalQuantity;
+        if (
+          order.orderType === OrderType.ORDER_TYPE_MARKET &&
+          fills.length === 0
+        ) {
+          return t("marketPrice");
+        }
+        return formatDollars(Number(total.toString()) / PRECISION, "");
+        // return formatDollars(Number(order.price) / PRECISION, "");
+        // return formatPrice(Number(order.price) / PRECISION, 2);
+      },
+      header: "Actual Price",
       cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
     },
     {

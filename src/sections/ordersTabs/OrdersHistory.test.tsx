@@ -47,6 +47,7 @@ describe("ClosedOrders", () => {
           side: 1,
           status: 4,
           orderType: 0,
+          fills: [{ quantity: "1810000", price: "5000000" }],
         },
         {
           marketId: "1",
@@ -57,6 +58,7 @@ describe("ClosedOrders", () => {
           side: 1,
           status: 3,
           orderType: 1,
+          fills: [{ quantity: "1100000", price: "4912000" }],
         },
         {
           marketId: "1",
@@ -67,9 +69,10 @@ describe("ClosedOrders", () => {
           side: 1,
           status: 3,
           orderType: 0,
+          fills: [{ quantity: "1100000", price: "4112000" }],
         },
       ],
-      totalOrders: 2,
+      totalOrders: 3,
       pageSize: 10,
     });
     (useMarkets as Mock).mockReturnValue({
@@ -99,7 +102,7 @@ describe("ClosedOrders", () => {
     expect(rows[3].querySelectorAll("td")[1].textContent).toBe("2024-09-29");
     expect(rows[3].querySelectorAll("td")[2].textContent).toBe("Limit");
     expect(rows[3].querySelectorAll("td")[3].textContent).toBe("1.81");
-    expect(rows[3].querySelectorAll("td")[4].textContent).toBe("5.00");
+    expect(rows[3].querySelectorAll("td")[4].textContent).toBe("USD 5.00");
     expect(rows[3].querySelectorAll("td")[5].textContent).toBe("x2");
     expect(rows[3].querySelectorAll("td")[6].textContent).toBe("buy");
     expect(rows[3].querySelectorAll("td")[7].textContent).toBe("Canceled");
@@ -108,7 +111,7 @@ describe("ClosedOrders", () => {
     expect(rows[2].querySelectorAll("td")[1].textContent).toBe("2024-09-28");
     expect(rows[2].querySelectorAll("td")[2].textContent).toBe("Market");
     expect(rows[2].querySelectorAll("td")[3].textContent).toBe("1.1");
-    expect(rows[2].querySelectorAll("td")[4].textContent).toBe("Market Price");
+    expect(rows[2].querySelectorAll("td")[4].textContent).toBe("USD 4.91");
     expect(rows[2].querySelectorAll("td")[5].textContent).toBe("x2");
     expect(rows[2].querySelectorAll("td")[6].textContent).toBe("buy");
     expect(rows[2].querySelectorAll("td")[7].textContent).toBe("Filled");
@@ -117,7 +120,7 @@ describe("ClosedOrders", () => {
     expect(rows[1].querySelectorAll("td")[1].textContent).toBe("2024-09-28");
     expect(rows[1].querySelectorAll("td")[2].textContent).toBe("Limit");
     expect(rows[1].querySelectorAll("td")[3].textContent).toBe("1.1");
-    expect(rows[1].querySelectorAll("td")[4].textContent).toBe("4.11");
+    expect(rows[1].querySelectorAll("td")[4].textContent).toBe("USD 4.11");
     expect(rows[1].querySelectorAll("td")[5].textContent).toBe("x2");
     expect(rows[1].querySelectorAll("td")[6].textContent).toBe("buy");
     expect(rows[1].querySelectorAll("td")[7].textContent).toBe("Filled");

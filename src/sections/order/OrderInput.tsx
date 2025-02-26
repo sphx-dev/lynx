@@ -194,8 +194,8 @@ function OrderInput() {
               marketTicker: selectedMarket?.ticker!,
             });
 
-            setValue("price", "");
-            setValue("volume", "");
+            // setValue("price", "");
+            // setValue("volume", "");
             setValue("takeProfit", "");
             setValue("stopLoss", "");
             successAlert(t("orderPlacedSuccess"));
@@ -223,8 +223,8 @@ function OrderInput() {
             (txt: string) => <div>{txt}</div>
           )
             .then(() => {
-              setValue("price", "");
-              setValue("volume", "");
+              // setValue("price", "");
+              // setValue("volume", "");
               setValue("takeProfit", "");
               setValue("stopLoss", "");
             })
@@ -248,8 +248,8 @@ function OrderInput() {
               leverage: Number(values.leverage),
               marketTicker: selectedMarket?.ticker!,
             });
-            setValue("price", "");
-            setValue("volume", "");
+            // setValue("price", "");
+            // setValue("volume", "");
             setValue("takeProfit", "");
             setValue("stopLoss", "");
             successAlert(t("orderPlacedSuccess"));
@@ -274,8 +274,8 @@ function OrderInput() {
             t
           )
             .then(() => {
-              setValue("price", "");
-              setValue("volume", "");
+              // setValue("price", "");
+              // setValue("volume", "");
               setValue("takeProfit", "");
               setValue("stopLoss", "");
             })

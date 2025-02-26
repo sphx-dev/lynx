@@ -2,17 +2,16 @@ import { useMemo, useState } from "react";
 import { Text, Table } from "../../components";
 import { getOrderStatusText, getOrderTypeText, getSideColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
-import { formatPrice } from "../../utils/format";
+import { formatDollars } from "../../utils/format";
 import { useTranslation } from "react-i18next";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
 import { useOrders } from "@/hooks/useOrders";
-import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import {
-  Order,
-  OrderSide,
-  OrderType,
-} from "proto-codecs/codegen/sphx/order/order";
+  OrderStatus,
+  ValidatedOrder,
+} from "proto-codecs/codegen/sphx/order/validated_order";
+import { OrderSide } from "proto-codecs/codegen/sphx/order/order";
 import { Side } from "@/types/order";
 import { Pagination } from "@/components/Pagination";
 import { useMarkets } from "@/hooks/useMarkets";
@@ -38,6 +37,7 @@ const OrdersHistory = () => {
     OrderStatus.ORDER_STATUS_CANCELED,
     OrderStatus.ORDER_STATUS_FILLED,
     OrderStatus.ORDER_STATUS_EXPIRED,
+    OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
   ]);
   const orders = originalOrders.toReversed();
 
@@ -110,25 +110,43 @@ const useOrdersHistoryColumns = () => {
       ),
     },
     {
-      accessorKey: "quantity",
-      header: "Size",
+      // accessorKey: "quantity",
+      accessorFn: (order: ValidatedOrder) => {
+        return (
+          order?.fills?.reduce((acc, fill) => {
+            return acc + Number(fill.quantity);
+          }, 0) || 0
+        );
+        // return order.quantity;
+      },
+      header: "Exec. Size",
       cell: (props: any) => (
         <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
       ),
     },
     {
       // accessorKey: "price",
-      accessorFn: (order: Order) => {
-        if (order.orderType === OrderType.ORDER_TYPE_MARKET) {
-          return t("marketPrice");
-        }
-        return formatPrice(Number(order.price) / PRECISION, 2);
+      accessorFn: (order: ValidatedOrder) => {
+        let totalQuantity = 0n;
+
+        let accPrice =
+          order?.fills?.reduce((acc, fill) => {
+            totalQuantity += BigInt(fill.quantity);
+            return acc + BigInt(fill.quantity) * BigInt(fill.price);
+          }, 0n) || 0n;
+
+        return Number((accPrice / totalQuantity).toString()) / PRECISION;
+
+        // if (order.orderType === OrderType.ORDER_TYPE_MARKET) {
+        //   return t("marketPrice");
+        // }
+        // return formatPrice(Number(order.price) / PRECISION, 2);
       },
-      header: "Price",
+      header: "Exec. Price",
       cell: (props: any) => (
         <Text color="tertiary">
-          {props.getValue()}
-          {/* {formatPrice(Number(props.getValue()) / PRECISION, 2)} */}
+          {/* {props.getValue()}/{formatPrice(Number(props.getValue()), 2)}/ */}
+          {formatDollars(Number(props.getValue()))}
         </Text>
       ),
     },

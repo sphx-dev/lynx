@@ -37,5 +37,8 @@ export function formatDollars(value: number, currencyDisplay?: any): string {
     currency: "USD",
     // currencyDisplay values can be: "code", "symbol", "narrowSymbol", or "name"
     currencyDisplay: currencyDisplay || "code",
-  }).format(value);
+  })
+    .format(value)
+    .replaceAll(String.fromCharCode(160), " ")
+    .trim();
 }

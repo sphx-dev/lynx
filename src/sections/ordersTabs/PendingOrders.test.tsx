@@ -66,6 +66,7 @@ describe("PendingOrders", () => {
             number: "1",
             marginAccountAddress: "test-margin-account-address",
           },
+          fills: [{ quantity: "1000000", price: "500000" }],
         },
       ],
       totalOrders: 1,
@@ -107,11 +108,19 @@ describe("PendingOrders", () => {
 
     vi.setSystemTime(date);
 
-    render(<PendingOrders />, { wrapper: AppWrapper });
+    const { container } = render(<PendingOrders />, { wrapper: AppWrapper });
+
+    const rows = container.querySelectorAll("tr");
+
     expect(screen.getByText("BTC/USD")).toBeInTheDocument();
     expect(screen.getByText("2021-10-01")).toBeInTheDocument();
     expect(screen.getByText("1")).toBeInTheDocument();
-    expect(screen.getByText("0.50")).toBeInTheDocument();
+    expect(rows[1].querySelector("td:nth-child(5)")?.textContent).toBe(
+      "USD 0.50"
+    );
+    expect(rows[1].querySelector("td:nth-child(6)")?.textContent).toBe(
+      "USD 0.50"
+    );
     expect(screen.getByText("x10")).toBeInTheDocument();
     expect(screen.getByText("buy")).toBeInTheDocument();
     expect(screen.getByText("Open")).toBeInTheDocument();

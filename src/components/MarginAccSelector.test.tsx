@@ -69,8 +69,8 @@ describe("MarginAccSelector", () => {
     const acc1 = screen.getByTestId("margin-acc-selector-item-1");
     const acc2 = screen.getByTestId("margin-acc-selector-item-2");
 
-    expect(acc1.textContent).toBe("Account #1 USD 1.00");
-    expect(acc2.textContent).toBe("Account #2 USD 2.00");
+    expect(acc1.textContent).toBe("Account #1 USD 1.00");
+    expect(acc2.textContent).toBe("Account #2 USD 2.00");
   });
 
   test("selects an account from the dropdown menu", () => {
