@@ -53,7 +53,7 @@
   "ORDER_TYPE_STOP_LOSS_LIMIT": "SL Limit",
   "ORDER_TYPE_TAKE_PROFIT_MARKET": "TP Market",
   "ORDER_TYPE_TAKE_PROFIT_LIMIT": "TP Limit",
-  "UNRECOGNIZED": "-",
+  "UNRECOGNIZED": "—",
   "cancel":"Cancel",
   "confirm":"Confirm",
   "noWalletConnected":"No wallet connected",

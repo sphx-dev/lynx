@@ -4,7 +4,7 @@ import { formatDollars } from "@/utils/format";
 import { useBalance } from "@/hooks/useBalance";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
-import { PRECISION } from "@/constants";
+import { DASH, PRECISION } from "@/constants";
 import { useTranslation } from "react-i18next";
 import { useLocalStreaming } from "../chart/localStreaming";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
@@ -76,7 +76,7 @@ const Label = ({ label, value, ...params }: Label & any) => {
   return (
     <LabelGroup {...params}>
       <Text variant="textSm">{label}:</Text>
-      <Text variant="textSm">{value || "-"}</Text>
+      <Text variant="textSm">{value || DASH}</Text>
     </LabelGroup>
   );
 };

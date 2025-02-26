@@ -16,7 +16,7 @@ import { Side } from "@/types/order";
 import { Pagination } from "@/components/Pagination";
 import { useMarkets } from "@/hooks/useMarkets";
 import dayjs from "dayjs";
-import { PRECISION } from "@/constants";
+import { DASH, PRECISION } from "@/constants";
 import { ReloadButton } from "./components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
 
@@ -112,21 +112,28 @@ const useOrdersHistoryColumns = () => {
     {
       // accessorKey: "quantity",
       accessorFn: (order: ValidatedOrder) => {
-        return (
+        let total =
           order?.fills?.reduce((acc, fill) => {
             return acc + Number(fill.quantity);
-          }, 0) || 0
-        );
-        // return order.quantity;
+          }, 0) || 0;
+        return {
+          total,
+          cancelled: order.status === OrderStatus.ORDER_STATUS_CANCELED,
+        };
       },
       header: "Exec. Size",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
+        <Text color="tertiary">
+          {props.getValue().cancelled
+            ? DASH
+            : Number(props.getValue().total) / PRECISION}
+        </Text>
       ),
     },
     {
       // accessorKey: "price",
       accessorFn: (order: ValidatedOrder) => {
+        let total = 0;
         let totalQuantity = 0n;
 
         let accPrice =
@@ -135,18 +142,21 @@ const useOrdersHistoryColumns = () => {
             return acc + BigInt(fill.quantity) * BigInt(fill.price);
           }, 0n) || 0n;
 
-        return Number((accPrice / totalQuantity).toString()) / PRECISION;
+        if (totalQuantity > 0n) {
+          total = Number((accPrice / totalQuantity).toString()) / PRECISION;
+        }
 
-        // if (order.orderType === OrderType.ORDER_TYPE_MARKET) {
-        //   return t("marketPrice");
-        // }
-        // return formatPrice(Number(order.price) / PRECISION, 2);
+        return {
+          total,
+          cancelled: order.status === OrderStatus.ORDER_STATUS_CANCELED,
+        };
       },
       header: "Exec. Price",
       cell: (props: any) => (
         <Text color="tertiary">
-          {/* {props.getValue()}/{formatPrice(Number(props.getValue()), 2)}/ */}
-          {formatDollars(Number(props.getValue()))}
+          {props.getValue().cancelled
+            ? DASH
+            : formatDollars(props.getValue().total)}
         </Text>
       ),
     },

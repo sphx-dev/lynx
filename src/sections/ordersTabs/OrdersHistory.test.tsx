@@ -101,8 +101,8 @@ describe("ClosedOrders", () => {
     expect(rows[3].querySelectorAll("td")[0].textContent).toBe("BTC/USD");
     expect(rows[3].querySelectorAll("td")[1].textContent).toBe("2024-09-29");
     expect(rows[3].querySelectorAll("td")[2].textContent).toBe("Limit");
-    expect(rows[3].querySelectorAll("td")[3].textContent).toBe("1.81");
-    expect(rows[3].querySelectorAll("td")[4].textContent).toBe("USD 5.00");
+    expect(rows[3].querySelectorAll("td")[3].textContent).toBe("—");
+    expect(rows[3].querySelectorAll("td")[4].textContent).toBe("—");
     expect(rows[3].querySelectorAll("td")[5].textContent).toBe("x2");
     expect(rows[3].querySelectorAll("td")[6].textContent).toBe("buy");
     expect(rows[3].querySelectorAll("td")[7].textContent).toBe("Canceled");

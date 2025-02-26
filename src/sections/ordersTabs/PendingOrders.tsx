@@ -150,12 +150,14 @@ const PendingOrders = () => {
           (acc: bigint, fill: any) => acc + BigInt(fill.quantity),
           0n
         );
-        total = total / totalQuantity;
         if (
           order.orderType === OrderType.ORDER_TYPE_MARKET &&
           fills.length === 0
         ) {
           return t("marketPrice");
+        }
+        if (totalQuantity > 0n) {
+          total = total / totalQuantity;
         }
         return formatDollars(Number(total.toString()) / PRECISION, "");
         // return formatDollars(Number(order.price) / PRECISION, "");

@@ -13,3 +13,5 @@ export const BREAK_POINTS = {
 export const DENOMUSDC = "usdc";
 
 export const PRECISION = 1e6;
+
+export const DASH = "—";
