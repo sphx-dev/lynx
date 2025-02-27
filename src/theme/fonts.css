@@ -1,0 +1,235 @@
+:root {
+  /*
+  const fontStyles = {
+    regular: "Poppins-Regular",
+    medium: "Poppins-Medium",
+    bold: "Poppins-Bold",
+    semiBold: "Poppins-SemiBold",
+    monoRegular: "RobotoMono-Regular",
+    monoBold: "RobotoMono-Bold",
+  };
+      */
+  --font-regular: "Poppins-Regular";
+  --font-medium: "Poppins-Medium";
+  --font-bold: "Poppins-Bold";
+  --font-semiBold: "Poppins-SemiBold";
+  --font-monoRegular: "RobotoMono-Regular";
+  --font-monoBold: "RobotoMono-Bold";
+
+  /*
+  const typography = {
+    textXl: {
+      "font-family": fontStyles.bold,
+      "font-size": "2rem",
+      "font-weight": 700,
+      "line-height": "18px",
+    },
+    textLg: {
+      fontFamily: fontStyles.regular,
+      fontSize: "18px",
+      fontWeight: 400,
+      lineHeight: "24px",
+    },
+    textMd: {
+      fontFamily: fontStyles.regular,
+      fontSize: "14px",
+      fontWeight: 400,
+      lineHeight: "18px",
+    },
+    textSm: {
+      fontFamily: fontStyles.regular,
+      fontSize: "12px",
+      fontWeight: 400,
+      lineHeight: "16px",
+    },
+    textXs: {
+      fontFamily: fontStyles.regular,
+      fontSize: "11px",
+      fontWeight: 400,
+      lineHeight: "13.31px",
+    },
+    text2Xs: {
+      fontFamily: fontStyles.regular,
+      fontSize: "10px",
+      fontWeight: 400,
+      lineHeight: "15px",
+    },
+    textNumSm: {
+      fontFamily: fontStyles.monoRegular,
+      fontSize: "12px",
+      fontWeight: 400,
+      lineHeight: "15.83px",
+    },
+    textNumSmBold: {
+      fontFamily: fontStyles.monoBold,
+      fontSize: "12px",
+      fontWeight: 700,
+      lineHeight: "15.83px",
+    },
+    textNumMd: {
+      fontFamily: fontStyles.monoRegular,
+      fontSize: "14px",
+      fontWeight: 400,
+      lineHeight: "18.46px",
+    },
+    textNumMdBold: {
+      fontFamily: fontStyles.monoBold,
+      fontSize: "14px",
+      fontWeight: 700,
+      lineHeight: "18.46px",
+    },
+    textNumLg: {
+      fontFamily: fontStyles.monoBold,
+      fontSize: "16px",
+      fontWeight: 700,
+      lineHeight: "21.1px",
+    },
+  };
+  */
+  --text-xl-font-family: var(--font-bold);
+  --text-xl-font-size: 2rem;
+  --text-xl-font-weight: 700;
+  --text-xl-line-height: 18px;
+
+  --text-lg-font-family: var(--font-regular);
+  --text-lg-font-size: 18px;
+  --text-lg-font-weight: 400;
+  --text-lg-line-height: 24px;
+
+  --text-md-font-family: var(--font-regular);
+  --text-md-font-size: 14px;
+  --text-md-font-weight: 400;
+  --text-md-line-height: 18px;
+
+  --text-sm-font-family: var(--font-regular);
+  --text-sm-font-size: 12px;
+  --text-sm-font-weight: 400;
+  --text-sm-line-height: 16px;
+
+  --text-xs-font-family: var(--font-regular);
+  --text-xs-font-size: 11px;
+  --text-xs-font-weight: 400;
+  --text-xs-line-height: 13.31px;
+
+  --text-2xs-font-family: var(--font-regular);
+  --text-2xs-font-size: 10px;
+  --text-2xs-font-weight: 400;
+  --text-2xs-line-height: 15px;
+
+  --text-num-sm-font-family: var(--font-monoRegular);
+  --text-num-sm-font-size: 12px;
+  --text-num-sm-font-weight: 400;
+  --text-num-sm-line-height: 15.83px;
+
+  --text-num-sm-bold-font-family: var(--font-monoBold);
+  --text-num-sm-bold-font-size: 12px;
+  --text-num-sm-bold-font-weight: 700;
+  --text-num-sm-bold-line-height: 15.83px;
+
+  --text-num-md-font-family: var(--font-monoRegular);
+  --text-num-md-font-size: 14px;
+  --text-num-md-font-weight: 400;
+  --text-num-md-line-height: 18.46px;
+
+  --text-num-md-bold-font-family: var(--font-monoBold);
+  --text-num-md-bold-font-size: 14px;
+  --text-num-md-bold-font-weight: 700;
+  --text-num-md-bold-line-height: 18.46px;
+
+  --text-num-lg-font-family: var(--font-monoBold);
+  --text-num-lg-font-size: 16px;
+  --text-num-lg-font-weight: 700;
+  --text-num-lg-line-height: 21.1px;
+
+  /*
+    actionMd: {
+      fontFamily: fontStyles.regular,
+      fontSize: "14px",
+      fontWeight: 400,
+      lineHeight: "21px",
+    },
+    actionMdBold: {
+      fontFamily: fontStyles.bold,
+      fontSize: "14px",
+      fontWeight: 700,
+      lineHeight: "21px",
+    },
+    actionSm: {
+      fontFamily: fontStyles.regular,
+      fontSize: "12px",
+      fontWeight: 400,
+      lineHeight: "14.52px",
+    },
+    actionSmBold: {
+      fontFamily: fontStyles.bold,
+      fontSize: "12px",
+      fontWeight: 700,
+      lineHeight: "14.52px",
+    },
+    actionXs: {
+      fontFamily: fontStyles.semiBold,
+      fontSize: "11px",
+      fontWeight: 600,
+      lineHeight: "16.5px",
+    },
+  */
+  --action-md-font-family: var(--font-regular);
+  --action-md-font-size: 14px;
+  --action-md-font-weight: 400;
+  --action-md-line-height: 21px;
+
+  --action-md-bold-font-family: var(--font-bold);
+  --action-md-bold-font-size: 14px;
+  --action-md-bold-font-weight: 700;
+  --action-md-bold-line-height: 21px;
+
+  --action-sm-font-family: var(--font-regular);
+  --action-sm-font-size: 12px;
+  --action-sm-font-weight: 400;
+  --action-sm-line-height: 14.52px;
+
+  --action-sm-bold-font-family: var(--font-bold);
+  --action-sm-bold-font-size: 12px;
+  --action-sm-bold-font-weight: 700;
+  --action-sm-bold-line-height: 14.52px;
+
+  --action-xs-font-family: var(--font-semiBold);
+  --action-xs-font-size: 11px;
+  --action-xs-font-weight: 600;
+  --action-xs-line-height: 16.5px;
+
+  /*
+        navigation: {
+      fontFamily: fontStyles.medium,
+      fontSize: "12px",
+      fontWeight: 500,
+      lineHeight: "18px",
+      },
+      header: {
+          fontFamily: fontStyles.medium,
+          fontSize: "10px",
+          fontWeight: "500",
+          lineHeight: "15px",
+      },
+      label: {
+          fontFamily: fontStyles.regular,
+          fontSize: "14px",
+          fontWeight: 400,
+          lineHeight: "21px",
+      },
+      */
+  --navigation-font-family: var(--font-medium);
+  --navigation-font-size: 12px;
+  --navigation-font-weight: 500;
+  --navigation-line-height: 18px;
+
+  --header-font-family: var(--font-medium);
+  --header-font-size: 10px;
+  --header-font-weight: 500;
+  --header-line-height: 15px;
+
+  --label-font-family: var(--font-regular);
+  --label-font-size: 14px;
+  --label-font-weight: 400;
+  --label-line-height: 21px;
+}
