@@ -1,2 +1,152 @@
 :root {
+  --neutral-n0: #ffffff;
+  --neutral-n10: #fafafa;
+  --neutral-n20: #f5f5f5;
+  --neutral-n30: #ececeb;
+  --neutral-n40: #e0e0df;
+  --neutral-n50: #c4c3c2;
+  --neutral-n60: #b5b4b3;
+  --neutral-n70: #a9a8a6;
+  --neutral-n80: #9b9a98;
+  --neutral-n90: #8d8b89;
+  --neutral-n100: #7e7d7a;
+  --neutral-n200: #706e6b;
+  --neutral-n300: #62605d;
+  --neutral-n400: #565450;
+  --neutral-n500: #484542;
+  --neutral-n600: #3c3935;
+  --neutral-n700: #2b2a28;
+  --neutral-n800: #1d1a15;
+  --neutral-n900: #14120f;
+  --neutral-n1000: #110e09;
+  --neutral-n1100: #0d0b08;
+
+  --gradient-gold: linear-gradient(180deg, #be9461 0%, #9c6c3c 100%);
+  --gradient-green: linear-gradient(
+    90deg,
+    hsla(190, 77%, 17%, 1) 0%,
+    hsla(186, 91%, 13%, 1) 66%,
+    hsla(202, 69%, 13%, 1) 100%
+  );
+  --gradient-green-secondary: linear-gradient(
+    90deg,
+    hsla(183, 78%, 18%, 1) 0%,
+    hsla(186, 76%, 17%, 1) 66%,
+    hsla(191, 74%, 15%, 1) 100%
+  );
+  --gradient-dark-primary: linear-gradient(
+    180deg,
+    #14494f 0%,
+    #164851 9.35%,
+    #194957 51%,
+    #0a2536 100%
+  );
+  --gradient-primary-blue: linear-gradient(180deg, #3185c3 0%, #68aee4 100%);
+  --gradient-primary-blue-dark: linear-gradient(
+    180deg,
+    #3185c3 0%,
+    #68aee4 100%
+  );
+  --gradient-surface: linear-gradient(
+    180deg,
+    #083f46 0%,
+    #093f46 9.35%,
+    #0e3f4e 51%,
+    #0a2536 100%
+  );
+
+  --alpha-white1: rgba(255, 255, 255, 0.01);
+  --alpha-white5: rgba(255, 255, 255, 0.05);
+  --alpha-white8: rgba(255, 255, 255, 0.08);
+  --alpha-white10: rgba(255, 255, 255, 0.1);
+  --alpha-white25: rgba(255, 255, 255, 0.25);
+  --alpha-gray60: rgba(17, 14, 9, 0.6);
+  --alpha-white60: rgba(250, 250, 250, 0.6);
+  --alpha-red10: rgba(241, 43, 43, 0.1);
+  --alpha-red15: rgba(241, 43, 43, 0.15);
+  --alpha-red5: rgba(241, 43, 43, 0.05);
+  --alpha-green20: rgba(127, 212, 130, 0.2);
+  --alpha-green10: rgba(127, 212, 130, 0.1);
+  --alpha-green5: rgba(127, 212, 130, 0.05);
+  --alpha-dark5: rgba(0, 0, 0, 0.05);
+  --alpha-lightButton: linear-gradient(180deg, #eeeeee 0%, #e0e0e0 100%);
+  --alpha-lightButtonHover: linear-gradient(180deg, #e6e6e6 0%, #cccccc 100%);
+  --alpha-darkButton: linear-gradient(180deg, #282727 0%, #191818 100%);
+  --alpha-darkButtonHover: linear-gradient(180deg, #383838 0%, #1e1e1e 100%);
+
+  --primary-50: #fbfdff;
+  --primary-100: #eef7fd;
+  --primary-200: #d8eefb;
+  --primary-300: #bbe1f8;
+  --primary-400: #94cff4;
+  --primary-500: #65bbf0;
+  --primary-600: #2da2ea;
+  --primary-700: #137dbe;
+  --primary-800: #0b486e;
+  --primary-900: #06293e;
+  --primary-950: #051e2e;
+
+  --secondary-50: #fafffe;
+  --secondary-100: #ecfefd;
+  --secondary-200: #d4fcfa;
+  --secondary-300: #b3f9f6;
+  --secondary-400: #88f6f1;
+  --secondary-500: #54f2ea;
+  --secondary-600: #17eee3;
+  --secondary-700: #0daba3;
+  --secondary-800: #086662;
+  --secondary-900: #053d3a;
+  --secondary-950: #042f2d;
+
+  --surface-50: #fbfdfd;
+  --surface-100: #eff6f8;
+  --surface-200: #dcecef;
+  --surface-300: #c0dde2;
+  --surface-400: #9dcad2;
+  --surface-500: #72b2be;
+  --surface-600: #48909d;
+  --surface-700: #2d5a62;
+  --surface-800: #143a44;
+  --surface-900: #13272a;
+  --surface-950: #102023;
+
+  --error-50: #ca363e;
+  --error-100: #8d252b;
+  --error-200: #55171a;
+  --error-300: #330e10;
+  --error-400: #280b0c;
+
+  /* common */
+  --white: #ffffff;
+
+  --aquaGreen: #12ccd1; /* active tab border */
+  --lightGreen: #235d64; /* divider, hovered border */
+  --green2: #1d535b; /* tab active bg */
+  --green3: #9ab4bb; /* pill text */
+  --green4: #16555c; /* button bg */
+  --green5: #059a8b; /* navbar text */
+  --greenLabel: #4f8087;
+  --greenPlaceholder: #3e7577; /* input placeholder, border */
+  --greenText: #9eb8bb; /* input text, active label */
+  --greenNeon: #12dde0; /* chart last price */
+  --greenPrimary: #0c303a; /* chart bg */
+
+  --pink: #fe237a; /* last price change */
+
+  --blue: #60b7f9;
+  --blue2: #62c6ff; /* active navbar, order book text */
+  --blue3: #1f567b; /* order list header bg */
+  --blue4: #275571; /* order list borders, head text */
+  --blueDefault: #031a27; /* body bg */
+  --blueDark: #03273b; /* order list bg */
+  --blueDark2: #041e2f; /* navbar bg */
+  --negative: #2e1515;
+  --negative2: #820000;
+  --negative3: #ff4848;
+  --negative4: #fb5b5b;
+  --positive: #1e4d39;
+  --positive1: #4c972e;
+  --positive2: #58b035;
+  --gray: #416075; /* action bar, order book logo */
+  --tertiary: #9d9d9d;
 }

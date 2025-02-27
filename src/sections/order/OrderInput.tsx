@@ -329,7 +329,7 @@ function OrderInput() {
           )}
           <Stack spacing={20}>
             <form
-              onSubmit={handleSubmit(placeOrder, errors => {
+              onSubmit={handleSubmit(placeOrder, (errors) => {
                 console.log(errors);
               })}
             >

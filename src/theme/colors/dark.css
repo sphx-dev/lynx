@@ -1,0 +1,186 @@
+@import "./common.css";
+
+/* dark theme colors */
+
+:root {
+  --background-gradient-primary: var(--gradient-dark-primary);
+  --background-gradient-secondary: var(--gradient-green-secondary);
+  --background-input: var(--surface-800);
+  --background-button: var(--surface-700);
+  --background-dropdown: var(--surface-900);
+  --background-primary: var(--primary-950);
+  --background-gradient-surface: var(--gradient-surface);
+
+  --divider-primary: var(--surface-700);
+  --divider-secondary: var(--blue-4);
+
+  --border-default: var(--surface-700);
+  --border-hovered: var(--greenPlaceholder);
+
+  --tab-active-background: var(--green2);
+  --tab-active-border: var(--aquaGreen);
+
+  --table-tabs-color: var(--primary-700);
+  --table-tabs-color-active: var(--primary-300);
+  --table-tabs-border: var(--primary-800);
+  --table-tabs-background: linear-gradient(
+    180deg,
+    #133f5b 0%,
+    #062b41 24%,
+    #031d2c 80.5%
+  );
+
+  --navbar-text: var(--green5);
+  --navbar-active-text: var(--blue2);
+
+  /*
+    input: {
+    primary: {
+      background: {
+        default: common.palette.surface["800"],
+        hovered: common.palette.surface["700"],
+        disabled: common.palette.surface["900"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
+    },
+    error: {
+      background: {
+        default: common.palette.error["300"],
+        hovered: common.palette.error["200"],
+        disabled: common.palette.error["400"],
+      },
+      border: {
+        focused: common.palette.error["100"],
+      },
+    },
+  },
+  */
+  --input-background-default: var(--surface-800);
+  --input-background-hovered: var(--surface-700);
+  --input-background-disabled: var(--surface-900);
+  --input-border-focused: var(--secondary-500);
+
+  --input-error-background-default: var(--error-300);
+  --input-error-background-hovered: var(--error-200);
+  --input-error-background-disabled: var(--error-400);
+  --input-error-border-focused: var(--error-100);
+
+  /*
+  button: {
+    primary: {
+      background: {
+        default: common.palette.gradient.primaryBlue,
+        hovered: common.palette.primary["500"],
+        disabled: common.palette.gradient.primaryBlueDark,
+        pressed: common.palette.primary["700"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
+    },
+    secondary: {
+      background: {
+        default: common.palette.surface["700"],
+        hovered: common.palette.surface["600"],
+        disabled: common.palette.surface["800"],
+        pressed: common.palette.surface["700"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
+    },
+    error: {
+      background: {
+        default: common.palette.error["50"],
+        hovered: common.palette.error["100"],
+        disabled: common.palette.error["300"],
+        pressed: common.palette.error["200"],
+      },
+      border: {
+        focused: common.palette.secondary["500"],
+      },
+    },
+    link: {
+      background: {
+        default: "none",
+        hovered: "none",
+        disabled: "none",
+        pressed: "none",
+      },
+      border: {
+        focused: "none",
+      },
+    },
+  },
+  */
+  --button-primary-background-default: var(--background-gradient-primary);
+  --button-primary-background-hovered: var(--primary-500);
+  --button-primary-background-disabled: var(--background-gradient-primary);
+  --button-primary-background-pressed: var(--primary-700);
+  --button-primary-border-focused: var(--secondary-500);
+  --button-secondary-background-default: var(--surface-700);
+  --button-secondary-background-hovered: var(--surface-600);
+  --button-secondary-background-disabled: var(--surface-800);
+  --button-secondary-background-pressed: var(--surface-700);
+  --button-secondary-border-focused: var(--secondary-500);
+  --button-error-background-default: var(--error-50);
+  --button-error-background-hovered: var(--error-100);
+  --button-error-background-disabled: var(--error-300);
+  --button-error-background-pressed: var(--error-200);
+  --button-error-border-focused: var(--secondary-500);
+  --button-link-background-default: none;
+  --button-link-background-hovered: none;
+  --button-link-background-disabled: none;
+  --button-link-background-pressed: none;
+  --button-link-border-focused: none;
+
+  /*
+  text: {
+    primary: "#FFFFFF",
+    secondary: "#E6E6E6",
+    tertiary: common.tertiary,
+    error: common.negative3,
+    secondaryActive: common.palette.secondary["600"],
+    secondaryLink: common.palette.secondary["700"],
+    primaryLink: common.palette.primary["500"],
+    buy: common.positive1,
+    sell: common.negative3,
+  },
+  */
+  --text-primary: #ffffff;
+  --text-secondary: #e6e6e6;
+  --text-tertiary: var(--tertiary);
+  --text-error: var(--negative3);
+  --text-secondary-active: var(--secondary-600);
+  --text-secondary-link: var(--secondary-700);
+  --text-primary-link: var(--primary-500);
+  --text-buy: var(--positive1);
+  --text-sell: var(--negative3);
+
+  /*
+  actionBar: {
+    text: common.gray,
+  },
+  */
+
+  --action-bar-text: var(--gray);
+
+  /*
+  orderButton: {
+    buy: {
+      background: common.positive1,
+      hover: common.positive2,
+    },
+    sell: {
+      background: common.negative3,
+      hover: common.negative4,
+    },
+  },
+  */
+  --orderbutton-buy-background: var(--positive1);
+  --orderbutton-buy-hover: var(--positive2);
+  --orderbutton-sell-background: var(--negative3);
+  --orderbutton-sell-hover: var(--negative4);
+}
