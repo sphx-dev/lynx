@@ -34,21 +34,6 @@ export const getOrdersByAddress = async (
     ),
   };
 
-  console.log("getOrdersByAddress request:", request);
-  console.log(
-    "getOrdersByAddress request:",
-    JSON.stringify(
-      request,
-      (key, value) => {
-        if (typeof value === "bigint") {
-          return value.toString() + "n";
-        }
-        return value;
-      },
-      4
-    )
-  );
-
   const response = await queryClient.sphx.order.ordersForAccount(request);
 
   return response;

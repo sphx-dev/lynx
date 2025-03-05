@@ -1,6 +1,6 @@
 import React, { FocusEvent, forwardRef, ChangeEvent } from "react";
 import styled, { css } from "styled-components";
-import { getThemeColors, ThemeColors } from "../../theme";
+import { ThemeColors } from "../../theme";
 import Stack from "../Stack";
 import Text from "../Text";
 import useTheme from "../../hooks/useTheme";
@@ -25,23 +25,26 @@ interface InputWrapperProps {
 const numberRegex = /^\d*\.?\d*$/;
 
 const StyledInput = styled.input`
-  ${({ theme }) => theme.fonts.typography.textNumMd}
+  font-family: var(--text-num-md-font-family);
+  font-size: var(--text-num-md-font-size);
+  font-weight: var(--text-num-md-font-weight);
+  line-height: var(--text-num-md-line-height);
   text-align: right;
   border: none;
   background: none;
   outline: none;
   flex: 1;
   max-width: 100%;
-  color: ${({ theme }) => getThemeColors(theme).text.primary};
+  color: var(--text-primary);
   &:focus,
   &:focus-visible {
     outline: none;
-    color: ${({ theme }) => getThemeColors(theme).text.primary};
+    color: var(--text-primary);
   }
   &::placeholder,
   &::-webkit-input-placeholder,
   &:-ms-input-placeholder {
-    color: ${({ theme }) => getThemeColors(theme).text.tertiary};
+    color: var(--text-tertiary);
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -56,31 +59,45 @@ const StyledInput = styled.input`
 `;
 
 export const InputLabel = styled.label`
-  ${({ theme }) => theme.fonts.typography.textSm}
-  color: ${({ theme }) => getThemeColors(theme).text.primary};
+  font-family: var(--text-sm-font-family);
+  font-size: var(--text-sm-font-size);
+  font-weight: var(--text-sm-font-weight);
+  line-height: var(--text-sm-line-height);
+  color: var(--text-primary);
   text-align: left;
 `;
 
 const errorStyle = css`
-  border: ${({ theme }) => `1px solid ${getThemeColors(theme).text.error}`};
+  border: 1px solid var(--text-error);
 `;
 
 export const InputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border-radius: var(--border-radius-md);
   width: 100%;
   padding: 7px 12px;
-  background-color: ${({ theme, variant, disabled }) =>
-    disabled
-      ? getThemeColors(theme).input[variant].background.disabled
-      : getThemeColors(theme).input[variant].background.default};
+  background-color: ${({ theme, variant, disabled }) => {
+    if (variant === "error") {
+      return disabled
+        ? "var(--input-error-background-disabled)"
+        : "var(--input-error-background-error)";
+    }
+
+    return disabled
+      ? /*getThemeColors(theme).input[variant].background.disabled*/ "var(--input-background-disabled)"
+      : /*getThemeColors(theme).input[variant].background.default}*/ "var(--input-background-default)";
+  }};
   &:focus-within {
     border-color: ${({ theme, variant }) =>
-      getThemeColors(theme).input[variant].border.focused};
+      variant === "error"
+        ? "var(--input-error-border-focused)"
+        : "var(--input-border-focused)"};
   }
   &:hover {
     background: ${({ theme, variant }) =>
-      getThemeColors(theme).input[variant].background.hovered};
+      variant === "error"
+        ? "var(--input-error-background-hovered)"
+        : "var(--input-background-hovered)"};
   }
   display: flex;
   gap: 0.5rem;

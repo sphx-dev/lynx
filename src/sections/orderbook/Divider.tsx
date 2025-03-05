@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
 import { Text } from "../../components";
 import { formatNumber } from "../../utils/format";
 
@@ -7,8 +6,8 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  border: ${({ theme }) => `1px solid ${getThemeColors(theme).border.default}`};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius-md);
   padding: 5px 10px;
 `;
 

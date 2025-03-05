@@ -23,35 +23,35 @@ exports[`Header Component > should render the Header component correctly 1`] = `
       />
     </header>
     <nav
-      class="sc-hSyjfr gEUtBX"
+      class="sc-hSyjfr bGFBCc"
     >
       <a
-        class="sc-kLJHhQ ansjc"
+        class="sc-kLJHhQ iUTIfg"
         href="/dashboard"
       >
         Dashboard
       </a>
       <a
-        class="sc-kLJHhQ ansjc"
+        class="sc-kLJHhQ iUTIfg"
         href="/exchange"
       >
         Exchange
       </a>
       <a
-        class="sc-kLJHhQ ansjc"
+        class="sc-kLJHhQ iUTIfg"
         href="/dashboard/faucet"
       >
         Faucet
       </a>
       <a
-        class="sc-kLJHhQ ansjc"
+        class="sc-kLJHhQ iUTIfg"
         href="https://station.non-prod.sphx.dev"
         target="_blank"
       >
         Station
       </a>
       <a
-        class="sc-kLJHhQ ansjc"
+        class="sc-kLJHhQ iUTIfg"
         href="https://explorer.sphx.dev"
         target="_blank"
       >
@@ -83,35 +83,35 @@ exports[`Header Component > should render the Header component correctly 1`] = `
 
 exports[`Header Component > should render the Nav component 1`] = `
 <nav
-  class="sc-hSyjfr gEUtBX"
+  class="sc-hSyjfr bGFBCc"
 >
   <a
-    class="sc-kLJHhQ ansjc"
+    class="sc-kLJHhQ iUTIfg"
     href="/dashboard"
   >
     Dashboard
   </a>
   <a
-    class="sc-kLJHhQ ansjc"
+    class="sc-kLJHhQ iUTIfg"
     href="/exchange"
   >
     Exchange
   </a>
   <a
-    class="sc-kLJHhQ ansjc"
+    class="sc-kLJHhQ iUTIfg"
     href="/dashboard/faucet"
   >
     Faucet
   </a>
   <a
-    class="sc-kLJHhQ ansjc"
+    class="sc-kLJHhQ iUTIfg"
     href="https://station.non-prod.sphx.dev"
     target="_blank"
   >
     Station
   </a>
   <a
-    class="sc-kLJHhQ ansjc"
+    class="sc-kLJHhQ iUTIfg"
     href="https://explorer.sphx.dev"
     target="_blank"
   >

@@ -2,9 +2,6 @@ import styled from "styled-components";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Table, Stack, Icon } from "../../components";
-import useTheme from "../../hooks/useTheme";
-// import { useAppSelector } from "../../hooks";
-// import { account } from "../../state/accountSlice";
 import PendingOrders from "./PendingOrders";
 import OrdersHistory from "./OrdersHistory";
 import Positions from "./Positions/Positions";
@@ -13,20 +10,22 @@ interface TabProps {
   $isActive?: boolean;
 }
 const Tab = styled.button<TabProps>`
-  ${({ theme, $isActive }) => theme.fonts.typography.actionMd};
+  font-family: var(--action-md-font-family);
+  font-size: var(--action-md-font-size);
+  font-weight: var(--action-md-font-weight);
+  line-height: var(--action-md-line-height);
   padding: 14px 34px;
   background: none;
   border: none;
-  color: ${({ theme, $isActive }) =>
-    $isActive
-      ? theme.colors.selectedTheme.tableTabs.colorActive
-      : theme.colors.selectedTheme.tableTabs.color};
-  border-right: ${({ theme }) =>
-    `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
+  color: var(--table-tabs-color);
+  border-right: 1px solid var(--table-tabs-border);
   display: flex;
   cursor: pointer;
   svg {
     margin-right: 4px;
+  }
+  &.active {
+    color: var(--table-tabs-color-active);
   }
 `;
 
@@ -38,7 +37,7 @@ const ScrollContent = styled.div`
 
 const Tabs = styled.div`
   display: flex;
-  background: ${({ theme }) => theme.colors.selectedTheme.tableTabs.background};
+  background: var(--table-tabs-background);
   width: 100%;
   min-width: 400px;
 `;
@@ -47,7 +46,6 @@ const CONTENT = [Positions, PendingOrders, OrdersHistory, Table];
 const OrderTabs = () => {
   const [active, setActive] = useLocalStorage("selectedOrderTab", 0);
   const { t } = useTranslation();
-  const { themeColors } = useTheme();
   // const { openOrders, closedOrders, positions } = useAppSelector(account);
   const Content = useMemo(() => CONTENT[active], [active]);
 
@@ -80,7 +78,8 @@ const OrderTabs = () => {
           <Tab
             data-testid={`order-tab-${title}`}
             key={index}
-            $isActive={active === index}
+            className={active === index ? "active" : ""}
+            // $isActive={active === index}
             onClick={() => setActive(index)}
           >
             <>
@@ -90,8 +89,8 @@ const OrderTabs = () => {
                 size="normal"
                 stroke={
                   active === index
-                    ? themeColors.tableTabs.colorActive
-                    : themeColors.tableTabs.color
+                    ? "var(--table-tabs-color-active)"
+                    : "var(--table-tabs-color)"
                 }
               />
               {t(title)}

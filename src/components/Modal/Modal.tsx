@@ -1,7 +1,6 @@
 import { PropsWithChildren } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
 import { create } from "zustand";
 import { motion } from "framer-motion";
 
@@ -76,8 +75,8 @@ const ModalOverlay = styled(motion.div)`
   z-index: 1000;
 `;
 const ModalContent = styled.div`
-  background-color: ${({ theme }) => getThemeColors(theme).background.dropdown};
-  color: ${({ theme }) => getThemeColors(theme).text.primary};
+  background-color: var(--background-dropdown);
+  color: var(--text-primary);
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -89,22 +88,19 @@ const CloseButton = styled.button`
   position: absolute;
   top: 5px;
   right: 5px;
-  background: ${({ theme }) =>
-    getThemeColors(theme).button.secondary.background.default};
+  background: var(--button-secondary-background-default);
   border: none;
   font-size: 18px;
   cursor: pointer;
   color: white;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border-radius: var(--border-radius-md);
   width: 24px;
   height: 24px;
   line-height: 24px;
   &:hover {
-    background: ${({ theme }) =>
-      getThemeColors(theme).button.secondary.background.hovered};
+    background: var(--button-secondary-background-hovered);
   }
   &:active {
-    background: ${({ theme }) =>
-      getThemeColors(theme).button.secondary.background.pressed};
+    background: var(--button-secondary-background-presed);
   }
 `;

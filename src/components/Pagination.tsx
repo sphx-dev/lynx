@@ -160,61 +160,55 @@ const PagesContainer = styled.div`
 const PageButton = styled.button`
   min-width: 30px;
   min-height: 30px;
-  ${({ theme }) => theme.fonts.typography.textSm};
-  color: ${({ theme }) => theme.colors.selectedTheme.text.primary};
-  background-color: ${({ theme }) =>
-    theme.colors.selectedTheme.button["secondary"].background.default};
+  font-family: var(--text-sm-font-family);
+  font-size: var(--text-sm-font-size);
+  font-weight: var(--text-sm-font-weight);
+  line-height: var(--text-sm-line-height);
+
+  color: var(--text-primary-color);
+
+  background-color: var(--button-secondary-background-default);
+
   &:focus {
-    border: ${({ theme }) =>
-      `1px solid ${theme.colors.selectedTheme.button["secondary"].border.focused} !important`};
+    border: 1px solid var(--button-secondary-border-focused);
   }
   &:hover,
   &.selected {
-    background: ${({ theme }) =>
-      theme.colors.selectedTheme.button["secondary"].background.hovered};
+    background: var(--button-secondary-background-hovered);
   }
   &:active {
-    background: ${({ theme }) =>
-      theme.colors.selectedTheme.button["secondary"].background.pressed};
+    background: var(--button-secondary-background-pressed);
   }
   border: 1px solid transparent;
   &:first-child {
-    border-top-left-radius: ${({ theme }) => theme.borderRadius.md};
-    border-bottom-left-radius: ${({ theme }) => theme.borderRadius.md};
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
   }
   &:last-child {
-    border-top-right-radius: ${({ theme }) => theme.borderRadius.md};
-    border-bottom-right-radius: ${({ theme }) => theme.borderRadius.md};
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
   }
 `;
 
 const PageButtonShort = styled.button`
   min-width: 20px;
   min-height: 30px;
-  ${({ theme }) => theme.fonts.typography.textSm};
-  color: ${({ theme }) => theme.colors.selectedTheme.text.primary};
-  background-color: ${({ theme }) =>
-    theme.colors.selectedTheme.button["secondary"].background.default};
-  /* &:focus {
-    border: ${({ theme }) =>
-    `1px solid ${theme.colors.selectedTheme.button["secondary"].border.focused} !important`};
-  } */
-  /* &:hover,
-  &.selected {
-    background: ${({ theme }) =>
-    theme.colors.selectedTheme.button["secondary"].background.hovered};
-  }
-  &:active {
-    background: ${({ theme }) =>
-    theme.colors.selectedTheme.button["secondary"].background.pressed};
-  } */
+
+  font-family: var(--text-sm-font-family);
+  font-size: var(--text-sm-font-size);
+  font-weight: var(--text-sm-font-weight);
+  line-height: var(--text-sm-line-height);
+
+  color: var(--text-primary-color);
+  background-color: var(--button-secondary-background-default);
+
   border: 1px solid transparent;
   &:first-child {
-    border-top-left-radius: ${({ theme }) => theme.borderRadius.md};
-    border-bottom-left-radius: ${({ theme }) => theme.borderRadius.md};
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
   }
   &:last-child {
-    border-top-right-radius: ${({ theme }) => theme.borderRadius.md};
-    border-bottom-right-radius: ${({ theme }) => theme.borderRadius.md};
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
   }
 `;

@@ -4,3 +4,43 @@
 
 :root {
 }
+
+/*
+  possible colors classes from theme
+*/
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.text-error {
+  color: var(--text-error);
+}
+
+.text-secondary-active {
+  color: var(--text-secondary-active);
+}
+
+.text-secondary-link {
+  color: var(--text-secondary-link);
+}
+
+.text-primary-link {
+  color: var(--text-primary-link);
+}
+
+.text-buy {
+  color: var(--text-buy);
+}
+
+.text-sell {
+  color: var(--text-sell);
+}

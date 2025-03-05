@@ -1,4 +1,3 @@
-import { getThemeColors } from "@/theme";
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import styled from "styled-components";
 import { CheckIcon } from "@radix-ui/react-icons";
@@ -36,8 +35,11 @@ const CheckIconStyled = styled(CheckIcon)`
 `;
 
 const CheckboxLabel = styled.label`
-  ${({ theme }) => theme.fonts.typography.textSm}
-  color: ${({ theme }) => getThemeColors(theme).text.primary};
+  font-family: var(--text-sm-font-family);
+  font-size: var(--text-sm-font-size);
+  font-weight: var(--text-sm-font-weight);
+  line-height: var(--text-sm-line-height);
+  color: var(--text-primary);
   display: flex;
   justify-content: space-between;
   gap: 8px;
@@ -46,19 +48,19 @@ const CheckboxLabel = styled.label`
 const CheckboxWrapper = styled.div`
   width: 18px;
   height: 18px;
-  border: 1px solid ${({ theme }) => getThemeColors(theme).border.default};
-  border-radius: ${({ theme }) => theme.borderRadius.xs};
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
   &:active {
-    border-color: ${({ theme }) => getThemeColors(theme).border.active};
+    border-color: var(--border-active);
   }
   &:hover {
-    border-color: ${({ theme }) => getThemeColors(theme).border.hovered};
+    border-color: var(--border-hovered);
   }
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => getThemeColors(theme).border.active};
+    border-color: var(--border-active);
   }
 `;

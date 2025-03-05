@@ -16,6 +16,7 @@
 
   --border-default: var(--surface-700);
   --border-hovered: var(--greenPlaceholder);
+  --border-active: #13dcde;
 
   --tab-active-background: var(--green2);
   --tab-active-border: var(--aquaGreen);

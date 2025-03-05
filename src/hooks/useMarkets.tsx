@@ -65,8 +65,12 @@ const useMarketsStore = create<MarketsStore>((set, get) => ({
   setMarkets: (markets: Market[]) => {
     if (equal(get().markets, markets)) return;
 
-    const selectedId =
-      get().selectedMarketId === 0n ? markets[0]?.id : get().selectedMarketId;
+    const isSelectedMarketInMarkets = markets.some(
+      m => m.id === get().selectedMarketId
+    );
+    const selectedId = isSelectedMarketInMarkets
+      ? get().selectedMarketId
+      : markets[0]?.id || 0n;
 
     setLocalStorageSelectedMarket(selectedId);
     set({

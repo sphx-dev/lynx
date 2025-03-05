@@ -66,7 +66,7 @@ const Trades = React.memo(() => {
             <TradeItem
               key={msg.id}
               price={msg.price}
-              quantity={Number(msg.quantity)}
+              quantity={Number(msg.quantityProcessed)}
               date={msg.timestamp}
               side={msg.side}
             />

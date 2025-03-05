@@ -28,8 +28,14 @@ export const useTradesWebsocket = () => {
       const data = JSON.parse(msg.data);
       const messageType = data.message_type;
       const symbol = data.symbol;
+      let quantityProcessed = data.quantity_processed;
       const info = JSON.parse(data.body);
-      const parsedMessage = { symbol, messageType, ...info };
+      if (messageType === "done") {
+        quantityProcessed = info.quantity;
+      } else if (messageType === "partial") {
+        quantityProcessed = data.quantity_processed;
+      }
+      const parsedMessage = { symbol, messageType, quantityProcessed, ...info };
 
       setMessage(parsedMessage);
     },

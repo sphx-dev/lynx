@@ -1,28 +1,28 @@
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
 interface Props {
   $active?: boolean;
 }
 
 export const TabButton = styled.button<Props>`
-  ${({ theme }) => theme.fonts.typography.actionSmBold}
+  font-family: var(--action-sm-bold-font-family);
+  font-size: var(--action-sm-bold-font-size);
+  font-weight: var(--action-sm-bold-font-weight);
+  line-height: var(--action-sm-bold-line-height);
   outline: none;
   border: none;
-  border-bottom: ${({ theme }) =>
-    `1px solid ${getThemeColors(theme).border.default}`};
+  border-bottom: 1px solid var(--border-default);
   background-color: ${({ $active, theme }) =>
-    $active ? getThemeColors(theme).background.button : "transparent"};
+    $active ? "var(--background-button)" : "transparent"};
   border-top: ${({ $active, theme }) =>
     $active
-      ? `2px solid ${getThemeColors(theme).border.active}`
-      : `1px solid ${getThemeColors(theme).border.default}`};
+      ? `2px solid var(--border-active)`
+      : `1px solid var(--border-default)`};
   padding: 14px 20px;
-  color: ${({ theme }) => getThemeColors(theme).text.primary};
+  color: var(--text-primary);
   cursor: pointer;
 
   &:focus-visible {
-    outline: 1px solid
-      ${({ theme }) => getThemeColors(theme).input.primary.border.focused};
+    outline: 1px solid var(--input-border-focused);
   }
 `;
 

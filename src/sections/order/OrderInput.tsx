@@ -217,7 +217,10 @@ function OrderInput() {
               stopLoss: stopLossValue,
               takeProfit: takeProfitValue,
               marketId: BigInt(marketId),
-            }),
+            }) /*.then(value => {
+              console.log("placeMarketOrder", value);
+              return this;
+            })*/,
             <div>{t("waitingForApproval")}</div>,
             <div>{t("orderPlacedSuccess")}</div>,
             (txt: string) => <div>{txt}</div>
@@ -329,7 +332,7 @@ function OrderInput() {
           )}
           <Stack spacing={20}>
             <form
-              onSubmit={handleSubmit(placeOrder, (errors) => {
+              onSubmit={handleSubmit(placeOrder, errors => {
                 console.log(errors);
               })}
             >
@@ -592,7 +595,11 @@ function sendLimitOrderToChain(
       stopLoss: stopLossValue,
       takeProfit: takeProfitValue,
       marketId: BigInt(marketId),
-    }),
+    }) /*.then(value => {
+      console.log("placeLimitOrder", value);
+      console.log("placeLimitOrder transactionHash:", value?.transactionHash);
+      return this;
+    })*/,
     <div>{t("waitingForApproval")}</div>,
     () => <div>{t("orderPlacedSuccess")}</div>,
     (txt: string) => <div>{txt}</div>

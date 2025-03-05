@@ -4,7 +4,6 @@ import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import Button from "../Button";
 import { Input } from "../Input";
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
 import Divider from "../Divider";
 import { useBalance } from "../../hooks/useBalance";
 import { sendTokens } from "../../utils/sendTokens";
@@ -147,7 +146,10 @@ export const DepositForm = () => {
 };
 
 const Container = styled.div`
-  ${({ theme }) => theme.fonts.typography.textMd}
+  font-family: var(--text-md-font-family);
+  font-size: var(--text-md-font-size);
+  font-weight: var(--text-md-font-weight);
+  line-height: var(--text-md-line-height);
 `;
 
 const Header = styled.h2`
@@ -164,9 +166,9 @@ const FormRow = styled.div`
 `;
 
 const StyledLabel = styled.label`
-  color: ${({ theme }) => getThemeColors(theme).text.secondaryLink};
+  color: var(--text-secondary-link);
   &.active {
-    color: ${({ theme }) => getThemeColors(theme).text.primary};
+    color: var(--text-primary);
   }
   text-transform: uppercase;
   text-decoration: none;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { getThemeColors } from "../../../theme";
 import { Link } from "react-router-dom";
 import { navLinks } from "./config";
 import { ConnectButton } from "../../ConnectButton";
@@ -7,7 +6,7 @@ import { MarginAccButton } from "../../MarginAccButton";
 import { SmartSignButton } from "@/components/SmartSignButton";
 
 const Wrapper = styled.nav`
-  background-color: ${({ theme }) => getThemeColors(theme).background.primary};
+  background-color: var(--background-primary);
   display: flex;
   align-items: center;
   padding: 0px 30px;
@@ -17,10 +16,14 @@ const Wrapper = styled.nav`
   box-shadow: 0px 4px 8px 0px #00000040;
 `;
 const StyledLink = styled(Link)`
-  ${({ theme }) => theme.fonts.typography.navigation}
-  color: ${({ theme }) => getThemeColors(theme).text.secondaryLink};
+  font-family: var(--navigation-font-family);
+  font-size: var(--navigation-font-size);
+  font-weight: var(--navigation-font-weight);
+  line-height: var(--navigation-line-height);
+
+  color: var(--text-secondary-link);
   &.active {
-    color: ${({ theme }) => getThemeColors(theme).text.primary};
+    color: var(--text-primary);
   }
   text-transform: uppercase;
   text-decoration: none;

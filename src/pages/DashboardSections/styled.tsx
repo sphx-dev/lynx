@@ -8,9 +8,6 @@ export const RightWrapper = styled.div`
   flex-direction: column;
 `;
 export const Container = styled.div`
-  /* background: ${({ theme }) =>
-    theme.colors.common.palette.gradient.darkPrimary}; */
-
   background: linear-gradient(180deg, #0a2536 0%, #14494f 100%);
   width: 99%;
   height: calc(100vh - 100px);
@@ -19,7 +16,10 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h2`
-  ${({ theme }) => theme.fonts.typography.textLg}
-  color: ${({ theme }) => theme.colors.common.palette.primary[100]};
+  font-family: var(--text-lg-font-family);
+  font-size: var(--text-lg-font-size);
+  font-weight: var(--text-lg-font-weight);
+  line-height: var(--text-lg-line-height);
+  color: var(--primary-100);
   margin-bottom: 16px;
 `;
