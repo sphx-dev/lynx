@@ -51,3 +51,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  helm-lint:
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    name: Helm Lint
+    timeout-minutes: 15
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Kubectl
+      uses: azure/setup-kubectl@v4
+    - name: Setup Helm
+      uses: azure/setup-helm@v4.3.0
+    - name: Lint Helm Charts
+      run: helm lint ./helm/* -f ./helm/lynxweb/values.dev.yaml
+    - name: Helm Template Test
+      run: |
+        helm package --app-version=latest helm/lynxweb
+        helm template lynxweb ./lynxweb-0.1.0.tgz -f ./helm/lynxweb/values.dev.yaml --set app.tag=latest

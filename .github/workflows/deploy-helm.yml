@@ -1,0 +1,52 @@
+name: Apply Helm Charts to EKS Cluster
+
+on:
+  push:
+    branches: 
+      - main
+      - sc-91-automate-deployment-of-helm-charts-to-dev-environment
+    tags:
+      'v*'
+  workflow_dispatch:
+
+jobs:
+
+  deploy-non-production:
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    name: Deploy to non-production
+    steps:
+    - name: Set up Kubectl
+      uses: azure/setup-kubectl@v4
+    - name: Setup Helm
+      uses: azure/setup-helm@v4.3.0
+    - name: Uses Twingate GitHub Action
+      uses: twingate/github-action@v1
+      with:
+        # Required
+        service-key: ${{ secrets.TWINGATE_KEY }}
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Get kubeconfig
+      run: aws eks update-kubeconfig --name dev-sphx-eu-west-2 --region eu-west-2
+    - name: Test cluster access
+      run: kubectl get all
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Declare some variables
+      id: set_vars
+      shell: bash
+      run: |
+        echo "COMMIT_SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+    - name: Deploy Helm chart
+      run: |
+        echo "Deploying Helm chart $COMMIT_SHA_SHORT"
+        helm package --app-version=$COMMIT_SHA_SHORT helm/lynxweb
+        helm upgrade --install lynxweb -f ./helm/lynxweb/values.dev.yaml \
+         ./lynxweb-0.1.0.tgz --set lynxweb.tag=$COMMIT_SHA_SHORT --namespace dev
+    
+  
