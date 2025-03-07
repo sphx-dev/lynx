@@ -8,6 +8,7 @@ COPY package.json yarn.lock .yarnrc.yml index.html tsconfig.json tsconfig.node.j
 RUN yarn install
 
 COPY server.js /home/lynx/
+COPY server /home/lynx/server
 COPY scripts/build.server.js scripts/webpack.server.config.js /home/lynx/scripts/
 RUN yarn build_server
 

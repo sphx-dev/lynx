@@ -4,6 +4,7 @@ import helmet from "helmet";
 import path from "path";
 import basicAuth from "express-basic-auth";
 import { fileURLToPath } from "url";
+import { createVersionInfoMiddleware } from "./server/version.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,6 +42,8 @@ if (BASIC_AUTH_ENABLED) {
 server.get("/healthcheck", (req, res) => {
   res.send({ status: "ok" });
 });
+
+server.get("/version", createVersionInfoMiddleware());
 
 // security
 if (!dev) {
