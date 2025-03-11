@@ -43,9 +43,8 @@ jobs:
         echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
     - name: Deploy Helm chart
       run: |
-        echo "Deploying Helm chart $COMMIT_SHA_SHORT"
-        helm package --app-version=$COMMIT_SHA_SHORT helm/lynxweb
+        helm package --app-version=$BRANCH-$COMMIT_SHA_SHORT helm/lynxweb
         helm upgrade --install lynxweb -f ./helm/lynxweb/values.dev.yaml \
-         ./lynxweb-0.1.0.tgz --set lynxweb.tag=$COMMIT_SHA_SHORT --namespace dev
+         ./lynxweb-0.1.0.tgz --set lynxweb.tag=$BRANCH--$COMMIT_SHA_SHORT --namespace dev
     
   
