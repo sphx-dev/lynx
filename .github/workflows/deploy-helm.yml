@@ -4,7 +4,6 @@ on:
   push:
     branches: 
       - main
-      - sc-91-automate-deployment-of-helm-charts-to-dev-environment
     tags:
       'v*'
   workflow_dispatch:
