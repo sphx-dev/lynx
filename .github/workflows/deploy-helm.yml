@@ -45,6 +45,6 @@ jobs:
       run: |
         helm package --app-version=$BRANCH-$COMMIT_SHA_SHORT helm/lynxweb
         helm upgrade --install lynxweb -f ./helm/lynxweb/values.dev.yaml \
-         ./lynxweb-0.1.0.tgz --set lynxweb.tag=$BRANCH--$COMMIT_SHA_SHORT --namespace dev
+         ./lynxweb-0.1.0.tgz --set lynxweb.tag=$BRANCH-$COMMIT_SHA_SHORT --namespace dev
     
   
