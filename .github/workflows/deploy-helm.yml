@@ -2,17 +2,22 @@ name: Apply Helm Charts to EKS Cluster
 
 on:
   push:
-    branches: 
+    branches:
       - main
     tags:
-      'v*'
+      - 'v*'
+  workflow_run:
+    workflows: ["Build and Push Multi-Arch Docker Image"]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
 
-  deploy-non-production:
+  deploy-devnet:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') && github.event.workflow_run.conclusion == 'success'
     runs-on: blacksmith-2vcpu-ubuntu-2204
-    name: Deploy to non-production
+    name: Deploy to devnet
     steps:
     - name: Set up Kubectl
       uses: azure/setup-kubectl@v4
@@ -46,5 +51,42 @@ jobs:
         helm package --app-version=$BRANCH-$COMMIT_SHA_SHORT helm/lynxweb
         helm upgrade --install lynxweb -f ./helm/lynxweb/values.dev.yaml \
          ./lynxweb-0.1.0.tgz --set lynxweb.tag=$BRANCH-$COMMIT_SHA_SHORT --namespace dev
+
+  deploy-testnet:
+    if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    name: Deploy to testnet
+    steps:
+    - name: Set up Kubectl
+      uses: azure/setup-kubectl@v4
+    - name: Setup Helm
+      uses: azure/setup-helm@v4.3.0
+    - name: Uses Twingate GitHub Action
+      uses: twingate/github-action@v1
+      with:
+        service-key: ${{ secrets.TWINGATE_KEY }}
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Get kubeconfig
+      run: aws eks update-kubeconfig --name testnet-sphx-eu-west-2 --region eu-west-2
+    - name: Test cluster access
+      run: kubectl get all
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Declare some variables
+      id: set_vars
+      shell: bash
+      run: |
+        echo "COMMIT_SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+    - name: Deploy Helm chart
+      run: |
+        helm package --app-version=$TAG-$COMMIT_SHA_SHORT helm/lynxweb
+        helm upgrade --install lynxweb -f ./helm/lynxweb/values.testnet.yaml \
+         ./lynxweb-0.1.0.tgz --set lynxweb.tag=$TAG-$COMMIT_SHA_SHORT --namespace testnet
     
   
