@@ -1,5 +1,7 @@
 import config from "@/config";
+import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useEffect } from "react";
+import { useQueryClient } from "react-query";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { create } from "zustand";
 
@@ -14,6 +16,8 @@ const websocketURL =
 const MAX_RECORDS = 500;
 
 export const useTradesWebsocket = () => {
+  const { address } = useChainCosmoshub();
+  const queryClient = useQueryClient();
   const { messages, setMessage, setSendMessage, setReadyState } =
     useTradesData();
 
@@ -36,6 +40,13 @@ export const useTradesWebsocket = () => {
         quantityProcessed = data.quantity_processed;
       }
       const parsedMessage = { symbol, messageType, quantityProcessed, ...info };
+
+      if (parsedMessage.account_id === address) {
+        queryClient.invalidateQueries(["orders"]);
+        queryClient.invalidateQueries(["query-orders"]);
+        queryClient.invalidateQueries(["positions"]);
+        queryClient.invalidateQueries(["balance"]);
+      }
 
       setMessage(parsedMessage);
     },

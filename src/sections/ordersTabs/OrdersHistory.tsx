@@ -110,6 +110,23 @@ const useOrdersHistoryColumns = () => {
       ),
     },
     {
+      accessorKey: "quantity",
+      // accessorFn: (order: ValidatedOrder) => {
+      //   let total =
+      //     order?.fills?.reduce((acc, fill) => {
+      //       return acc + Number(fill.quantity);
+      //     }, 0) || 0;
+      //   return {
+      //     total,
+      //     cancelled: order.status === OrderStatus.ORDER_STATUS_CANCELED,
+      //   };
+      // },
+      header: "Size",
+      cell: (props: any) => (
+        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
+      ),
+    },
+    {
       // accessorKey: "quantity",
       accessorFn: (order: ValidatedOrder) => {
         let total =

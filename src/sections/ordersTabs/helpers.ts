@@ -6,6 +6,9 @@ import { OrderType } from "proto-codecs/codegen/sphx/order/order";
 export const getSideColor = (side: Side) =>
   side === Side.Buy ? Colors.common.positive1 : Colors.common.negative3;
 
+export const getSideTextColor = (side: string) =>
+  side === Side.Buy ? "buy" : "sell";
+
 export const getColorByPl = (pl: string) =>
   +pl > 0 ? getSideColor(Side.Buy) : getSideColor(Side.Sell);
 

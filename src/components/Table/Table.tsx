@@ -3,6 +3,7 @@ import {
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
+  getExpandedRowModel,
 } from "@tanstack/react-table";
 
 import { mockColumns } from "../../sections/ordersTabs/constants";
@@ -13,7 +14,7 @@ import Icon from "../Icon";
 import useTheme from "../../hooks/useTheme";
 interface ITableProps<T> {
   data?: T[];
-  columns?: any;
+  columns?: any[];
   headerStyle?: CSSProperties;
   onClick?: (data: T) => void;
   enableSorting?: boolean;
@@ -81,7 +82,9 @@ const Table = <T extends object>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     enableSorting,
+    getSubRows: row => row.subRows,
   });
   const { themeColors } = useTheme();
 
@@ -115,36 +118,55 @@ const Table = <T extends object>({
       </thead>
       <tbody>
         {table.getRowModel().rows.map(row => (
-          <StyledRow
-            key={row.id}
-            onClick={onClick && (() => onClick(row.original))}
-          >
-            {row.getVisibleCells().map(cell => {
-              let meta;
-              if (cell.column.columnDef?.meta) {
-                meta = cell.column.columnDef.meta as any;
-              }
-              if (meta?.background && typeof meta?.background === "function") {
+          <React.Fragment key={row.id}>
+            <StyledRow onClick={onClick && (() => onClick(row.original))}>
+              {row.getVisibleCells().map(cell => {
+                let meta;
+                if (cell.column.columnDef?.meta) {
+                  meta = cell.column.columnDef.meta as any;
+                }
+                if (
+                  meta?.background &&
+                  typeof meta?.background === "function"
+                ) {
+                  return (
+                    <td
+                      key={cell.id}
+                      style={{
+                        background: meta?.background(cell.getContext()),
+                      }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  );
+                }
                 return (
-                  <td
-                    key={cell.id}
-                    style={{
-                      background: meta?.background(cell.getContext()),
-                    }}
-                  >
+                  <td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 );
-              }
-              return (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              );
-            })}
-          </StyledRow>
+              })}
+            </StyledRow>
+          </React.Fragment>
         ))}
       </tbody>
+      <tfoot>
+        {table.getFooterGroups().map(footerGroup => (
+          <tr key={footerGroup.id}>
+            {footerGroup.headers.map(footer => (
+              <th key={footer.id}>
+                {flexRender(
+                  footer.column.columnDef.footer,
+                  footer.getContext()
+                )}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </tfoot>
     </StyledTable>
   );
 };

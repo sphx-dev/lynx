@@ -16,7 +16,8 @@ import { useLocalStreamingData } from "@/sections/chart/localStreaming";
 
 export const usePositionColumns = function (
   closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
-  showTpSl: (position: PerpetualPosition) => void
+  showTpSl: (position: PerpetualPosition) => void,
+  queryDetails: (symbol: string) => void
 ) {
   const { t } = useTranslation();
   const { themeColors } = UseTheme();
@@ -227,6 +228,24 @@ export const usePositionColumns = function (
               Limit
             </Button>
           </div>
+        );
+      },
+    },
+    {
+      header: " ",
+      accessorFn: (row: any) => {
+        const market = markets.find(m => m.id === row.marketId);
+        return { ticker: market?.ticker };
+      },
+      cell: (props: any) => {
+        return (
+          <Button
+            variant="link"
+            size="xs"
+            onClick={() => queryDetails(props.getValue()?.ticker)}
+          >
+            {t("details")}
+          </Button>
         );
       },
     },

@@ -16,9 +16,13 @@ import { ClosePositionByLimitModal } from "./ClosePositionByLimit";
 import { ShowTpSlModal } from "./ShowTpSlModal";
 import { ReloadButton } from "../components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
+import config from "@/config";
+import { useQuery } from "react-query";
+import { ModalPositionDetails } from "./usePositionDetailsColumns";
 
 const Positions = () => {
-  const { isConnected } = useChainCosmoshub();
+  const [selectedSymbol, setSelectedSymbol] = useState<string | undefined>();
+  const { isConnected, address } = useChainCosmoshub();
 
   const { data, refetch, isFetching } = usePositions();
 
@@ -28,6 +32,12 @@ const Positions = () => {
       pos => pos.status === PositionStatus.POSITION_STATUS_OPEN
     );
   }, [data]);
+
+  // TODO: Update query from chain to positions from osiris
+  // const { data: positionsByAccount, refetch: refetchPositionsByAccount } =
+  //   useQueryPositionsByAccount(address);
+
+  // console.log("POSITIONS", positions, positionsByAccount);
 
   const [page, setPage] = useState(0);
   const pagination = data?.pagination || { total: 0 };
@@ -61,13 +71,34 @@ const Positions = () => {
     setShowTpSlModal(true);
   }, []);
 
-  const positionColumns = usePositionColumns(closePosition, showTpSl);
+  const queryDetails = useCallback((symbol: string) => {
+    console.log("TODO: query details", symbol);
+    setSelectedSymbol(symbol);
+    setIsDetailsOpen(true);
+  }, []);
+
+  const positionColumns = usePositionColumns(
+    closePosition,
+    showTpSl,
+    queryDetails
+  );
+
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const setDetailsClose = useCallback(() => {
+    setIsDetailsOpen(false);
+  }, [setIsDetailsOpen]);
 
   if (!positions?.length || !isConnected) {
     return (
       <>
         <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
-        <ReloadButton onClick={() => refetch()} />
+        <ReloadButton
+          onClick={() => {
+            refetch();
+            // TODO: Update query from chain to positions from osiris
+            // refetchPositionsByAccount();
+          }}
+        />
         <PlaceHolder data-testid="perpetual-positions-table-empty">
           No Positions
         </PlaceHolder>
@@ -77,7 +108,19 @@ const Positions = () => {
   return (
     <>
       <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
-      <ReloadButton onClick={() => refetch()} />
+      <ModalPositionDetails
+        isOpen={isDetailsOpen}
+        onClose={setDetailsClose}
+        accountId={address}
+        symbol={selectedSymbol}
+      />
+      <ReloadButton
+        onClick={() => {
+          refetch();
+          // TODO: Update query from chain to positions from osiris
+          // refetchPositionsByAccount();
+        }}
+      />
       <Table
         data-testid="perpetual-positions-table"
         columns={positionColumns}
@@ -115,3 +158,31 @@ const Positions = () => {
 };
 
 export default Positions;
+
+//
+const queryPositionsByAccount = async ({
+  queryKey,
+}: {
+  queryKey: readonly unknown[];
+}) => {
+  const [, accountId] = queryKey;
+  const response = await fetch(
+    config.VITE_API_URL + `/positions/composed?account_id=${accountId}`
+  );
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
+export const useQueryPositionsByAccount = (accountId: string | undefined) => {
+  return useQuery(
+    ["query-positions-composed", accountId],
+    queryPositionsByAccount,
+    {
+      enabled: !!accountId,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      refetchInterval: 5000,
+    }
+  );
+};

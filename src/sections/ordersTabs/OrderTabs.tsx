@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Table, Stack, Icon } from "../../components";
-import PendingOrders from "./PendingOrders";
-import OrdersHistory from "./OrdersHistory";
+// import PendingOrders from "./PendingOrders";
+// import OrdersHistory from "./OrdersHistory";
 import Positions from "./Positions/Positions";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import OrdersByAccount from "./OrdersByAccount";
 interface TabProps {
   $isActive?: boolean;
 }
@@ -41,7 +42,14 @@ const Tabs = styled.div`
   width: 100%;
   min-width: 400px;
 `;
-const CONTENT = [Positions, PendingOrders, OrdersHistory, Table];
+const CONTENT = [
+  Positions,
+  // PendingOrders,
+  OrdersByAccount,
+  // OrdersHistory,
+  OrdersByAccount,
+  Table,
+];
 
 const OrderTabs = () => {
   const [active, setActive] = useLocalStorage("selectedOrderTab", 0);
@@ -55,18 +63,25 @@ const OrderTabs = () => {
         title: "positions",
         icon: "PositionsIcon",
       },
+      // {
+      //   title: "pending",
+      //   icon: "PendingIcon",
+      // },
       {
         title: "pending",
         icon: "PendingIcon",
       },
+      // {
+      //   title: "orderHistory",
+      //   icon: "OrdersIcon",
+      // },
       {
         title: "orderHistory",
         icon: "OrdersIcon",
+        params: {
+          final: true,
+        },
       },
-      // {
-      //   title: "trades",
-      //   icon: "TradesIcon",
-      // },
     ],
     []
   );
@@ -99,7 +114,7 @@ const OrderTabs = () => {
         ))}
       </Tabs>
       <ScrollContent>
-        <Content key={active} />
+        <Content key={active} {...(tabs[active]?.params || {})} />
       </ScrollContent>
     </Stack>
   );

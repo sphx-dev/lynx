@@ -101,29 +101,32 @@ describe("ClosedOrders", () => {
     expect(rows[3].querySelectorAll("td")[0].textContent).toBe("BTC/USD");
     expect(rows[3].querySelectorAll("td")[1].textContent).toBe("2024-09-29");
     expect(rows[3].querySelectorAll("td")[2].textContent).toBe("Limit");
-    expect(rows[3].querySelectorAll("td")[3].textContent).toBe("—");
+    expect(rows[3].querySelectorAll("td")[3].textContent).toBe("1.81");
     expect(rows[3].querySelectorAll("td")[4].textContent).toBe("—");
-    expect(rows[3].querySelectorAll("td")[5].textContent).toBe("x2");
-    expect(rows[3].querySelectorAll("td")[6].textContent).toBe("buy");
-    expect(rows[3].querySelectorAll("td")[7].textContent).toBe("Canceled");
+    expect(rows[3].querySelectorAll("td")[5].textContent).toBe("—");
+    expect(rows[3].querySelectorAll("td")[6].textContent).toBe("x2");
+    expect(rows[3].querySelectorAll("td")[7].textContent).toBe("buy");
+    expect(rows[3].querySelectorAll("td")[8].textContent).toBe("Canceled");
 
     expect(rows[2].querySelectorAll("td")[0].textContent).toBe("BTC/USD");
     expect(rows[2].querySelectorAll("td")[1].textContent).toBe("2024-09-28");
     expect(rows[2].querySelectorAll("td")[2].textContent).toBe("Market");
     expect(rows[2].querySelectorAll("td")[3].textContent).toBe("1.1");
-    expect(rows[2].querySelectorAll("td")[4].textContent).toBe("USD 4.91");
-    expect(rows[2].querySelectorAll("td")[5].textContent).toBe("x2");
-    expect(rows[2].querySelectorAll("td")[6].textContent).toBe("buy");
-    expect(rows[2].querySelectorAll("td")[7].textContent).toBe("Filled");
+    expect(rows[2].querySelectorAll("td")[4].textContent).toBe("1.1");
+    expect(rows[2].querySelectorAll("td")[5].textContent).toBe("USD 4.91");
+    expect(rows[2].querySelectorAll("td")[6].textContent).toBe("x2");
+    expect(rows[2].querySelectorAll("td")[7].textContent).toBe("buy");
+    expect(rows[2].querySelectorAll("td")[8].textContent).toBe("Filled");
 
     expect(rows[1].querySelectorAll("td")[0].textContent).toBe("BTC/USD");
     expect(rows[1].querySelectorAll("td")[1].textContent).toBe("2024-09-28");
     expect(rows[1].querySelectorAll("td")[2].textContent).toBe("Limit");
     expect(rows[1].querySelectorAll("td")[3].textContent).toBe("1.1");
-    expect(rows[1].querySelectorAll("td")[4].textContent).toBe("USD 4.11");
-    expect(rows[1].querySelectorAll("td")[5].textContent).toBe("x2");
-    expect(rows[1].querySelectorAll("td")[6].textContent).toBe("buy");
-    expect(rows[1].querySelectorAll("td")[7].textContent).toBe("Filled");
+    expect(rows[1].querySelectorAll("td")[4].textContent).toBe("1.1");
+    expect(rows[1].querySelectorAll("td")[5].textContent).toBe("USD 4.11");
+    expect(rows[1].querySelectorAll("td")[6].textContent).toBe("x2");
+    expect(rows[1].querySelectorAll("td")[7].textContent).toBe("buy");
+    expect(rows[1].querySelectorAll("td")[8].textContent).toBe("Filled");
   });
 
   test("displays placeholder when no orders", () => {

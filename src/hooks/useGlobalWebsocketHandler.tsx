@@ -65,23 +65,27 @@ export function useGlobalWebsocketHandler() {
       if (chainEventsMap.has("place_order")) {
         console.log("WS_message", "place_order event");
         queryClient.invalidateQueries(["orders"]);
+        queryClient.invalidateQueries(["query-orders"]);
       }
       // "cancel_order"
       if (chainEventsMap.has("cancel_order")) {
         console.log("WS_message", "cancel_order event");
         queryClient.invalidateQueries(["orders"]);
+        queryClient.invalidateQueries(["query-orders"]);
       }
 
       // "new_position" and "modify_position"
       if (chainEventsMap.has("new_position")) {
         console.log("WS_message", "new_position");
         queryClient.invalidateQueries(["orders"]);
+        queryClient.invalidateQueries(["query-orders"]);
         queryClient.invalidateQueries(["positions"]);
         queryClient.invalidateQueries(["balance"]);
       }
       if (chainEventsMap.has("modify_position")) {
         console.log("WS_message", "modify_position");
         queryClient.invalidateQueries(["orders"]);
+        queryClient.invalidateQueries(["query-orders"]);
         queryClient.invalidateQueries(["positions"]);
         queryClient.invalidateQueries(["balance"]);
       }
