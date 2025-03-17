@@ -55,7 +55,7 @@ const useOrderColumns = ({
   const { markets } = useMarkets();
   const marketMap = useMemo(() => {
     const map = new Map();
-    markets.forEach(m => {
+    markets.forEach((m) => {
       map.set(m.id, t(m.baseAsset) + "/" + t(m.quoteAsset));
     });
     return map;
@@ -74,7 +74,7 @@ const useOrderColumns = ({
     setCancellingOrders([...cancellingOrders, orderId]);
   };
   const removeCancellingOrder = (orderId: OrderId) => {
-    setCancellingOrders(co => co.filter(o => o.number !== orderId.number));
+    setCancellingOrders((co) => co.filter((o) => o.number !== orderId.number));
   };
 
   const columns = [
@@ -215,7 +215,14 @@ const useOrderColumns = ({
         <>
           {props.getValue().hash ? (
             <Text>
-              <ExplorerLink to={props.getValue().hash} target="_blank">
+              <ExplorerLink
+                to={
+                  config.VITE_EXPLORER_URL +
+                  "/transactions/" +
+                  props.getValue().hash
+                }
+                target="_blank"
+              >
                 {getOrderStatusText(props.getValue().status, t)}
               </ExplorerLink>
             </Text>
@@ -259,7 +266,7 @@ const useOrderColumns = ({
         const status = props.getValue()?.status;
         const orderId = props.getValue()?.id;
         const isCancelling = cancellingOrders.some(
-          o => o.number === orderId.number
+          (o) => o.number === orderId.number
         );
         const onClickHandler = async () => {
           const row = props.getValue()?.row;
