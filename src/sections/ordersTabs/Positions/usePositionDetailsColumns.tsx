@@ -37,8 +37,8 @@ const useQueryPositionsDetails = (
     queryPostionsDetails,
     {
       enabled: !!accountId && !!symbol,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchInterval: 5000,
+      staleTime: 1000 * 60 * 1, // 1 minute
+      refetchInterval: 2000,
     }
   );
 };
