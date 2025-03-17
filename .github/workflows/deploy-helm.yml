@@ -6,16 +6,12 @@ on:
       - main
     tags:
       - 'v*'
-  workflow_run:
-    workflows: ["Build and Push Multi-Arch Docker Image"]
-    types:
-      - completed
   workflow_dispatch:
 
 jobs:
 
   deploy-devnet:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') && github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
     runs-on: blacksmith-2vcpu-ubuntu-2204
     name: Deploy to devnet
     steps:
@@ -31,11 +27,12 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        role-to-assume: ${{ secrets.AWS_ASSUME_ROLE_EKS }}
+        aws-region: ${{ secrets.AWS_REGION_EKS }}
+        role-session-name: "${{ github.run_id }}-${{ github.run_attempt }}"
+        role-duration-seconds: 1200
     - name: Get kubeconfig
-      run: aws eks update-kubeconfig --name dev-sphx-eu-west-2 --region eu-west-2
+      run: aws eks update-kubeconfig --name dev-sphx-eu-west-2 --region ${{ secrets.AWS_REGION_EKS }}
     - name: Test cluster access
       run: kubectl get all
     - name: Checkout code
