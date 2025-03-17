@@ -1,9 +1,13 @@
 name: Apply Helm Charts to EKS Cluster
 
 on:
+  workflow_run:
+    workflows:
+      - "Build"
+      - "Build and Push Multi-Arch Docker Image"
+    types:
+      - completed
   push:
-    branches:
-      - main
     tags:
       - 'v*'
   workflow_dispatch:
@@ -11,7 +15,9 @@ on:
 jobs:
 
   deploy-devnet:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.ref == 'refs/heads/main'
     runs-on: blacksmith-2vcpu-ubuntu-2204
     permissions:
       id-token: write
