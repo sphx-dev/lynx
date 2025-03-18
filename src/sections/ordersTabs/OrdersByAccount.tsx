@@ -304,30 +304,33 @@ const useOrderColumns = ({
 
         return (
           <>
-            {status === OrderStatus.ORDER_STATUS_FILLED && (
-              <Button
-                color="secondary"
-                size="xs"
-                onClick={() => {
-                  setPartialOrders(props.getValue().row.subData);
-                  openPartialsModal();
-                }}
-              >
-                {t("details")} ({props.getValue()?.row?.subData?.length})
-              </Button>
-            )}
-            {status === OrderStatus.ORDER_STATUS_PARTIALLY_FILLED && (
-              <Button
-                color="secondary"
-                size="xs"
-                onClick={() => {
-                  setPartialOrders(props.getValue()?.row?.subData);
-                  openPartialsModal();
-                }}
-              >
-                {t("partials")} ({props.getValue()?.row?.subData?.length})
-              </Button>
-            )}
+            {status === OrderStatus.ORDER_STATUS_FILLED &&
+              (props.getValue()?.row?.subData?.length > 0 ? (
+                <Button
+                  color="secondary"
+                  size="xs"
+                  onClick={() => {
+                    setPartialOrders(props.getValue()?.row?.subData || []);
+                    openPartialsModal();
+                  }}
+                >
+                  {t("details")} ({props.getValue()?.row?.subData?.length})
+                </Button>
+              ) : null)}
+
+            {status === OrderStatus.ORDER_STATUS_PARTIALLY_FILLED &&
+              (props.getValue()?.row?.subData?.length > 0 ? (
+                <Button
+                  color="secondary"
+                  size="xs"
+                  onClick={() => {
+                    setPartialOrders(props.getValue()?.row?.subData || []);
+                    openPartialsModal();
+                  }}
+                >
+                  {t("partials")} ({props.getValue()?.row?.subData?.length})
+                </Button>
+              ) : null)}
             {status === OrderStatus.ORDER_STATUS_OPEN && (
               <Button
                 variant="error"
@@ -367,7 +370,7 @@ const useNestedOrderColumns = () => {
         <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
       ),
       footer: (info: any) => {
-        const data = info?.table?.options?.data;
+        const data = info?.table?.options?.data || [];
         const total = data?.reduce(
           (acc: number, item: any) => acc + Number(item.quantity / PRECISION),
           0
@@ -469,6 +472,7 @@ const OrdersByAccount = ({ final = false }) => {
     setIsPartialsModalOpen(false);
   };
   const [partialOrders, setPartialOrders] = useState<any[]>([]);
+  console.log("partialOrders", partialOrders, isPartialsModalOpen);
   const columns = useOrderColumns({
     openPartialsModal: () => setIsPartialsModalOpen(true),
     setPartialOrders,
@@ -535,7 +539,7 @@ function getStatusByMessage(msg: any) {
 }
 
 const PartialsModal = ({
-  partialOrders,
+  partialOrders = [],
   isOpen,
   onClose,
 }: {
