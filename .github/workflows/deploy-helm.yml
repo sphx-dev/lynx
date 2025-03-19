@@ -3,7 +3,7 @@ name: Apply Helm Charts to EKS Cluster
 on:
   workflow_run:
     workflows:
-      - "Build and Push Multi-Arch Docker Image"
+      - "Build and Push Multi-Arch Docker Images"
     types:
       - completed
   push:
