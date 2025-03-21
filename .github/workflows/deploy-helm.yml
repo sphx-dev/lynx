@@ -49,18 +49,17 @@ jobs:
       run: kubectl get all
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Declare some variables
+      - name: Declare some variables
       id: set_vars
       shell: bash
       run: |
-        echo "COMMIT_SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        echo "COMMIT_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
     - name: Deploy Helm chart
       run: |
         CHART_VERSION=$(grep version helm/lynxweb/Chart.yaml | awk '{print $2}')
-        helm package --app-version=$BRANCH-$COMMIT_SHA_SHORT helm/lynxweb
-        helm upgrade --install lynxweb -f ./helm/lynxweb/values.dev.yaml \
-         ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=$BRANCH-$COMMIT_SHA_SHORT --namespace dev
+        helm package --app-version=$TAG-$COMMIT_SHA_SHORT helm/lynxweb
+        helm upgrade --install lynxweb -f ./helm/lynxweb/values.testnet.yaml \
+         ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace testnet
 
   deploy-testnet:
     if: github.event_name == 'workflow_dispatch' && startsWith(github.event.inputs.tag, 'v')
@@ -99,13 +98,12 @@ jobs:
       id: set_vars
       shell: bash
       run: |
-        echo "COMMIT_SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        echo "COMMIT_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
     - name: Deploy Helm chart
       run: |
         CHART_VERSION=$(grep version helm/lynxweb/Chart.yaml | awk '{print $2}')
         helm package --app-version=$TAG-$COMMIT_SHA_SHORT helm/lynxweb
         helm upgrade --install lynxweb -f ./helm/lynxweb/values.testnet.yaml \
-         ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=$TAG-$COMMIT_SHA_SHORT --namespace testnet
+         ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace testnet
     
   
