@@ -15,14 +15,7 @@ jobs:
     - name: Extract branch name
       shell: bash
       run: |
-        branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-        branch_slug_slash=$(echo "${branch//\//-}")
-        branch_slug=$(echo "${branch_slug_slash//./-}")
-        echo "branch=${branch_slug}" >> $GITHUB_OUTPUT
-        echo ${branch_slug}
-        echo ------------------------
-        echo ${{ github.ref_name }}
-        echo ${{ github.ref_type}}
+        echo "COMMIT_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
       id: extract_branch
     - name: Extract git short sha
       shell: bash
@@ -51,10 +44,8 @@ jobs:
       env:
         DOCKER_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         SERVICE_NAME: sphx/lynx
-        TAG: ${{ steps.extract_branch.outputs.branch }}-${{ steps.extract_short_sha.outputs.short_sha }}
-        CACHE_TAG: buildcache-${{ steps.extract_branch.outputs.branch }}
-        GIT_COMMIT: ${CI_COMMIT_SHA}
-        GIT_TAG: ${CI_COMMIT_TAG}
+        TAG: ${{ github.ref_name }}-$COMMIT_SHA_SHORT
+        CACHE_TAG: buildcache-$COMMIT_SHA_SHORT
       with:
         context: .
         file: ./Dockerfile
