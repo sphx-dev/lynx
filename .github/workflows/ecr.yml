@@ -19,6 +19,10 @@ jobs:
         branch_slug_slash=$(echo "${branch//\//-}")
         branch_slug=$(echo "${branch_slug_slash//./-}")
         echo "branch=${branch_slug}" >> $GITHUB_OUTPUT
+        echo ${branch_slug}
+        echo ------------------------
+        echo ${{ github.ref_name }}
+        echo ${{ github.ref_type}}
       id: extract_branch
     - name: Extract git short sha
       shell: bash
