@@ -90,7 +90,7 @@ jobs:
         role-session-name: "${{ github.run_id }}-${{ github.run_attempt }}"
         role-duration-seconds: 1200
     - name: Get kubeconfig
-      run: aws eks update-kubeconfig --name testnet-sphx-eu-west-2 --region ${{ secrets.AWS_REGION_EKS }}
+      run: aws eks update-kubeconfig --name dev-sphx-eu-west-2 --region ${{ secrets.AWS_REGION_EKS }}
     - name: Test cluster access
       run: kubectl get all
     - name: Checkout code
