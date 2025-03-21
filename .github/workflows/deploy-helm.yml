@@ -10,10 +10,6 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Git tag to deploy'
-        required: true
 
 jobs:
 
@@ -58,8 +54,8 @@ jobs:
       run: |
         CHART_VERSION=$(grep version helm/lynxweb/Chart.yaml | awk '{print $2}')
         helm package --app-version=$TAG-$COMMIT_SHA_SHORT helm/lynxweb
-        helm upgrade --install lynxweb -f ./helm/lynxweb/values.testnet.yaml \
-         ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace testnet
+        helm upgrade --install lynxweb -f ./helm/lynxweb/values.dev.yaml \
+         ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace dev
 
   deploy-testnet:
     if: github.event_name == 'workflow_dispatch' && startsWith(github.event.inputs.tag, 'v')
