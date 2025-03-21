@@ -12,11 +12,6 @@ jobs:
       id-token: write
       contents: read
     steps:
-    - name: Extract branch name
-      shell: bash
-      run: |
-        echo "COMMIT_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-      id: extract_branch
     - name: Extract git short sha
       shell: bash
       run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
@@ -44,8 +39,8 @@ jobs:
       env:
         DOCKER_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         SERVICE_NAME: sphx/lynx
-        TAG: ${{ github.ref_name }}-$COMMIT_SHA_SHORT
-        CACHE_TAG: buildcache-$COMMIT_SHA_SHORT
+        TAG: ${{ github.ref_name }}-${{ steps.extract_short_sha.outputs.short_sha }}
+        CACHE_TAG: buildcache-${{ steps.extract_short_sha.outputs.short_sha }}
       with:
         context: .
         file: ./Dockerfile

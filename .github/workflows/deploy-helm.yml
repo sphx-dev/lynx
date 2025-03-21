@@ -50,8 +50,6 @@ jobs:
       shell: bash
       run: |
         echo "COMMIT_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-        echo ${{ github.ref_name }}
-        echo ${{ github.ref_type}}
     - name: Deploy Helm chart
       run: |
         CHART_VERSION=$(grep version helm/lynxweb/Chart.yaml | awk '{print $2}')
@@ -97,8 +95,6 @@ jobs:
       shell: bash
       run: |
         echo "COMMIT_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-        echo ${{ github.ref_name }}
-        echo ${{ github.ref_type}}
     - name: Deploy Helm chart
       run: |
         CHART_VERSION=$(grep version helm/lynxweb/Chart.yaml | awk '{print $2}')
