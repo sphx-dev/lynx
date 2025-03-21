@@ -58,7 +58,7 @@ jobs:
          ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace dev
 
   deploy-testnet:
-    if: github.event_name == 'workflow_dispatch' && startsWith(github.event.inputs.tag, 'v')
+    if: github.event_name == 'workflow_dispatch' && startsWith(github.ref_name, 'refs-tags-v')
     runs-on: blacksmith-2vcpu-ubuntu-2204
     permissions:
       id-token: write
