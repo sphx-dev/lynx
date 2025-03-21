@@ -78,6 +78,10 @@ jobs:
       uses: twingate/github-action@v1
       with:
         service-key: ${{ secrets.TWINGATE_KEY }}
+    - name: Show secrets 
+      run: |
+        echo "Secret is ${{ secrets.AWS_ASSUME_ROLE_EKS }}"
+        echo "Secret is ${{ secrets.AWS_REGION_EKS }}"
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
