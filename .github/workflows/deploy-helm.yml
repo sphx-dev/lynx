@@ -58,7 +58,7 @@ jobs:
          ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace dev
 
   deploy-testnet:
-    if: github.event_name == 'workflow_dispatch' && startsWith(github.ref_name, 'refs-tags-v')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: blacksmith-2vcpu-ubuntu-2204
     permissions:
       id-token: write
@@ -98,6 +98,8 @@ jobs:
     - name: Deploy Helm chart
       run: |
         CHART_VERSION=$(grep version helm/lynxweb/Chart.yaml | awk '{print $2}')
+        echo ${{ github.ref_name }}
+        echo ${{ github.ref_type}}
         helm package --app-version=$TAG-$COMMIT_SHA_SHORT helm/lynxweb
         helm upgrade --install lynxweb -f ./helm/lynxweb/values.testnet.yaml \
          ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace testnet
