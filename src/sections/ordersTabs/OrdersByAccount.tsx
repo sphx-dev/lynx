@@ -55,7 +55,7 @@ const useOrderColumns = ({
   const { markets } = useMarkets();
   const marketMap = useMemo(() => {
     const map = new Map();
-    markets.forEach((m) => {
+    markets.forEach(m => {
       map.set(m.id, t(m.baseAsset) + "/" + t(m.quoteAsset));
     });
     return map;
@@ -74,7 +74,7 @@ const useOrderColumns = ({
     setCancellingOrders([...cancellingOrders, orderId]);
   };
   const removeCancellingOrder = (orderId: OrderId) => {
-    setCancellingOrders((co) => co.filter((o) => o.number !== orderId.number));
+    setCancellingOrders(co => co.filter(o => o.number !== orderId.number));
   };
 
   const columns = [
@@ -197,18 +197,31 @@ const useOrderColumns = ({
           return {
             status: OrderStatus.ORDER_STATUS_FILLED,
             hash: order.final_tx_hash,
+            label: order.final_tx_hash
+              ? getOrderStatusText(OrderStatus.ORDER_STATUS_FILLED, t)
+              : t("ORDER_STATUS_FILLED_OB"),
           };
         }
         if (order.is_canceled) {
           return {
             status: OrderStatus.ORDER_STATUS_CANCELED,
             hash: order.canceled_tx_hash,
+            label: getOrderStatusText(OrderStatus.ORDER_STATUS_CANCELED, t),
           };
         }
         if (order?.subData?.length > 0) {
-          return { status: OrderStatus.ORDER_STATUS_PARTIALLY_FILLED };
+          return {
+            status: OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
+            label: getOrderStatusText(
+              OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
+              t
+            ),
+          };
         }
-        return { status: OrderStatus.ORDER_STATUS_OPEN };
+        return {
+          status: OrderStatus.ORDER_STATUS_OPEN,
+          label: getOrderStatusText(OrderStatus.ORDER_STATUS_OPEN, t),
+        };
       },
       header: t("status"),
       cell: (props: any) => (
@@ -223,11 +236,11 @@ const useOrderColumns = ({
                 }
                 target="_blank"
               >
-                {getOrderStatusText(props.getValue().status, t)}
+                {props.getValue().label}
               </ExplorerLink>
             </Text>
           ) : (
-            <Text>{getOrderStatusText(props.getValue().status, t)}</Text>
+            <Text>{props.getValue().label}</Text>
           )}
         </>
       ),
@@ -266,7 +279,7 @@ const useOrderColumns = ({
         const status = props.getValue()?.status;
         const orderId = props.getValue()?.id;
         const isCancelling = cancellingOrders.some(
-          (o) => o.number === orderId.number
+          o => o.number === orderId.number
         );
         const onClickHandler = async () => {
           const row = props.getValue()?.row;

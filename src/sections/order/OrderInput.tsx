@@ -23,7 +23,7 @@ import {
 } from "./style";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useCreateOrder, useCreateOrderSmart } from "../../hooks/useOrders";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMarkets } from "../../hooks/useMarkets";
 import { useSub } from "@/hooks/usePubSub";
 import { Input } from "@/components/Input/Input";
@@ -37,6 +37,13 @@ import { useLocalStreaming } from "../chart/localStreaming";
 import { useSmartSign } from "@/components/SmartSignButton";
 import { PlaceLimitOrderInChainParams } from "@/utils/placeOrder";
 import { LoaderBar } from "@/components/LoaderBar";
+// import { useQueryPositionsByAccount } from "../ordersTabs/Positions/Positions";
+import { usePositions } from "@/hooks/usePositions";
+import {
+  PositionSide,
+  PositionStatus,
+} from "proto-codecs/codegen/sphx/order/perpetual_position";
+import config from "@/config";
 
 const options: [
   { label: string; value: OrderType },
@@ -81,12 +88,17 @@ const defaultValues: MarketOrderForm = {
   orderType: defaultOrderType,
 };
 
+const MARKET_MINIMUM_MARGING_RATIO = 1 + config.MIN_MARGIN_RATIO / 100;
+
 function OrderInput() {
   const { themeColors } = useTheme();
   const { account, isConnected } = useChainCosmoshub();
   const address = account?.bech32Address;
   const { selectedAddress } = useMarginAccount(address);
   const { amount } = useBalance(selectedAddress);
+
+  const data = useLocalStreaming();
+  const marketEstimatedPrice = data?.p ?? 0;
 
   const { t } = useTranslation();
   const {
@@ -95,6 +107,17 @@ function OrderInput() {
     minimumVolume,
     pricePerContract,
   } = useMarkets();
+
+  // const { data: positions } = useQueryPositionsByAccount(selectedAddress);
+  const { data: positions } = usePositions();
+  const positionInMarket = positions?.positions.find(
+    position =>
+      position.marketId === marketId &&
+      position.status === PositionStatus.POSITION_STATUS_OPEN
+  );
+
+  const positionSide = positionInMarket?.side;
+  const positionSize = Number(positionInMarket?.size) || Infinity;
 
   const {
     handleSubmit,
@@ -105,7 +128,9 @@ function OrderInput() {
     getValues,
   } = useForm<MarketOrderForm>({
     defaultValues,
-    resolver: yupResolver<any>(schema(minimumVolume)),
+    resolver: yupResolver<any>(
+      schema(minimumVolume, positionSide, positionSize, pricePerContract)
+    ),
   });
 
   const handleSwitchOrderType = (type: OrderType) => {
@@ -116,9 +141,24 @@ function OrderInput() {
     }
   };
 
-  const isBuyPosition = watch("isBuy");
+  const isBuySide = watch("isBuy");
   const orderType: OrderType = watch("orderType");
   const hasTPSL = watch("hasTPSL");
+
+  const [isReduceOnly, setIsReduceOnly] = useState(false);
+  useEffect(() => {
+    let isReduceOnly = false;
+    if (
+      (isBuySide && positionSide === PositionSide.POSITION_SIDE_LONG) ||
+      (!isBuySide && positionSide === PositionSide.POSITION_SIDE_SHORT)
+    ) {
+      isReduceOnly = true;
+    } else {
+      isReduceOnly = false;
+    }
+
+    setIsReduceOnly(isReduceOnly);
+  }, [isBuySide, positionSide, setIsReduceOnly]);
 
   const handleChangeOrderSide = (value: boolean) => {
     setValue("isBuy", value);
@@ -294,13 +334,23 @@ function OrderInput() {
     }
   };
 
-  const orderTotalValue =
+  const orderTotalValueLimit =
     Number(getValues().volume) *
     Number(getValues().price) *
+    pricePerContract *
     PRECISION *
     getValues().leverage;
 
-  const insufficientFunds = orderTotalValue > (amount ?? 0);
+  const orderTotalValueMarket =
+    Number(getValues().volume) *
+    marketEstimatedPrice *
+    pricePerContract *
+    PRECISION *
+    getValues().leverage;
+
+  const insufficientFundsLimit = orderTotalValueLimit > (amount ?? 0);
+  const insufficientFundsMarket =
+    orderTotalValueMarket * MARKET_MINIMUM_MARGING_RATIO > (amount ?? 0);
 
   return (
     <Surface
@@ -339,7 +389,7 @@ function OrderInput() {
               <Stack spacing={20}>
                 <Group spacing={0}>
                   <TabButton
-                    $active={isBuyPosition}
+                    $active={isBuySide}
                     onClick={() => handleChangeOrderSide(true)}
                     type="button"
                     style={{ flex: 1 }}
@@ -347,7 +397,7 @@ function OrderInput() {
                     LONG
                   </TabButton>
                   <TabButton
-                    $active={!isBuyPosition}
+                    $active={!isBuySide}
                     onClick={() => handleChangeOrderSide(false)}
                     type="button"
                     style={{ flex: 1 }}
@@ -390,6 +440,18 @@ function OrderInput() {
                       rightSide={selectedMarket?.baseAsset || ""}
                       autoComplete="off"
                     />
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <div style={{ display: "flex", justifyContent: "start" }}>
+                        <Checkbox
+                          type="checkbox"
+                          left={t("reduceOnly")}
+                          checked={isReduceOnly}
+                        />
+                      </div>
+                      <div>
+                        <WarnInfoText>{t("ordersReduceInfo")}</WarnInfoText>
+                      </div>
+                    </div>
                     <div style={{ position: "relative" }}>
                       <Group align="end">
                         <Input
@@ -505,8 +567,12 @@ function OrderInput() {
                             >
                               <PlaceOrderButton
                                 data-testid="order-input-place-order-button"
-                                $isBuy={isBuyPosition}
-                                disabled={isPlacingOrder || insufficientFunds}
+                                $isBuy={isBuySide}
+                                disabled={
+                                  isPlacingOrder ||
+                                  insufficientFundsLimit ||
+                                  insufficientFundsMarket
+                                }
                                 smartSign={smartSign}
                               >
                                 {t("placeOrder")}
@@ -520,7 +586,14 @@ function OrderInput() {
                                 }}
                               />
                             </div>
-                            {insufficientFunds ? (
+                            {orderType === OrderType.ORDER_TYPE_MARKET &&
+                              insufficientFundsMarket && (
+                                <WarnInfoText>
+                                  {t("insufficientBalanceInAccountMarket")}
+                                </WarnInfoText>
+                              )}
+                            {orderType === OrderType.ORDER_TYPE_LIMIT &&
+                            insufficientFundsLimit ? (
                               <WarnInfoText>
                                 {t("insufficientBalanceInAccount")}
                               </WarnInfoText>

@@ -5,6 +5,12 @@ import { CheckIcon } from "@radix-ui/react-icons";
 export const Checkbox = forwardRef<HTMLInputElement, any>((props, ref) => {
   const localRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => localRef.current as HTMLInputElement);
+
+  const isChecked =
+    props.checked !== undefined
+      ? props.checked
+      : localRef.current?.checked || false;
+
   return (
     <CheckboxLabel>
       {props.left && <span>{props.left}</span>}
@@ -17,10 +23,10 @@ export const Checkbox = forwardRef<HTMLInputElement, any>((props, ref) => {
 
       <CheckboxWrapper
         role="checkbox"
-        aria-checked={localRef?.current?.checked ? "true" : "false"}
+        aria-checked={isChecked ? "true" : "false"}
         tabIndex={0}
       >
-        {localRef?.current?.checked && <CheckIconStyled />}
+        {isChecked && <CheckIconStyled />}
       </CheckboxWrapper>
 
       {props.right && <span>{props.right}</span>}
@@ -38,11 +44,12 @@ const CheckboxLabel = styled.label`
   font-family: var(--text-sm-font-family);
   font-size: var(--text-sm-font-size);
   font-weight: var(--text-sm-font-weight);
-  line-height: var(--text-sm-line-height);
+  line-height: 18px; /*var(--text-sm-line-height);*/
   color: var(--text-primary);
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  cursor: pointer;
 `;
 
 const CheckboxWrapper = styled.div`

@@ -45,6 +45,7 @@
   "ORDER_STATUS_OPEN":"Open",
   "ORDER_STATUS_PARTIALLY_FILLED":"Partially filled",
   "ORDER_STATUS_FILLED":"Filled",
+  "ORDER_STATUS_FILLED_OB":"Filled OB",
   "ORDER_STATUS_CANCELED":"Canceled",
   "ORDER_STATUS_EXPIRED":"Expired",
   "ORDER_STATUS_UNRECOGNIZED":"Unrecognized",
@@ -74,6 +75,7 @@
   "errorPlacingOrder": "Error placing order",
   "waitingForApproval":"Waiting for approval",
   "insufficientBalanceInAccount": "Your margin account balance is insufficient for this action.",
+  "insufficientBalanceInAccountMarket": "Your margin account balance may be insufficient for placing a market order.",
   "fundingRateLogs": "Funding Rate Logs",
   "selectRageToLoadData": "Select range to load data",
   "conectWalletToViewFundingRateLogs": "Connect wallet and select a margin account to view funding rate logs",
@@ -105,6 +107,7 @@
   "asks": "Asks",
   "bids": "Bids",
   "smartSignActive": "Smart Sign On",
-  "activatesmartsign": "Activate Smart Sign"
-  
+  "activatesmartsign": "Activate Smart Sign",
+  "reduceOnly": "Reduce Only",
+  "ordersReduceInfo": "Orders will only reduce the current position"
 }

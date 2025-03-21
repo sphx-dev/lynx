@@ -1,8 +1,15 @@
 import * as yup from "yup";
 import { MESSAGE } from "../../constants/validation";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
+import { PositionSide } from "proto-codecs/codegen/sphx/order/perpetual_position";
+import { PRECISION } from "@/constants";
 
-export const schema = (minimumVolume: number) =>
+export const schema = (
+  minimumVolume: number,
+  positionSide: PositionSide | undefined,
+  positionSize: number,
+  pricePerContract: number
+) =>
   yup.object().shape({
     volume: yup
       .number()
@@ -11,11 +18,30 @@ export const schema = (minimumVolume: number) =>
         "isGreaterOrEqualThan",
         MESSAGE.moreThanMin(minimumVolume),
         value => {
-          console.log("VALUE", value, minimumVolume);
           return value! >= minimumVolume;
         }
       )
-      // .moreThan(minimumVolume, MESSAGE.moreThanMin(minimumVolume))
+      .test(
+        "isLessOrEqualThanPositionSize",
+        MESSAGE.lessThanPositionSize(positionSize / PRECISION),
+        function (value) {
+          const { isBuy } = this.parent;
+
+          if (value === undefined) {
+            return true;
+          }
+          if (
+            (isBuy === false &&
+              positionSide === PositionSide.POSITION_SIDE_LONG) ||
+            (isBuy === true &&
+              positionSide === PositionSide.POSITION_SIDE_SHORT)
+          ) {
+            return value * pricePerContract * PRECISION <= positionSize;
+          }
+          // true if not applicable
+          return true;
+        }
+      )
       .required(MESSAGE.required),
     price: yup
       .number()
@@ -41,13 +67,6 @@ export const schema = (minimumVolume: number) =>
       .when(
         ["hasTPSL", "isBuy", "price"],
         ([hasTPSL, isBuy, price], schema) => {
-          console.log(
-            "SCHEMA takeProfit",
-            hasTPSL,
-            isBuy,
-            price,
-            schema.moreThan(price, MESSAGE.moreThan)
-          );
           if (!hasTPSL) {
             return schema.nullable();
           }
@@ -65,7 +84,6 @@ export const schema = (minimumVolume: number) =>
       .when(
         ["hasTPSL", "isBuy", "price"],
         ([hasTPSL, isBuy, price], schema) => {
-          console.log("SCHEMA stopLoss", hasTPSL, isBuy, price);
           if (!hasTPSL) {
             return schema.nullable();
           }
