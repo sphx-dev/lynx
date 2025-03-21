@@ -105,5 +105,3 @@ jobs:
         helm package --app-version=$TAG-$COMMIT_SHA_SHORT helm/lynxweb
         helm upgrade --install lynxweb -f ./helm/lynxweb/values.testnet.yaml \
          ./lynxweb-$CHART_VERSION.tgz --set lynxweb.tag=${{ github.ref_name }}-$COMMIT_SHA_SHORT --namespace testnet
-    
-  
