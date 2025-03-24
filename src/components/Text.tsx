@@ -77,6 +77,7 @@ const Text = ({
       align={align}
       variant={variant}
       className={cx(
+        "text",
         variantClassNames[variant || "textSm"],
         color && color in colorClassNames ? colorClassNames[color as Color] : ""
       )}

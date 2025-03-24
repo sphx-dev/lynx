@@ -8,39 +8,42 @@
 /*
   possible colors classes from theme
 */
-
-.text-primary {
+.text {
   color: var(--text-primary);
 }
 
-.text-secondary {
+.text.text-primary {
+  color: var(--text-primary);
+}
+
+.text.text-secondary {
   color: var(--text-secondary);
 }
 
-.text-tertiary {
+.text.text-tertiary {
   color: var(--text-tertiary);
 }
 
-.text-error {
+.text.text-error {
   color: var(--text-error);
 }
 
-.text-secondary-active {
+.text.text-secondary-active {
   color: var(--text-secondary-active);
 }
 
-.text-secondary-link {
+.text.text-secondary-link {
   color: var(--text-secondary-link);
 }
 
-.text-primary-link {
+.text.text-primary-link {
   color: var(--text-primary-link);
 }
 
-.text-buy {
+.text.text-buy {
   color: var(--text-buy);
 }
 
-.text-sell {
+.text.text-sell {
   color: var(--text-sell);
 }
