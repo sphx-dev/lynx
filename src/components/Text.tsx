@@ -51,6 +51,7 @@ interface TextProps
 }
 
 const StyledText = styled.p<TextProps>`
+  color: var(--text-primary);
   display: inline-block;
   text-align: ${({ align }) => align};
   margin-bottom: 0 !important;
@@ -61,9 +62,15 @@ const Text = ({
   color,
   align = "left",
   children,
-  as = "p",
+  as = "span",
   ...props
 }: TextProps) => {
+  let style = {};
+  if (color && !(color in colorClassNames)) {
+    style = {
+      color: color,
+    };
+  }
   return (
     <StyledText
       as={as}
@@ -73,10 +80,7 @@ const Text = ({
         variantClassNames[variant || "textSm"],
         color && color in colorClassNames ? colorClassNames[color as Color] : ""
       )}
-      style={{
-        color:
-          color && color in colorClassNames ? color : "var(--text-primary)",
-      }}
+      style={style}
       {...props}
     >
       {children}

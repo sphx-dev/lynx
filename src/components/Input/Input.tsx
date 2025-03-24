@@ -3,7 +3,6 @@ import styled, { css } from "styled-components";
 import { ThemeColors } from "../../theme";
 import Stack from "../Stack";
 import Text from "../Text";
-import useTheme from "../../hooks/useTheme";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: string;
@@ -124,8 +123,6 @@ export const Input = forwardRef<Ref, InputProps>(
     },
     ref
   ) => {
-    const { themeColors } = useTheme();
-
     const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
       if (onFocus) {
         onFocus(e);
@@ -175,7 +172,7 @@ export const Input = forwardRef<Ref, InputProps>(
           {rightSide && <Text>{rightSide}</Text>}
         </InputWrapper>
         {error && (
-          <Text variant="textSm" color={themeColors.text.error}>
+          <Text variant="textSm" color="error">
             {error}
           </Text>
         )}

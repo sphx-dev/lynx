@@ -152,9 +152,9 @@ function OrderInput() {
       (isBuySide && positionSide === PositionSide.POSITION_SIDE_LONG) ||
       (!isBuySide && positionSide === PositionSide.POSITION_SIDE_SHORT)
     ) {
-      isReduceOnly = true;
-    } else {
       isReduceOnly = false;
+    } else {
+      isReduceOnly = true;
     }
 
     setIsReduceOnly(isReduceOnly);
