@@ -146,13 +146,16 @@ function OrderInput() {
   const [isReduceOnly, setIsReduceOnly] = useState(false);
   useEffect(() => {
     let isReduceOnly = false;
-    if (
-      (isBuySide && positionSide === PositionSide.POSITION_SIDE_LONG) ||
-      (!isBuySide && positionSide === PositionSide.POSITION_SIDE_SHORT)
-    ) {
-      isReduceOnly = false;
-    } else {
-      isReduceOnly = true;
+    console.log("positionSide", positionSide);
+    if (positionSide !== undefined) {
+      if (
+        (isBuySide && positionSide === PositionSide.POSITION_SIDE_LONG) ||
+        (!isBuySide && positionSide === PositionSide.POSITION_SIDE_SHORT)
+      ) {
+        isReduceOnly = false;
+      } else {
+        isReduceOnly = true;
+      }
     }
 
     setIsReduceOnly(isReduceOnly);
