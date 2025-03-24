@@ -1,6 +1,5 @@
 import { useMarkets } from "@/hooks/useMarkets";
 import { Button, Text } from "@/components";
-import UseTheme from "@/hooks/useTheme";
 import { formatNumber } from "@/utils/format";
 import { getColorByPl } from "../helpers";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
@@ -20,8 +19,6 @@ export const usePositionColumns = function (
   queryDetails: (symbol: string) => void
 ) {
   const { t } = useTranslation();
-  const { themeColors } = UseTheme();
-
   const { markets } = useMarkets();
 
   return [
@@ -31,10 +28,10 @@ export const usePositionColumns = function (
       meta: {
         background: (props: any) => {
           if (props.row.original.side === PositionSide.POSITION_SIDE_LONG) {
-            return `linear-gradient(90deg,${themeColors.positive} 0,transparent 100%) 0px`;
+            return `linear-gradient(90deg,var(--positive) 0,transparent 100%) 0px`;
           }
           if (props.row.original.side === PositionSide.POSITION_SIDE_SHORT) {
-            return `linear-gradient(90deg,${themeColors.negative} 0,transparent 100%) 0px`;
+            return `linear-gradient(90deg,var(--negative) 0,transparent 100%) 0px`;
           }
           return "";
         },
@@ -170,7 +167,6 @@ export const usePositionColumns = function (
                   console.log("SHOW TP/SL", slOrderId, tpOrderId);
                   showTpSl(position);
                 }}
-                // color={themeColors.text.secondaryLink}
               >
                 Details
               </Button>
@@ -184,7 +180,7 @@ export const usePositionColumns = function (
       accessorKey: "orderType",
       header: "Type",
       cell: (props: any) => (
-        <Text color={themeColors.text.secondaryLink}>
+        <Text color={"secondaryLink"}>
           {props.getValue() === OrderType.ORDER_TYPE_MARKET
             ? "Market"
             : "Limit"}
@@ -212,7 +208,6 @@ export const usePositionColumns = function (
               onClick={() => {
                 closePosition(OrderType.ORDER_TYPE_MARKET, position);
               }}
-              // color={themeColors.text.secondaryLink}
             >
               Market
             </Button>
@@ -223,7 +218,6 @@ export const usePositionColumns = function (
               onClick={() => {
                 closePosition(OrderType.ORDER_TYPE_LIMIT, position);
               }}
-              // color={themeColors.text.secondaryLink}
             >
               Limit
             </Button>

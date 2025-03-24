@@ -8,10 +8,8 @@ import {
 
 import { mockColumns } from "../../sections/ordersTabs/constants";
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
 import React, { CSSProperties } from "react";
 import Icon from "../Icon";
-import useTheme from "../../hooks/useTheme";
 interface ITableProps<T> {
   data?: T[];
   columns?: any[];
@@ -21,8 +19,11 @@ interface ITableProps<T> {
   "data-testid"?: string;
 }
 const StyledTable = styled.table`
-  ${({ theme }) => theme.fonts.typography.textSm};
-  color: ${({ theme }) => getThemeColors(theme).text.tertiary};
+  font-family: var(--text-sm-font-family);
+  font-size: var(--text-sm-font-size);
+  font-weight: var(--text-sm-font-weight);
+  line-height: var(--text-sm-line-height);
+  color: var(--text-tertiary);
   border-collapse: collapse;
   width: 100%;
   thead {
@@ -38,10 +39,8 @@ const StyledTable = styled.table`
       }
       text-align: center;
       border: none;
-      border-top: ${({ theme }) =>
-        `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
-      border-bottom: ${({ theme }) =>
-        `1px solid ${theme.colors.selectedTheme.tableTabs.border}`};
+      border-top: 1px solid var(--table-tabs-border);
+      border-bottom: 1px solid var(--table-tabs-border);
     }
   }
   tbody {
@@ -86,7 +85,6 @@ const Table = <T extends object>({
     enableSorting,
     getSubRows: row => row.subRows,
   });
-  const { themeColors } = useTheme();
 
   return (
     <StyledTable data-testid={rest["data-testid"]}>
@@ -106,7 +104,7 @@ const Table = <T extends object>({
                     <HeaderWrapperComponent>
                       {header.column.columnDef.header}
                       {header.column.getCanSort() && (
-                        <Icon icon="SortIcon" color={themeColors.tertiary} />
+                        <Icon icon="SortIcon" color={"var(--tertiary)"} />
                       )}
                     </HeaderWrapperComponent>
                   </StyledTh>

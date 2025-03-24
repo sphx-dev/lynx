@@ -5,7 +5,6 @@ import Group from "../Group";
 import { formatNumber } from "../../utils/format";
 import Table from "../Table/Table";
 import Icon from "../Icon";
-import useTheme from "../../hooks/useTheme";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
@@ -25,18 +24,18 @@ interface Props {
   list: TradePair[];
   closePopup: Function;
 }
+/**
+ * @deprecated
+ */
 const FuturesList = ({ list, closePopup }: Props) => {
-  const { themeColors } = useTheme();
   const dispatch = useAppDispatch();
   const favorites = useAppSelector(selectFavoriteSymbols);
 
   const getColor = useCallback(
     (symbol: string) => {
-      return favorites.includes(symbol)
-        ? themeColors.text.secondaryLink
-        : "none";
+      return favorites.includes(symbol) ? "var(--text-secondary-link)" : "none";
     },
-    [favorites, themeColors.text.secondaryLink]
+    [favorites]
   );
 
   const handleRowClick = (row: TradePair) => {
@@ -64,10 +63,11 @@ const FuturesList = ({ list, closePopup }: Props) => {
               <Icon
                 icon="StarIcon"
                 size="small"
-                stroke={themeColors.text.secondaryLink}
+                stroke={"var(--text-secondary-link)"}
                 strokeWidth={2}
                 color={getColor(props.getValue())}
               />
+              <Text>{props.getValue()}</Text>
             </IconButton>
             <Text>{props.getValue()}</Text>
           </Group>
@@ -96,7 +96,7 @@ const FuturesList = ({ list, closePopup }: Props) => {
         ),
       },
     ],
-    [getColor, handleToggleFavorite, themeColors.text.secondaryLink]
+    [getColor, handleToggleFavorite]
   );
   return (
     <Table
@@ -104,7 +104,7 @@ const FuturesList = ({ list, closePopup }: Props) => {
       columns={columns}
       data={list}
       onClick={handleRowClick}
-      headerStyle={{ backgroundColor: themeColors.background.dropdown }}
+      headerStyle={{ backgroundColor: "var(--background-dropdown)" }}
     />
   );
 };

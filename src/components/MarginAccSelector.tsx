@@ -4,7 +4,6 @@ import { useMarginAccount } from "../hooks/useMarginAccounts";
 import Button, { ButtonProps } from "./Button";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getThemeColors } from "../theme";
 import { useModalStore } from "./Modal/Modal";
 import { useBalances } from "../hooks/useBalance";
 import { DENOMUSDC, PRECISION } from "@/constants";
@@ -160,9 +159,8 @@ const DropdawnWindow = styled.div<{ $show: boolean }>`
   display: ${({ $show }) => ($show ? "flex" : "none")};
   position: absolute;
   z-index: 1;
-  background-color: ${({ theme }) =>
-    getThemeColors(theme)?.background?.dropdown};
-  color: ${({ theme }) => getThemeColors(theme)?.text?.tertiary};
+  background-color: var(--background-dropdown);
+  color: var(--text-tertiary);
   flex-direction: column;
   gap: 10px;
   min-width: 200px;
@@ -176,19 +174,20 @@ const MenuItem = styled.li`
   display: flex;
   gap: 8px;
   justify-content: space-between;
-  ${({ theme }) => theme?.fonts?.typography?.actionMd}
+  font-family: var(--action-md-font-family);
+  font-size: var(--action-md-font-size);
+  font-weight: var(--action-md-font-weight);
+  line-height: var(--action-md-line-height);
   cursor: pointer;
   list-style-type: none;
   padding: 0px 16px;
   &.selected {
-    background-color: ${({ theme }) =>
-      getThemeColors(theme)?.input?.primary?.background?.hovered};
-    color: ${({ theme }) => getThemeColors(theme)?.text?.primary};
+    background-color: var(--input-background-hovered);
+    color: var(--text-primary);
   }
   &:hover {
-    background-color: ${({ theme }) =>
-      getThemeColors(theme)?.input?.primary?.background?.hovered};
-    color: ${({ theme }) => getThemeColors(theme)?.text?.primary};
+    background-color: var(--input-background-hovered);
+    color: var(--text-primary);
   }
 `;
 

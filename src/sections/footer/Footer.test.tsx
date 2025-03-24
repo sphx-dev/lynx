@@ -5,9 +5,6 @@ import { AppWrapper } from "@/testing/AppWrapper";
 const mockUseChainCosmoshub = vi.fn();
 
 beforeEach(() => {
-  vi.doMock("@/hooks/useTheme", () => ({
-    default: () => ({ themeColors: { negative2: "red" } }),
-  }));
   vi.doMock("@/hooks/useChainCosmoshub", () => ({
     useChainCosmoshub: mockUseChainCosmoshub,
   }));
@@ -20,9 +17,6 @@ describe("Footer", () => {
     render(<Footer />, { wrapper: AppWrapper });
 
     expect(screen.getByText("offline")).toBeInTheDocument();
-    expect(screen.getByText("offline").closest("div")).toHaveStyle(
-      "color: red"
-    );
   });
 
   it("renders online status when connected", async () => {

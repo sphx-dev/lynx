@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Stack, Text } from "../../components";
-import useTheme from "../../hooks/useTheme";
 import { formatNumber } from "@/utils/format";
 import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 // import { useLocalStreaming } from "../chart/localStreaming";
@@ -40,17 +39,15 @@ const PriceView = ({
   after = "",
   type = ValueType.DEFAULT,
 }: PriceViewParam) => {
-  const { themeColors } = useTheme();
   const colorsByType = {
-    [ValueType.ACTIVE]: themeColors.text.secondaryActive,
-    [ValueType.ERROR]: themeColors.text.error,
-    [ValueType.DEFAULT]: themeColors.text.primary,
+    [ValueType.ACTIVE]: "secondaryActive", //themeColors.text.secondaryActive,
+    [ValueType.ERROR]: "error", //themeColors.text.error,
+    [ValueType.DEFAULT]: "primary", //themeColors.text.primary,
   };
   return (
     <Stack>
       <Text color="tertiary">{label}</Text>
       <Text variant="textNumSm" color={colorsByType[type]}>
-        {/* {value} */}
         {typeof value === "string" ? (
           value
         ) : (
@@ -99,8 +96,8 @@ const MainPrice = styled.div`
   font-size: 18px;
   font-weight: 400;
   line-height: 24px;
-  ${({ theme }) => theme.fonts.fontStyles.monoRegular};
-  color: ${({ theme }) => theme.colors.common.palette.secondary[600]};
+  font-family: var(--font-monoRegular);
+  color: var(--secondary-600);
 `;
 const MainPriceUnit = styled.span`
   display: inline-block;

@@ -5,7 +5,6 @@ import Surface from "@/ui/Layouts/Surface";
 import Summary from "./Summary";
 import AttributionBar from "../../components/AttributionBar";
 import TabButton from "../../components/TabButton";
-import useTheme from "../../hooks/useTheme";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { errorAlert, promiseAlert, successAlert } from "../../utils/alerts";
@@ -91,7 +90,6 @@ const defaultValues: MarketOrderForm = {
 const MARKET_MINIMUM_MARGING_RATIO = 1 + config.MIN_MARGIN_RATIO / 100;
 
 function OrderInput() {
-  const { themeColors } = useTheme();
   const { account, isConnected } = useChainCosmoshub();
   const address = account?.bech32Address;
   const { selectedAddress } = useMarginAccount(address);
@@ -356,7 +354,7 @@ function OrderInput() {
     <Surface
       style={{
         paddingBottom: "32px",
-        borderTop: `1px solid ${themeColors.border.default}`,
+        borderTop: `1px solid var(--border-default)`,
       }}
     >
       <Stack justify="apart" fullHeight spacing={40}>

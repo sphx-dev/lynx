@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { getThemeColors } from "../../theme";
 import { useTranslation } from "react-i18next";
-import useTheme from "@/hooks/useTheme";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 
 const Wrapper = styled.footer`
@@ -13,20 +12,21 @@ const Wrapper = styled.footer`
 `;
 
 interface IStatusProps {
-  color?: string;
+  $isConnected?: boolean;
 }
 
 const Status = styled.div<IStatusProps>`
   ${({ theme }) => theme.fonts.typography.navigation}
-  color: ${({ theme, color }) =>
-    color || getThemeColors(theme).text.secondaryLink};
+
+  color: ${({ $isConnected }) =>
+    $isConnected ? `var(--secondary-700)` : `var(--negative2)`};
   text-transform: uppercase;
   text-decoration: none;
   display: flex;
   align-items: center;
   .status-icon {
-    background-color: ${({ theme, color }) =>
-      color || getThemeColors(theme).text.secondaryLink};
+    background-color: ${({ $isConnected }) =>
+      $isConnected ? `var(--secondary-700)` : `var(--negative2)`};
     width: 8px;
     height: 8px;
     margin-right: 6px;
@@ -49,12 +49,10 @@ const NavItem = styled.a`
 `;
 const Footer = () => {
   const { isConnected } = useChainCosmoshub();
-  const { themeColors } = useTheme();
-  const color = !isConnected ? themeColors.negative2 : "";
   const { t } = useTranslation();
   return (
     <Wrapper>
-      <Status color={color}>
+      <Status $isConnected={isConnected}>
         <div className="status-icon" />
         {isConnected ? t("online") : t("offline")}
       </Status>

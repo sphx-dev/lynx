@@ -2,6 +2,9 @@ import { useAppSelector } from "../hooks";
 import { selectCurrentTheme } from "../state/preferences";
 import { getThemeColors, themes } from "../theme";
 
+/**
+ * @deprecated
+ */
 const UseTheme = () => {
   const currentTheme = useAppSelector(selectCurrentTheme);
   const theme = themes[currentTheme];

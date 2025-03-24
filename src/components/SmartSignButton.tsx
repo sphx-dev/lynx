@@ -12,13 +12,12 @@ import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import config from "@/config";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { getThemeColors } from "@/theme";
 
 const StyledStatus = styled.div`
   display: inline-flex;
   align-items: center;
-  background-color: ${({ theme }) => getThemeColors(theme).text.primary};
-  color: ${({ theme }) => getThemeColors(theme).background.primary};
+  background-color: var(--text-primary);
+  color: var(--background-primary);
   padding: 2px 4px;
   border-radius: 999px;
   font-size: 0.625rem;

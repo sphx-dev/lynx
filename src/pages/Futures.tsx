@@ -11,7 +11,6 @@ import Surface from "../ui/Layouts/Surface";
 import { ActionBarContainer } from "../components/AttributionBar/ActionBar";
 import Text from "../components/Text";
 import logo from "../assets/icons/logo-small.svg";
-import useTheme from "../hooks/useTheme";
 import Trades from "../sections/trades/Trades";
 
 const Wrapper = styled.div`
@@ -21,15 +20,14 @@ const Wrapper = styled.div`
   gap: 16px;
 `;
 const Logo = () => {
-  const { themeColors } = useTheme();
   return (
     <ActionBarContainer
       align="center"
       style={{ width: "290px", margin: "0 auto", padding: "0 32px" }}
     >
-      <Text color={themeColors.actionBar.text}>SPHINX OFFICIAL</Text>
+      <Text color={"var(--action-bar-text)"}>SPHINX OFFICIAL</Text>
       <img alt="lynx logo" src={logo} />
-      <Text color={themeColors.actionBar.text}>ORDER BOOK</Text>
+      <Text color={"var(--action-bar-text)"}>ORDER BOOK</Text>
     </ActionBarContainer>
   );
 };

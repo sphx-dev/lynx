@@ -3,6 +3,7 @@
 /* dark theme colors */
 
 :root {
+  /* BACKGROUND */
   --background-gradient-primary: var(--gradient-dark-primary);
   --background-gradient-secondary: var(--gradient-green-secondary);
   --background-input: var(--surface-800);
@@ -11,6 +12,7 @@
   --background-primary: var(--primary-950);
   --background-gradient-surface: var(--gradient-surface);
 
+  /* DIVIDER */
   --divider-primary: var(--surface-700);
   --divider-secondary: var(--blue-4);
 
