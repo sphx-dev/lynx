@@ -64,7 +64,7 @@ const Trades = React.memo(() => {
         >
           {messages.map((msg: any) => (
             <TradeItem
-              key={msg.id}
+              key={msg.id + msg.messageType}
               price={msg.price}
               quantity={Number(msg.quantityProcessed)}
               date={msg.timestamp}

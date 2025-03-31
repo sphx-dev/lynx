@@ -29,6 +29,14 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
   // config.VITE_EXPLORER_URL = "https://explorer.sphx.dev";
   // config.VITE_STATION_URL = "https://station.non-prod.sphx.dev";
   // config.VITE_FAUCET_URL = "http://0.0.0.0:9898";
+
+  // config.VITE_API_HOST = "api-devnet.sphx.dev";
+  // config.VITE_API_PORT = 443;
+  // config.VITE_API_URL = "//api-devnet.sphx.dev";
+  // config.VITE_WS_PROTOCOL = "wss";
+  // config.VITE_EXPLORER_URL = "https://explorer-devnet.sphx.dev";
+  // config.VITE_STATION_URL = "https://station-devnet.non-prod.sphx.dev";
+  // config.VITE_FAUCET_URL = "https://faucet-devnet.non-prod.sphx.dev";
   // return config;
   if (
     location.hostname.indexOf("localhost") > -1 ||

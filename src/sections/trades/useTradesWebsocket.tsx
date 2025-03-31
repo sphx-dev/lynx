@@ -28,7 +28,7 @@ export const useTradesWebsocket = () => {
     //   console.log("closed", e);
     // },
     // onError: e => console.log("error", e),
-    onMessage: msg => {
+    onMessage: (msg) => {
       const data = JSON.parse(msg.data);
       const messageType = data.message_type;
       const symbol = data.symbol;
@@ -68,7 +68,7 @@ export const useTradesWebsocket = () => {
 type TradesData = {
   readyState: ReadyState;
   messages: any[];
-  messagesByTicker: any;
+  messagesByTicker: { [key: string]: any[] };
   sendMessage: any;
   setReadyState: (readyState: ReadyState) => void;
   getMessages: (ticker: string) => void;
@@ -89,6 +89,23 @@ export const useTradesData = create<TradesData>((set, get) => ({
   },
   setMessage: (message: any) => {
     const symbol = message.symbol;
+    const existingMessages = get().messagesByTicker[symbol] ?? [];
+    // check if message id already exists
+    const messageExists = existingMessages.find(
+      (existingMessage: any) => existingMessage.id === message.id
+    );
+    if (!!messageExists) {
+      console.warn(
+        `Message with id ${message.id} already exists for symbol ${symbol}.`,
+        `\n`,
+        message,
+        `\n`,
+        existingMessages,
+        `\n`,
+        "Not adding to messagesByTicker."
+      );
+      // return;
+    }
     set({
       messagesByTicker: {
         ...get().messagesByTicker,

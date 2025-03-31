@@ -271,7 +271,6 @@ const useOrderColumns = ({
             marginAccountAddress: row.margin_account_address,
           },
           status: getStatusByMessage(row),
-          row,
         };
       },
       header: t("action"),
@@ -282,18 +281,14 @@ const useOrderColumns = ({
           o => o.number === orderId.number
         );
         const onClickHandler = async () => {
-          const row = props.getValue()?.row;
-          console.log("row", row);
           if (address && orderId?.number && orderId?.marginAccountAddress) {
             try {
               addCancellingOrder(orderId);
               if (FF_SMART_SIGN && smartSign) {
-                console.log("smartSign", orderId);
                 let response = await cancelOrderSmart({
                   marginAccountAddress: orderId.marginAccountAddress,
                   number: orderId.number.toString(),
                 });
-                console.log("response", response);
                 if (response.status === 200) {
                   successAlert("Order canceled successfully");
                 } else {
@@ -485,7 +480,6 @@ const OrdersByAccount = ({ final = false }) => {
     setIsPartialsModalOpen(false);
   };
   const [partialOrders, setPartialOrders] = useState<any[]>([]);
-  console.log("partialOrders", partialOrders, isPartialsModalOpen);
   const columns = useOrderColumns({
     openPartialsModal: () => setIsPartialsModalOpen(true),
     setPartialOrders,

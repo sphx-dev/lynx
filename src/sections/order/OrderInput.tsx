@@ -146,7 +146,7 @@ function OrderInput() {
   const [isReduceOnly, setIsReduceOnly] = useState(false);
   useEffect(() => {
     let isReduceOnly = false;
-    console.log("positionSide", positionSide);
+
     if (positionSide !== undefined) {
       if (
         (isBuySide && positionSide === PositionSide.POSITION_SIDE_LONG) ||
