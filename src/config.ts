@@ -21,6 +21,7 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
     VITE_SMART_API_PROTOCOL: "http",
     VITE_SMART_API_HOST: "localhost",
     VITE_SMART_API_PORT: "3077",
+    SIGNATURE_BASED_CANCEL: false,
   };
   // config.VITE_API_HOST = "api.sphx.dev";
   // config.VITE_API_PORT = 443;
@@ -37,6 +38,7 @@ export function getEnvVARs(location: { hostname: string | string[] }) {
   // config.VITE_EXPLORER_URL = "https://explorer-devnet.sphx.dev";
   // config.VITE_STATION_URL = "https://station-devnet.non-prod.sphx.dev";
   // config.VITE_FAUCET_URL = "https://faucet-devnet.non-prod.sphx.dev";
+  // config.SIGNATURE_BASED_CANCEL = true;
   // return config;
   if (
     location.hostname.indexOf("localhost") > -1 ||

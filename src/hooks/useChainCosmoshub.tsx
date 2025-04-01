@@ -1,6 +1,7 @@
 import { useAccount, useConnect, useDisconnect, WalletType } from "graz";
 import { Keplr } from "@keplr-wallet/types";
 import { getChain } from "../config";
+import { signArbitrary } from "@/utils/getOfflineSigner";
 
 export const useChainCosmoshub = () => {
   const { connectAsync, status: connectionStatus, error } = useConnect();
@@ -50,6 +51,19 @@ export const useChainCosmoshub = () => {
         // });
       } catch (e) {
         console.log("-------->", e);
+      }
+    },
+    signArbitrary: async (data: string | Uint8Array) => {
+      try {
+        const signer = account?.bech32Address;
+        if (!signer) {
+          throw new Error("No signer available");
+        }
+        const signature = await signArbitrary(signer, data);
+        return signature;
+      } catch (e) {
+        console.log("signArbitrary ERR -------->", e);
+        return null;
       }
     },
     reconnect,

@@ -28,7 +28,7 @@ export const useTradesWebsocket = () => {
     //   console.log("closed", e);
     // },
     // onError: e => console.log("error", e),
-    onMessage: (msg) => {
+    onMessage: msg => {
       const data = JSON.parse(msg.data);
       const messageType = data.message_type;
       const symbol = data.symbol;

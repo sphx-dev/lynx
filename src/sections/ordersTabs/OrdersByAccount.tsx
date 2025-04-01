@@ -65,6 +65,7 @@ const useOrderColumns = ({
 
   const { cancelOrder } = useCancelOrder();
   const { cancelOrder: cancelOrderSmart } = useCancelOrderSmart();
+  const { signArbitrary } = useChainCosmoshub();
 
   const { address } = useChainCosmoshub();
 
@@ -284,7 +285,32 @@ const useOrderColumns = ({
           if (address && orderId?.number && orderId?.marginAccountAddress) {
             try {
               addCancellingOrder(orderId);
-              if (FF_SMART_SIGN && smartSign) {
+
+              if (config.SIGNATURE_BASED_CANCEL) {
+                const cancelIntent = {
+                  action: "cancel_order",
+                  order_id: `${orderId.marginAccountAddress}:${orderId.number}`,
+                  timestamp: Math.floor(Date.now() / 1000),
+                };
+                const signature = await signArbitrary(
+                  JSON.stringify(cancelIntent)
+                );
+                console.log("signature", signature, orderId);
+                if (!signature) {
+                  errorAlert("Failed to sign cancel order");
+                  return;
+                }
+                const response = await cancelOrderSigned({
+                  ...cancelIntent,
+                  signature: signature.signature,
+                  pubkey: signature.pub_key,
+                });
+                if (response.status === 200) {
+                  successAlert("Order canceled successfully");
+                } else {
+                  errorAlert("Order cancel failed");
+                }
+              } else if (FF_SMART_SIGN && smartSign) {
                 let response = await cancelOrderSmart({
                   marginAccountAddress: orderId.marginAccountAddress,
                   number: orderId.number.toString(),
@@ -568,3 +594,18 @@ const PartialsModal = ({
     </Modal>
   );
 };
+
+async function cancelOrderSigned(data: any) {
+  const response = await fetch(config.VITE_API_URL + "/order/cancel", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
