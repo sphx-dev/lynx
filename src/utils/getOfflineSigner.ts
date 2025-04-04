@@ -30,5 +30,36 @@ export async function signArbitrary(
     throw Error('No method "signArbitrary" available');
   }
 
+  console.log("signArbitrary((((((((", getChain().chainId, signer, data);
   return signArbitrary(getChain().chainId, signer, data);
+}
+
+export async function verifyArbitrary(
+  signer: string,
+  data: string | Uint8Array,
+  signature: StdSignature
+): Promise<StdSignature> {
+  let verifyArbitrary;
+  if (window?.keplr?.verifyArbitrary) {
+    // https://docs.keplr.app/api/guide/sign-arbitrary
+    verifyArbitrary = window.keplr.verifyArbitrary;
+  } else if (window?.leap?.verifyArbitrary) {
+    // https://docs.leapwallet.io/cosmos/for-dapps-connect-to-leap/api-reference#request-signature-for-arbitrary-message
+    verifyArbitrary = window.leap.verifyArbitrary;
+  } else {
+    throw Error('No method "verifyArbitrary" available');
+  }
+
+  console.log(
+    "verifyArbitrary((((((((",
+    getChain().chainId,
+    signer,
+    data,
+    signature
+  );
+  // chainId: string,
+  // signer: string,
+  // data: string | Uint8Array,
+  // signature: StdSignature
+  return verifyArbitrary(getChain().chainId, signer, data, signature);
 }

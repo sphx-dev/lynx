@@ -2,45 +2,42 @@ import { Table } from "../../../components";
 import PlaceHolder from "../PlaceHolder";
 
 import { useChainCosmoshub } from "../../../hooks/useChainCosmoshub";
-import { usePositionColumns } from "./usePositionColumns";
-import { useCallback, useMemo, useState } from "react";
-import { usePositions } from "@/hooks/usePositions";
+import { useCallback, useState } from "react";
 import { Pagination } from "@/components/Pagination";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
-import {
-  PerpetualPosition,
-  PositionStatus,
-} from "proto-codecs/codegen/sphx/order/perpetual_position";
+import { PerpetualPosition } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import { ClosePositionByMarketModal } from "./ClosePositionByMarket";
 import { ClosePositionByLimitModal } from "./ClosePositionByLimit";
 import { ShowTpSlModal } from "./ShowTpSlModal";
 import { ReloadButton } from "../components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
-import config from "@/config";
-import { useQuery } from "react-query";
 import { ModalPositionDetails } from "./usePositionDetailsColumns";
+import { usePositionColumnsV2 } from "./usePositionColumnsV2";
+import { useQueryPositionsByAccount } from "@/hooks/usePositions";
 
 const Positions = () => {
   const [selectedSymbol, setSelectedSymbol] = useState<string | undefined>();
   const { isConnected, address } = useChainCosmoshub();
 
-  const { data, refetch, isFetching } = usePositions();
+  // const { data, refetch, isFetching } = usePositions();
 
-  const positions = useMemo(() => {
-    // TODO: Filter out closed positions by call params when implemented in chain
-    return (data?.positions || []).filter(
-      pos => pos.status === PositionStatus.POSITION_STATUS_OPEN
-    );
-  }, [data]);
+  // const positions = useMemo(() => {
+  //   // TODO: Filter out closed positions by call params when implemented in chain
+  //   return (data?.positions || []).filter(
+  //     (pos) => pos.status === PositionStatus.POSITION_STATUS_OPEN
+  //   );
+  // }, [data]);
 
   // TODO: Update query from chain to positions from osiris
-  // const { data: positionsByAccount, refetch: refetchPositionsByAccount } =
-  //   useQueryPositionsByAccount(address);
-
-  // console.log("POSITIONS", positions, positionsByAccount);
+  const {
+    data: positions,
+    refetch,
+    isFetching,
+  } = useQueryPositionsByAccount(address);
 
   const [page, setPage] = useState(0);
-  const pagination = data?.pagination || { total: 0 };
+  // const pagination = data?.pagination || { total: 0 };
+  const pagination = { total: 0 };
 
   const [closePositionByMarketModal, setClosePositionByMarketModal] =
     useState(false);
@@ -77,7 +74,7 @@ const Positions = () => {
     setIsDetailsOpen(true);
   }, []);
 
-  const positionColumns = usePositionColumns(
+  const positionColumns = usePositionColumnsV2(
     closePosition,
     showTpSl,
     queryDetails
@@ -158,31 +155,3 @@ const Positions = () => {
 };
 
 export default Positions;
-
-//
-const queryPositionsByAccount = async ({
-  queryKey,
-}: {
-  queryKey: readonly unknown[];
-}) => {
-  const [, accountId] = queryKey;
-  const response = await fetch(
-    config.VITE_API_URL + `/positions/composed?account_id=${accountId}`
-  );
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-};
-
-export const useQueryPositionsByAccount = (accountId: string | undefined) => {
-  return useQuery(
-    ["query-positions-composed", accountId],
-    queryPositionsByAccount,
-    {
-      enabled: !!accountId,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchInterval: 5000,
-    }
-  );
-};

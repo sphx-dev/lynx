@@ -1,20 +1,16 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { Table, Text, Button } from "../../components";
 import { getOrderStatusText, getSideTextColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
-import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useCancelOrder, useCancelOrderSmart } from "../../hooks/useOrders";
-import { OrderId } from "proto-codecs/codegen/sphx/order/order";
 import { Side } from "../../types/order";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "@/utils/alerts";
-import { useMarkets } from "../../hooks/useMarkets";
 import dayjs from "dayjs";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
-import { PRECISION } from "@/constants";
 import { formatDollars } from "@/utils/format";
 import { useSmartSign } from "@/components/SmartSignButton";
 import { ReloadButton } from "./components/ReloadButton";
@@ -24,7 +20,7 @@ import config from "@/config";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Modal } from "@/components/Modal/Modal";
-import { OsirisOrder } from "./OsirisOrder";
+import { signArbitrary } from "@/utils/getOfflineSigner";
 
 const FF_SMART_SIGN = false;
 
@@ -33,10 +29,10 @@ const queryOrdersByAccount = async ({
 }: {
   queryKey: readonly unknown[];
 }) => {
-  const [, address, page, pageSize, isFinal] = queryKey;
+  const [, address, page, pageSize] = queryKey;
   const response = await fetch(
     config.VITE_API_URL +
-      `/order/query?margin_account=${address}&page=${page}&page_size=${pageSize}&is_final=${isFinal}`
+      `/order/query?account_id=${address}&page=${page}&page_size=${pageSize}`
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -52,39 +48,28 @@ const useOrderColumns = ({
   setPartialOrders: (orders: any[]) => void;
 }) => {
   const { t } = useTranslation();
-  const { markets } = useMarkets();
-  const marketMap = useMemo(() => {
-    const map = new Map();
-    markets.forEach(m => {
-      map.set(m.id, t(m.baseAsset) + "/" + t(m.quoteAsset));
-    });
-    return map;
-  }, [markets, t]);
 
   const { smartSign } = useSmartSign();
 
   const { cancelOrder } = useCancelOrder();
   const { cancelOrder: cancelOrderSmart } = useCancelOrderSmart();
-  const { signArbitrary } = useChainCosmoshub();
 
   const { address } = useChainCosmoshub();
 
-  const [cancellingOrders, setCancellingOrders] = useState<OrderId[]>([]);
+  const [cancellingOrders, setCancellingOrders] = useState<string[]>([]);
 
-  const addCancellingOrder = (orderId: OrderId) => {
+  const addCancellingOrder = (orderId: string) => {
     setCancellingOrders([...cancellingOrders, orderId]);
   };
-  const removeCancellingOrder = (orderId: OrderId) => {
-    setCancellingOrders(co => co.filter(o => o.number !== orderId.number));
+  const removeCancellingOrder = (orderId: string) => {
+    setCancellingOrders(co => co.filter(o => o !== orderId));
   };
 
   const columns = [
     {
-      accessorKey: "market_id",
+      accessorKey: "symbol",
       header: t("market"),
-      cell: (props: any) => (
-        <Text color="tertiary">{marketMap.get(BigInt(props.getValue()))}</Text>
-      ),
+      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
     },
     {
       flex: 1,
@@ -102,7 +87,7 @@ const useOrderColumns = ({
       accessorKey: "quantity",
       header: t("size"),
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
+        <Text color="tertiary">{Number(props.getValue())}</Text>
       ),
     },
     // {
@@ -132,13 +117,10 @@ const useOrderColumns = ({
         if (order.is_canceled) {
           return "—";
         }
-        if (
-          order.order_type ===
-          "ORDER_TYPE_MARKET" /*OrderType.ORDER_TYPE_MARKET*/
-        ) {
+        if (order.order_type === "market" /*OrderType.ORDER_TYPE_MARKET*/) {
           return t("marketPrice");
         }
-        return formatDollars(Number(order.price) / PRECISION, "");
+        return formatDollars(Number(order.price), "");
       },
       header: t("Req. Price"),
       cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
@@ -185,10 +167,10 @@ const useOrderColumns = ({
       cell: (props: any) => (
         <Text
           color={getSideTextColor(
-            props.getValue() === "ORDER_SIDE_BUY" ? Side.Buy : Side.Sell
+            props.getValue() === "buy" ? Side.Buy : Side.Sell
           )}
         >
-          {props.getValue() === "ORDER_SIDE_BUY" ? "buy" : "sell"}
+          {props.getValue() === "buy" ? "buy" : "sell"}
         </Text>
       ),
     },
@@ -247,73 +229,51 @@ const useOrderColumns = ({
       ),
     },
 
-    {
-      accessorKey: "hash",
-      header: t("tx"),
-      cell: (props: any) => (
-        <Text>
-          <HashLink
-            to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
-            target="_blank"
-          >
-            {/* 🔗 */}⧉
-          </HashLink>
-        </Text>
-      ),
-    },
+    // {
+    //   accessorKey: "hash",
+    //   header: t("tx"),
+    //   cell: (props: any) => (
+    //     <Text>
+    //       <HashLink
+    //         to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
+    //         target="_blank"
+    //       >
+    //         {/* 🔗 */}⧉
+    //       </HashLink>
+    //     </Text>
+    //   ),
+    // },
 
     {
       flex: 1,
       // accessorKey: "id",
       accessorFn: (row: any) => {
-        return {
-          id: {
-            number: row.order_id_chain,
-            marginAccountAddress: row.margin_account_address,
-          },
-          status: getStatusByMessage(row),
-        };
+        console.log("row", row);
+        return row;
       },
       header: t("action"),
       cell: (props: any) => {
-        const status = props.getValue()?.status;
-        const orderId = props.getValue()?.id;
-        const isCancelling = cancellingOrders.some(
-          o => o.number === orderId.number
-        );
+        const order = props.getValue();
+
+        const status = getStatusByMessage(order);
+        const orderId = order.chain_order_id;
+        const isCancelling = cancellingOrders.some(o => o === orderId);
         const onClickHandler = async () => {
-          if (address && orderId?.number && orderId?.marginAccountAddress) {
+          if (address) {
             try {
               addCancellingOrder(orderId);
 
               if (config.SIGNATURE_BASED_CANCEL) {
-                const cancelIntent = {
-                  action: "cancel_order",
-                  order_id: `${orderId.marginAccountAddress}:${orderId.number}`,
-                  timestamp: Math.floor(Date.now() / 1000),
-                };
-                const signature = await signArbitrary(
-                  JSON.stringify(cancelIntent)
-                );
-                console.log("signature", signature, orderId);
-                if (!signature) {
-                  errorAlert("Failed to sign cancel order");
-                  return;
-                }
-                const response = await cancelOrderSigned({
-                  ...cancelIntent,
-                  signature: signature.signature,
-                  pubkey: signature.pub_key,
-                });
-                if (response.status === 200) {
+                const response = await cancelOrderSigned(address, order);
+                if (response?.status === 200) {
                   successAlert("Order canceled successfully");
                 } else {
                   errorAlert("Order cancel failed");
                 }
               } else if (FF_SMART_SIGN && smartSign) {
                 let response = await cancelOrderSmart({
-                  marginAccountAddress: orderId.marginAccountAddress,
-                  number: orderId.number.toString(),
+                  marginAccountAddress: orderId.split(":")[0],
+                  number: orderId.split(":")[1],
                 });
                 if (response.status === 200) {
                   successAlert("Order canceled successfully");
@@ -323,8 +283,11 @@ const useOrderColumns = ({
               } else {
                 await cancelOrder({
                   address,
-                  orderId,
-                  memo: `Cancel order #${orderId.number}`,
+                  orderId: {
+                    marginAccountAddress: orderId.split(":")[0],
+                    number: orderId.split(":")[1],
+                  },
+                  memo: `Cancel order #${orderId}`,
                 });
                 successAlert("Order canceled successfully");
               }
@@ -401,12 +364,12 @@ const useNestedOrderColumns = () => {
       accessorKey: "quantity",
       header: t("size"),
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue()) / PRECISION}</Text>
+        <Text color="tertiary">{Number(props.getValue())}</Text>
       ),
       footer: (info: any) => {
         const data = info?.table?.options?.data || [];
         const total = data?.reduce(
-          (acc: number, item: any) => acc + Number(item.quantity / PRECISION),
+          (acc: number, item: any) => acc + Number(item.quantity),
           0
         );
         if (!data) {
@@ -420,19 +383,18 @@ const useNestedOrderColumns = () => {
       header: t("price"),
       cell: (props: any) => (
         <Text color="tertiary">
-          {formatDollars(Number(props.getValue()) / PRECISION, "")}
+          {formatDollars(Number(props.getValue()), "")}
         </Text>
       ),
       footer: (info: any) => {
         const data = info?.table?.options?.data;
         const totalQuantity = data?.reduce(
-          (acc: number, item: any) => acc + Number(item.quantity / PRECISION),
+          (acc: number, item: any) => acc + Number(item.quantity),
           0
         );
         const totalPrice = data?.reduce(
           (acc: number, item: any) =>
-            acc +
-            Number(item.quantity / PRECISION) * Number(item.price / PRECISION),
+            acc + Number(item.quantity) * Number(item.price),
           0
         );
         if (!data) {
@@ -478,28 +440,27 @@ const useNestedOrderColumns = () => {
 
 const OrdersByAccount = ({ final = false }) => {
   const { address } = useChainCosmoshub();
-  const { selectedAddress } = useMarginAccount(address);
 
   const [page, setPage] = useState<number>(0);
 
   const pageSize = 10;
-  const isFinal = final;
   const { data, isFetching, refetch } = useQuery(
-    ["query-orders", selectedAddress, page, pageSize, isFinal],
+    ["query-orders", address, page, pageSize],
     queryOrdersByAccount,
     {
-      enabled: !!selectedAddress,
+      enabled: !!address,
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchInterval: 5000,
     }
   );
 
   const totalOrders = data?.total ?? 0;
-  const orders =
-    data?.orders?.map((response: OsirisOrder) => ({
-      ...response.order,
-      subData: response?.partials,
-    })) ?? [];
+  const orders = data?.orders || [];
+  // const orders =
+  //   data?.orders?.map((response: OsirisOrder) => ({
+  //     ...response.order,
+  //     subData: response?.partials,
+  //   })) ?? [];
 
   const [isPartialsModalOpen, setIsPartialsModalOpen] = useState(false);
   const handleClosePartialsModal = () => {
@@ -517,6 +478,16 @@ const OrdersByAccount = ({ final = false }) => {
         <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
         <ReloadButton onClick={() => refetch()} />
         <PlaceHolder>No Orders yet</PlaceHolder>
+      </>
+    );
+  }
+
+  if (final) {
+    return (
+      <>
+        <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
+        <ReloadButton onClick={() => refetch()} />
+        <PlaceHolder>Orders History</PlaceHolder>
       </>
     );
   }
@@ -595,17 +566,39 @@ const PartialsModal = ({
   );
 };
 
-async function cancelOrderSigned(data: any) {
-  const response = await fetch(config.VITE_API_URL + "/order/cancel", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+async function cancelOrderSigned(address: string, order: any) {
+  const id = order.order_id;
 
+  const chainOrderId = order.chain_order_id;
+  const cancelIntent = {
+    id: `${id}`,
+  };
+  const signature = await signArbitrary(address, `{"id":"${id}"}`);
+  console.log("signature", signature, chainOrderId);
+  if (!signature) {
+    errorAlert("Failed to sign cancel order");
+    return;
+  }
+
+  const response = await fetch(
+    config.VITE_API_URL + "/order/" + id + "?ticker=" + order.symbol,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-ACCOUNT-ID": address,
+      },
+      body: JSON.stringify({
+        ...cancelIntent,
+        signature: signature.signature,
+        pubkey: signature.pub_key.value,
+      }),
+    }
+  );
+
+  debugger;
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-  return response.json();
+  return response;
 }

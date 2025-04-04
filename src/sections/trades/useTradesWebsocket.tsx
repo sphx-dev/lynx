@@ -89,23 +89,23 @@ export const useTradesData = create<TradesData>((set, get) => ({
   },
   setMessage: (message: any) => {
     const symbol = message.symbol;
-    const existingMessages = get().messagesByTicker[symbol] ?? [];
+    // const existingMessages = get().messagesByTicker[symbol] ?? [];
     // check if message id already exists
-    const messageExists = existingMessages.find(
-      (existingMessage: any) => existingMessage.id === message.id
-    );
-    if (!!messageExists) {
-      console.warn(
-        `Message with id ${message.id} already exists for symbol ${symbol}.`,
-        `\n`,
-        message,
-        `\n`,
-        existingMessages,
-        `\n`,
-        "Not adding to messagesByTicker."
-      );
-      // return;
-    }
+    // const messageExists = existingMessages.find(
+    //   (existingMessage: any) => existingMessage.id === message.id
+    // );
+    // if (!!messageExists) {
+    //   console.warn(
+    //     `Message with id ${message.id} already exists for symbol ${symbol}.`,
+    //     `\n`,
+    //     message,
+    //     `\n`,
+    //     existingMessages,
+    //     `\n`,
+    //     "Not adding to messagesByTicker."
+    //   );
+    //   // return;
+    // }
     set({
       messagesByTicker: {
         ...get().messagesByTicker,

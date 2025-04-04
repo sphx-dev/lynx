@@ -1,73 +1,54 @@
-import { useMarkets } from "@/hooks/useMarkets";
 import { Button, Text } from "@/components";
 import { formatNumber } from "@/utils/format";
 import { getColorByPl } from "../helpers";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
-import {
-  PerpetualPosition,
-  PositionSide,
-} from "proto-codecs/codegen/sphx/order/perpetual_position";
-import { PRECISION } from "@/constants";
+import { PerpetualPosition } from "proto-codecs/codegen/sphx/order/perpetual_position";
+// import { PRECISION } from "@/constants";
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import React, { PropsWithChildren } from "react";
 import { useLocalStreamingData } from "@/sections/chart/localStreaming";
 
-export const usePositionColumns = function (
+export const usePositionColumnsV2 = function (
   closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
   showTpSl: (position: PerpetualPosition) => void,
   queryDetails: (symbol: string) => void
 ) {
   const { t } = useTranslation();
-  const { markets } = useMarkets();
 
   return [
     {
-      accessorKey: "marketId",
+      accessorKey: "symbol",
       header: "Symbol",
       meta: {
         background: (props: any) => {
-          if (props.row.original.side === PositionSide.POSITION_SIDE_LONG) {
+          if (props.row.original.volume > 0) {
             return `linear-gradient(90deg,var(--positive) 0,transparent 100%) 0px`;
           }
-          if (props.row.original.side === PositionSide.POSITION_SIDE_SHORT) {
+          if (props.row.original.volume < 0) {
             return `linear-gradient(90deg,var(--negative) 0,transparent 100%) 0px`;
           }
           return "";
         },
       },
       cell: (props: any) => {
-        const market = markets.find(m => m.id === props.getValue());
-        return <Text color="tertiary">{t(market?.ticker || "")}</Text>;
+        return <Text color="tertiary">{t(props.getValue() || "")}</Text>;
       },
     },
-    // {
-    //   accessorKey: "entryTime",
-    //   header: "Date",
-    //   cell: (props: any) => {
-    //     return (
-    //       <Text color="tertiary">
-    //         {dateToDisplay(Number(props.getValue()) * 1000)}
-    //       </Text>
-    //     );
-    //   },
-    // },
     {
-      accessorKey: "size",
+      accessorKey: "volume",
       header: "Qty",
       cell: (props: any) => (
-        <Text color="tertiary">
-          {Number(props.getValue() || 0) / PRECISION}
-        </Text>
+        <Text color="tertiary">{Number(props.getValue() || 0)}</Text>
       ),
     },
     {
-      accessorKey: "entryPrice",
+      accessorKey: "entry_price",
       header: "Entry Price",
       cell: (props: any) => (
         <Text color="tertiary">
           {formatNumber({
-            value: Number(props.getValue()) / PRECISION,
+            value: Number(props.getValue()),
             fixed: 3,
           })}
         </Text>
@@ -75,11 +56,8 @@ export const usePositionColumns = function (
     },
 
     {
-      // accessorKey: "size",
       accessorFn: (row: any) => {
-        return (
-          (Number(row.size) / PRECISION) * (Number(row.entryPrice) / PRECISION)
-        );
+        return Number(row.volume) * Number(row.entry_price);
       },
       header: "Value",
       cell: (props: any) => (
@@ -126,14 +104,14 @@ export const usePositionColumns = function (
         );
       }),
       accessorFn: (row: any) => {
-        const market = markets.find(m => m.id === row.marketId);
-        let size = Number(row.size) / PRECISION;
-        let entryPrice = Number(row.entryPrice) / PRECISION;
+        let size = Number(row.volume);
+        let entryPrice = Number(row.entry_price);
+        let symbol = row.symbol;
 
         return {
           size,
           entryPrice,
-          ticker: market?.ticker,
+          ticker: symbol,
         };
       },
       header: "uPNL",
@@ -176,19 +154,7 @@ export const usePositionColumns = function (
       },
       // width: "100px",
     },
-    {
-      accessorKey: "orderType",
-      header: "Type",
-      cell: (props: any) => (
-        <Text color={"secondaryLink"}>
-          {props.getValue() === OrderType.ORDER_TYPE_MARKET
-            ? "Market"
-            : "Limit"}
-        </Text>
-      ),
-      width: "100px",
-    },
-    {
+    /*{
       header: "Close By",
       cell: (props: any) => {
         const position = props.row.original;
@@ -224,19 +190,18 @@ export const usePositionColumns = function (
           </div>
         );
       },
-    },
+    },*/
     {
       header: " ",
       accessorFn: (row: any) => {
-        const market = markets.find(m => m.id === row.marketId);
-        return { ticker: market?.ticker };
+        return row?.symbol;
       },
       cell: (props: any) => {
         return (
           <Button
             variant="link"
             size="xs"
-            onClick={() => queryDetails(props.getValue()?.ticker)}
+            onClick={() => queryDetails(props.getValue())}
           >
             {t("details")}
           </Button>
@@ -272,8 +237,14 @@ const UnrealizedPnL = ({
   return (
     <Text color={getColorByPl(pnlValue.toFixed(10))}>
       <>
-        {sign}${Math.abs(pnlValue).toFixed(5).replace(/0+$/, "")} ({sign}
-        {Math.abs(pnlPercent).toFixed(2)}%)
+        {pnlValue ? (
+          <>
+            {sign}${Math.abs(pnlValue).toFixed(5).replace(/0+$/, "")} ({sign}
+            {Math.abs(pnlPercent).toFixed(2)}%)
+          </>
+        ) : (
+          <Text color="tertiary">-</Text>
+        )}
       </>
     </Text>
   );

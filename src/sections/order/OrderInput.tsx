@@ -43,6 +43,7 @@ import {
   PositionStatus,
 } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import config from "@/config";
+import { placeOrderSigned } from "./placeOrderSigned";
 
 const options: [
   { label: string; value: OrderType },
@@ -222,110 +223,135 @@ function OrderInput() {
       const price = Math.floor(Number(values.price) * PRECISION);
       const leverage = Number(values.leverage);
 
-      if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
-        setIsPlacingOrder(true);
+      if (config.SIGNATURE_BASED_PLACEMENT) {
+        const orderType =
+          values.orderType === OrderType.ORDER_TYPE_LIMIT ? "limit" : "market";
+        try {
+          await placeOrderSigned(address, selectedMarket?.ticker!, {
+            price: Number(values.price),
+            volume: Number(values.volume),
+            is_buy: values.isBuy,
+            leverage: leverage,
+            trigger_price: 0,
+            order_type: orderType,
+            chain_order_id: selectedAddress + ":" + Date.now() * 1000,
+          });
 
-        if (smartSign) {
-          try {
-            await placeMarketOrderSmart({
-              marginAccountAddress: selectedAddress,
-              side: sideValue,
-              quantity: quantity,
-              leverage: Number(values.leverage),
-              marketTicker: selectedMarket?.ticker!,
-            });
+          setValue("takeProfit", "");
+          setValue("stopLoss", "");
+          successAlert(t("orderPlacedSuccess"));
+        } catch (error) {
+          console.log(error);
+          errorAlert(t("errorPlacingOrder"));
+        } finally {
+          setIsPlacingOrder(false);
+        }
+      } else {
+        if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
+          setIsPlacingOrder(true);
 
-            // setValue("price", "");
-            // setValue("volume", "");
-            setValue("takeProfit", "");
-            setValue("stopLoss", "");
-            successAlert(t("orderPlacedSuccess"));
-          } catch (error) {
-            console.error(error);
-            errorAlert(t("errorPlacingOrder"));
-          } finally {
-            setIsPlacingOrder(false);
-          }
-        } else {
-          promiseAlert(
-            placeMarketOrder({
-              address,
-              marginAccountAddress: selectedAddress,
-              orderId: BigInt(Date.now() * 1000),
-              side: sideValue,
-              quantity: BigInt(quantity),
-              leverage: BigInt(leverage),
-              stopLoss: stopLossValue,
-              takeProfit: takeProfitValue,
-              marketId: BigInt(marketId),
-            }) /*.then(value => {
+          if (smartSign) {
+            try {
+              await placeMarketOrderSmart({
+                marginAccountAddress: selectedAddress,
+                side: sideValue,
+                quantity: quantity,
+                leverage: Number(values.leverage),
+                marketTicker: selectedMarket?.ticker!,
+              });
+
+              // setValue("price", "");
+              // setValue("volume", "");
+              setValue("takeProfit", "");
+              setValue("stopLoss", "");
+              successAlert(t("orderPlacedSuccess"));
+            } catch (error) {
+              console.error(error);
+              errorAlert(t("errorPlacingOrder"));
+            } finally {
+              setIsPlacingOrder(false);
+            }
+          } else {
+            promiseAlert(
+              placeMarketOrder({
+                address,
+                marginAccountAddress: selectedAddress,
+                orderId: BigInt(Date.now() * 1000),
+                side: sideValue,
+                quantity: BigInt(quantity),
+                leverage: BigInt(leverage),
+                stopLoss: stopLossValue,
+                takeProfit: takeProfitValue,
+                marketId: BigInt(marketId),
+              }) /*.then(value => {
               console.log("placeMarketOrder", value);
               return this;
             })*/,
-            <div>{t("waitingForApproval")}</div>,
-            <div>{t("orderPlacedSuccess")}</div>,
-            (txt: string) => <div>{txt}</div>
-          )
-            .then(() => {
-              // setValue("price", "");
-              // setValue("volume", "");
-              setValue("takeProfit", "");
-              setValue("stopLoss", "");
-            })
-            .finally(() => {
-              setIsPlacingOrder(false);
-            });
-        }
-      }
-      if (values.orderType === OrderType.ORDER_TYPE_LIMIT) {
-        setIsPlacingOrder(true);
-
-        if (smartSign) {
-          try {
-            await placeLimitOrderSmart({
-              marginAccountAddress: selectedAddress,
-              side: sideValue,
-              quantity:
-                Math.floor(Number(values.volume) * PRECISION) *
-                pricePerContract,
-              price: Math.floor(Number(values.price) * PRECISION),
-              leverage: Number(values.leverage),
-              marketTicker: selectedMarket?.ticker!,
-            });
-            // setValue("price", "");
-            // setValue("volume", "");
-            setValue("takeProfit", "");
-            setValue("stopLoss", "");
-            successAlert(t("orderPlacedSuccess"));
-          } catch (error) {
-            console.error(1234, error);
-            errorAlert(t("errorPlacingOrder"));
-          } finally {
-            setIsPlacingOrder(false);
+              <div>{t("waitingForApproval")}</div>,
+              <div>{t("orderPlacedSuccess")}</div>,
+              (txt: string) => <div>{txt}</div>
+            )
+              .then(() => {
+                // setValue("price", "");
+                // setValue("volume", "");
+                setValue("takeProfit", "");
+                setValue("stopLoss", "");
+              })
+              .finally(() => {
+                setIsPlacingOrder(false);
+              });
           }
-        } else {
-          sendLimitOrderToChain(
-            placeLimitOrder,
-            address,
-            selectedAddress,
-            sideValue,
-            BigInt(quantity),
-            BigInt(price),
-            BigInt(leverage),
-            stopLossValue,
-            takeProfitValue,
-            BigInt(marketId),
-            t
-          )
-            .then(() => {
+        }
+        if (values.orderType === OrderType.ORDER_TYPE_LIMIT) {
+          setIsPlacingOrder(true);
+
+          if (smartSign) {
+            try {
+              await placeLimitOrderSmart({
+                marginAccountAddress: selectedAddress,
+                side: sideValue,
+                quantity:
+                  Math.floor(Number(values.volume) * PRECISION) *
+                  pricePerContract,
+                price: Math.floor(Number(values.price) * PRECISION),
+                leverage: Number(values.leverage),
+                marketTicker: selectedMarket?.ticker!,
+              });
               // setValue("price", "");
               // setValue("volume", "");
               setValue("takeProfit", "");
               setValue("stopLoss", "");
-            })
-            .finally(() => {
+              successAlert(t("orderPlacedSuccess"));
+            } catch (error) {
+              console.error(1234, error);
+              errorAlert(t("errorPlacingOrder"));
+            } finally {
               setIsPlacingOrder(false);
-            });
+            }
+          } else {
+            sendLimitOrderToChain(
+              placeLimitOrder,
+              address,
+              selectedAddress,
+              sideValue,
+              BigInt(quantity),
+              BigInt(price),
+              BigInt(leverage),
+              stopLossValue,
+              takeProfitValue,
+              BigInt(marketId),
+              t
+            )
+              .then(() => {
+                // setValue("price", "");
+                // setValue("volume", "");
+                setValue("takeProfit", "");
+                setValue("stopLoss", "");
+              })
+              .finally(() => {
+                setIsPlacingOrder(false);
+              });
+          }
         }
       }
     } catch (error) {
