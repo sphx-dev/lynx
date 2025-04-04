@@ -596,7 +596,6 @@ async function cancelOrderSigned(address: string, order: any) {
     }
   );
 
-  debugger;
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
