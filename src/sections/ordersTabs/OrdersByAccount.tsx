@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Table, Text, Button } from "../../components";
-import { getOrderStatusText, getSideTextColor } from "./helpers";
+import { getSideTextColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useCancelOrder, useCancelOrderSmart } from "../../hooks/useOrders";
@@ -174,7 +174,7 @@ const useOrderColumns = ({
         </Text>
       ),
     },
-    {
+    /*{
       accessorFn: (order: any) => {
         if (order.is_final) {
           return {
@@ -227,6 +227,20 @@ const useOrderColumns = ({
           )}
         </>
       ),
+    },*/
+
+    {
+      accessorFn: (order: any) => {
+        let label = "ORDER_STATUS_OPEN";
+        if (order.source === "partial") {
+          label = "ORDER_STATUS_PARTIALLY_FILLED";
+        }
+        return {
+          label: label,
+        };
+      },
+      header: t("status"),
+      cell: (props: any) => <Text>{t(props.getValue().label)}</Text>,
     },
 
     // {
@@ -518,7 +532,7 @@ const OrdersByAccount = ({ final = false }) => {
 
 export default OrdersByAccount;
 
-const ExplorerLink = styled(Link)`
+export const ExplorerLink = styled(Link)`
   color: var(--text-secondary-link);
 `;
 

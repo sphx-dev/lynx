@@ -39,7 +39,7 @@ export const usePositionColumnsV2 = function (
       accessorKey: "volume",
       header: "Qty",
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue() || 0)}</Text>
+        <Text color="tertiary">{Math.abs(Number(props.getValue() || 0))}</Text>
       ),
     },
     {
@@ -48,7 +48,7 @@ export const usePositionColumnsV2 = function (
       cell: (props: any) => (
         <Text color="tertiary">
           {formatNumber({
-            value: Number(props.getValue()),
+            value: Math.abs(Number(props.getValue())),
             fixed: 3,
           })}
         </Text>
@@ -57,7 +57,7 @@ export const usePositionColumnsV2 = function (
 
     {
       accessorFn: (row: any) => {
-        return Number(row.volume) * Number(row.entry_price);
+        return Math.abs(Number(row.volume) * Number(row.entry_price));
       },
       header: "Value",
       cell: (props: any) => (
