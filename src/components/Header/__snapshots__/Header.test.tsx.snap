@@ -15,43 +15,43 @@ exports[`Header Component > should render the Header component correctly 1`] = `
     style="width: 100vw;"
   >
     <header
-      class="sc-edsqmr cbKssJ"
+      class="sc-bKXUjo dsbqug"
     >
       <img
-        class="sc-fXwCOG fArYx"
+        class="sc-edsqmr igzWAP"
         src="/src/assets/icons/logo-dark.svg"
       />
     </header>
     <nav
-      class="sc-lgprfV btLhcV"
+      class="sc-kJZLhT hBQMmf"
     >
       <a
-        class="sc-bKXUjo bILTyh"
+        class="sc-lgprfV HPWPB"
         href="/dashboard"
       >
         Dashboard
       </a>
       <a
-        class="sc-bKXUjo bILTyh"
+        class="sc-lgprfV HPWPB"
         href="/exchange"
       >
         Exchange
       </a>
       <a
-        class="sc-bKXUjo bILTyh"
+        class="sc-lgprfV HPWPB"
         href="/dashboard/faucet"
       >
         Faucet
       </a>
       <a
-        class="sc-bKXUjo bILTyh"
+        class="sc-lgprfV HPWPB"
         href="https://station.non-prod.sphx.dev"
         target="_blank"
       >
         Station
       </a>
       <a
-        class="sc-bKXUjo bILTyh"
+        class="sc-lgprfV HPWPB"
         href="https://explorer.sphx.dev"
         target="_blank"
       >
@@ -83,35 +83,35 @@ exports[`Header Component > should render the Header component correctly 1`] = `
 
 exports[`Header Component > should render the Nav component 1`] = `
 <nav
-  class="sc-lgprfV btLhcV"
+  class="sc-kJZLhT hBQMmf"
 >
   <a
-    class="sc-bKXUjo bILTyh"
+    class="sc-lgprfV HPWPB"
     href="/dashboard"
   >
     Dashboard
   </a>
   <a
-    class="sc-bKXUjo bILTyh"
+    class="sc-lgprfV HPWPB"
     href="/exchange"
   >
     Exchange
   </a>
   <a
-    class="sc-bKXUjo bILTyh"
+    class="sc-lgprfV HPWPB"
     href="/dashboard/faucet"
   >
     Faucet
   </a>
   <a
-    class="sc-bKXUjo bILTyh"
+    class="sc-lgprfV HPWPB"
     href="https://station.non-prod.sphx.dev"
     target="_blank"
   >
     Station
   </a>
   <a
-    class="sc-bKXUjo bILTyh"
+    class="sc-lgprfV HPWPB"
     href="https://explorer.sphx.dev"
     target="_blank"
   >

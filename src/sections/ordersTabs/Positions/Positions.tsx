@@ -19,16 +19,6 @@ const Positions = () => {
   const [selectedSymbol, setSelectedSymbol] = useState<string | undefined>();
   const { isConnected, address } = useChainCosmoshub();
 
-  // const { data, refetch, isFetching } = usePositions();
-
-  // const positions = useMemo(() => {
-  //   // TODO: Filter out closed positions by call params when implemented in chain
-  //   return (data?.positions || []).filter(
-  //     (pos) => pos.status === PositionStatus.POSITION_STATUS_OPEN
-  //   );
-  // }, [data]);
-
-  // TODO: Update query from chain to positions from osiris
   const {
     data: positions,
     refetch,
@@ -36,7 +26,6 @@ const Positions = () => {
   } = useQueryPositionsByAccount(address);
 
   const [page, setPage] = useState(0);
-  // const pagination = data?.pagination || { total: 0 };
   const pagination = { total: 0 };
 
   const [closePositionByMarketModal, setClosePositionByMarketModal] =
@@ -92,8 +81,6 @@ const Positions = () => {
         <ReloadButton
           onClick={() => {
             refetch();
-            // TODO: Update query from chain to positions from osiris
-            // refetchPositionsByAccount();
           }}
         />
         <PlaceHolder data-testid="perpetual-positions-table-empty">
@@ -114,8 +101,6 @@ const Positions = () => {
       <ReloadButton
         onClick={() => {
           refetch();
-          // TODO: Update query from chain to positions from osiris
-          // refetchPositionsByAccount();
         }}
       />
       <Table

@@ -30,6 +30,14 @@ export const usePositions = (page: number = 0) => {
 };
 
 //
+
+type OsirisPostion = {
+  entry_price: string;
+  symbol: string;
+  value: string;
+  volume: string;
+};
+
 const queryPositionsByAccount = async ({
   queryKey,
 }: {
@@ -42,7 +50,7 @@ const queryPositionsByAccount = async ({
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-  return response.json();
+  return response.json() as Promise<OsirisPostion[]>;
 };
 
 export const useQueryPositionsByAccount = (accountId: string | undefined) => {

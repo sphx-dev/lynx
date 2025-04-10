@@ -8,8 +8,11 @@ import { useQuery } from "react-query";
 import { getSideTextColor } from "../helpers";
 import { Side } from "@/types/order";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+// TODO: Uncoment when hash is available in DB
+// import { Link } from "react-router-dom";
 import { LoaderBar } from "@/components/LoaderBar";
+import { useEffect, useState } from "react";
+import { Pagination } from "@/components/Pagination";
 
 //
 const queryPostionsDetails = async ({
@@ -17,10 +20,10 @@ const queryPostionsDetails = async ({
 }: {
   queryKey: readonly unknown[];
 }) => {
-  const [, accountId, symbol] = queryKey;
+  const [, accountId, symbol, page, pageSize] = queryKey;
   const response = await fetch(
     config.VITE_API_URL +
-      `/positions/details?account_id=${accountId}&symbol=${symbol}`
+      `/positions/details?account_id=${accountId}&symbol=${symbol}&page=${page}&page_size=${pageSize}`
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -30,10 +33,13 @@ const queryPostionsDetails = async ({
 
 const useQueryPositionsDetails = (
   accountId: string | undefined,
-  symbol: string | undefined
+  symbol: string | undefined,
+  page: number = 0,
+  pageSize: number = 10
 ) => {
+  console.log("useQueryPositionsDetails", accountId, symbol, page, pageSize);
   return useQuery(
-    ["query-positions-details", accountId, symbol],
+    ["query-positions-details", accountId, symbol, page, pageSize],
     queryPostionsDetails,
     {
       enabled: !!accountId && !!symbol,
@@ -42,6 +48,8 @@ const useQueryPositionsDetails = (
     }
   );
 };
+
+const PAGE_SIZE = 10;
 
 export const ModalPositionDetails = ({
   isOpen,
@@ -54,18 +62,38 @@ export const ModalPositionDetails = ({
   accountId: string | undefined;
   symbol: string | undefined;
 }) => {
-  const { data, isFetching } = useQueryPositionsDetails(accountId, symbol);
+  const { t } = useTranslation();
+  const [page, setPage] = useState(0);
+  useEffect(() => {
+    if (isOpen) {
+      setPage(0);
+    }
+  }, [isOpen]);
+  const { data, isFetching } = useQueryPositionsDetails(
+    accountId,
+    symbol,
+    page,
+    PAGE_SIZE
+  );
+  const orders = data?.orders || [];
+  const total = data?.total || 0;
   const positionDetailsColumns = usePositionDetailsColumns();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <H2Modal>Position Details</H2Modal>
+        <H2Modal>{t("positionDetails")}</H2Modal>
         <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
         <Table
           data-testid="perpetual-positions-table"
           columns={positionDetailsColumns}
-          data={data || []}
+          data={orders}
+        />
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalItems={total}
+          pageSize={PAGE_SIZE}
         />
       </ModalContent>
     </Modal>
@@ -96,7 +124,6 @@ export const usePositionDetailsColumns = () => {
 
       cell: (props: any) => (
         <Text color="tertiary">
-          {/* {new Date(props.getValue()).toLocaleString()} */}
           {dayjs(props.getValue()).format("YYYY-MM-DD HH:mm:ss")}
         </Text>
       ),
@@ -106,7 +133,6 @@ export const usePositionDetailsColumns = () => {
       header: t("side"),
       cell: (props: any) => (
         <Text
-          //   color="tertiary"
           color={getSideTextColor(
             props.getValue() === "buy" ? Side.Buy : Side.Sell
           )}
@@ -118,7 +144,7 @@ export const usePositionDetailsColumns = () => {
     {
       accessorKey: "type",
       header: t("type"),
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      cell: (props: any) => <Text color="tertiary">{t(props.getValue())}</Text>,
     },
     {
       accessorKey: "executed_quantity",
@@ -147,26 +173,28 @@ export const usePositionDetailsColumns = () => {
       header: t("order_type"),
       cell: (props: any) => <Text color="tertiary">{t(props.getValue())}</Text>,
     },
-    {
-      accessorKey: "hash",
-      header: t("tx"),
-      cell: (props: any) => (
-        <Text>
-          <HashLink
-            to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
-            target="_blank"
-          >
-            {/* 🔗 */}⧉
-          </HashLink>
-        </Text>
-      ),
-    },
+    // TODO: Uncoment when hash is available in DB
+    // {
+    //   accessorKey: "hash",
+    //   header: t("tx"),
+    //   cell: (props: any) => (
+    //     <Text>
+    //       <HashLink
+    //         to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
+    //         target="_blank"
+    //       >
+    //         {/* 🔗 */}⧉
+    //       </HashLink>
+    //     </Text>
+    //   ),
+    // },
   ];
 };
 
-const HashLink = styled(Link)`
-  text-decoration: none;
-  color: var(--text-secondary-link);
-  font-size: 17px;
-  line-height: 4px;
-`;
+// TODO: Uncoment when hash is available in DB
+// const HashLink = styled(Link)`
+//   text-decoration: none;
+//   color: var(--text-secondary-link);
+//   font-size: 17px;
+//   line-height: 4px;
+// `;

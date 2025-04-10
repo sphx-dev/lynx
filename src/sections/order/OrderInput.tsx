@@ -37,11 +37,8 @@ import { useSmartSign } from "@/components/SmartSignButton";
 import { PlaceLimitOrderInChainParams } from "@/utils/placeOrder";
 import { LoaderBar } from "@/components/LoaderBar";
 // import { useQueryPositionsByAccount } from "../ordersTabs/Positions/Positions";
-import { usePositions } from "@/hooks/usePositions";
-import {
-  PositionSide,
-  PositionStatus,
-} from "proto-codecs/codegen/sphx/order/perpetual_position";
+import { useQueryPositionsByAccount } from "@/hooks/usePositions";
+import { PositionSide } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import config from "@/config";
 import { placeOrderSigned } from "./placeOrderSigned";
 
@@ -107,16 +104,19 @@ function OrderInput() {
     pricePerContract,
   } = useMarkets();
 
-  // const { data: positions } = useQueryPositionsByAccount(selectedAddress);
-  const { data: positions } = usePositions();
-  const positionInMarket = positions?.positions.find(
-    position =>
-      position.marketId === marketId &&
-      position.status === PositionStatus.POSITION_STATUS_OPEN
+  const { data: positions } = useQueryPositionsByAccount(address);
+
+  const positionInMarket = positions?.find(
+    position => position.symbol === selectedMarket?.ticker
   );
 
-  const positionSide = positionInMarket?.side;
-  const positionSize = Number(positionInMarket?.size) || Infinity;
+  const positionSide =
+    positionInMarket?.volume === undefined
+      ? undefined
+      : Number(positionInMarket?.volume) > 0
+      ? PositionSide.POSITION_SIDE_LONG
+      : PositionSide.POSITION_SIDE_SHORT;
+  const positionSize = Math.abs(Number(positionInMarket?.volume)) || Infinity;
 
   const {
     handleSubmit,
