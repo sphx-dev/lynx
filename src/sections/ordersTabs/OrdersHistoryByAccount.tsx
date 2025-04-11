@@ -4,15 +4,11 @@ import { Table, Text, Button } from "../../components";
 import { getSideTextColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
-import { useCancelOrder, useCancelOrderSmart } from "../../hooks/useOrders";
 import { Side } from "../../types/order";
 import { useTranslation } from "react-i18next";
-import { errorAlert, successAlert } from "@/utils/alerts";
 import dayjs from "dayjs";
-import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
 import { formatDollars } from "@/utils/format";
-import { useSmartSign } from "@/components/SmartSignButton";
 import { ReloadButton } from "./components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
 import { useQuery } from "react-query";
@@ -20,11 +16,9 @@ import config from "@/config";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Modal } from "@/components/Modal/Modal";
-import { signArbitrary } from "@/utils/getOfflineSigner";
+import { PRECISION } from "@/constants";
 
-const FF_SMART_SIGN = false;
-
-const queryOrdersByAccount = async ({
+const queryOrdersHistoryByAccount = async ({
   queryKey,
 }: {
   queryKey: readonly unknown[];
@@ -32,7 +26,7 @@ const queryOrdersByAccount = async ({
   const [, address, page, pageSize] = queryKey;
   const response = await fetch(
     config.VITE_API_URL +
-      `/order/query?account_id=${address}&page=${page}&page_size=${pageSize}`
+      `/order/query_history?account_id=${address}&page=${page}&page_size=${pageSize}`
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -42,28 +36,12 @@ const queryOrdersByAccount = async ({
 
 const useOrderColumns = ({
   openPartialsModal,
-  setPartialOrders,
+  setSelectedOrderId,
 }: {
   openPartialsModal: () => void;
-  setPartialOrders: (orders: any[]) => void;
+  setSelectedOrderId: (orderId: string) => void;
 }) => {
   const { t } = useTranslation();
-
-  const { smartSign } = useSmartSign();
-
-  const { cancelOrder } = useCancelOrder();
-  const { cancelOrder: cancelOrderSmart } = useCancelOrderSmart();
-
-  const { address } = useChainCosmoshub();
-
-  const [cancellingOrders, setCancellingOrders] = useState<string[]>([]);
-
-  const addCancellingOrder = (orderId: string) => {
-    setCancellingOrders([...cancellingOrders, orderId]);
-  };
-  const removeCancellingOrder = (orderId: string) => {
-    setCancellingOrders(co => co.filter(o => o !== orderId));
-  };
 
   const columns = [
     {
@@ -71,8 +49,8 @@ const useOrderColumns = ({
       header: t("market"),
       cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
     },
+
     {
-      flex: 1,
       accessorKey: "timestamp",
       header: t("date"),
       cell: (props: any) => (
@@ -82,6 +60,11 @@ const useOrderColumns = ({
             : dayjs(new Date(props.getValue())).format("HH:mm:ss")}
         </Text>
       ),
+    },
+    {
+      accessorKey: "order_type",
+      header: t("type"),
+      cell: (props: any) => <Text color="primary">{t(props.getValue())}</Text>,
     },
     {
       accessorKey: "quantity",
@@ -117,10 +100,10 @@ const useOrderColumns = ({
         if (order.is_canceled) {
           return "—";
         }
-        if (order.order_type === "market" /*OrderType.ORDER_TYPE_MARKET*/) {
+        if (order.order_type === "market" && order.price === 0) {
           return t("marketPrice");
         }
-        return formatDollars(Number(order.price), "");
+        return formatDollars(Number(order.price) / PRECISION, "");
       },
       header: t("Req. Price"),
       cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
@@ -174,64 +157,13 @@ const useOrderColumns = ({
         </Text>
       ),
     },
-    /*{
-      accessorFn: (order: any) => {
-        if (order.is_final) {
-          return {
-            status: OrderStatus.ORDER_STATUS_FILLED,
-            hash: order.final_tx_hash,
-            label: order.final_tx_hash
-              ? getOrderStatusText(OrderStatus.ORDER_STATUS_FILLED, t)
-              : t("ORDER_STATUS_FILLED_OB"),
-          };
-        }
-        if (order.is_canceled) {
-          return {
-            status: OrderStatus.ORDER_STATUS_CANCELED,
-            hash: order.canceled_tx_hash,
-            label: getOrderStatusText(OrderStatus.ORDER_STATUS_CANCELED, t),
-          };
-        }
-        if (order?.subData?.length > 0) {
-          return {
-            status: OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
-            label: getOrderStatusText(
-              OrderStatus.ORDER_STATUS_PARTIALLY_FILLED,
-              t
-            ),
-          };
-        }
-        return {
-          status: OrderStatus.ORDER_STATUS_OPEN,
-          label: getOrderStatusText(OrderStatus.ORDER_STATUS_OPEN, t),
-        };
-      },
-      header: t("status"),
-      cell: (props: any) => (
-        <>
-          {props.getValue().hash ? (
-            <Text>
-              <ExplorerLink
-                to={
-                  config.VITE_EXPLORER_URL +
-                  "/transactions/" +
-                  props.getValue().hash
-                }
-                target="_blank"
-              >
-                {props.getValue().label}
-              </ExplorerLink>
-            </Text>
-          ) : (
-            <Text>{props.getValue().label}</Text>
-          )}
-        </>
-      ),
-    },*/
 
     {
       accessorFn: (order: any) => {
-        let label = "ORDER_STATUS_OPEN";
+        let label = "ORDER_STATUS_FILLED_OB";
+        if (order?.hash) {
+          label = "ORDER_STATUS_FILLED";
+        }
         if (order.source === "partial") {
           label = "ORDER_STATUS_PARTIALLY_FILLED";
         }
@@ -243,20 +175,20 @@ const useOrderColumns = ({
       cell: (props: any) => <Text>{t(props.getValue().label)}</Text>,
     },
 
-    // {
-    //   accessorKey: "hash",
-    //   header: t("tx"),
-    //   cell: (props: any) => (
-    //     <Text>
-    //       <HashLink
-    //         to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
-    //         target="_blank"
-    //       >
-    //         {/* 🔗 */}⧉
-    //       </HashLink>
-    //     </Text>
-    //   ),
-    // },
+    {
+      accessorKey: "hash",
+      header: t("tx"),
+      cell: (props: any) => (
+        <Text>
+          <HashLink
+            to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
+            target="_blank"
+          >
+            {/* 🔗 */}⧉
+          </HashLink>
+        </Text>
+      ),
+    },
 
     {
       flex: 1,
@@ -267,91 +199,18 @@ const useOrderColumns = ({
       },
       header: t("action"),
       cell: (props: any) => {
-        const order = props.getValue();
-
-        const status = getStatusByMessage(order);
-        const orderId = order.chain_order_id;
-        const isCancelling = cancellingOrders.some(o => o === orderId);
-        const onClickHandler = async () => {
-          if (address) {
-            try {
-              addCancellingOrder(orderId);
-
-              if (config.SIGNATURE_BASED_CANCEL) {
-                const response = await cancelOrderSigned(address, order);
-                if (response?.status === 200) {
-                  successAlert("Order canceled successfully");
-                } else {
-                  errorAlert("Order cancel failed");
-                }
-              } else if (FF_SMART_SIGN && smartSign) {
-                let response = await cancelOrderSmart({
-                  marginAccountAddress: orderId.split(":")[0],
-                  number: orderId.split(":")[1],
-                });
-                if (response.status === 200) {
-                  successAlert("Order canceled successfully");
-                } else {
-                  errorAlert("Order cancel failed");
-                }
-              } else {
-                await cancelOrder({
-                  address,
-                  orderId: {
-                    marginAccountAddress: orderId.split(":")[0],
-                    number: orderId.split(":")[1],
-                  },
-                  memo: `Cancel order #${orderId}`,
-                });
-                successAlert("Order canceled successfully");
-              }
-            } catch (error) {
-              console.error(error);
-            } finally {
-              removeCancellingOrder(orderId);
-            }
-          }
-        };
-
         return (
           <>
-            {status === OrderStatus.ORDER_STATUS_FILLED &&
-              (props.getValue()?.row?.subData?.length > 0 ? (
-                <Button
-                  color="secondary"
-                  size="xs"
-                  onClick={() => {
-                    setPartialOrders(props.getValue()?.row?.subData || []);
-                    openPartialsModal();
-                  }}
-                >
-                  {t("details")} ({props.getValue()?.row?.subData?.length})
-                </Button>
-              ) : null)}
-
-            {status === OrderStatus.ORDER_STATUS_PARTIALLY_FILLED &&
-              (props.getValue()?.row?.subData?.length > 0 ? (
-                <Button
-                  color="secondary"
-                  size="xs"
-                  onClick={() => {
-                    setPartialOrders(props.getValue()?.row?.subData || []);
-                    openPartialsModal();
-                  }}
-                >
-                  {t("partials")} ({props.getValue()?.row?.subData?.length})
-                </Button>
-              ) : null)}
-            {status === OrderStatus.ORDER_STATUS_OPEN && (
-              <Button
-                variant="error"
-                size="xs"
-                disabled={isCancelling}
-                onClick={onClickHandler}
-              >
-                {isCancelling ? "Canceling..." : "Cancel"}
-              </Button>
-            )}
+            <Button
+              color="secondary"
+              size="xs"
+              onClick={() => {
+                setSelectedOrderId(props.getValue()?.order_id);
+                openPartialsModal();
+              }}
+            >
+              {t("details")}
+            </Button>
           </>
         );
       },
@@ -382,7 +241,7 @@ const useNestedOrderColumns = () => {
       ),
       footer: (info: any) => {
         const data = info?.table?.options?.data || [];
-        const total = data?.reduce(
+        const total = (data || [])?.reduce(
           (acc: number, item: any) => acc + Number(item.quantity),
           0
         );
@@ -402,11 +261,11 @@ const useNestedOrderColumns = () => {
       ),
       footer: (info: any) => {
         const data = info?.table?.options?.data;
-        const totalQuantity = data?.reduce(
+        const totalQuantity = (data || [])?.reduce(
           (acc: number, item: any) => acc + Number(item.quantity),
           0
         );
-        const totalPrice = data?.reduce(
+        const totalPrice = (data || [])?.reduce(
           (acc: number, item: any) =>
             acc + Number(item.quantity) * Number(item.price),
           0
@@ -433,34 +292,35 @@ const useNestedOrderColumns = () => {
         </Text>
       ),
     },
-    {
-      accessorKey: "hash",
-      header: t("tx"),
-      cell: (props: any) => (
-        <Text>
-          <HashLink
-            to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
-            target="_blank"
-          >
-            {/* 🔗 */}⧉
-          </HashLink>
-        </Text>
-      ),
-    },
+    // TODO: activate when partial orders contain hash field
+    // {
+    //   accessorKey: "hash",
+    //   header: t("tx"),
+    //   cell: (props: any) => (
+    //     <Text>
+    //       <HashLink
+    //         to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
+    //         target="_blank"
+    //       >
+    //         {/* 🔗 */}⧉
+    //       </HashLink>
+    //     </Text>
+    //   ),
+    // },
   ];
 
   return nestedColumns;
 };
 
-const OrdersByAccount = () => {
+const OrdersHistoryByAccount = () => {
   const { address } = useChainCosmoshub();
 
   const [page, setPage] = useState<number>(0);
 
   const pageSize = 10;
   const { data, isFetching, refetch } = useQuery(
-    ["query-orders", address, page, pageSize],
-    queryOrdersByAccount,
+    ["query-orders-history", address, page, pageSize],
+    queryOrdersHistoryByAccount,
     {
       enabled: !!address,
       staleTime: 1000 * 60 * 5, // 5 minutes
@@ -470,20 +330,15 @@ const OrdersByAccount = () => {
 
   const totalOrders = data?.total ?? 0;
   const orders = data?.orders || [];
-  // const orders =
-  //   data?.orders?.map((response: OsirisOrder) => ({
-  //     ...response.order,
-  //     subData: response?.partials,
-  //   })) ?? [];
 
   const [isPartialsModalOpen, setIsPartialsModalOpen] = useState(false);
   const handleClosePartialsModal = () => {
     setIsPartialsModalOpen(false);
   };
-  const [partialOrders, setPartialOrders] = useState<any[]>([]);
+  const [selectedOrderId, setSelectedOrderId] = useState<string>("");
   const columns = useOrderColumns({
     openPartialsModal: () => setIsPartialsModalOpen(true),
-    setPartialOrders,
+    setSelectedOrderId: setSelectedOrderId,
   });
 
   if (totalOrders === 0) {
@@ -499,7 +354,7 @@ const OrdersByAccount = () => {
   return (
     <>
       <PartialsModal
-        partialOrders={partialOrders}
+        orderId={selectedOrderId}
         isOpen={isPartialsModalOpen}
         onClose={handleClosePartialsModal}
       />
@@ -520,7 +375,7 @@ const OrdersByAccount = () => {
   );
 };
 
-export default OrdersByAccount;
+export default OrdersHistoryByAccount;
 
 export const ExplorerLink = styled(Link)`
   color: var(--text-secondary-link);
@@ -533,34 +388,32 @@ const HashLink = styled(Link)`
   line-height: 4px;
 `;
 
-function getStatusByMessage(msg: any) {
-  if (msg.is_final) {
-    return OrderStatus.ORDER_STATUS_FILLED;
-  }
-  if (msg.is_canceled) {
-    return OrderStatus.ORDER_STATUS_CANCELED;
-  }
-  if (msg?.subData?.length > 0) {
-    return OrderStatus.ORDER_STATUS_PARTIALLY_FILLED;
-  }
-  return OrderStatus.ORDER_STATUS_OPEN;
-}
-
 const PartialsModal = ({
-  partialOrders = [],
+  orderId = "",
   isOpen,
   onClose,
 }: {
-  partialOrders: any[];
+  orderId: string;
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { data, isFetching } = useQuery(
+    ["query-partials", orderId],
+    () => getPartialsBy(orderId),
+    {
+      enabled: !!orderId,
+    }
+  );
+
+  const partials = data?.partials || [];
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div style={{ minWidth: "500px", minHeight: "150px" }}>
+        {isFetching && <LoaderBar />}
         <Table
           columns={useNestedOrderColumns()}
-          data={partialOrders}
+          data={partials}
           headerStyle={{
             backgroundColor: "transparent",
           }}
@@ -570,34 +423,14 @@ const PartialsModal = ({
   );
 };
 
-async function cancelOrderSigned(address: string, order: any) {
-  const id = order.order_id;
-
-  const chainOrderId = order.chain_order_id;
-  const cancelIntent = {
-    id: `${id}`,
-  };
-  const signature = await signArbitrary(address, `{"id":"${id}"}`);
-  console.log("signature", signature, chainOrderId);
-  if (!signature) {
-    errorAlert("Failed to sign cancel order");
-    return;
-  }
-
-  const response = await fetch(
-    config.VITE_API_URL + "/order/" + id + "?ticker=" + order.symbol,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "X-ACCOUNT-ID": address,
-      },
-      body: JSON.stringify({
-        ...cancelIntent,
-        signature: signature.signature,
-        pubkey: signature.pub_key.value,
-      }),
-    }
+async function getPartialsBy(chainOrderId: string) {
+  let response = await fetch(
+    config.VITE_API_URL +
+      `/order/query_history/details?order_id=${chainOrderId}`
   );
-  return response;
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  const data = await response.json();
+  return data;
 }
