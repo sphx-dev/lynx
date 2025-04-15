@@ -180,12 +180,16 @@ const useOrderColumns = ({
       header: t("tx"),
       cell: (props: any) => (
         <Text>
-          <HashLink
-            to={config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()}
-            target="_blank"
-          >
-            {/* 🔗 */}⧉
-          </HashLink>
+          {props.getValue() && (
+            <HashLink
+              to={
+                config.VITE_EXPLORER_URL + "/transactions/" + props.getValue()
+              }
+              target="_blank"
+            >
+              {/* 🔗 */}⧉
+            </HashLink>
+          )}
         </Text>
       ),
     },
