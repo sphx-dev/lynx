@@ -32,6 +32,7 @@ import { useOrderBookData } from "./useOrderBookData";
 
 const HEADERS = ["price", "amount", "total"];
 const MIN_RECORDS = 9;
+const MAX_RECORDS = 20;
 
 const OrderBook: FunctionComponent = () => {
   const { t } = useTranslation();
@@ -45,7 +46,10 @@ const OrderBook: FunctionComponent = () => {
   return (
     <Container ref={containerRef} data-testid="orderbook-tab">
       {!isLoading && (book?.bids?.length || book?.asks?.length) ? (
-        <AsksBidsContainer ref={asksBidsRef}>
+        <AsksBidsContainer
+          data-testid="asks-and-bids-container"
+          ref={asksBidsRef}
+        >
           <TableContainer>
             <TitleRow titles={HEADERS} />
             <PriceLevelsWrapper>
@@ -150,14 +154,37 @@ const StreamingInfo = () => {
   const data = useLocalStreaming();
 
   return (
-    <>
-      <div style={{ textAlign: "center", fontSize: "10px" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        fontSize: "10px",
+        justifyContent: "center",
+        gap: "6px",
+      }}
+    >
+      <div
+        style={{
+          display: "inline-block",
+        }}
+      >
         {t(data?.ticker || "")}: {data?.p}
       </div>
-      <div style={{ textAlign: "center", fontSize: "10px" }}>
+      <div
+        style={{
+          height: "10px",
+          display: "inline-block",
+          borderRight: "1px solid #ffffff",
+        }}
+      ></div>
+      <div
+        style={{
+          display: "inline-block",
+        }}
+      >
         {dayjs(new Date((data?.t || 0) * 1000)).format("YYYY-MM-DD HH:mm:ss")}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -166,6 +193,8 @@ const AsksBidsContainer = styled.div`
   flex-direction: column;
   width: 100%;
   flex: 1 0 auto;
+  height: calc(100vh - 375px);
+  overflow: hidden;
 `;
 
 const PriceLevelsWrapper = styled.div`
@@ -269,8 +298,31 @@ const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
 
   useLayoutEffect(() => {
     if (ref.current) {
-      const r = Math.floor((ref.current?.clientHeight - 60) / 26 / 2);
+      const winHeight = window.outerHeight - 250;
+      const columnHeight = ref.current?.clientHeight - 60;
+      const h = Math.min(winHeight, columnHeight);
+      const r = Math.max(
+        Math.min(Math.floor(h / 26 / 2), MAX_RECORDS)
+        // MIN_RECORDS
+      );
+      console.log(
+        "ref.current",
+        ref.current,
+        `
+\n
+\n
+\n->ref.current=${columnHeight} / ${Math.floor(h / 26 / 2)} / ${
+          ref.current?.offsetHeight
+        }
+\n->window.innerHeight=${window.innerHeight}
+\n->window.outerHeight=${window.outerHeight}
+\n->h=${h}
+\n->r=${r}
+
+        `
+      );
       setRecords(r ? r : MIN_RECORDS);
+      // setRecords(20);
     }
   }, [responseData, ref]);
 
