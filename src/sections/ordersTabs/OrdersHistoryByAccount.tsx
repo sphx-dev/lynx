@@ -230,11 +230,7 @@ const useNestedOrderColumns = () => {
     {
       accessorKey: "order_type",
       header: t("Order Type"),
-      cell: (props: any) => (
-        <Text color="tertiary">
-          {props.getValue() === "ORDER_TYPE_LIMIT" ? t("limit") : t("market")}
-        </Text>
-      ),
+      cell: (props: any) => <Text color="tertiary">{t(props.getValue())}</Text>,
     },
 
     {
