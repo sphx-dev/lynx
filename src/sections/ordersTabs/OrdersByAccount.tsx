@@ -571,13 +571,16 @@ const PartialsModal = ({
 };
 
 async function cancelOrderSigned(address: string, order: any) {
+  console.log("cancelOrderSigned", address, JSON.stringify(order));
+
   const id = order.order_id;
 
   const chainOrderId = order.chain_order_id;
   const cancelIntent = {
     id: `${id}`,
+    chain_order_id: `${chainOrderId}`,
   };
-  const signature = await signArbitrary(address, `{"id":"${id}"}`);
+  const signature = await signArbitrary(address, `{"id":"${chainOrderId}"}`);
   console.log("signature", signature, chainOrderId);
   if (!signature) {
     errorAlert("Failed to sign cancel order");
