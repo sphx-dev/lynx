@@ -305,22 +305,7 @@ const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
         Math.min(Math.floor(h / 26 / 2), MAX_RECORDS)
         // MIN_RECORDS
       );
-      console.log(
-        "ref.current",
-        ref.current,
-        `
-\n
-\n
-\n->ref.current=${columnHeight} / ${Math.floor(h / 26 / 2)} / ${
-          ref.current?.offsetHeight
-        }
-\n->window.innerHeight=${window.innerHeight}
-\n->window.outerHeight=${window.outerHeight}
-\n->h=${h}
-\n->r=${r}
 
-        `
-      );
       setRecords(r ? r : MIN_RECORDS);
       // setRecords(20);
     }

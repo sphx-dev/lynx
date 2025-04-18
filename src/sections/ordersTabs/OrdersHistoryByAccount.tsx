@@ -73,70 +73,29 @@ const useOrderColumns = ({
         <Text color="tertiary">{Number(props.getValue())}</Text>
       ),
     },
-    // {
-    //   accessorFn: (order: ValidatedOrder) => {
-    //     return order;
-    //   },
-    //   header: "Pending Size",
-    //   cell: (props: any) => {
-    //     const order = props.getValue();
-    //     const fills = order.fills;
-    //     const pendingSize = fills?.reduce(
-    //       (acc: number, fill: any) => acc + Number(fill.quantity),
-    //       0
-    //     );
-    //     const quantity = order.quantity;
-    //     return (
-    //       <Text color="tertiary">
-    //         {(Number(quantity) - Number(pendingSize)) / PRECISION}
-    //       </Text>
-    //     );
-    //   },
-    // },
+    {
+      // accessorKey: "original_price",
+      accessorFn: (order: any) => {
+        if (order.order_type === "market") {
+          return t("marketPrice");
+        }
+        return formatDollars(Number(order.original_price), "");
+      },
+      header: t("Orig. Price"),
+      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+    },
     {
       // accessorKey: "price",
       accessorFn: (order: any) => {
         // if order is canceled, return —
-        if (order.is_canceled) {
+        if (Number(order.price) === 0) {
           return "—";
-        }
-        if (order.order_type === "market" && order.price === 0) {
-          return t("marketPrice");
         }
         return formatDollars(Number(order.price) / PRECISION, "");
       },
-      header: t("Req. Price"),
+      header: t("Price"),
       cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
     },
-    // {
-    //   // accessorKey: "price",
-    //   accessorFn: (order: ValidatedOrder) => {
-    //     const fills = order.fills;
-    //     let total = fills?.reduce(
-    //       (acc: bigint, fill: any) =>
-    //         acc + BigInt(fill.quantity) * BigInt(fill.price),
-    //       0n
-    //     );
-    //     const totalQuantity = fills?.reduce(
-    //       (acc: bigint, fill: any) => acc + BigInt(fill.quantity),
-    //       0n
-    //     );
-    //     if (
-    //       order.orderType === OrderType.ORDER_TYPE_MARKET &&
-    //       fills.length === 0
-    //     ) {
-    //       return t("marketPrice");
-    //     }
-    //     if (totalQuantity > 0n) {
-    //       total = total / totalQuantity;
-    //     }
-    //     return formatDollars(Number(total.toString()) / PRECISION, "");
-    //     // return formatDollars(Number(order.price) / PRECISION, "");
-    //     // return formatPrice(Number(order.price) / PRECISION, 2);
-    //   },
-    //   header: "Actual Price",
-    //   cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
-    // },
     {
       accessorKey: "leverage",
       header: t("lev."),
@@ -166,6 +125,9 @@ const useOrderColumns = ({
         }
         if (order.source === "partial") {
           label = "ORDER_STATUS_PARTIALLY_FILLED";
+        }
+        if (Number(order.price) === 0) {
+          label = "ORDER_STATUS_CANCELED";
         }
         return {
           label: label,
@@ -236,9 +198,13 @@ const useNestedOrderColumns = () => {
     {
       accessorKey: "quantity",
       header: t("size"),
-      cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue())}</Text>
-      ),
+      cell: (props: any) => {
+        const size = Number(props.getValue());
+        if (size === 0) {
+          return <Text color="tertiary">{t("canceled")}</Text>;
+        }
+        return <Text color="tertiary">{size}</Text>;
+      },
       footer: (info: any) => {
         const data = info?.table?.options?.data || [];
         const total = (data || [])?.reduce(

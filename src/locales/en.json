@@ -68,6 +68,7 @@
   "ORDER_TYPE_TAKE_PROFIT_LIMIT": "TP Limit",
   "UNRECOGNIZED": "—",
   "cancel":"Cancel",
+  "canceled":"Canceled",
   "confirm":"Confirm",
   "noWalletConnected":"No wallet connected",
   "connectWalletToDeposit":"Connect wallet to deposit margin",
