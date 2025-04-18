@@ -2,7 +2,6 @@ import * as yup from "yup";
 import { MESSAGE } from "../../constants/validation";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { PositionSide } from "proto-codecs/codegen/sphx/order/perpetual_position";
-import { PRECISION } from "@/constants";
 
 export const schema = (
   minimumVolume: number,
@@ -23,7 +22,7 @@ export const schema = (
       )
       .test(
         "isLessOrEqualThanPositionSize",
-        MESSAGE.lessThanPositionSize(positionSize / PRECISION),
+        MESSAGE.lessThanPositionSize(positionSize),
         function (value) {
           const { isBuy } = this.parent;
 
@@ -36,7 +35,7 @@ export const schema = (
             (isBuy === true &&
               positionSide === PositionSide.POSITION_SIDE_SHORT)
           ) {
-            return value * pricePerContract * PRECISION <= positionSize;
+            return value * pricePerContract <= positionSize;
           }
           // true if not applicable
           return true;
