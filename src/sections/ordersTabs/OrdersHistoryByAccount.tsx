@@ -1,10 +1,7 @@
 import { useState } from "react";
-
 import { Table, Text, Button } from "../../components";
-import { getSideTextColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
-import { Side } from "../../types/order";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { Pagination } from "@/components/Pagination";
@@ -17,7 +14,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Modal } from "@/components/Modal/Modal";
 import { PRECISION } from "@/constants";
-import { getIconByTicker } from "@/hooks/useMarkets";
 import { RiShareBoxLine } from "@remixicon/react";
 import { TableRowMarket } from "@/components/Table/TableRowMarket";
 

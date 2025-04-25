@@ -83,6 +83,8 @@ const BtnWrapper = styled.button`
   font-weight: var(--text-small-font-weight);
   line-height: var(--text-small-line-height);
 
+  cursor: pointer;
+
   /* Types */
 
   &.primary {
@@ -114,18 +116,18 @@ const BtnWrapper = styled.button`
 
   /* Size */
   &.medium {
-    padding: 10px;
+    padding: 10px 12px;
   }
 
   &.small {
-    padding: 10px 8px;
+    padding: 8px 10px;
   }
 
   &.xsmall {
-    padding: 8px 6px;
+    padding: 6px 8px;
   }
 
   &.xxsmall {
-    padding: 6px 4px;
+    padding: 4px 6px;
   }
 `;

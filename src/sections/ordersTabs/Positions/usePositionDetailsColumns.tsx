@@ -36,7 +36,6 @@ const useQueryPositionsDetails = (
   page: number = 0,
   pageSize: number = 10
 ) => {
-  console.log("useQueryPositionsDetails", accountId, symbol, page, pageSize);
   return useQuery(
     ["query-positions-details", accountId, symbol, page, pageSize],
     queryPostionsDetails,

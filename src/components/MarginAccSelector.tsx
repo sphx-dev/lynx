@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import config from "@/config";
 import { formatDollars } from "@/utils/format";
 import { Button } from "./ButtonV2/Button";
+import { RiArrowDownSLine } from "@remixicon/react";
 
 export const MarginAccSelector = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -73,7 +74,7 @@ export const MarginAccSelector = () => {
           onClick={() => {
             const buttonCoords = buttonRef.current?.getBoundingClientRect();
             if (!buttonCoords) return;
-            setX(buttonCoords.x - buttonCoords.width);
+            setX(buttonCoords.x - buttonCoords.width / 2);
             setY(buttonCoords.y + buttonCoords.height + 2);
             setMenuVisible(menuVisible => !menuVisible);
           }}
@@ -82,7 +83,8 @@ export const MarginAccSelector = () => {
           option="stroke"
           title={selectedAccount?.address}
         >
-          Account #{selectedAccount?.id?.number} v
+          Account #{selectedAccount?.id?.number}{" "}
+          <RiArrowDownSLine style={{ color: "var(--icon-sub-600)" }} />
         </Button>
       )}
       <DropdownMenu

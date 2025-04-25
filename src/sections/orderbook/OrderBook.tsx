@@ -8,13 +8,7 @@ import {
 import TitleRow from "./TitleRow";
 import { DepthVisualizerAsk, DepthVisualizerBid } from "./DepthVisualizer";
 import PriceLevelRow from "./PriceLevelRow";
-import {
-  Asks,
-  Bids,
-  Container,
-  TableContainer,
-  TextContainer,
-} from "./OrderBookStyle";
+import { Container, TableContainer } from "./OrderBookStyle";
 import { PriceLevelRowContainer } from "./PriceLevelRowStyle";
 import { Stack, Text } from "../../components";
 import Divider from "./Divider";
@@ -35,7 +29,6 @@ const OrderBook: FunctionComponent = () => {
   const containerRef = useRef(null);
   const asksBidsRef = useRef(null);
   const { data: book, isLoading } = useOrderBook(asksBidsRef);
-  const { selectedMarket } = useMarkets();
 
   return (
     <Container ref={containerRef} data-testid="orderbook-tab">
@@ -101,8 +94,8 @@ const OrderBook: FunctionComponent = () => {
   );
 };
 
-const MIN_SIDE = 27;
-const MAX_SIDE = 100 - MIN_SIDE - MIN_SIDE;
+// const MIN_SIDE = 27;
+// const MAX_SIDE = 100 - MIN_SIDE - MIN_SIDE;
 
 const AsksBidsContainer = styled.div`
   display: flex;
@@ -222,8 +215,6 @@ const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
         Math.min(Math.floor(h / 27 / 2), MAX_RECORDS)
         // MIN_RECORDS
       );
-
-      console.log(r, h, ref.current?.clientHeight, window.outerHeight);
 
       setRecords(r ? r : MIN_RECORDS);
       // setRecords(20);

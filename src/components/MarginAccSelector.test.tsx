@@ -58,12 +58,12 @@ describe("MarginAccSelector", () => {
   });
 
   test("renders the selected account button", () => {
-    render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
+    render(<MarginAccSelector />, { wrapper: AppWrapper });
     expect(screen.getByTestId("margin-acc-selector")).toBeInTheDocument();
   });
 
   test("toggles the dropdown menu on button click", () => {
-    render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
+    render(<MarginAccSelector />, { wrapper: AppWrapper });
     const button = screen.getByTestId("margin-acc-selector");
     fireEvent.click(button);
     const acc1 = screen.getByTestId("margin-acc-selector-item-1");
@@ -74,7 +74,7 @@ describe("MarginAccSelector", () => {
   });
 
   test("selects an account from the dropdown menu", () => {
-    render(<MarginAccSelector size="sm" />, {
+    render(<MarginAccSelector />, {
       wrapper: AppWrapper,
     });
     const button = screen.getByTestId("margin-acc-selector");
@@ -99,7 +99,7 @@ describe("MarginAccSelector", () => {
   });
 
   test("opens the withdraw modal", () => {
-    render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
+    render(<MarginAccSelector />, { wrapper: AppWrapper });
 
     const button = screen.getByTestId("margin-acc-selector");
     fireEvent.click(button);
