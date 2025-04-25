@@ -5,7 +5,6 @@ import { getSideTextColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useCancelOrder, useCancelOrderSmart } from "../../hooks/useOrders";
-import { Side } from "../../types/order";
 import { useTranslation } from "react-i18next";
 import { errorAlert, successAlert } from "@/utils/alerts";
 import dayjs from "dayjs";
@@ -21,6 +20,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Modal } from "@/components/Modal/Modal";
 import { signArbitrary } from "@/utils/getOfflineSigner";
+import { TableRowMarket } from "@/components/Table/TableRowMarket";
 
 const FF_SMART_SIGN = false;
 
@@ -68,15 +68,15 @@ const useOrderColumns = ({
   const columns = [
     {
       accessorKey: "symbol",
-      header: t("market"),
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      header: t("Market"),
+      cell: TableRowMarket,
     },
     {
       flex: 1,
       accessorKey: "timestamp",
       header: t("date"),
       cell: (props: any) => (
-        <Text color="tertiary">
+        <Text variant="textXSmall">
           {!dayjs(Date.now()).isSame(dayjs(new Date(props.getValue())), "day")
             ? dayjs(new Date(props.getValue())).format("YYYY-MM-DD HH:mm:ss")
             : dayjs(new Date(props.getValue())).format("HH:mm:ss")}
@@ -87,7 +87,7 @@ const useOrderColumns = ({
       accessorKey: "quantity",
       header: t("size"),
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue())}</Text>
+        <Text variant="textXSmall">{Number(props.getValue())}</Text>
       ),
     },
     // {
@@ -123,7 +123,9 @@ const useOrderColumns = ({
         return formatDollars(Number(order.price), "");
       },
       header: t("Req. Price"),
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{props.getValue()}</Text>
+      ),
     },
     // {
     //   // accessorKey: "price",
@@ -158,7 +160,7 @@ const useOrderColumns = ({
       accessorKey: "leverage",
       header: t("lev."),
       cell: (props: any) => (
-        <Text color="tertiary">x{Number(props.getValue())}</Text>
+        <Text variant="textXSmall">x{Number(props.getValue())}</Text>
       ),
     },
     {
@@ -166,9 +168,8 @@ const useOrderColumns = ({
       header: t("side"),
       cell: (props: any) => (
         <Text
-          color={getSideTextColor(
-            props.getValue() === "buy" ? Side.Buy : Side.Sell
-          )}
+          variant="textXSmall"
+          color={getSideTextColor(props.getValue() === "buy" ? "bull" : "bear")}
         >
           {props.getValue() === "buy" ? "buy" : "sell"}
         </Text>
@@ -240,7 +241,9 @@ const useOrderColumns = ({
         };
       },
       header: t("status"),
-      cell: (props: any) => <Text>{t(props.getValue().label)}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{t(props.getValue().label)}</Text>
+      ),
     },
 
     // {
@@ -505,11 +508,7 @@ const OrdersByAccount = () => {
       />
       <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
       <ReloadButton onClick={() => refetch()} />
-      <Table
-        columns={columns}
-        data={orders}
-        headerStyle={{ backgroundColor: "#031a28" }}
-      />
+      <Table columns={columns} data={orders} />
       <Pagination
         page={page}
         setPage={setPage}

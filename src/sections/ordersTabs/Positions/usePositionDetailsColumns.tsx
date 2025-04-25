@@ -5,14 +5,13 @@ import { formatDollars } from "@/utils/format";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
-import { getSideTextColor } from "../helpers";
-import { Side } from "@/types/order";
 import styled from "styled-components";
 // TODO: Uncoment when hash is available in DB
 // import { Link } from "react-router-dom";
 import { LoaderBar } from "@/components/LoaderBar";
 import { useEffect, useState } from "react";
 import { Pagination } from "@/components/Pagination";
+import { TableRowMarket } from "@/components/Table/TableRowMarket";
 
 //
 const queryPostionsDetails = async ({
@@ -82,7 +81,9 @@ export const ModalPositionDetails = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <H2Modal>{t("positionDetails")}</H2Modal>
+        <Text variant="textMedium" as="h2">
+          {t("positionDetails")}
+        </Text>
         <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
         <Table
           data-testid="perpetual-positions-table"
@@ -105,10 +106,6 @@ const ModalContent = styled.div`
   height: 100%;
 `;
 
-const H2Modal = styled.h2`
-  margin-bottom: 1rem;
-`;
-
 export const usePositionDetailsColumns = () => {
   const { t } = useTranslation();
 
@@ -116,14 +113,15 @@ export const usePositionDetailsColumns = () => {
     {
       accessorKey: "symbol",
       header: "", //t("ticker"),
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      // cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      cell: TableRowMarket,
     },
     {
       accessorKey: "timestamp",
       header: t("date"),
 
       cell: (props: any) => (
-        <Text color="tertiary">
+        <Text variant="textXSmall">
           {dayjs(props.getValue()).format("YYYY-MM-DD HH:mm:ss")}
         </Text>
       ),
@@ -132,11 +130,7 @@ export const usePositionDetailsColumns = () => {
       accessorKey: "side",
       header: t("side"),
       cell: (props: any) => (
-        <Text
-          color={getSideTextColor(
-            props.getValue() === "buy" ? Side.Buy : Side.Sell
-          )}
-        >
+        <Text color={props.getValue() === "buy" ? "bull" : "bear"}>
           {props.getValue()}
         </Text>
       ),
@@ -144,34 +138,42 @@ export const usePositionDetailsColumns = () => {
     {
       accessorKey: "type",
       header: t("type"),
-      cell: (props: any) => <Text color="tertiary">{t(props.getValue())}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{t(props.getValue())}</Text>
+      ),
     },
     {
       accessorKey: "executed_quantity",
       header: t("size"),
-      cell: (props: any) => <Text color="secondary">{props.getValue()}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{props.getValue()}</Text>
+      ),
     },
     {
       accessorKey: "price",
       header: t("price"),
       cell: (props: any) => (
-        <Text color="primary">{formatDollars(props.getValue())}</Text>
+        <Text variant="textXSmall">{formatDollars(props.getValue())}</Text>
       ),
     },
     // {
     //   accessorKey: "trigger_price",
     //   header: t("trigger_price"),
-    //   cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+    //   cell: (props: any) => <Text variant="textXSmall">{props.getValue()}</Text>,
     // },
     {
       accessorKey: "leverage",
       header: t("lev."),
-      cell: (props: any) => <Text color="tertiary">x{props.getValue()}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">x{props.getValue()}</Text>
+      ),
     },
     {
       accessorKey: "order_type",
       header: t("order_type"),
-      cell: (props: any) => <Text color="tertiary">{t(props.getValue())}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{t(props.getValue())}</Text>
+      ),
     },
     // TODO: Uncoment when hash is available in DB
     // {

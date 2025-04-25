@@ -1,13 +1,10 @@
 import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
-import Button, { ButtonProps } from "./Button";
 import { useMarginAccount } from "../hooks/useMarginAccounts";
+import { Button } from "./ButtonV2/Button";
 import { MarginAccSelector } from "./MarginAccSelector";
 import { useTranslation } from "react-i18next";
 
-export const MarginAccButton = ({
-  size,
-  ...props
-}: ButtonProps & { size: string }) => {
+export const MarginAccButton = () => {
   const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { marginAccounts, createAccount, isSuccess } =
@@ -19,14 +16,19 @@ export const MarginAccButton = ({
 
   if (isSuccess && !marginAccounts.length) {
     return (
-      <Button size={size} onClick={createAccount}>
+      <Button
+        type="primary"
+        option="filled"
+        size="xsmall"
+        onClick={createAccount}
+      >
         {t("createMarginAccount")}
       </Button>
     );
   }
 
   if (isSuccess && marginAccounts.length > 0) {
-    return <MarginAccSelector size={size} {...props} />;
+    return <MarginAccSelector />;
   }
   return null;
 };

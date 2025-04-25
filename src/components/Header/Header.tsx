@@ -1,30 +1,68 @@
 import styled from "styled-components";
-import logo from "../../assets/icons/logo-dark.svg";
-import Group from "../Group";
+import logo from "../../assets/header-logo.svg";
 import Nav from "./navbar";
-import headerBg from "../../assets/images/header-logo-bg.svg";
+import { navLinks } from "./navbar/config";
+import { Link } from "react-router-dom";
 
-const StyledHeader = styled.header<{ $url: string }>`
-  position: relative;
-  background-image: url("${({ $url }) => $url}");
-  background-repeat: no-repeat;
-  min-width: 320px;
-  height: 100px;
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 24px;
+  padding-right: 24px;
+
+  min-height: 64px;
+
+  background-color: var(--bg-strong-1000);
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: var(--stroke-soft-200);
+`;
+
+const LeftBlock = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
 `;
 
 const Logo = styled.img`
-  padding-top: 15px;
-  margin-left: 45px;
+  height: 20px;
+`;
+
+const VerticalDivider = styled.div`
+  width: 1px;
+  height: 24px;
+  margin: 0 30px 0 20px;
+  background-color: var(--stroke-soft-200);
+`;
+
+const StyledLink = styled(Link)`
+  /* text-transform: uppercase; */
+  text-decoration: none;
+
+  font-family: var(--text-small-font-family);
+  font-weight: var(--text-small-font-weight);
+  font-size: var(--text-small-font-size);
+  line-height: var(--text-small-line-height);
+  letter-spacing: var(--text-small-letter-spacing);
+
+  color: var(--text-strong-950);
 `;
 
 const Header = () => {
   return (
-    <Group fluid spacing={0} style={{ width: "100vw" }}>
-      <StyledHeader $url={headerBg}>
+    <Container>
+      <LeftBlock>
         <Logo src={logo} />
-      </StyledHeader>
+        <VerticalDivider />
+        {navLinks.map(({ title, path, target }) => (
+          <StyledLink to={path} key={title} target={target}>
+            {title}
+          </StyledLink>
+        ))}
+      </LeftBlock>
       <Nav />
-    </Group>
+    </Container>
   );
 };
 

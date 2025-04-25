@@ -4,11 +4,10 @@ import React from "react";
 import Popup from "./Popup/Popup";
 import Group from "../Group";
 import Text from "../Text";
-import Icon from "../Icon";
 import { useMarkets } from "../../hooks/useMarkets";
-import { getThemeColors } from "../../theme";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { RiArrowDropDownLine } from "@remixicon/react";
 
 interface SymbolContentProps {
   close: Function;
@@ -16,7 +15,7 @@ interface SymbolContentProps {
 const SymbolContent = ({ close }: SymbolContentProps) => {
   const { t } = useTranslation();
 
-  const { markets, setMarketId } = useMarkets();
+  const { markets, setMarketId, selectedMarketId } = useMarkets();
   const futures = markets;
 
   return (
@@ -30,6 +29,7 @@ const SymbolContent = ({ close }: SymbolContentProps) => {
               setMarketId(item.id);
               close();
             }}
+            className={selectedMarketId === item.id ? "selected" : ""}
           >
             {t(item.baseAsset)} / {t(item.quoteAsset)} ({t(item.ticker)})
           </MenuItem>
@@ -44,24 +44,25 @@ const MenuContainer = styled.div`
 `;
 
 const MenuItem = styled.li`
-  ${({ theme }) => theme?.fonts?.typography?.actionMd}
-  color: ${({ theme }) => getThemeColors(theme)?.text?.tertiary};
+  font-family: var(--text-small-font-family);
+  font-weight: var(--text-small-font-weight);
+  font-size: var(--text-small-font-size);
+  line-height: var(--text-small-line-height);
+  color: var(--text-strong-950);
+
   cursor: pointer;
   list-style-type: none;
   padding: 4px 16px;
   &.selected {
-    background-color: ${({ theme }) =>
-      getThemeColors(theme)?.input?.primary?.background?.hovered};
-    color: ${({ theme }) => getThemeColors(theme)?.text?.primary};
+    background-color: var(--bg-surface-900);
+    color: var(--text-sub-600);
   }
   &:hover {
-    background-color: ${({ theme }) =>
-      getThemeColors(theme)?.input?.primary?.background?.hovered};
-    color: ${({ theme }) => getThemeColors(theme)?.text?.primary};
+    background-color: var(--bg-surface-800);
+    color: var(--text-sub-600);
   }
   &:focus-visible {
-    outline: 1px solid
-      ${({ theme }) => getThemeColors(theme)?.input?.primary?.border?.focused};
+    outline: 1px solid var(--text-sub-600);
   }
 `;
 
@@ -92,14 +93,33 @@ const SymbolSelectView = React.memo(
             <img
               src={icon}
               alt="pairIcon"
-              width={30}
-              style={{ minHeight: "30px" }}
+              width={24}
+              style={{ minHeight: "24px" }}
             />
-            <Text variant="textMd">{t(symbol || "---")}</Text>
+            <Text variant="textLarge">{t(symbol || "---")}</Text>
           </Group>
-          <Icon icon="ChevronIcon" color="white" rotate="90deg" />
+          <DropDownButton>
+            <RiArrowDropDownLine
+              size={25}
+              color="var(--icon-sub-600)"
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </DropDownButton>
         </Group>
       </Popup>
     );
   }
 );
+
+const DropDownButton = styled.div`
+  border-radius: 50%;
+  border: 1px solid var(--stroke-soft-200);
+  width: 24px;
+  height: 24px;
+  position: relative;
+`;

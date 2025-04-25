@@ -4,10 +4,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   border-color: #263946;
-  padding: 10px;
-  height: 100%;
-  /* height: calc(100vh - 255px);
-  overflow: hidden; */
 `;
 
 export const TableContainer = styled.div`

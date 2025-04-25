@@ -17,6 +17,9 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Modal } from "@/components/Modal/Modal";
 import { PRECISION } from "@/constants";
+import { getIconByTicker } from "@/hooks/useMarkets";
+import { RiShareBoxLine } from "@remixicon/react";
+import { TableRowMarket } from "@/components/Table/TableRowMarket";
 
 const queryOrdersHistoryByAccount = async ({
   queryKey,
@@ -46,15 +49,15 @@ const useOrderColumns = ({
   const columns = [
     {
       accessorKey: "symbol",
-      header: t("market"),
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      header: t("Market"),
+      cell: TableRowMarket,
     },
 
     {
       accessorKey: "timestamp",
       header: t("date"),
       cell: (props: any) => (
-        <Text color="tertiary">
+        <Text variant="textXSmall">
           {!dayjs(Date.now()).isSame(dayjs(new Date(props.getValue())), "day")
             ? dayjs(new Date(props.getValue())).format("YYYY-MM-DD HH:mm:ss")
             : dayjs(new Date(props.getValue())).format("HH:mm:ss")}
@@ -64,13 +67,15 @@ const useOrderColumns = ({
     {
       accessorKey: "order_type",
       header: t("type"),
-      cell: (props: any) => <Text color="primary">{t(props.getValue())}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{t(props.getValue())}</Text>
+      ),
     },
     {
       accessorKey: "quantity",
       header: t("size"),
       cell: (props: any) => (
-        <Text color="tertiary">{Number(props.getValue())}</Text>
+        <Text variant="textXSmall">{Number(props.getValue())}</Text>
       ),
     },
     {
@@ -82,7 +87,9 @@ const useOrderColumns = ({
         return formatDollars(Number(order.original_price), "");
       },
       header: t("Orig. Price"),
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{props.getValue()}</Text>
+      ),
     },
     {
       // accessorKey: "price",
@@ -94,13 +101,15 @@ const useOrderColumns = ({
         return formatDollars(Number(order.price) / PRECISION, "");
       },
       header: t("Price"),
-      cell: (props: any) => <Text color="tertiary">{props.getValue()}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{props.getValue()}</Text>
+      ),
     },
     {
       accessorKey: "leverage",
       header: t("lev."),
       cell: (props: any) => (
-        <Text color="tertiary">x{Number(props.getValue())}</Text>
+        <Text variant="textXSmall">x{Number(props.getValue())}</Text>
       ),
     },
     {
@@ -108,9 +117,8 @@ const useOrderColumns = ({
       header: t("side"),
       cell: (props: any) => (
         <Text
-          color={getSideTextColor(
-            props.getValue() === "buy" ? Side.Buy : Side.Sell
-          )}
+          variant="textXSmall"
+          color={props.getValue() === "buy" ? "bull" : "bear"}
         >
           {props.getValue() === "buy" ? "buy" : "sell"}
         </Text>
@@ -134,14 +142,16 @@ const useOrderColumns = ({
         };
       },
       header: t("status"),
-      cell: (props: any) => <Text>{t(props.getValue().label)}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{t(props.getValue().label)}</Text>
+      ),
     },
 
     {
       accessorKey: "hash",
       header: t("tx"),
       cell: (props: any) => (
-        <Text>
+        <Text variant="textXSmall">
           {props.getValue() && (
             <HashLink
               to={
@@ -149,7 +159,8 @@ const useOrderColumns = ({
               }
               target="_blank"
             >
-              {/* 🔗 */}⧉
+              {/* 🔗 ⧉*/}
+              <RiShareBoxLine style={{ width: "20px", height: "20px" }} />
             </HashLink>
           )}
         </Text>
@@ -192,7 +203,9 @@ const useNestedOrderColumns = () => {
     {
       accessorKey: "order_type",
       header: t("Order Type"),
-      cell: (props: any) => <Text color="tertiary">{t(props.getValue())}</Text>,
+      cell: (props: any) => (
+        <Text variant="textXSmall">{t(props.getValue())}</Text>
+      ),
     },
 
     {
@@ -201,9 +214,9 @@ const useNestedOrderColumns = () => {
       cell: (props: any) => {
         const size = Number(props.getValue());
         if (size === 0) {
-          return <Text color="tertiary">{t("canceled")}</Text>;
+          return <Text variant="textXSmall">{t("canceled")}</Text>;
         }
-        return <Text color="tertiary">{size}</Text>;
+        return <Text variant="textXSmall">{size}</Text>;
       },
       footer: (info: any) => {
         const data = info?.table?.options?.data || [];
@@ -221,7 +234,7 @@ const useNestedOrderColumns = () => {
       accessorKey: "price",
       header: t("price"),
       cell: (props: any) => (
-        <Text color="tertiary">
+        <Text variant="textXSmall">
           {formatDollars(Number(props.getValue()), "")}
         </Text>
       ),
@@ -246,14 +259,14 @@ const useNestedOrderColumns = () => {
       accessorKey: "leverage",
       header: t("lev."),
       cell: (props: any) => (
-        <Text color="tertiary">x{Number(props.getValue())}</Text>
+        <Text variant="textXSmall">x{Number(props.getValue())}</Text>
       ),
     },
     {
       accessorKey: "timestamp",
       header: t("date"),
       cell: (props: any) => (
-        <Text color="tertiary">
+        <Text variant="textXSmall">
           {dayjs(new Date(props.getValue())).format("YYYY-MM-DD HH:mm:ss")}
         </Text>
       ),
@@ -326,11 +339,7 @@ const OrdersHistoryByAccount = () => {
       />
       <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
       <ReloadButton onClick={() => refetch()} />
-      <Table
-        columns={columns}
-        data={orders}
-        headerStyle={{ backgroundColor: "#031a28" }}
-      />
+      <Table columns={columns} data={orders} />
       <Pagination
         page={page}
         setPage={setPage}
@@ -349,9 +358,7 @@ export const ExplorerLink = styled(Link)`
 
 const HashLink = styled(Link)`
   text-decoration: none;
-  color: var(--text-secondary-link);
-  font-size: 17px;
-  line-height: 4px;
+  color: var(--icon-sub-600);
 `;
 
 const PartialsModal = ({

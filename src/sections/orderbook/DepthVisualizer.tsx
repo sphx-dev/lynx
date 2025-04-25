@@ -6,10 +6,11 @@ const DepthVisualizer = styled.div`
   transition: width 0.5s;
   width: var(--depth);
   top: 0;
-  right: 0;
+  left: 0;
   position: absolute;
   transform: translateX(1%);
   z-index: 0;
+  border-radius: 4px;
 
   &:after {
     content: "";
@@ -24,7 +25,8 @@ const DepthVisualizer = styled.div`
 `;
 
 export const DepthVisualizerBid = styled(DepthVisualizer)`
-  background-color: ${({ theme }) => getThemeColors(theme).positive};
+  background-color: var(--cyan-alpha-10);
+  /* background-color: ${({ theme }) => getThemeColors(theme).positive};
   :hover > & {
     background-color: ${({ theme }) => getThemeColors(theme).positive};
   }
@@ -33,11 +35,13 @@ export const DepthVisualizerBid = styled(DepthVisualizer)`
   }
   :hover > &:after {
     background-color: ${({ theme }) => getThemeColors(theme).positive2};
-  }
+  } */
 `;
 
 export const DepthVisualizerAsk = styled(DepthVisualizer)`
-  background-color: ${({ theme }) => getThemeColors(theme).negative};
+  background-color: var(--red-alpha-10);
+
+  /* background-color: ${({ theme }) => getThemeColors(theme).negative};
   :hover > & {
     background-color: ${({ theme }) => getThemeColors(theme).negative};
   }
@@ -46,5 +50,5 @@ export const DepthVisualizerAsk = styled(DepthVisualizer)`
   }
   :hover > &:after {
     background-color: ${({ theme }) => getThemeColors(theme).negative2};
-  }
+  } */
 `;

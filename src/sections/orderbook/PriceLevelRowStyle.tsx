@@ -7,6 +7,8 @@ interface PriceLevelContainerProps {
 export const PriceLevelContainer = styled.div<PriceLevelContainerProps>`
   display: flex;
   position: relative;
+  padding-left: 8px;
+  padding-right: 8px;
 
   &:after {
     background-color: ${props => (props.$isRight ? "#113534" : "#3d1e28")};
@@ -40,7 +42,8 @@ export const PriceLevelRowContainer = styled.div`
   padding: 0;
   cursor: pointer;
   position: relative;
-  &:hover {
+  /* &:hover {
     background-color: #91919147;
-  }
+  } */
+  border-radius: 4px;
 `;

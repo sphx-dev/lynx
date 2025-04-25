@@ -12,8 +12,10 @@ interface CustomPopoverProps {
 }
 
 const Content = styled.div`
-  background-color: ${({ theme }) => getThemeColors(theme).background.dropdown};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  background-color: var(--bg-strong-950);
+  border: 1px solid var(--stroke-soft-200);
+  border-radius: 8px;
+  color: var(--text-strong-950);
   padding: 20px 0;
 `;
 

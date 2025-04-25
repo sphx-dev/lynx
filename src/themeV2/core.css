@@ -1,0 +1,303 @@
+/* Color palette */
+/* https://www.figma.com/design/JeCaSHN6V6y1EL2rqwT4Q0/Sphinx--GCX--x-FlowSkale?node-id=2-1743&t=0iYkY2sVBCO2a25n-0 */
+:root {
+  --neutral-1000: #080b0f;
+  --neutral-950: #0a0f14;
+  --neutral-900: #0e161b;
+  --neutral-800: #222b30;
+  --neutral-700: #2b363b;
+  --neutral-600: #525f66;
+  --neutral-500: #717e84;
+  --neutral-400: #99a7ae;
+  --neutral-300: #cad4d8;
+  --neutral-200: #e1e7ea;
+  --neutral-100: #f2f6f8;
+  --neutral-50: #f5f8fa;
+  --neutral-0: #f5f8fa;
+
+  --cyan-950: #126768;
+  --cyan-900: #18898b;
+  --cyan-800: #1fabad;
+  --cyan-700: #1fabad;
+  --cyan-600: #35e6e9;
+  --cyan-500: #47fcff;
+  --cyan-400: #68fcff;
+  --cyan-300: #97fdff;
+  --cyan-200: #97fdff;
+  --cyan-100: #d5feff;
+  --cyan-50: #ebffff;
+
+  --cyan-alpha-24: #35e6e93d;
+  --cyan-alpha-16: #35e6e929;
+  --cyan-alpha-10: #35e6e91a;
+  --cyan-alpha-6: #35e6e915;
+
+  --red-950: #681219;
+  --red-900: #8b1822;
+  --red-800: #ad1f2b;
+  --red-700: #d02533;
+  --red-600: #e93544;
+  --red-500: #fb3748;
+  --red-400: #fb3748;
+  --red-300: #ff97a0;
+  --red-200: #ffc0c5;
+  --red-100: #ffd5d8;
+  --red-50: #ffebec;
+
+  --red-alpha-24: #fb37483d;
+  --red-alpha-16: #fb374829;
+  --red-alpha-10: #fb37481a;
+
+  --orange-950: #682f12;
+  --orange-900: #8b3e18;
+  --orange-800: #ad4e1f;
+  --orange-700: #d05e25;
+  --orange-600: #e97135;
+  --orange-500: #ff8447;
+  --orange-400: #ff9a68;
+  --orange-300: #ffba97;
+  --orange-200: #ffd5c0;
+  --orange-100: #ffe3d5;
+  --orange-50: #fff1eb;
+
+  --orange-alpha-24: #ff91473d;
+  --orange-alpha-16: #ff914729;
+
+  --yellow-950: #624c18;
+  --yellow-900: #86661d;
+  --yellow-800: #a78025;
+  --yellow-700: #c99a2c;
+  --yellow-600: #e6a819;
+  --yellow-500: #f6b51e;
+  --yellow-400: #ffd268;
+  --yellow-300: #ffe097;
+  --yellow-200: #ffecc0;
+  --yellow-100: #ffefcc;
+  --yellow-50: #fffaeb;
+
+  --green-950: #0b4627;
+  --green-900: #16643b;
+  --green-800: #1a7544;
+  --green-700: #178c4e;
+  --green-600: #1daf61;
+  --green-500: #1fc16b;
+  --green-400: #3ee089;
+  --green-300: #84ebb4;
+  --green-200: #c2f5da;
+  --green-100: #d0fbe9;
+  --green-50: #e0faec;
+
+  --green-alpha-24: #1fc16b3d;
+  --green-alpha-16: #1fc16b29;
+
+  --blue-950: #122368;
+  --blue-900: #182f8b;
+  --blue-800: #1f3bad;
+  --blue-700: #2547d0;
+  --blue-600: #3559e9;
+  --blue-500: #335cff;
+  --blue-400: #6895ff;
+  --blue-300: #97baff;
+  --blue-200: #c0d5ff;
+  --blue-100: #d5e2ff;
+  --blue-50: #ebf1ff;
+
+  --blue-alpha-24: #476cff3d;
+  --blue-alpha-16: #476cff29;
+}
+
+:root {
+  --primary-dark: var(--cyan-950);
+  --primary-darker: var(--cyan-800);
+  --primary-base: var(--cyan-700);
+  --primary-alpha-16: var(--cyan-alpha-16);
+  --primary-alpha-10: var(--cyan-alpha-10);
+  --primary-alpha-6: var(--cyan-alpha-6);
+
+  --bg-strong-1000: var(--neutral-1000);
+  --bg-strong-950: var(--neutral-950);
+  --bg-surface-900: var(--neutral-900);
+  --bg-surface-800: var(--neutral-800);
+  --bg-surface-700: var(--neutral-700);
+  --bg-sub-300: var(--neutral-300);
+  --bg-soft-200: var(--neutral-200);
+  --bg-weak-50: var(--neutral-50);
+  --bg-white-0: var(--neutral-0);
+
+  --text-strong-950: var(--neutral-0);
+  --text-sub-600: var(--neutral-400);
+  --text-soft-400: var(--neutral-500);
+  --text-disabled-300: var(--neutral-600);
+  --text-white-0: var(--neutral-950);
+  --text-bull: var(--primary-base);
+  --text-bear: var(--red-500);
+
+  --stroke-strong-950: var(--neutral-600);
+  --stroke-sub-300: var(--neutral-700);
+  --stroke-soft-200: var(--neutral-800);
+  --stroke-white-0: var(--neutral-900);
+
+  --icon-strong-950: var(--neutral-0);
+  --icon-sub-600: var(--neutral-400);
+  --icon-soft-400: var(--neutral-500);
+  --icon-disabled-300: var(--neutral-600);
+  --icon-white-0: var(--neutral-950);
+
+  --faded-dark: var(--neutral-300);
+  --faded-base: var(--neutral-500);
+  --faded-light: var(--neutral-alpha-24);
+  --faded-lighter: var(--neutral-alpha-16);
+
+  --information-dark: var(--blue-400);
+  --information-base: var(--blue-500);
+  --information-light: var(--blue-200);
+  --information-lighter: var(--blue-50);
+
+  --warning-dark: var(--orange-400);
+  --warning-base: var(--orange-600);
+  --warning-light: var(--orange-alpha-24);
+  --warning-lighter: var(--orange-alpha-16);
+
+  --error-dark: var(--red-400);
+  --error-base: var(--red-600);
+  --error-light: var(--red-alpa-24);
+  --error-lighter: var(--red-alpha-16);
+
+  --success-dark: var(--green-400);
+  --success-base: var(--green-600);
+  --success-light: var(--green-alpha-24);
+  --success-lighter: var(--green-alpha-16);
+
+  --away-dark: var(--yellow-400);
+  --away-base: var(--yellow-600);
+  --away-light: var(--yellow-alpha-24);
+  --away-lighter: var(--yellow-alpha-16);
+
+  --feature-dark: #8c71f6;
+  --feature-base: #7d52f4;
+  --feature-light: #784def3d;
+  --feature-lighter: #784def29;
+
+  --verified-dark: var(--cyan-400);
+  --verified-base: var(--cyan-600);
+  --verified-light: var(--cyan-alpha-24);
+  --verified-lighter: var(--cyan-alpha-16);
+
+  --highlighted-dark: var(--pink-400);
+  --highlighted-base: var(--pink-600);
+  --highlighted-light: var(--pink-alpha-24);
+  --highlighted-lighter: var(--pink-alpha-16);
+
+  --stable-dark: #3fdec9;
+  --stable-light: #1daf9c;
+  --stable-light: #22d3bb3d;
+  --stable-lighter: #22d3bb29;
+
+  --faded-dark: var(--neutral-300);
+  --faded-base: var(--neutral-500);
+  --faded-light: var(--neutral-alpha-24);
+  --faded-lighter: var(--neutral-alpha-16);
+
+  --overlay: #080b0fcc;
+}
+
+/* Typoraphy */
+/* https://www.figma.com/design/JeCaSHN6V6y1EL2rqwT4Q0/Sphinx--GCX--x-FlowSkale?node-id=2-1181&p=f&t=0iYkY2sVBCO2a25n-0 */
+:root {
+  --text-x-large-font-family: Inter;
+  --text-x-large-font-weight: 500;
+  --text-x-large-font-size: 24px;
+  --text-x-large-line-height: 32px;
+  --text-x-large-letter-spacing: -1.5%;
+
+  --text-large-font-family: Inter;
+  --text-large-font-weight: 500;
+  --text-large-font-size: 18px;
+  --text-large-line-height: 24px;
+  --text-large-letter-spacing: -1.5%;
+
+  --text-medium-font-family: Inter;
+  --text-medium-font-weight: 500;
+  --text-medium-font-size: 16px;
+  --text-medium-line-height: 24px;
+  --text-medium-letter-spacing: -1.1%;
+
+  --text-small-font-family: Inter;
+  --text-small-font-weight: 500;
+  --text-small-font-size: 14px;
+  --text-small-line-height: 20px;
+  --text-small-letter-spacing: -0.6%;
+
+  --text-x-small-font-family: Inter;
+  --text-x-small-font-weight: 500;
+  --text-x-small-font-size: 12px;
+  --text-x-small-line-height: 16px;
+  --text-x-small-letter-spacing: 0%;
+
+  /* Classes for texts*/
+  .text-x-large {
+    font-family: var(--text-x-large-font-family);
+    font-weight: var(--text-x-large-font-weight);
+    font-size: var(--text-x-large-font-size);
+    line-height: var(--text-x-large-line-height);
+    letter-spacing: var(--text-x-large-letter-spacing);
+  }
+
+  .text-large {
+    font-family: var(--text-large-font-family);
+    font-weight: var(--text-large-font-weight);
+    font-size: var(--text-large-font-size);
+    line-height: var(--text-large-line-height);
+    letter-spacing: var(--text-large-letter-spacing);
+  }
+
+  .text-medium {
+    font-family: var(--text-medium-font-family);
+    font-weight: var(--text-medium-font-weight);
+    font-size: var(--text-medium-font-size);
+    line-height: var(--text-medium-line-height);
+    letter-spacing: var(--text-medium-letter-spacing);
+  }
+
+  .text-small {
+    font-family: var(--text-small-font-family);
+    font-weight: var(--text-small-font-weight);
+    font-size: var(--text-small-font-size);
+    line-height: var(--text-small-line-height);
+    letter-spacing: var(--text-small-letter-spacing);
+  }
+
+  .text-x-small {
+    font-family: var(--text-x-small-font-family);
+    font-weight: var(--text-x-small-font-weight);
+    font-size: var(--text-x-small-font-size);
+    line-height: var(--text-x-small-line-height);
+    letter-spacing: var(--text-x-small-letter-spacing);
+  }
+
+  /* Color classes */
+  .color-text-strong-950 {
+    color: var(--text-strong-950);
+  }
+  .color-text-sub-600 {
+    color: var(--text-sub-600);
+  }
+  .color-text-soft-400 {
+    color: var(--text-soft-400);
+  }
+  .color-text-disabled-300 {
+    color: var(--text-disabled-300);
+  }
+  .color-text-white0 {
+    color: var(--text-white-0);
+  }
+  .color-text-bull {
+    color: var(--text-bull);
+  }
+  .color-text-bear {
+    color: var(--text-bear);
+  }
+  .color-text-faded-dark {
+    color: var(--faded-dark);
+  }
+}

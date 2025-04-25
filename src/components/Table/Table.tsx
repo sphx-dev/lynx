@@ -19,19 +19,26 @@ interface ITableProps<T> {
   "data-testid"?: string;
 }
 const StyledTable = styled.table`
-  font-family: var(--text-sm-font-family);
-  font-size: var(--text-sm-font-size);
-  font-weight: var(--text-sm-font-weight);
-  line-height: var(--text-sm-line-height);
-  color: var(--text-tertiary);
   border-collapse: collapse;
   width: 100%;
   thead {
+    height: 50px;
+    tr th {
+      min-width: 100px;
+    }
+  }
+  thead,
+  tfoot {
     position: sticky;
-    top: -1px;
     border: none;
     tr th {
-      padding: 8px 2px;
+      font-family: var(--text-x-small-font-family);
+      font-weight: var(--text-x-small-font-weight);
+      font-size: var(--text-x-small-font-size);
+      line-height: var(--text-x-small-line-height);
+      color: var(--text-sub-600);
+
+      padding: 6px 2px;
       white-space: nowrap;
       &:first-child {
         text-align: left;
@@ -39,18 +46,24 @@ const StyledTable = styled.table`
       }
       text-align: center;
       border: none;
-      border-top: 1px solid var(--table-tabs-border);
-      border-bottom: 1px solid var(--table-tabs-border);
+      border-top: 1px solid var(--stroke-soft-200);
     }
   }
   tbody {
     tr td {
+      height: 50px;
+      font-family: var(--text-x-small-font-family);
+      font-weight: var(--text-x-small-font-weight);
+      font-size: var(--text-x-small-font-size);
+      line-height: var(--text-x-small-line-height);
+
       &:first-child {
         text-align: left;
       }
       text-align: center;
-      padding: 8px 2px;
+      padding: 6px 2px;
       white-space: nowrap;
+      border-top: 1px solid var(--stroke-soft-200);
     }
   }
 `;

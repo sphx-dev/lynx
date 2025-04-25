@@ -10,7 +10,6 @@ interface TitleRowProps {
 
 const Label = styled.div`
   flex: 1;
-  text-transform: uppercase;
   text-align: center;
   &:first-child {
     text-align: left;
@@ -26,7 +25,7 @@ const TitleRow: FunctionComponent<TitleRowProps> = ({ titles }) => {
     <Container data-testid="title-row">
       {titles.map((title, index) => (
         <Label key={title}>
-          <Text variant="textXs" color="secondaryLink">
+          <Text variant="textXSmall" color="sub600">
             {t(title)}
           </Text>
         </Label>

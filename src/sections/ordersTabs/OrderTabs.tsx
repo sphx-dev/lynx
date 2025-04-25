@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Table, Stack, Icon } from "../../components";
+import { Table } from "../../components";
 import Positions from "./Positions/Positions";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import OrdersByAccount from "./OrdersByAccount";
@@ -10,43 +10,64 @@ interface TabProps {
   $isActive?: boolean;
 }
 const Tab = styled.button<TabProps>`
-  font-family: var(--action-md-font-family);
-  font-size: var(--action-md-font-size);
-  font-weight: var(--action-md-font-weight);
-  line-height: var(--action-md-line-height);
-  padding: 14px 34px;
-  background: none;
-  border: none;
-  color: var(--table-tabs-color);
-  border-right: 1px solid var(--table-tabs-border);
+  font-family: var(--text-x-small-font-family);
+  font-weight: var(--text-x-small-font-weight);
+  font-size: var(--text-x-small-font-size);
+  line-height: var(--text-x-small-line-height);
+  color: var(--text-sub-600);
+  background-color: var(--bg-strong-950);
+
+  margin-right: -1px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--stroke-soft-200);
+
+  padding: 3px 12px;
   display: flex;
   cursor: pointer;
   svg {
     margin-right: 4px;
   }
   &.active {
-    color: var(--table-tabs-color-active);
+    color: var(--text-strong-900);
+    background-color: var(--bg-surface-800);
+  }
+
+  &:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  &:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
   }
 `;
 
 const ScrollContent = styled.div`
-  height: 300px;
   width: 100%;
   position: relative;
+  flex: 1;
 `;
 
 const Tabs = styled.div`
   display: flex;
-  background: var(--table-tabs-background);
   width: 100%;
   min-width: 400px;
+  margin-bottom: 8px;
 `;
+
+const Container = styled.div`
+  flex: 1;
+  background: var(--bg-surface-900);
+  padding: 8px;
+  border-radius: 8px;
+`;
+
 const CONTENT = [Positions, OrdersByAccount, OrdersHistoryByAccount, Table];
 
 const OrderTabs = () => {
   const [active, setActive] = useLocalStorage("selectedOrderTab", 0);
   const { t } = useTranslation();
-  // const { openOrders, closedOrders, positions } = useAppSelector(account);
   const Content = useMemo(() => CONTENT[active], [active]);
 
   const tabs = useMemo(
@@ -71,7 +92,7 @@ const OrderTabs = () => {
   );
 
   return (
-    <Stack spacing={0} style={{ flex: "0 1 auto" }}>
+    <Container>
       <Tabs>
         {tabs.map(({ icon, title }, index) => (
           <Tab
@@ -82,7 +103,7 @@ const OrderTabs = () => {
             onClick={() => setActive(index)}
           >
             <>
-              <Icon
+              {/* <Icon
                 // @ts-ignore
                 icon={icon}
                 size="normal"
@@ -91,7 +112,7 @@ const OrderTabs = () => {
                     ? "var(--table-tabs-color-active)"
                     : "var(--table-tabs-color)"
                 }
-              />
+              /> */}
               {t(title)}
             </>
           </Tab>
@@ -100,7 +121,7 @@ const OrderTabs = () => {
       <ScrollContent>
         <Content key={active} {...(tabs[active]?.params || {})} />
       </ScrollContent>
-    </Stack>
+    </Container>
   );
 };
 

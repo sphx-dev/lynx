@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../hooks/useMarginAccounts";
-import Button, { ButtonProps } from "./Button";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useModalStore } from "./Modal/Modal";
@@ -11,11 +10,9 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import config from "@/config";
 import { formatDollars } from "@/utils/format";
+import { Button } from "./ButtonV2/Button";
 
-export const MarginAccSelector = ({
-  size,
-  ...props
-}: ButtonProps & { size: string }) => {
+export const MarginAccSelector = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [menuVisible, setMenuVisible] = useState(false);
   useEffect(() => {
@@ -76,15 +73,16 @@ export const MarginAccSelector = ({
           onClick={() => {
             const buttonCoords = buttonRef.current?.getBoundingClientRect();
             if (!buttonCoords) return;
-            setX(buttonCoords.x + buttonCoords.width / 2);
+            setX(buttonCoords.x - buttonCoords.width);
             setY(buttonCoords.y + buttonCoords.height + 2);
             setMenuVisible(menuVisible => !menuVisible);
           }}
-          size={size}
-          {...props}
+          size="xxsmall"
+          type="neutral"
+          option="stroke"
           title={selectedAccount?.address}
         >
-          Account #{selectedAccount?.id?.number}
+          Account #{selectedAccount?.id?.number} v
         </Button>
       )}
       <DropdownMenu
@@ -146,10 +144,12 @@ const DropdownMenu = ({
         ))}
       </ul>
       <ButtonWrapper>
-        <Button onClick={() => openModal("DEPOSIT")}>{t("deposit")}</Button>
-        <Button variant="link" onClick={() => openModal("WITHDRAW")}>
+        <StyledButton onClick={() => openModal("DEPOSIT")}>
+          {t("deposit")}
+        </StyledButton>
+        <StyledButton onClick={() => openModal("WITHDRAW")}>
           {t("withdraw")}
-        </Button>
+        </StyledButton>
       </ButtonWrapper>
     </DropdawnWindow>
   );
@@ -159,35 +159,35 @@ const DropdawnWindow = styled.div<{ $show: boolean }>`
   display: ${({ $show }) => ($show ? "flex" : "none")};
   position: absolute;
   z-index: 1;
-  background-color: var(--background-dropdown);
+  background-color: var(--bg-strong-950);
   color: var(--text-tertiary);
   flex-direction: column;
   gap: 10px;
   min-width: 200px;
   transform: translateX(-50%);
-  border-radius: 8px;
-  padding: 12px 0;
-  box-shadow: 0px 5px 20px black;
+  border-radius: 12px;
+  padding: 8px;
+  border: 1px solid var(--stroke-soft-200);
 `;
 
 const MenuItem = styled.li`
   display: flex;
   gap: 8px;
   justify-content: space-between;
-  font-family: var(--action-md-font-family);
-  font-size: var(--action-md-font-size);
-  font-weight: var(--action-md-font-weight);
-  line-height: var(--action-md-line-height);
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
+  color: var(--text-strong-950);
   cursor: pointer;
   list-style-type: none;
   padding: 0px 16px;
+  border-radius: 8px;
   &.selected {
-    background-color: var(--input-background-hovered);
-    color: var(--text-primary);
+    background-color: var(--bg-surface-900);
   }
   &:hover {
-    background-color: var(--input-background-hovered);
-    color: var(--text-primary);
+    background-color: var(--bg-surface-900);
   }
 `;
 
@@ -223,7 +223,28 @@ const ExternalLink = styled(Link)`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-around;
-  gap: 8px;
-  padding: 10px 16px 0 16px;
+  justify-content: space-between;
+  gap: 6px;
+`;
+
+const StyledButton = styled.button`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
+  background-color: var(--bg-strong-950);
+  color: var(--primary-base);
+  border: 1px solid var(--primary-base);
+  border-radius: 4px;
+  height: 32px;
+
+  cursor: pointer;
+  &:hover {
+    background-color: var(--bg-strong-900);
+  }
 `;

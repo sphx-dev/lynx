@@ -42,3 +42,10 @@ export function formatDollars(value: number, currencyDisplay?: any): string {
     .replaceAll(String.fromCharCode(160), " ")
     .trim();
 }
+
+export function formatNumberIntl(value: number) {
+  return new Intl.NumberFormat("en-US")
+    .format(value)
+    .replaceAll(String.fromCharCode(160), " ")
+    .trim();
+}

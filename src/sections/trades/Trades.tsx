@@ -46,7 +46,7 @@ const Trades = React.memo(() => {
         align="center"
         data-testid="trades-tab"
       >
-        <Text variant="textXl" color="tertiary">
+        <Text variant="textXLarge" color="tertiary">
           {isLoading ? t("loading") : t("noData")}
         </Text>
       </Stack>
@@ -82,6 +82,4 @@ export default Trades;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  border-color: #263946;
-  padding: 10px 10px 0;
 `;

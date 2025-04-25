@@ -57,13 +57,11 @@ const StyledInput = styled.input`
   }
 `;
 
-export const InputLabel = styled.label`
-  font-family: var(--text-sm-font-family);
-  font-size: var(--text-sm-font-size);
-  font-weight: var(--text-sm-font-weight);
-  line-height: var(--text-sm-line-height);
-  color: var(--text-primary);
-  text-align: left;
+export const VerticalDivider = styled.div`
+  width: 1px;
+  height: 34px;
+  background-color: var(--stroke-soft-200);
+  margin: -10px 0;
 `;
 
 const errorStyle = css`
@@ -71,32 +69,26 @@ const errorStyle = css`
 `;
 
 export const InputWrapper = styled.div<InputWrapperProps>`
-  border: 1px solid transparent;
-  border-radius: var(--border-radius-md);
+  border: 1px solid var(--stroke-soft-200);
+  border-radius: 6px;
   width: 100%;
   padding: 7px 12px;
   background-color: ${({ theme, variant, disabled }) => {
     if (variant === "error") {
-      return disabled
-        ? "var(--input-error-background-disabled)"
-        : "var(--input-error-background-error)";
+      return disabled ? "var(--bg-strong-900)" : "var(--bg-strong-950)";
     }
 
     return disabled
-      ? /*getThemeColors(theme).input[variant].background.disabled*/ "var(--input-background-disabled)"
-      : /*getThemeColors(theme).input[variant].background.default}*/ "var(--input-background-default)";
+      ? /*getThemeColors(theme).input[variant].background.disabled*/ "var(--bg-strong-900)"
+      : /*getThemeColors(theme).input[variant].background.default}*/ "var(--bg-strong-950)";
   }};
   &:focus-within {
     border-color: ${({ theme, variant }) =>
-      variant === "error"
-        ? "var(--input-error-border-focused)"
-        : "var(--input-border-focused)"};
+      variant === "error" ? "var(--error-base)" : "var(--stroke-soft-200)"};
   }
   &:hover {
     background: ${({ theme, variant }) =>
-      variant === "error"
-        ? "var(--input-error-background-hovered)"
-        : "var(--input-background-hovered)"};
+      variant === "error" ? "var(--bg-surface-800)" : "var(--bg-surface-800)"};
   }
   display: flex;
   gap: 0.5rem;
@@ -152,7 +144,11 @@ export const Input = forwardRef<Ref, InputProps>(
           ...style,
         }}
       >
-        {label && <InputLabel>{label}</InputLabel>}
+        {label && (
+          <Text variant="textSmall" color="strong950">
+            {label}
+          </Text>
+        )}
         <InputWrapper
           style={{ position: "relative" }}
           variant={variant}
@@ -169,10 +165,15 @@ export const Input = forwardRef<Ref, InputProps>(
             onBlur={handleBlur}
             onChange={handleChange}
           />
-          {rightSide && <Text>{rightSide}</Text>}
+          {rightSide && (
+            <>
+              <VerticalDivider />
+              <Text color="disabled300">{rightSide}</Text>
+            </>
+          )}
         </InputWrapper>
         {error && (
-          <Text variant="textSm" color="error">
+          <Text variant="textSmall" color="error">
             {error}
           </Text>
         )}

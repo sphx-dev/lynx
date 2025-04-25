@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { getThemeColors } from "../../theme";
 import { useTranslation } from "react-i18next";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
+import { RiHeadphoneLine } from "@remixicon/react";
 
 const Wrapper = styled.footer`
-  background-color: ${({ theme }) => getThemeColors(theme).background.primary};
+  background-color: var(--neutral-1000);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 30px;
+  padding: 0px 30px;
+  height: 36px;
+  border-top: 1px solid var(--stroke-soft-200);
 `;
 
 interface IStatusProps {
@@ -16,19 +18,28 @@ interface IStatusProps {
 }
 
 const Status = styled.div<IStatusProps>`
-  ${({ theme }) => theme.fonts.typography.navigation}
+  font-family: var(--text-x-small-font-family);
+  font-size: var(--text-x-small-font-size);
+  font-weight: var(--text-x-small-font-weight);
+  line-height: var(--text-x-small-line-height);
 
   color: ${({ $isConnected }) =>
-    $isConnected ? `var(--secondary-700)` : `var(--negative2)`};
-  text-transform: uppercase;
+    $isConnected ? `var(--verified-base)` : `var(--error-base)`};
+
+  background-color: ${({ $isConnected }) =>
+    $isConnected ? `var(--verified-lighter)` : `var(--error-lighter)`};
+
   text-decoration: none;
   display: flex;
   align-items: center;
+  border-radius: 6px;
+  padding: 4px 8px;
+
   .status-icon {
     background-color: ${({ $isConnected }) =>
-      $isConnected ? `var(--secondary-700)` : `var(--negative2)`};
-    width: 8px;
-    height: 8px;
+      $isConnected ? `var(--verified-base)` : `var(--error-base)`};
+    width: 6px;
+    height: 6px;
     margin-right: 6px;
     border-radius: 50%;
   }
@@ -41,30 +52,39 @@ const Nav = styled.nav`
 `;
 
 const NavItem = styled.a`
-  color: ${({ theme }) => getThemeColors(theme).text.tertiary};
+  font-family: var(--text-x-small-font-family);
+  font-size: var(--text-x-small-font-size);
+  font-weight: var(--text-x-small-font-weight);
+  line-height: var(--text-x-small-line-height);
+  color: var(--text-sub-600);
   background-color: transparent;
   text-decoration: none;
-  ${({ theme }) => theme.fonts.typography.actionSmBold};
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
 `;
 const Footer = () => {
   const { isConnected } = useChainCosmoshub();
   const { t } = useTranslation();
   return (
     <Wrapper>
-      <Status $isConnected={isConnected}>
-        <div className="status-icon" />
-        {isConnected ? t("online") : t("offline")}
-      </Status>
       <Nav>
+        <NavItem href="mailto:info@sphx.io" target="_blank" rel="noopener">
+          <RiHeadphoneLine style={{ width: "16px", height: "16px" }} />
+          {t("support")}
+        </NavItem>
         <NavItem rel="noopener">{t("stats")}</NavItem>
         <NavItem href="https://docs.sphx.io/" target="_blank" rel="noopener">
           {t("docs")}
         </NavItem>
-        <NavItem href="mailto:info@sphx.io" target="_blank" rel="noopener">
-          {t("support")}
-        </NavItem>
       </Nav>
+      <Status $isConnected={isConnected}>
+        <div className="status-icon" />
+        {isConnected ? t("online") : t("offline")}
+      </Status>
     </Wrapper>
   );
 };

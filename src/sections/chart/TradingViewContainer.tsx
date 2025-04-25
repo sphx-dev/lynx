@@ -55,10 +55,16 @@ export const TradingViewContainer = () => {
       ...CHART_DEFAULT_OPTIONS,
       symbol: marketId,
       datafeed,
+      // https://www.tradingview.com/charting-library-docs/latest/customization/overrides/chart-overrides/
       overrides: {
-        "paneProperties.backgroundGradientStartColor": "#0E2836",
-        "paneProperties.backgroundGradientEndColor": "#0B202D",
+        "paneProperties.backgroundGradientStartColor": "#0e161b", //"#0E2836",
+        "paneProperties.backgroundGradientEndColor": "#0e161b", //"#0B202D",
         "scalesProperties.textColor": "#95FFF5",
+        "mainSeriesProperties.candleStyle.upColor": "#1fabad20",
+        "mainSeriesProperties.candleStyle.downColor": "#fb374820",
+        "mainSeriesProperties.candleStyle.drawBorder": true,
+        "mainSeriesProperties.candleStyle.borderUpColor": "#1fabad",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#fb3748",
       },
       container: chartContainerRef.current,
       locale: getLanguageFromURL() || "en",

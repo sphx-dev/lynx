@@ -1,4 +1,4 @@
-import { Stack, Text } from "../../components";
+import { Divider, Stack, Text } from "../../components";
 import { formatDollars } from "@/utils/format";
 
 import { useBalance } from "@/hooks/useBalance";
@@ -38,22 +38,15 @@ const Summary = ({
 
   return (
     <Stack>
+      <Text variant="textSmall">{t("Contract Specifications")}</Text>
       <Label
-        label={t("pricePerContract")}
-        value={formatDollars(pricePerContract)}
+        label={t("1 contract")}
+        value={formatDollars(pricePerContract, "symbol")}
+        post={t("per point")}
       />
+      <Divider />
+      <Text variant="textSmall">{t("Order Summary")}</Text>
       <Label label={t("notionalValue")} value={formatDollars(notional)} />
-      {/* <Label
-        label="Total Fees"
-        value={formatNumber({ value: 2.21, after: " USD" })}
-      />
-      <Label label="Liquidation Price" />
-      <Label label="Fill Price" />
-      <Label label="Price Impact" /> */}
-      {/* <Label
-        label="Balance"
-        value={formatNumber({ value: +balance, fixed: 2, before: "$" })}
-      /> */}
       <Label
         label="Available Margin"
         data-testid="summary-available-margin"
@@ -69,14 +62,29 @@ export default Summary;
 interface Label {
   label: string;
   value?: string;
+  post?: string;
 }
 
 // eslint-disable-next-line
-const Label = ({ label, value, ...params }: Label & any) => {
+const Label = ({ label, value, post, ...params }: Label & any) => {
   return (
     <LabelGroup {...params}>
-      <Text variant="textSm">{label}:</Text>
-      <Text variant="textSm">{value || DASH}</Text>
+      <Text variant="textSmall" color="sub600">
+        {label}:
+      </Text>
+      <div>
+        <Text variant="textSmall" color="strong950">
+          {value || DASH}
+        </Text>
+        {post && (
+          <>
+            {" "}
+            <Text variant="textSmall" color="sub600">
+              {post}
+            </Text>
+          </>
+        )}
+      </div>
     </LabelGroup>
   );
 };

@@ -1,4 +1,5 @@
 import "./App.css";
+import "./themeV2/core.css";
 import { useRoutes } from "react-router-dom";
 import { routes } from "./routes";
 import { ThemeInterface, themes } from "./theme";

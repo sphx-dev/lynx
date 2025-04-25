@@ -2,29 +2,30 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Radio = styled.button<{ $isActive?: boolean }>`
-  font-family: var(--text-sm-font-family);
-  font-size: var(--text-sm-font-size);
-  font-weight: var(--text-sm-font-weight);
-  line-height: var(--text-sm-line-height);
-  border-radius: var(--border-radius-md);
-  color: var(--text-secondary);
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
+
+  border-radius: 9999px;
+  color: var(--text-strong-950);
   background-color: transparent;
   border-width: 1px;
   border-style: solid;
   border-color: transparent;
-  padding: 4px 0px;
+  padding: 1px 0px;
   flex: 1;
   text-align: center;
   cursor: pointer;
 
   &.active {
-    font-family: var(--action-sm-bold-font-family);
-    font-size: var(--action-sm-bold-font-size);
-    font-weight: var(--action-sm-bold-font-weight);
-    line-height: var(--action-sm-bold-line-height);
-    color: var(--text-primary);
-    background-color: var(--background-button);
-    border-color: var(--border-default);
+    color: #7eeff1;
+    background: linear-gradient(
+      90deg,
+      rgba(53, 230, 233, 0.16) 0%,
+      rgba(53, 230, 233, 0) 100%
+    );
+    border-color: var(--primary-base);
   }
 
   &:focus-visible {
@@ -33,12 +34,10 @@ const Radio = styled.button<{ $isActive?: boolean }>`
 `;
 
 const Container = styled.div`
-  border: 1px solid var(--border-default);
-  border-radius: var(--border-radius-md);
+  border: 1px solid var(--stroke-soft-200);
+  border-radius: 9999px;
   width: 100%;
-  padding: 6px 8px;
-  background-color: var(--alpha-dark5);
-  border-color: var(--border-hovered);
+  padding: 3px;
   display: flex;
   align-items: center;
 `;

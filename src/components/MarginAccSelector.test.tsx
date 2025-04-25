@@ -86,7 +86,7 @@ describe("MarginAccSelector", () => {
   });
 
   test("opens the deposit modal", async () => {
-    render(<MarginAccSelector size="sm" />, { wrapper: AppWrapper });
+    render(<MarginAccSelector />, { wrapper: AppWrapper });
 
     const button = screen.getByTestId("margin-acc-selector");
     await userEvent.click(button);

@@ -33,8 +33,8 @@
   "marketMargin": "Market Margin",
   "connectWallet": "CONNECT WALLET",
   "placeOrder": "Place order",
-  "online": "online",
-  "offline": "offline",
+  "online": "Online",
+  "offline": "Offline",
   "deposit": "Deposit",
   "withdraw": "Withdraw",
   "createMarginAccount": "Create Margin Account",
@@ -88,6 +88,7 @@
   "USDC": "USD",
   "BTCUSDC.P": "BTCUSD.P",
   "ETHUSDC.P": "ETHUSD.P",
+  "NGXUSDC.P": "NGXUSD.P",
   "WTXUSDC.P": "WTXUSD.P",
   "loading": "Loading",
   "noData": "No data",
@@ -111,5 +112,8 @@
   "smartSignActive": "Smart Sign On",
   "activatesmartsign": "Activate Smart Sign",
   "reduceOnly": "Reduce Only",
-  "ordersReduceInfo": "Orders will only reduce the current position"
+  "ordersReduceInfo": "Orders will only reduce the current position",
+  "long": "Long",
+  "short": "Short",
+  "order.youNeedAMarginAccount": "You need a Margin Account with funds to place an order"
 }

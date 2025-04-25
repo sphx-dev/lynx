@@ -3,6 +3,7 @@ import { PriceLevelContainer } from "./PriceLevelRowStyle";
 import { Text } from "../../components";
 import styled from "styled-components";
 import { useMarkets } from "@/hooks/useMarkets";
+import { OrderType } from "../../types/orderBook";
 
 interface PriceLevelRowProps {
   total: string;
@@ -10,6 +11,7 @@ interface PriceLevelRowProps {
   price: string;
   amount: string;
   amountSum: string;
+  orderType: OrderType;
   reversedFieldsOrder: boolean;
 }
 
@@ -24,17 +26,13 @@ const Label = styled.div`
   }
 `;
 
-const Currency = styled.span`
-  color: #ffffff89;
-  margin-right: 2px;
-`;
-
 const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
   total,
   size,
   price,
   amount,
   amountSum,
+  orderType,
   reversedFieldsOrder = false,
 }) => {
   const { selectedMarket } = useMarkets();
@@ -46,15 +44,20 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
     >
       <>
         <Label>
-          <Text variant="textNumMd">
-            <Currency>$</Currency>
+          <Text
+            variant="textXSmall"
+            color={
+              orderType === OrderType.ASKS
+                ? "var(--text-bear)"
+                : "var(--text-bull)"
+            }
+          >
             {price}
           </Text>
         </Label>
         <Label>
-          <Currency>$</Currency>
           <Text
-            variant="textNumMd"
+            variant="textXSmall"
             data-tooltip={size + " " + symbol}
             data-tooltip-top
           >
@@ -62,9 +65,8 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
           </Text>
         </Label>
         <Label>
-          <Currency>$</Currency>
           <Text
-            variant="textNumMd"
+            variant="textXSmall"
             data-tooltip={total + " " + symbol}
             data-tooltip-top
           >

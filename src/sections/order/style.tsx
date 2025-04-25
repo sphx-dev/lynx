@@ -2,24 +2,46 @@ import styled from "styled-components";
 import { Button, Text } from "../../components";
 import { css } from "styled-components";
 import { getThemeColors } from "../../theme";
-import { InputLabel } from "@/components/Input";
 import { useTranslation } from "react-i18next";
+import { VerticalDivider } from "@/components/Input";
+import { t } from "i18next";
 
 export const Wrapper = styled.div`
-  background: ${({ theme }) => theme.colors.common.palette.alpha.white5};
-  padding: 16px 0;
+  background: var(--bg-surface-900);
+  padding: 8px;
   width: 320px;
+  border-radius: 8px;
 `;
-export const Container = styled.div`
-  padding: 0 16px;
-`;
-export const StyledButton = styled(Button)`
-  width: 38px;
-  height: 38px;
+
+export const StyledButton = styled.button`
+  width: 48px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
+
+  background-color: var(--bg-strong-950);
+  border: 1px solid var(--stroke-soft-200);
+  border-radius: 8px;
+  color: var(--text-sub-600);
+
+  &:disabled {
+    background-color: var(--bg-strong-800);
+    border: 1px solid var(--stroke-soft-200);
+    color: var(--text-sub-600);
+  }
+
+  &:not(:disabled):hover {
+    border: 1px solid var(--primary-base);
+    color: var(--primary-base);
+    background-color: var(--bg-strong-900);
+  }
 `;
 
 export const buyStyle = css`
@@ -44,7 +66,14 @@ export const PlaceOrderButton = styled(Button)<{
   $isBuy: boolean;
   smartSign: boolean;
 }>`
-  ${({ $isBuy }) => ($isBuy ? buyStyle : sellStyle)}
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
+  background-color: var(--primary-base);
+  color: black;
+
+  /* ${({ $isBuy }) => ($isBuy ? buyStyle : sellStyle)} */
   ${({ $isBuy, smartSign }) =>
     smartSign &&
     css`
@@ -54,20 +83,18 @@ export const PlaceOrderButton = styled(Button)<{
 `;
 
 export const PlaceOrderMessage = () => {
-  return (
-    <PlaceHolder>
-      You need a Margin Account with funds to place an order
-    </PlaceHolder>
-  );
+  return <PlaceHolder>{t("order.youNeedAMarginAccount")}</PlaceHolder>;
 };
 export const PlaceHolder = styled.div`
-  text-align: center;
-  padding: 16px;
-  color: ${({ theme }) => getThemeColors(theme).text.primary};
-  background: ${({ theme }) => getThemeColors(theme).background.button};
-  border: 1px solid ${({ theme }) => getThemeColors(theme).border.default};
-  border-radius: 8px;
-  margin: 6px;
+  padding: 14px 14px 16px 14px;
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
+  color: white;
+  background: var(--warning-base);
+  border: 0;
+  border-radius: 12px;
 `;
 
 export const PriceEstimation = ({
@@ -80,26 +107,25 @@ export const PriceEstimation = ({
   const { t } = useTranslation();
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-      <InputLabel>{label}</InputLabel>
+      <Text variant="textSmall" color="strong950">
+        {label}
+      </Text>
       <InputWrapper>
         <StyledNonInput>{value}</StyledNonInput>
-        <Text>{t("USDC")}</Text>
+        <VerticalDivider style={{ background: "var(--stroke-sub-300)" }} />
+        <Text color="disabled300">{t("USDC")}</Text>
       </InputWrapper>
     </div>
   );
 };
 
 const InputWrapper = styled.div`
-  border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border: 1px solid var(--bg-surface-900);
+  border-radius: 6px;
   width: 100%;
   padding: 7px 12px;
 
-  background-color: ${({ theme }) =>
-    getThemeColors(theme).input["primary"].background.disabled};
-
-  background: ${({ theme }) =>
-    getThemeColors(theme).input["primary"].background.hovered};
+  background-color: var(--bg-surface-800);
 
   display: flex;
   gap: 0.5rem;
@@ -109,6 +135,6 @@ const InputWrapper = styled.div`
 const StyledNonInput = styled.div`
   text-align: right;
   width: 100%;
-  color: #17eee3;
+  color: var(--text-bull);
   ${({ theme }) => theme.fonts.typography.textNumMd}
 `;

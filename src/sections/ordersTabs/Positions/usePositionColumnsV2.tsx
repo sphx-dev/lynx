@@ -1,6 +1,5 @@
 import { Button, Text } from "@/components";
 import { formatNumber } from "@/utils/format";
-import { getColorByPl } from "../helpers";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { PerpetualPosition } from "proto-codecs/codegen/sphx/order/perpetual_position";
 // import { PRECISION } from "@/constants";
@@ -8,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import React, { PropsWithChildren } from "react";
 import { useLocalStreamingData } from "@/sections/chart/localStreaming";
+import { Column, TableRowMarket } from "@/components/Table/TableRowMarket";
 
 export const usePositionColumnsV2 = function (
   closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
@@ -19,34 +19,34 @@ export const usePositionColumnsV2 = function (
   return [
     {
       accessorKey: "symbol",
-      header: "Symbol",
-      meta: {
-        background: (props: any) => {
-          if (props.row.original.volume > 0) {
-            return `linear-gradient(90deg,var(--positive) 0,transparent 100%) 0px`;
-          }
-          if (props.row.original.volume < 0) {
-            return `linear-gradient(90deg,var(--negative) 0,transparent 100%) 0px`;
-          }
-          return "";
-        },
-      },
-      cell: (props: any) => {
-        return <Text color="tertiary">{t(props.getValue() || "")}</Text>;
-      },
+      header: "Market",
+      // meta: {
+      //   background: (props: any) => {
+      //     if (props.row.original.volume > 0) {
+      //       return `linear-gradient(90deg,var(--positive) 0,transparent 100%) 0px`;
+      //     }
+      //     if (props.row.original.volume < 0) {
+      //       return `linear-gradient(90deg,var(--negative) 0,transparent 100%) 0px`;
+      //     }
+      //     return "";
+      //   },
+      // },
+      cell: TableRowMarket,
     },
     {
       accessorKey: "volume",
       header: "Qty",
       cell: (props: any) => (
-        <Text color="tertiary">{Math.abs(Number(props.getValue() || 0))}</Text>
+        <Text variant="textXSmall">
+          {Math.abs(Number(props.getValue() || 0))}
+        </Text>
       ),
     },
     {
       accessorKey: "entry_price",
       header: "Entry Price",
       cell: (props: any) => (
-        <Text color="tertiary">
+        <Text variant="textXSmall">
           {formatNumber({
             value: Math.abs(Number(props.getValue())),
             fixed: 3,
@@ -61,7 +61,7 @@ export const usePositionColumnsV2 = function (
       },
       header: "Value",
       cell: (props: any) => (
-        <Text color="tertiary">
+        <Text variant="textXSmall">
           {formatNumber({ value: props.getValue(), fixed: 8 })}
         </Text>
       ),
@@ -234,14 +234,20 @@ const UnrealizedPnL = ({
   let pnlPercent = ((currentPrice - entryPrice) / entryPrice) * 100;
 
   let sign = pnlValue < 0 ? "-" : "+";
+  const isPositive = pnlValue > 0;
   return (
-    <Text color={getColorByPl(pnlValue.toFixed(10))}>
+    <Text variant="textXSmall" color={isPositive ? "bull" : "bear"}>
       <>
         {pnlValue ? (
-          <>
-            {sign}${Math.abs(pnlValue).toFixed(5).replace(/0+$/, "")} ({sign}
-            {Math.abs(pnlPercent).toFixed(2)}%)
-          </>
+          <Column>
+            <div>
+              {sign}${Math.abs(pnlValue).toFixed(5).replace(/0+$/, "")}
+            </div>
+            <div>
+              ({sign}
+              {Math.abs(pnlPercent).toFixed(2)}%)
+            </div>
+          </Column>
         ) : (
           <Text color="tertiary">-</Text>
         )}

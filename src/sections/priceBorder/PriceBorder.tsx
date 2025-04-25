@@ -8,15 +8,15 @@ import { useQuery } from "react-query";
 import config from "@/config";
 
 const Wrapper = styled.div`
-  background: linear-gradient(180deg, #16353c 0%, #17484e 100%);
   display: flex;
   padding: 8px 16px;
   align-items: center;
   gap: 24px;
   width: 100%;
-  border-width: 1px 0px 1px 0px;
+  border-width: 0px 0px 1px 0px;
   border-style: solid;
-  border-color: #2d5a62;
+  border-color: var(--stroke-soft-200);
+  min-height: 68px;
 `;
 
 enum ValueType {
@@ -40,14 +40,16 @@ const PriceView = ({
   type = ValueType.DEFAULT,
 }: PriceViewParam) => {
   const colorsByType = {
-    [ValueType.ACTIVE]: "secondaryActive", //themeColors.text.secondaryActive,
-    [ValueType.ERROR]: "error", //themeColors.text.error,
-    [ValueType.DEFAULT]: "primary", //themeColors.text.primary,
+    [ValueType.ACTIVE]: "bull", //themeColors.text.secondaryActive,
+    [ValueType.ERROR]: "bear", //themeColors.text.error,
+    [ValueType.DEFAULT]: "strong950", //themeColors.text.primary,
   };
   return (
     <Stack>
-      <Text color="tertiary">{label}</Text>
-      <Text variant="textNumSm" color={colorsByType[type]}>
+      <Text variant="textXSmall" color="sub600">
+        {label}
+      </Text>
+      <Text variant="textMedium" color={colorsByType[type]}>
         {typeof value === "string" ? (
           value
         ) : (
@@ -81,7 +83,7 @@ const NumberDisplay = ({
       {formatNumber({ value: +intPart })}
       {decimalPart && (
         <>
-          .<span style={{ fontSize: "0.8em" }}>{zeros}</span>
+          .<span style={{ fontSize: "0.7em" }}>{zeros}</span>
           {decimalsNotZero}
         </>
       )}
@@ -90,19 +92,11 @@ const NumberDisplay = ({
   );
 };
 
-const MainPrice = styled.div`
-  min-width: 115px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 24px;
-  font-family: var(--font-monoRegular);
-  color: var(--secondary-600);
-`;
-const MainPriceUnit = styled.span`
-  display: inline-block;
-  padding: 2px;
-  opacity: 0.7;
+const VerticalDivider = styled.div`
+  width: 1px;
+  height: 24px;
+  margin: 0 10px 0 10px;
+  background-color: var(--stroke-soft-200);
 `;
 
 const PriceBorder = () => {
@@ -124,12 +118,11 @@ const PriceBorder = () => {
   return (
     <Wrapper>
       <SymbolSelect />
-      <MainPrice>
-        <>
-          <MainPriceUnit>{unit}</MainPriceUnit>
-          {formatNumber({ value: +lastPrice })}
-        </>
-      </MainPrice>
+      <VerticalDivider />
+      <Text variant="textLarge" color="bull">
+        {formatNumber({ value: +lastPrice })}
+      </Text>
+      <VerticalDivider />
       <PriceView
         label="Last Price"
         value={formatNumber({ value: +lastPrice, before: unit })}

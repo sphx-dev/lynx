@@ -23,11 +23,7 @@ import { usePubSub } from "@/hooks/usePubSub";
 import { useMarkets } from "@/hooks/useMarkets";
 import { asksToState, orderToState } from "./helpers";
 import styled from "styled-components";
-import { useLocalStreaming } from "../chart/localStreaming";
 import { useTranslation } from "react-i18next";
-import dayjs from "dayjs";
-import { t } from "i18next";
-import { formatDollars } from "@/utils/format";
 import { useOrderBookData } from "./useOrderBookData";
 
 const HEADERS = ["price", "amount", "total"];
@@ -40,8 +36,6 @@ const OrderBook: FunctionComponent = () => {
   const asksBidsRef = useRef(null);
   const { data: book, isLoading } = useOrderBook(asksBidsRef);
   const { selectedMarket } = useMarkets();
-  const symbol = selectedMarket?.baseAsset;
-  const [sizeOption, setSizeOption] = useState(0);
 
   return (
     <Container ref={containerRef} data-testid="orderbook-tab">
@@ -78,12 +72,12 @@ const OrderBook: FunctionComponent = () => {
         </AsksBidsContainer>
       ) : (
         <Stack justify="center" align="center" style={{ flex: "1 0 auto" }}>
-          <Text variant="textXl" color="tertiary">
+          <Text variant="textXLarge" color="soft400">
             {isLoading ? t("loading") : t("noData")}
           </Text>
         </Stack>
       )}
-      <div onClick={() => setSizeOption(x => (x + 1) % 3)}>
+      {/* <div onClick={() => setSizeOption((x) => (x + 1) % 3)}>
         {sizeOption === 0 && (
           <BidsAsksSize bidsSize={book?.bids_size} asksSize={book?.asks_size} />
         )}
@@ -102,91 +96,13 @@ const OrderBook: FunctionComponent = () => {
           />
         )}
         <StreamingInfo />
-      </div>
+      </div> */}
     </Container>
   );
 };
 
 const MIN_SIDE = 27;
 const MAX_SIDE = 100 - MIN_SIDE - MIN_SIDE;
-const BidsAsksSize = ({
-  bidsSize,
-  asksSize,
-  formatFn,
-}: {
-  bidsSize: number;
-  asksSize: number;
-  formatFn?: (value: number) => string;
-}) => {
-  let bidsWidth = (bidsSize / (bidsSize + asksSize)) * MAX_SIDE + MIN_SIDE;
-  let asksWidth = (asksSize / (bidsSize + asksSize)) * MAX_SIDE + MIN_SIDE;
-  if (!bidsSize && !asksSize) {
-    bidsWidth = 50;
-    asksWidth = 50;
-  }
-
-  return (
-    <div style={{ position: "relative", height: "20px", margin: "15px 0 7px" }}>
-      <Bids style={{ width: bidsWidth + "%" }}></Bids>
-      <Asks style={{ width: asksWidth + "%" }}></Asks>
-      {!formatFn && (
-        <TextContainer style={{ left: 0, width: "40px" }}>
-          {t("bids")}
-        </TextContainer>
-      )}
-      <TextContainer style={{ left: !formatFn ? "40px" : "5px" }}>
-        {formatFn ? formatFn(bidsSize) : bidsSize}
-      </TextContainer>
-      {!formatFn && (
-        <TextContainer style={{ right: 0, width: "40px" }}>
-          {t("asks")}
-        </TextContainer>
-      )}
-      <TextContainer style={{ right: !formatFn ? "40px" : "5px" }}>
-        {formatFn ? formatFn(asksSize) : asksSize}
-      </TextContainer>
-    </div>
-  );
-};
-
-const StreamingInfo = () => {
-  const { t } = useTranslation();
-  const data = useLocalStreaming();
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        fontSize: "10px",
-        justifyContent: "center",
-        gap: "6px",
-      }}
-    >
-      <div
-        style={{
-          display: "inline-block",
-        }}
-      >
-        {t(data?.ticker || "")}: {data?.p}
-      </div>
-      <div
-        style={{
-          height: "10px",
-          display: "inline-block",
-          borderRight: "1px solid #ffffff",
-        }}
-      ></div>
-      <div
-        style={{
-          display: "inline-block",
-        }}
-      >
-        {dayjs(new Date((data?.t || 0) * 1000)).format("YYYY-MM-DD HH:mm:ss")}
-      </div>
-    </div>
-  );
-};
 
 const AsksBidsContainer = styled.div`
   display: flex;
@@ -254,6 +170,7 @@ const PriceLevels = ({
               amount={amount}
               amountSum={amountSum}
               price={price}
+              orderType={orderType}
               reversedFieldsOrder={orderType === OrderType.ASKS}
             />
           </PriceLevelRowContainer>
@@ -298,13 +215,15 @@ const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
 
   useLayoutEffect(() => {
     if (ref.current) {
-      const winHeight = window.outerHeight - 250;
-      const columnHeight = ref.current?.clientHeight - 60;
+      const winHeight = window.outerHeight - 168;
+      const columnHeight = ref.current?.clientHeight - 75;
       const h = Math.min(winHeight, columnHeight);
       const r = Math.max(
-        Math.min(Math.floor(h / 26 / 2), MAX_RECORDS)
+        Math.min(Math.floor(h / 27 / 2), MAX_RECORDS)
         // MIN_RECORDS
       );
+
+      console.log(r, h, ref.current?.clientHeight, window.outerHeight);
 
       setRecords(r ? r : MIN_RECORDS);
       // setRecords(20);

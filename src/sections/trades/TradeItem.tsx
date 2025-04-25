@@ -2,7 +2,7 @@ import { Side } from "../../types/order";
 import { Text } from "../../components";
 import styled from "styled-components";
 import { showTime } from "../../utils/date";
-import { formatDollars } from "@/utils/format";
+import { formatNumberIntl } from "@/utils/format";
 
 interface Props {
   price: string;
@@ -35,15 +35,18 @@ const TradeItem = ({ price, quantity, date, side }: Props) => {
   return (
     <Row>
       <Label>
-        <Text color={side} variant="textNumMd">
-          {formatDollars(+price, "symbol")}
+        <Text
+          color={side === Side.Buy ? "var(--text-bull)" : "var(--text-bear)"}
+          variant="textXSmall"
+        >
+          {formatNumberIntl(+price)}
         </Text>
       </Label>
       <Label>
-        <Text variant="textNumMd">{quantity}</Text>
+        <Text variant="textXSmall">{quantity}</Text>
       </Label>
       <Label>
-        <Text variant="textNumMd">{showTime(date)}</Text>
+        <Text variant="textXSmall">{showTime(date)}</Text>
       </Label>
     </Row>
   );

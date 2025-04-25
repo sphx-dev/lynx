@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
-import { Button } from ".";
 import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useTranslation } from "react-i18next";
 import { ButtonProps } from "./Button";
+import { Button } from "./ButtonV2/Button";
 
 type ConnectButtonProps = ButtonProps & {
   text?: string;
@@ -38,8 +38,9 @@ export const ConnectButton = React.memo(
     if (!hasKeplr) {
       return (
         <Button
-          size={size}
-          style={{ textAlign: "center" }}
+          type="primary"
+          option="filled"
+          size="xsmall"
           as="a"
           href={GET_KEPLR_URL}
           target="_blank"
@@ -60,24 +61,44 @@ export const ConnectButton = React.memo(
 
     return (
       <>
-        <Button size={size} onClick={() => addChain()}>
+        {/* <ButtonOld size={size} onClick={() => addChain()}>
+          Add Chain
+        </ButtonOld> */}
+        <Button
+          type="neutral"
+          option="stroke"
+          size="xxsmall"
+          onClick={() => addChain()}
+        >
           Add Chain
         </Button>
         {!isConnected ? (
-          <Button
-            variant="primary"
-            size={size}
-            {...props}
-            onClick={() => connect()}
-          >
-            {text ?? t("connect")}
-          </Button>
+          <>
+            {/* <ButtonOld
+              variant="primary"
+              size={size}
+              {...props}
+              onClick={() => connect()}
+            >
+              {text ?? t("connect")}
+            </ButtonOld> */}
+            <Button
+              {...props}
+              type="primary"
+              option="stroke"
+              size="xxsmall"
+              onClick={() => connect()}
+            >
+              {text ?? t("connect")}
+            </Button>
+          </>
         ) : (
           <Button
-            data-testid="disconnect-button"
-            variant="secondary"
-            size={size}
             {...props}
+            data-testid="disconnect-button"
+            type="neutral"
+            option="stroke"
+            size="xxsmall"
             onClick={() => {
               // TODO: add confirmation modal to add chain config to Keplr
               // addChain();

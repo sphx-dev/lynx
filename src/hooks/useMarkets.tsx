@@ -50,6 +50,13 @@ export const useMarkets = () => {
   };
 };
 
+export const getIconByTicker = (ticker: string) => {
+  if (ticker in marketsIcons) {
+    return marketsIcons[ticker];
+  }
+  return marketsIcons["default"];
+};
+
 type MarketsStore = {
   markets: Market[];
   selectedMarketId: bigint;
@@ -106,7 +113,7 @@ const MARKETS_META: Record<string, any> = {
     minimumVolume: 0,
     pricePerContract: 1,
   },
-  "ETHUSDC.P": {
+  "NGXUSDC.P": {
     minimumVolume: 0,
     pricePerContract: 1,
   },

@@ -1,19 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Divider, Group, Stack, Switcher, Text } from "../../components";
-import Surface from "@/ui/Layouts/Surface";
 import Summary from "./Summary";
-import AttributionBar from "../../components/AttributionBar";
-import TabButton from "../../components/TabButton";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { errorAlert, promiseAlert, successAlert } from "../../utils/alerts";
-import SymbolSelect from "../../components/SymbolSelect/SymbolSelect";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
 import { schema } from "./orderSchema";
 import {
-  Container,
   PlaceOrderButton,
   StyledButton,
   Wrapper,
@@ -31,7 +26,6 @@ import { useBalance } from "@/hooks/useBalance";
 import { OrderSide, OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { motion, AnimatePresence } from "framer-motion";
 import { PRECISION } from "@/constants";
-import styled from "styled-components";
 import { useLocalStreaming } from "../chart/localStreaming";
 import { useSmartSign } from "@/components/SmartSignButton";
 import { PlaceLimitOrderInChainParams } from "@/utils/placeOrder";
@@ -41,6 +35,10 @@ import { useQueryPositionsByAccount } from "@/hooks/usePositions";
 import { PositionSide } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import config from "@/config";
 import { placeOrderSigned } from "./placeOrderSigned";
+import {
+  TabButtonContainer,
+  TabButton,
+} from "@/components/TabButton/TabButton";
 
 const options: [
   { label: string; value: OrderType },
@@ -380,282 +378,242 @@ function OrderInput() {
     orderTotalValueMarket * MARKET_MINIMUM_MARGING_RATIO > (amount ?? 0);
 
   return (
-    <Surface
-      style={{
-        paddingBottom: "32px",
-        borderTop: `1px solid var(--border-default)`,
-      }}
-    >
-      <Stack justify="apart" fullHeight spacing={40}>
-        <Wrapper>
-          <Container style={{ paddingBottom: "16px" }}>
-            <SymbolSelect />
-          </Container>
-          <Divider />
-          {!isConnected && (
-            <Container style={{ padding: "10px 16px" }}>
-              <Group align="center" position="apart">
-                {!isConnected && (
-                  <Stack spacing={2}>
-                    <Text variant="text2Xs">{t("noWalletConnected")}</Text>
-                    <Text variant="text2Xs" color="primaryLink">
-                      {t("connectWalletToDeposit")}
-                    </Text>
-                  </Stack>
-                )}
-                <ConnectButton size="sm" />
-              </Group>
-            </Container>
-          )}
-          <Stack spacing={20}>
-            <form
-              onSubmit={handleSubmit(placeOrder, errors => {
-                console.log(errors);
-              })}
-            >
-              <Stack spacing={20}>
-                <Group spacing={0}>
-                  <TabButton
-                    $active={isBuySide}
-                    onClick={() => handleChangeOrderSide(true)}
-                    type="button"
-                    style={{ flex: 1 }}
-                  >
-                    LONG
-                  </TabButton>
-                  <TabButton
-                    $active={!isBuySide}
-                    onClick={() => handleChangeOrderSide(false)}
-                    type="button"
-                    style={{ flex: 1 }}
-                  >
-                    SHORT
-                  </TabButton>
+    <Wrapper>
+      <Stack spacing={20}>
+        <form
+          onSubmit={handleSubmit(placeOrder, errors => {
+            console.log(errors);
+          })}
+        >
+          <Stack spacing={10}>
+            <TabButtonContainer>
+              <TabButton
+                $active={isBuySide}
+                $isBuy={true}
+                onClick={() => handleChangeOrderSide(true)}
+                type="button"
+              >
+                {t("long")}
+              </TabButton>
+              <TabButton
+                $active={!isBuySide}
+                $isBuy={false}
+                onClick={() => handleChangeOrderSide(false)}
+                type="button"
+              >
+                {t("short")}
+              </TabButton>
+            </TabButtonContainer>
+            <Divider />
+            <Stack spacing={8}>
+              <Switcher
+                onChange={handleSwitchOrderType}
+                defaultValue={orderType}
+                options={options}
+                name="orderType"
+              />
+              {orderType !== OrderType.ORDER_TYPE_MARKET ? (
+                <Input
+                  data-testid="order-input-price"
+                  {...register("price")}
+                  label="Price"
+                  placeholder="0.00"
+                  rightSide="USD"
+                  type="number"
+                  value={watch("price")}
+                  error={errors.price?.message}
+                  autoComplete="off"
+                />
+              ) : (
+                <FakeInput />
+              )}
+              <Input
+                data-testid="order-input-volume"
+                {...register("volume")}
+                error={errors.volume?.message}
+                value={watch("volume")}
+                placeholder="0.00"
+                type="number"
+                label="Size"
+                rightSide={selectedMarket?.baseAsset || ""}
+                autoComplete="off"
+              />
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", justifyContent: "start" }}>
+                  <Checkbox
+                    type="checkbox"
+                    left={t("reduceOnly")}
+                    checked={isReduceOnly}
+                  />
+                </div>
+                <div>
+                  <WarnInfoText>{t("ordersReduceInfo")}</WarnInfoText>
+                </div>
+              </div>
+              <div style={{ position: "relative" }}>
+                <Group align="end">
+                  <Input
+                    {...register("leverage")}
+                    style={{ minWidth: "60px" }}
+                    label="Leverage"
+                    readOnly
+                  />
+                  <Group align="end" style={{ flex: 1 }}>
+                    <StyledButton
+                      data-testid="order-input-leverate-1x"
+                      type="button"
+                      onClick={() => handleChangeLeverage(1)}
+                    >
+                      1x
+                    </StyledButton>
+                    <StyledButton
+                      data-testid="order-input-leverate-2x"
+                      type="button"
+                      onClick={() => handleChangeLeverage(2)}
+                      // TODO: enable when leverage is supported
+                      disabled
+                    >
+                      2x
+                    </StyledButton>
+                    <StyledButton
+                      data-testid="order-input-leverate-5x"
+                      type="button"
+                      onClick={() => handleChangeLeverage(5)}
+                      // TODO: enable when leverage is supported
+                      disabled
+                    >
+                      5x
+                    </StyledButton>
+                    <StyledButton
+                      data-testid="order-input-leverate-10x"
+                      type="button"
+                      onClick={() => handleChangeLeverage(10)}
+                      // TODO: enable when leverage is supported
+                      disabled
+                    >
+                      10x
+                    </StyledButton>
+                  </Group>
                 </Group>
-                <Container>
-                  <Stack spacing={20}>
-                    <Switcher
-                      onChange={handleSwitchOrderType}
-                      defaultValue={orderType}
-                      options={options}
-                      name="orderType"
-                    />
-
-                    {orderType !== OrderType.ORDER_TYPE_MARKET ? (
-                      <Input
-                        data-testid="order-input-price"
-                        {...register("price")}
-                        label="Price"
-                        placeholder="0.00"
-                        rightSide="USD"
-                        type="number"
-                        value={watch("price")}
-                        error={errors.price?.message}
-                        autoComplete="off"
-                      />
-                    ) : (
-                      <FakeInput />
-                    )}
+              </div>
+              {/* TODO: Add Take Profit/Stop Loss when chain functionality is finished */}
+              {false && (
+                <Group>
+                  <Checkbox
+                    type="checkbox"
+                    left={t("Take Profit/Stop Loss")}
+                    onClick={handleClickHasTPSL}
+                    {...register("hasTPSL")}
+                  />
+                </Group>
+              )}
+              <AnimatePresence>
+                {hasTPSL && (
+                  <motion.div
+                    className={hasTPSL ? "hasTPSL" : "PLANE"}
+                    style={{ overflow: "hidden" }}
+                    initial={{ height: 0 }}
+                    animate={{ height: "auto" }}
+                    transition={{ duration: 0.4 }}
+                    exit={{ height: 0 }}
+                  >
                     <Input
-                      data-testid="order-input-volume"
-                      {...register("volume")}
-                      error={errors.volume?.message}
-                      value={watch("volume")}
-                      placeholder="0.00"
+                      {...register("takeProfit")}
+                      label="Take Profit"
+                      rightSide="USD"
+                      error={errors.takeProfit?.message}
                       type="number"
-                      label="Size"
-                      rightSide={selectedMarket?.baseAsset || ""}
-                      autoComplete="off"
+                      value={watch("takeProfit") || ""}
                     />
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <div style={{ display: "flex", justifyContent: "start" }}>
-                        <Checkbox
-                          type="checkbox"
-                          left={t("reduceOnly")}
-                          checked={isReduceOnly}
-                        />
-                      </div>
-                      <div>
-                        <WarnInfoText>{t("ordersReduceInfo")}</WarnInfoText>
-                      </div>
-                    </div>
-                    <div style={{ position: "relative" }}>
-                      <Group align="end">
-                        <Input
-                          {...register("leverage")}
-                          style={{ minWidth: "60px" }}
-                          label="Leverage"
-                          readOnly
-                        />
-                        <Group align="end" style={{ flex: 1 }}>
-                          <StyledButton
-                            data-testid="order-input-leverate-1x"
-                            type="button"
-                            onClick={() => handleChangeLeverage(1)}
-                          >
-                            1x
-                          </StyledButton>
-                          <StyledButton
-                            data-testid="order-input-leverate-2x"
-                            type="button"
-                            onClick={() => handleChangeLeverage(2)}
-                            // TODO: enable when leverage is supported
-                            disabled
-                          >
-                            2x
-                          </StyledButton>
-                          <StyledButton
-                            data-testid="order-input-leverate-5x"
-                            type="button"
-                            onClick={() => handleChangeLeverage(5)}
-                            // TODO: enable when leverage is supported
-                            disabled
-                          >
-                            5x
-                          </StyledButton>
-                          <StyledButton
-                            data-testid="order-input-leverate-10x"
-                            type="button"
-                            onClick={() => handleChangeLeverage(10)}
-                            // TODO: enable when leverage is supported
-                            disabled
-                          >
-                            10x
-                          </StyledButton>
-                        </Group>
-                      </Group>
-                    </div>
-                    {/* TODO: Add Take Profit/Stop Loss when chain functionality is finished */}
-                    {false && (
-                      <Group>
-                        <Checkbox
-                          type="checkbox"
-                          left={t("Take Profit/Stop Loss")}
-                          onClick={handleClickHasTPSL}
-                          {...register("hasTPSL")}
-                        />
-                      </Group>
-                    )}
-
-                    <AnimatePresence>
-                      {hasTPSL && (
-                        <motion.div
-                          className={hasTPSL ? "hasTPSL" : "PLANE"}
-                          style={{ overflow: "hidden" }}
-                          initial={{ height: 0 }}
-                          animate={{ height: "auto" }}
-                          transition={{ duration: 0.4 }}
-                          exit={{ height: 0 }}
+                    <Input
+                      {...register("stopLoss")}
+                      label="Stop Loss"
+                      rightSide="USD"
+                      error={errors.stopLoss?.message}
+                      type="number"
+                      value={watch("stopLoss") || ""}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              {!isConnected && (
+                <ConnectButton size="sm" fluid text={t("connectWallet")} />
+              )}
+              {isConnected && (
+                <>
+                  {!address || !marketId || !selectedAddress || !amount ? (
+                    <PlaceOrderMessage />
+                  ) : (
+                    <>
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "4px",
+                          marginBottom: "-4px",
+                        }}
+                      >
+                        <PlaceOrderButton
+                          data-testid="order-input-place-order-button"
+                          $isBuy={isBuySide}
+                          disabled={
+                            isPlacingOrder ||
+                            insufficientFundsLimit ||
+                            insufficientFundsMarket
+                          }
+                          smartSign={smartSign}
                         >
-                          <Input
-                            {...register("takeProfit")}
-                            label="Take Profit"
-                            rightSide="USD"
-                            error={errors.takeProfit?.message}
-                            type="number"
-                            value={watch("takeProfit") || ""}
-                          />
-                          <Input
-                            {...register("stopLoss")}
-                            label="Stop Loss"
-                            rightSide="USD"
-                            error={errors.stopLoss?.message}
-                            type="number"
-                            value={watch("stopLoss") || ""}
-                          />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    {!isConnected && (
-                      <ConnectButton
-                        size="sm"
-                        fluid
-                        text={t("connectWallet")}
-                      />
-                    )}
-                    {isConnected && (
-                      <>
-                        {!address ||
-                        !marketId ||
-                        !selectedAddress ||
-                        !amount ? (
-                          <PlaceOrderMessage />
-                        ) : (
-                          <>
-                            <div
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "4px",
-                                marginBottom: "-4px",
-                              }}
-                            >
-                              <PlaceOrderButton
-                                data-testid="order-input-place-order-button"
-                                $isBuy={isBuySide}
-                                disabled={
-                                  isPlacingOrder ||
-                                  insufficientFundsLimit ||
-                                  insufficientFundsMarket
-                                }
-                                smartSign={smartSign}
-                              >
-                                {t("placeOrder")}
-                              </PlaceOrderButton>
-                              <LoaderBar
-                                style={{
-                                  width: "100%",
-                                  visibility: isPlacingOrder
-                                    ? "visible"
-                                    : "hidden",
-                                }}
-                              />
-                            </div>
-                            {orderType === OrderType.ORDER_TYPE_MARKET &&
-                              insufficientFundsMarket && (
-                                <WarnInfoText>
-                                  {t("insufficientBalanceInAccountMarket")}
-                                </WarnInfoText>
-                              )}
-                            {orderType === OrderType.ORDER_TYPE_LIMIT &&
-                            insufficientFundsLimit ? (
-                              <WarnInfoText>
-                                {t("insufficientBalanceInAccount")}
-                              </WarnInfoText>
-                            ) : null}
-                          </>
+                          {t("placeOrder")}
+                        </PlaceOrderButton>
+                        <LoaderBar
+                          style={{
+                            width: "100%",
+                            visibility: isPlacingOrder ? "visible" : "hidden",
+                          }}
+                        />
+                      </div>
+                      {orderType === OrderType.ORDER_TYPE_MARKET &&
+                        insufficientFundsMarket && (
+                          <WarnInfoText>
+                            {t("insufficientBalanceInAccountMarket")}
+                          </WarnInfoText>
                         )}
-                      </>
-                    )}
-                    <Summary
-                      limitPrice={Number(watch("price"))}
-                      orderType={orderType}
-                      pricePerContract={pricePerContract}
-                      volume={Number(watch("volume"))}
-                      minimumVolume={minimumVolume}
-                    />
-                  </Stack>
-                </Container>
-              </Stack>
-            </form>
+                      {orderType === OrderType.ORDER_TYPE_LIMIT &&
+                      insufficientFundsLimit ? (
+                        <WarnInfoText>
+                          {t("insufficientBalanceInAccount")}
+                        </WarnInfoText>
+                      ) : null}
+                    </>
+                  )}
+                </>
+              )}
+              <Divider />
+              <Summary
+                limitPrice={Number(watch("price"))}
+                orderType={orderType}
+                pricePerContract={pricePerContract}
+                volume={Number(watch("volume"))}
+                minimumVolume={minimumVolume}
+              />
+            </Stack>
           </Stack>
-        </Wrapper>
-        <Container>
-          <AttributionBar />
-        </Container>
+        </form>
       </Stack>
-    </Surface>
+    </Wrapper>
   );
 }
 
 export default OrderInput;
 
-const WarnInfoText = styled.p`
-  ${({ theme }) => theme.fonts.typography.textSm};
-  color: ${({ theme }) => theme.colors.selectedTheme.text.secondaryActive};
-`;
+const WarnInfoText = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Text variant="textSmall" color="var(--primary-base)">
+      {children}
+    </Text>
+  );
+};
 
 const FakeInput = () => {
   const { t } = useTranslation();

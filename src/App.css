@@ -8,48 +8,8 @@ body {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background: center / cover no-repeat url("assets/glow-up.png"), #031a28 35% !important;
-  color: #e5e5e5;
-}
-
-.App {
-  text-align: center;
-  color: #e5e5e5;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-float infinite 3s ease-in-out;
-  }
-}
-
-.App-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-}
-
-.App-link {
-  color: rgb(112, 76, 182);
-}
-
-@keyframes App-logo-float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+  background-color: var(--bg-strong-1000);
+  color: var(--text-strong-950);
 }
 
 * {
