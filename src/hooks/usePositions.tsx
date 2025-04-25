@@ -61,6 +61,9 @@ export const useQueryPositionsByAccount = (accountId: string | undefined) => {
       enabled: !!accountId,
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchInterval: 5000,
+      select: data => {
+        return data.filter(pos => pos.volume !== "0");
+      },
     }
   );
 };
