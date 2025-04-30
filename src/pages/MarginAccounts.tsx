@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, Stack } from "../components";
+import { Stack } from "../components";
 import { ConnectButton } from "../components/ConnectButton";
 import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../hooks/useMarginAccounts";
@@ -12,6 +12,7 @@ import { Input } from "@/components/Input";
 import { DENOMUSDC, PRECISION } from "@/constants";
 import { Link } from "react-router-dom";
 import config from "@/config";
+import { Button } from "@/components/ButtonV2/Button";
 
 const MarginAccountsPage = () => {
   const { address, reconnect } = useChainCosmoshub();
@@ -38,10 +39,10 @@ const MarginAccountsPage = () => {
   const [balances, setBalances] = useState<any[]>([]);
   useEffect(() => {
     if (marginAccounts && marginAccounts.length) {
-      const promises = marginAccounts.map(account =>
+      const promises = marginAccounts.map((account) =>
         getBalance(account.address, DENOMUSDC)
       );
-      Promise.all(promises).then(balances => {
+      Promise.all(promises).then((balances) => {
         setBalances(balances);
       });
     } else {
@@ -101,7 +102,7 @@ const MarginAccountsPage = () => {
                 placeholder="10.00 USD"
                 type="number"
                 value={sendAmount}
-                onChange={event => {
+                onChange={(event) => {
                   setSendAmount((event.target as HTMLInputElement).value);
                 }}
               />
@@ -127,7 +128,7 @@ const MarginAccountsPage = () => {
                         setCanSend(true);
                         setSendAmount("");
                       },
-                      error => {
+                      (error) => {
                         errorAlert(error.message);
                         setCanSend(true);
                       }

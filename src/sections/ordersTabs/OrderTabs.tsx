@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Table } from "../../components";
 import Positions from "./Positions/Positions";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import OrdersByAccount from "./OrdersByAccount";
 import OrdersHistoryByAccount from "./OrdersHistoryByAccount";
+import { ReloadButton } from "./components/ReloadButton";
+import { usePubSub } from "@/hooks/usePubSub";
+
+export const RELOAD_ORDER_TABS = "RELOAD_ORDER_TABS";
+
 interface TabProps {
   $isActive?: boolean;
 }
@@ -44,9 +48,11 @@ const Tab = styled.button<TabProps>`
 `;
 
 const ScrollContent = styled.div`
+  overflow: auto;
   width: 100%;
   position: relative;
   flex: 1;
+  scrollbar-color: var(--bg-surface-800) var(--bg-surface-900);
 `;
 
 const Tabs = styled.div`
@@ -61,14 +67,16 @@ const Container = styled.div`
   background: var(--bg-surface-900);
   padding: 8px;
   border-radius: 8px;
+  position: relative;
 `;
 
-const CONTENT = [Positions, OrdersByAccount, OrdersHistoryByAccount, Table];
+const CONTENT = [Positions, OrdersByAccount, OrdersHistoryByAccount];
 
 const OrderTabs = () => {
   const [active, setActive] = useLocalStorage("selectedOrderTab", 0);
   const { t } = useTranslation();
   const Content = useMemo(() => CONTENT[active], [active]);
+  const { publish } = usePubSub();
 
   const tabs = useMemo(
     () => [
@@ -118,6 +126,11 @@ const OrderTabs = () => {
           </Tab>
         ))}
       </Tabs>
+      <ReloadButton
+        onClick={() => {
+          publish(RELOAD_ORDER_TABS, { page: tabs[active].title });
+        }}
+      />
       <ScrollContent>
         <Content key={active} {...(tabs[active]?.params || {})} />
       </ScrollContent>

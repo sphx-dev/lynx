@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import Button from "./Button";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useCallback } from "react";
 import { SigningStargateClient } from "@cosmjs/stargate";
@@ -12,6 +11,7 @@ import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import config from "@/config";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
+import { Button } from "./ButtonV2/Button";
 
 const StyledStatus = styled.div`
   display: inline-flex;
@@ -140,7 +140,7 @@ const ButtonWrapper = ({
   params: any;
 }) => {
   return (
-    <Button size="xs" {...params}>
+    <Button size="xxsmall" {...params}>
       {children}
     </Button>
   );

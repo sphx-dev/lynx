@@ -40,10 +40,10 @@ const StyledTable = styled.table`
 
       padding: 6px 2px;
       white-space: nowrap;
-      &:first-child {
+      /* &:first-child {
         text-align: left;
         padding-left: 8px;
-      }
+      } */
       text-align: center;
       border: none;
       border-top: 1px solid var(--stroke-soft-200);
@@ -57,9 +57,9 @@ const StyledTable = styled.table`
       font-size: var(--text-x-small-font-size);
       line-height: var(--text-x-small-line-height);
 
-      &:first-child {
+      /* &:first-child {
         text-align: left;
-      }
+      } */
       text-align: center;
       padding: 6px 2px;
       white-space: nowrap;
@@ -96,13 +96,13 @@ const Table = <T extends object>({
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     enableSorting,
-    getSubRows: row => row.subRows,
+    getSubRows: (row) => row.subRows,
   });
 
   return (
     <StyledTable data-testid={rest["data-testid"]}>
       <thead style={headerStyle}>
-        {table.getHeaderGroups().map(headerGroup => (
+        {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header: any) => {
               const HeaderWrapperComponent =
@@ -128,10 +128,10 @@ const Table = <T extends object>({
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.map(row => (
+        {table.getRowModel().rows.map((row) => (
           <React.Fragment key={row.id}>
             <StyledRow onClick={onClick && (() => onClick(row.original))}>
-              {row.getVisibleCells().map(cell => {
+              {row.getVisibleCells().map((cell) => {
                 let meta;
                 if (cell.column.columnDef?.meta) {
                   meta = cell.column.columnDef.meta as any;
@@ -165,9 +165,9 @@ const Table = <T extends object>({
         ))}
       </tbody>
       <tfoot>
-        {table.getFooterGroups().map(footerGroup => (
+        {table.getFooterGroups().map((footerGroup) => (
           <tr key={footerGroup.id}>
-            {footerGroup.headers.map(footer => (
+            {footerGroup.headers.map((footer) => (
               <th key={footer.id}>
                 {flexRender(
                   footer.column.columnDef.footer,

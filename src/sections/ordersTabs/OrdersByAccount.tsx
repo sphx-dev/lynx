@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Table, Text, Button } from "../../components";
+import { Table, Text } from "../../components";
 import { getSideTextColor } from "./helpers";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
@@ -12,7 +12,6 @@ import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
 import { formatDollars } from "@/utils/format";
 import { useSmartSign } from "@/components/SmartSignButton";
-import { ReloadButton } from "./components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
 import { useQuery } from "react-query";
 import config from "@/config";
@@ -21,6 +20,9 @@ import styled from "styled-components";
 import { Modal } from "@/components/Modal/Modal";
 import { signArbitrary } from "@/utils/getOfflineSigner";
 import { TableRowMarket } from "@/components/Table/TableRowMarket";
+import { Button } from "@/components/ButtonV2/Button";
+import { usePubSub } from "@/hooks/usePubSub";
+import { RELOAD_ORDER_TABS } from "./OrderTabs";
 
 const FF_SMART_SIGN = false;
 
@@ -62,7 +64,7 @@ const useOrderColumns = ({
     setCancellingOrders([...cancellingOrders, orderId]);
   };
   const removeCancellingOrder = (orderId: string) => {
-    setCancellingOrders(co => co.filter(o => o !== orderId));
+    setCancellingOrders((co) => co.filter((o) => o !== orderId));
   };
 
   const columns = [
@@ -274,7 +276,7 @@ const useOrderColumns = ({
 
         const status = getStatusByMessage(order);
         const orderId = order.chain_order_id;
-        const isCancelling = cancellingOrders.some(o => o === orderId);
+        const isCancelling = cancellingOrders.some((o) => o === orderId);
         const onClickHandler = async () => {
           if (address) {
             try {
@@ -471,6 +473,26 @@ const OrdersByAccount = () => {
     }
   );
 
+  const { subscribe, usnuscribe } = usePubSub();
+
+  const refetchCallback = useCallback(
+    (data) => {
+      if (data.page !== "pending") {
+        return;
+      }
+      refetch();
+    },
+    [refetch]
+  );
+
+  subscribe(RELOAD_ORDER_TABS, refetchCallback);
+
+  useEffect(() => {
+    return () => {
+      usnuscribe(RELOAD_ORDER_TABS, refetchCallback);
+    };
+  }, [refetchCallback, usnuscribe]);
+
   const totalOrders = data?.total ?? 0;
   const orders = data?.orders || [];
   // const orders =
@@ -493,7 +515,6 @@ const OrdersByAccount = () => {
     return (
       <>
         <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
-        <ReloadButton onClick={() => refetch()} />
         <PlaceHolder>No Orders yet</PlaceHolder>
       </>
     );
@@ -507,7 +528,6 @@ const OrdersByAccount = () => {
         onClose={handleClosePartialsModal}
       />
       <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
-      <ReloadButton onClick={() => refetch()} />
       <Table columns={columns} data={orders} />
       <Pagination
         page={page}

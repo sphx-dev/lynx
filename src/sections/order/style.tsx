@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, Text } from "../../components";
+import { Text } from "../../components";
 import { css } from "styled-components";
 import { getThemeColors } from "../../theme";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
   border-radius: 8px;
 `;
 
-export const StyledButton = styled.button`
+export const LeverageButton = styled.button`
   width: 48px;
   height: 36px;
   display: flex;
@@ -60,26 +60,6 @@ export const sellStyle = css`
     background-color: ${({ theme }) =>
       getThemeColors(theme).orderButton.sell.hover};
   }
-`;
-
-export const PlaceOrderButton = styled(Button)<{
-  $isBuy: boolean;
-  smartSign: boolean;
-}>`
-  font-family: var(--text-small-font-family);
-  font-size: var(--text-small-font-size);
-  font-weight: var(--text-small-font-weight);
-  line-height: var(--text-small-line-height);
-  background-color: var(--primary-base);
-  color: black;
-
-  /* ${({ $isBuy }) => ($isBuy ? buyStyle : sellStyle)} */
-  ${({ $isBuy, smartSign }) =>
-    smartSign &&
-    css`
-      border-bottom: 1px solid;
-      border-bottom-color: ${({ theme }) => ($isBuy ? "#90f767" : "#ffa700")};
-    `}
 `;
 
 export const PlaceOrderMessage = () => {

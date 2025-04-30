@@ -1,4 +1,4 @@
-import { Button, Text } from "@/components";
+import { Text } from "@/components";
 import { formatNumber } from "@/utils/format";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { PerpetualPosition } from "proto-codecs/codegen/sphx/order/perpetual_position";
@@ -8,6 +8,8 @@ import { Tooltip } from "react-tooltip";
 import React, { PropsWithChildren } from "react";
 import { useLocalStreamingData } from "@/sections/chart/localStreaming";
 import { Column, TableRowMarket } from "@/components/Table/TableRowMarket";
+import { Button } from "@/components/ButtonV2/Button";
+import { LinkButton } from "@/components/ButtonV2/LinkButton";
 
 export const usePositionColumnsV2 = function (
   closePosition: (orderType: OrderType, position: PerpetualPosition) => void,
@@ -198,13 +200,13 @@ export const usePositionColumnsV2 = function (
       },
       cell: (props: any) => {
         return (
-          <Button
-            variant="link"
-            size="xs"
+          <LinkButton
+            type="grey"
+            size="small"
             onClick={() => queryDetails(props.getValue())}
           >
             {t("details")}
-          </Button>
+          </LinkButton>
         );
       },
     },

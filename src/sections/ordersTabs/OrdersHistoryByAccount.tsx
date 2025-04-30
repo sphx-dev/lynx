@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { Table, Text, Button } from "../../components";
+import { useCallback, useEffect, useState } from "react";
+import { Table, Text } from "../../components";
 import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { Pagination } from "@/components/Pagination";
 import { formatDollars } from "@/utils/format";
-import { ReloadButton } from "./components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
 import { useQuery } from "react-query";
 import config from "@/config";
@@ -16,6 +15,9 @@ import { Modal } from "@/components/Modal/Modal";
 import { PRECISION } from "@/constants";
 import { RiShareBoxLine } from "@remixicon/react";
 import { TableRowMarket } from "@/components/Table/TableRowMarket";
+import { LinkButton } from "@/components/ButtonV2/LinkButton";
+import { usePubSub } from "@/hooks/usePubSub";
+import { RELOAD_ORDER_TABS } from "./OrderTabs";
 
 const queryOrdersHistoryByAccount = async ({
   queryKey,
@@ -55,8 +57,8 @@ const useOrderColumns = ({
       cell: (props: any) => (
         <Text variant="textXSmall">
           {!dayjs(Date.now()).isSame(dayjs(new Date(props.getValue())), "day")
-            ? dayjs(new Date(props.getValue())).format("YYYY-MM-DD HH:mm:ss")
-            : dayjs(new Date(props.getValue())).format("HH:mm:ss")}
+            ? dayjs(new Date(props.getValue())).format("HH:mm:ss")
+            : dayjs(new Date(props.getValue())).format("YYYY-MM-DD")}
         </Text>
       ),
     },
@@ -174,16 +176,16 @@ const useOrderColumns = ({
       cell: (props: any) => {
         return (
           <>
-            <Button
-              color="secondary"
-              size="xs"
+            <LinkButton
+              type="grey"
+              size="small"
               onClick={() => {
                 setSelectedOrderId(props.getValue()?.order_id);
                 openPartialsModal();
               }}
             >
               {t("details")}
-            </Button>
+            </LinkButton>
           </>
         );
       },
@@ -303,6 +305,26 @@ const OrdersHistoryByAccount = () => {
     }
   );
 
+  const { subscribe, usnuscribe } = usePubSub();
+
+  const refetchCallback = useCallback(
+    (data) => {
+      if (data.page !== "orderHistory") {
+        return;
+      }
+      refetch();
+    },
+    [refetch]
+  );
+
+  subscribe(RELOAD_ORDER_TABS, refetchCallback);
+
+  useEffect(() => {
+    return () => {
+      usnuscribe(RELOAD_ORDER_TABS, refetchCallback);
+    };
+  }, [refetchCallback, usnuscribe]);
+
   const totalOrders = data?.total ?? 0;
   const orders = data?.orders || [];
 
@@ -320,7 +342,6 @@ const OrdersHistoryByAccount = () => {
     return (
       <>
         <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
-        <ReloadButton onClick={() => refetch()} />
         <PlaceHolder>No Orders yet</PlaceHolder>
       </>
     );
@@ -334,7 +355,6 @@ const OrdersHistoryByAccount = () => {
         onClose={handleClosePartialsModal}
       />
       <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
-      <ReloadButton onClick={() => refetch()} />
       <Table columns={columns} data={orders} />
       <Pagination
         page={page}

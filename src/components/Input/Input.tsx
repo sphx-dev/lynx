@@ -7,6 +7,7 @@ import Text from "../Text";
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: string;
   label?: string;
+  leftSide?: string;
   rightSide?: string;
   fluid?: boolean;
   variant?: keyof ThemeColors["input"];
@@ -24,6 +25,7 @@ interface InputWrapperProps {
 const numberRegex = /^\d*\.?\d*$/;
 
 const StyledInput = styled.input`
+  padding-block: 8px;
   font-family: var(--text-num-md-font-family);
   font-size: var(--text-num-md-font-size);
   font-weight: var(--text-num-md-font-weight);
@@ -72,7 +74,7 @@ export const InputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid var(--stroke-soft-200);
   border-radius: 6px;
   width: 100%;
-  padding: 7px 12px;
+  padding-inline: 12px;
   background-color: ${({ theme, variant, disabled }) => {
     if (variant === "error") {
       return disabled ? "var(--bg-strong-900)" : "var(--bg-strong-950)";
@@ -102,6 +104,7 @@ export const Input = forwardRef<Ref, InputProps>(
     {
       error,
       label,
+      leftSide,
       rightSide,
       fluid,
       style,
@@ -145,7 +148,7 @@ export const Input = forwardRef<Ref, InputProps>(
         }}
       >
         {label && (
-          <Text variant="textSmall" color="strong950">
+          <Text variant="textSmall" color="strong950" align="left">
             {label}
           </Text>
         )}
@@ -155,6 +158,12 @@ export const Input = forwardRef<Ref, InputProps>(
           disabled={restProps.disabled}
           $error={!!error}
         >
+          {leftSide && (
+            <>
+              <Text color="disabled300">{leftSide}</Text>
+              <VerticalDivider />
+            </>
+          )}
           <StyledInput
             data-error={error ? "true" : "false"}
             ref={ref}

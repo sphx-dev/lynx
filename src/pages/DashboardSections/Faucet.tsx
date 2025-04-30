@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { Title } from "./styled";
 import styled from "styled-components";
 import { Input } from "@/components/Input";
-import { Button } from "@/components";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import config, { getChain } from "@/config";
@@ -10,6 +9,7 @@ import { getThemeColors } from "@/theme";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { Link } from "react-router-dom";
 import { LoaderBar } from "@/components/LoaderBar";
+import { Button } from "@/components/ButtonV2/Button";
 
 export const Faucet = () => {
   const { t } = useTranslation();
@@ -42,14 +42,14 @@ export const Faucet = () => {
           denom: "usdc",
           amount: ["1000000"],
         }),
-      }).then(res => {
+      }).then((res) => {
         return res.json();
       });
     },
     onError: (error: any) => {
       setErrorMessage(error?.message || t("faucetError"));
     },
-    onSuccess: data => {
+    onSuccess: (data) => {
       if (data.error) {
         setErrorMessage(data.error);
       }
@@ -71,7 +71,7 @@ export const Faucet = () => {
               style={{ width: "400px" }}
               inputStyle={{ textAlign: "left" }}
               value={selectedAddress}
-              onChange={e => {
+              onChange={(e) => {
                 setErrorMessage("");
                 const target = e.target as HTMLInputElement;
                 setSelectedAddress(target.value);

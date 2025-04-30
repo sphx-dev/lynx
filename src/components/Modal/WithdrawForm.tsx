@@ -4,7 +4,7 @@ import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useBalance } from "../../hooks/useBalance";
 import { successAlert } from "../../utils/alerts";
 import styled from "styled-components";
-import Button from "../Button";
+import { Button } from "../ButtonV2/Button";
 import { Input } from "../Input";
 import { DENOMUSDC, PRECISION } from "@/constants";
 
@@ -95,7 +95,7 @@ export const WithdrawForm = () => {
         <Label>{addressBalance} USD</Label>
       </FormRow>
       <FormRow style={{ display: "flex", justifyContent: "space-around" }}>
-        <Button type="submit" disabled={!isSuccess || isSubmitting}>
+        <Button htmlType="submit" disabled={!isSuccess || isSubmitting}>
           {isSubmitting ? "Withdrawing..." : "Withdraw"}
         </Button>
       </FormRow>

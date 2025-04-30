@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
 import { useChainCosmoshub } from "../hooks/useChainCosmoshub";
 import { useTranslation } from "react-i18next";
-import { ButtonProps } from "./Button";
-import { Button } from "./ButtonV2/Button";
+import { Button, ButtonProps } from "./ButtonV2/Button";
 
 type ConnectButtonProps = ButtonProps & {
   text?: string;
@@ -51,19 +50,8 @@ export const ConnectButton = React.memo(
       );
     }
 
-    // if (!hasChain) {
-    //   return (
-    //     <Button size={size} onClick={() => addChain()}>
-    //       Add Chain
-    //     </Button>
-    //   );
-    // }
-
     return (
       <>
-        {/* <ButtonOld size={size} onClick={() => addChain()}>
-          Add Chain
-        </ButtonOld> */}
         <Button
           type="neutral"
           option="stroke"
@@ -73,25 +61,15 @@ export const ConnectButton = React.memo(
           Add Chain
         </Button>
         {!isConnected ? (
-          <>
-            {/* <ButtonOld
-              variant="primary"
-              size={size}
-              {...props}
-              onClick={() => connect()}
-            >
-              {text ?? t("connect")}
-            </ButtonOld> */}
-            <Button
-              {...props}
-              type="primary"
-              option="stroke"
-              size="xxsmall"
-              onClick={() => connect()}
-            >
-              {text ?? t("connect")}
-            </Button>
-          </>
+          <Button
+            {...props}
+            type="primary"
+            option="stroke"
+            size="xxsmall"
+            onClick={() => connect()}
+          >
+            {text ?? t("connect")}
+          </Button>
         ) : (
           <Button
             {...props}

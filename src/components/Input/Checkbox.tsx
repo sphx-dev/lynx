@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import styled from "styled-components";
-import { CheckIcon } from "@radix-ui/react-icons";
+import { RiCheckFill } from "@remixicon/react";
 
 export const Checkbox = forwardRef<HTMLInputElement, any>((props, ref) => {
   const localRef = useRef<HTMLInputElement>(null);
@@ -25,20 +25,15 @@ export const Checkbox = forwardRef<HTMLInputElement, any>((props, ref) => {
         role="checkbox"
         aria-checked={isChecked ? "true" : "false"}
         tabIndex={0}
+        $checked={isChecked}
       >
-        {isChecked && <CheckIconStyled />}
+        {isChecked && <RiCheckFill />}
       </CheckboxWrapper>
 
       {props.right && <span>{props.right}</span>}
     </CheckboxLabel>
   );
 });
-
-const CheckIconStyled = styled(CheckIcon)`
-  width: 25px;
-  height: 25px;
-  position: absolute;
-`;
 
 const CheckboxLabel = styled.label`
   font-family: var(--text-sm-font-family);
@@ -52,22 +47,31 @@ const CheckboxLabel = styled.label`
   cursor: pointer;
 `;
 
-const CheckboxWrapper = styled.div`
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--border-default);
-  border-radius: var(--border-radius-xs);
+const CheckboxWrapper = styled.div<{ $checked: boolean }>`
+  width: 16px;
+  height: 16px;
+  margin: 1px;
+  border: 2px solid var(--bg-surface-800);
+  border-width: 2px;
+  border-style: solid;
+  border-color: ${({ $checked }) =>
+    $checked ? "var(--primary-base)" : "var(--bg-surface-800)"};
+  background-color: ${({ $checked }) =>
+    $checked ? "var(--primary-base)" : "transparent"};
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:active {
-    border-color: var(--border-active);
-  }
   &:hover {
-    border-color: var(--border-hovered);
+    border-color: ${({ $checked }) =>
+      $checked ? "var(--primary-darker)" : "var(--bg-surface-700)"};
+    background-color: ${({ $checked }) =>
+      $checked ? "var(--primary-darker)" : "transparent"};
   }
   &:focus {
-    outline: none;
-    border-color: var(--border-active);
+    border-color: ${({ $checked }) =>
+      $checked ? "var(--primary-dark)" : "var(--primary-base)"};
+    background-color: ${({ $checked }) =>
+      $checked ? "var(--primary-dark)" : "transparent"};
   }
 `;

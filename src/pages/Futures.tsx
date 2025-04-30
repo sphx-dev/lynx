@@ -2,7 +2,7 @@ import styled from "styled-components";
 import OrderInput from "../sections/order/OrderInput";
 import { TradingViewContainer } from "../sections/chart/TradingViewContainer";
 import OrderBook from "../sections/orderbook/OrderBook";
-import OrdersHistory from "../sections/ordersTabs";
+import OrdersTabs from "../sections/ordersTabs";
 import { Stack } from "../components";
 import PriceBorder from "../sections/priceBorder";
 import TabComponent from "../components/Tab/Tab";
@@ -27,7 +27,7 @@ const Futures = () => {
       <MainGroup>
         <Stack style={{ flex: 1 }} fullHeight>
           <TradingViewContainer />
-          <OrdersHistory />
+          <OrdersTabs />
         </Stack>
         <TabsGroup>
           <TabComponent id="futures-tabs" tabs={tabs} />
@@ -42,7 +42,7 @@ export default Futures;
 
 const MainGroup = styled.div`
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: calc(100vw - 640px - 32px) 320px 320px;
   gap: 8px;
   padding: 8px;
   min-height: calc(100vh - 168px);

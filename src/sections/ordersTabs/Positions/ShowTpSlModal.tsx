@@ -1,4 +1,4 @@
-import { Button, Table, Text } from "@/components";
+import { Table, Text } from "@/components";
 import { Modal } from "@/components/Modal/Modal";
 import { useCancelOrder, useOrdersById } from "@/hooks/useOrders";
 import dayjs from "dayjs";
@@ -9,6 +9,7 @@ import { formatPrice } from "@/utils/format";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { OrderId } from "proto-codecs/codegen/sphx/order/order";
 import { PRECISION } from "@/constants";
+import { Button } from "@/components/ButtonV2/Button";
 
 export const ShowTpSlModal = ({
   position,
@@ -38,13 +39,13 @@ export const ShowTpSlModal = ({
   const resultsTp = useOrdersById([tpOrderId]);
   const resultsSl = useOrdersById([slOrderId]);
   const dataTp = resultsTp
-    .map(r => r.data)
-    .filter(d => !!d)
-    .map(d => ({ ...d, type: "TP" }));
+    .map((r) => r.data)
+    .filter((d) => !!d)
+    .map((d) => ({ ...d, type: "TP" }));
   const dataSl = resultsSl
-    .map(r => r.data)
-    .filter(d => !!d)
-    .map(d => ({ ...d, type: "SL" }));
+    .map((r) => r.data)
+    .filter((d) => !!d)
+    .map((d) => ({ ...d, type: "SL" }));
 
   let data = [...dataTp, ...dataSl].toSorted((a, b) => {
     return Number(a.timestamp! - b.timestamp!);

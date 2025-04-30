@@ -3,7 +3,7 @@ import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
 import { useMarkets } from "@/hooks/useMarkets";
 import DatePicker from "@/components/ReactDatepickerCustom/DatePicker";
-import { Button, Divider, Table } from "@/components";
+import { Divider, Table } from "@/components";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import styled from "styled-components";
@@ -12,6 +12,7 @@ import { useFundingRateColumns } from "./useFundingRateColumns";
 import { fetchFundingRateLogs } from "./useFundingRate";
 import { Title } from "./styled";
 import { Pagination } from "@/components/Pagination";
+import { Button } from "@/components/ButtonV2/Button";
 
 export const Funding = () => {
   const { t } = useTranslation();
@@ -86,7 +87,7 @@ export const Funding = () => {
         <DatePickerContainer>
           <DatePickerLabel>{t("From")}:</DatePickerLabel>
           <DatePicker
-            onChange={date => {
+            onChange={(date) => {
               // setTimeout fixes interblocking issue with selected
               setTimeout(() => setFromDate(date), 100);
             }}
@@ -97,7 +98,7 @@ export const Funding = () => {
         <DatePickerContainer>
           <DatePickerLabel>{t("To")}:</DatePickerLabel>
           <DatePicker
-            onChange={date => {
+            onChange={(date) => {
               // setTimeout fixes interblocking issue with selected
               setTimeout(() => setToDate(date), 100);
             }}

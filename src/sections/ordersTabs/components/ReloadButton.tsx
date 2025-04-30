@@ -6,8 +6,8 @@ export const ReloadButton = ({ onClick }: { onClick: () => void }) => {
 
 const StyledButton = styled.button`
   position: absolute;
-  top: 7px;
-  right: 0;
+  top: 8px;
+  right: 10px;
   z-index: 1;
 
   pointer-events: all;

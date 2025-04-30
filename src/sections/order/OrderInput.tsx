@@ -9,8 +9,7 @@ import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
 import { schema } from "./orderSchema";
 import {
-  PlaceOrderButton,
-  StyledButton,
+  LeverageButton,
   Wrapper,
   PlaceOrderMessage,
   PriceEstimation,
@@ -39,6 +38,7 @@ import {
   TabButtonContainer,
   TabButton,
 } from "@/components/TabButton/TabButton";
+import { Button } from "@/components/ButtonV2/Button";
 
 const options: [
   { label: string; value: OrderType },
@@ -105,7 +105,7 @@ function OrderInput() {
   const { data: positions } = useQueryPositionsByAccount(address);
 
   const positionInMarket = positions?.find(
-    position => position.symbol === selectedMarket?.ticker
+    (position) => position.symbol === selectedMarket?.ticker
   );
 
   const positionSide =
@@ -381,7 +381,7 @@ function OrderInput() {
     <Wrapper>
       <Stack spacing={20}>
         <form
-          onSubmit={handleSubmit(placeOrder, errors => {
+          onSubmit={handleSubmit(placeOrder, (errors) => {
             console.log(errors);
           })}
         >
@@ -439,18 +439,31 @@ function OrderInput() {
                 autoComplete="off"
               />
               <div style={{ display: "flex", flexDirection: "column" }}>
+                {/* <div style={{ display: "flex", justifyContent: "center" }}>
+                  {isReduceOnly ? (
+                    <Text variant="textXSmall" color="bull">
+                      Reduce Only
+                    </Text>
+                  ) : (
+                    <Text variant="textXSmall" color="bull">
+                      Open Position
+                    </Text>
+                  )}
+                </div> */}
                 <div style={{ display: "flex", justifyContent: "start" }}>
                   <Checkbox
                     type="checkbox"
-                    left={t("reduceOnly")}
+                    right={t("reduceOnly")}
                     checked={isReduceOnly}
                   />
                 </div>
                 <div>
-                  <WarnInfoText>{t("ordersReduceInfo")}</WarnInfoText>
+                  {isReduceOnly && (
+                    <WarnInfoText>{t("ordersReduceInfo")}</WarnInfoText>
+                  )}
                 </div>
               </div>
-              <div style={{ position: "relative" }}>
+              <div>
                 <Group align="end">
                   <Input
                     {...register("leverage")}
@@ -459,14 +472,14 @@ function OrderInput() {
                     readOnly
                   />
                   <Group align="end" style={{ flex: 1 }}>
-                    <StyledButton
+                    <LeverageButton
                       data-testid="order-input-leverate-1x"
                       type="button"
                       onClick={() => handleChangeLeverage(1)}
                     >
                       1x
-                    </StyledButton>
-                    <StyledButton
+                    </LeverageButton>
+                    <LeverageButton
                       data-testid="order-input-leverate-2x"
                       type="button"
                       onClick={() => handleChangeLeverage(2)}
@@ -474,8 +487,8 @@ function OrderInput() {
                       disabled
                     >
                       2x
-                    </StyledButton>
-                    <StyledButton
+                    </LeverageButton>
+                    <LeverageButton
                       data-testid="order-input-leverate-5x"
                       type="button"
                       onClick={() => handleChangeLeverage(5)}
@@ -483,8 +496,8 @@ function OrderInput() {
                       disabled
                     >
                       5x
-                    </StyledButton>
-                    <StyledButton
+                    </LeverageButton>
+                    <LeverageButton
                       data-testid="order-input-leverate-10x"
                       type="button"
                       onClick={() => handleChangeLeverage(10)}
@@ -492,7 +505,7 @@ function OrderInput() {
                       disabled
                     >
                       10x
-                    </StyledButton>
+                    </LeverageButton>
                   </Group>
                 </Group>
               </div>
@@ -537,7 +550,7 @@ function OrderInput() {
                 )}
               </AnimatePresence>
               {!isConnected && (
-                <ConnectButton size="sm" fluid text={t("connectWallet")} />
+                <ConnectButton size="small" text={t("connectWallet")} />
               )}
               {isConnected && (
                 <>
@@ -554,18 +567,20 @@ function OrderInput() {
                           marginBottom: "-4px",
                         }}
                       >
-                        <PlaceOrderButton
+                        <Button
                           data-testid="order-input-place-order-button"
-                          $isBuy={isBuySide}
+                          // $isBuy={isBuySide}
+                          type="primary"
+                          option="filled"
+                          size="small"
                           disabled={
                             isPlacingOrder ||
                             insufficientFundsLimit ||
                             insufficientFundsMarket
                           }
-                          smartSign={smartSign}
                         >
                           {t("placeOrder")}
-                        </PlaceOrderButton>
+                        </Button>
                         <LoaderBar
                           style={{
                             width: "100%",

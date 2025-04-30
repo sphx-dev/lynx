@@ -1,4 +1,4 @@
-import { Button } from "@/components";
+import { Button } from "@/components/ButtonV2/Button";
 import { Input } from "@/components/Input";
 // import { BigIntInput } from "@/components/Input/BigIntInput";
 import { Modal } from "@/components/Modal/Modal";
@@ -36,7 +36,7 @@ export const ClosePositionByMarketModal = ({
   const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { markets } = useMarkets();
-  const market = markets.find(m => m.id === position.marketId);
+  const market = markets.find((m) => m.id === position.marketId);
 
   const { handleSubmit, setValue, register, watch } =
     useForm<ClosePositionFromProps>({

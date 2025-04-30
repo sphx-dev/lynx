@@ -2,18 +2,19 @@ import { Table } from "../../../components";
 import PlaceHolder from "../PlaceHolder";
 
 import { useChainCosmoshub } from "../../../hooks/useChainCosmoshub";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Pagination } from "@/components/Pagination";
 import { OrderType } from "proto-codecs/codegen/sphx/order/order";
 import { PerpetualPosition } from "proto-codecs/codegen/sphx/order/perpetual_position";
 import { ClosePositionByMarketModal } from "./ClosePositionByMarket";
 import { ClosePositionByLimitModal } from "./ClosePositionByLimit";
 import { ShowTpSlModal } from "./ShowTpSlModal";
-import { ReloadButton } from "../components/ReloadButton";
 import { LoaderBar } from "@/components/LoaderBar";
 import { ModalPositionDetails } from "./usePositionDetailsColumns";
 import { usePositionColumnsV2 } from "./usePositionColumnsV2";
 import { useQueryPositionsByAccount } from "@/hooks/usePositions";
+import { usePubSub } from "@/hooks/usePubSub";
+import { RELOAD_ORDER_TABS } from "../OrderTabs";
 
 const Positions = () => {
   const [selectedSymbol, setSelectedSymbol] = useState<string | undefined>();
@@ -24,6 +25,26 @@ const Positions = () => {
     refetch,
     isFetching,
   } = useQueryPositionsByAccount(address);
+
+  const { subscribe, usnuscribe } = usePubSub();
+
+  const refetchCallback = useCallback(
+    (data) => {
+      if (data.page !== "positions") {
+        return;
+      }
+      refetch();
+    },
+    [refetch]
+  );
+
+  subscribe(RELOAD_ORDER_TABS, refetchCallback);
+
+  useEffect(() => {
+    return () => {
+      usnuscribe(RELOAD_ORDER_TABS, refetchCallback);
+    };
+  }, [refetchCallback, usnuscribe]);
 
   const [page, setPage] = useState(0);
   const pagination = { total: 0 };
@@ -78,11 +99,6 @@ const Positions = () => {
     return (
       <>
         <LoaderBar style={{ visibility: isFetching ? "visible" : "hidden" }} />
-        <ReloadButton
-          onClick={() => {
-            refetch();
-          }}
-        />
         <PlaceHolder data-testid="perpetual-positions-table-empty">
           No Positions
         </PlaceHolder>
@@ -97,11 +113,6 @@ const Positions = () => {
         onClose={setDetailsClose}
         accountId={address}
         symbol={selectedSymbol}
-      />
-      <ReloadButton
-        onClick={() => {
-          refetch();
-        }}
       />
       <Table
         data-testid="perpetual-positions-table"

@@ -14,7 +14,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { WebSocketProvider } from "./hooks/useWebsocket";
 import { GrazProvider } from "graz";
 import { getChain } from "./config";
-import { useLocalStorage } from "./hooks/useLocalStorage";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -24,7 +23,7 @@ declare global {
 }
 
 window.devTools = async function () {
-  await import("./utils/windowTooling").then((mod) => {
+  await import("./utils/windowTooling").then(mod => {
     console.log("*** DEV TOOLS loaded ***");
     console.log("mod", mod);
   });
@@ -99,8 +98,8 @@ const Wall = () => {
             border: "1px solid #ccc",
             marginBottom: "10px",
           }}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => {
             if (e.key === "Enter") {
               window.localStorage.setItem(WALL_KEY, input);
               window.location.reload();
@@ -117,8 +116,6 @@ const Wall = () => {
             cursor: "pointer",
           }}
           onClick={() => {
-            // Handle the button click
-            console.log("Button clicked");
             window.localStorage.setItem(WALL_KEY, input);
             window.location.reload();
           }}

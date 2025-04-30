@@ -10,8 +10,10 @@ type Props = Omit<React.HTMLProps<HTMLButtonElement>, "size"> & {
   type?: Type;
   option?: Option;
   size?: Size;
+  htmlType?: "button" | "submit" | "reset";
 };
 
+export type ButtonProps = React.ComponentPropsWithoutRef<typeof Button>;
 export const Button = React.forwardRef(
   (
     {
@@ -19,12 +21,18 @@ export const Button = React.forwardRef(
       type = "primary",
       option = "filled",
       size = "medium",
+      htmlType,
       ...rest
     }: Props,
     ref: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
-      <BtnWrapper ref={ref} className={`${type} ${option} ${size}`} {...rest}>
+      <BtnWrapper
+        ref={ref}
+        className={`${type} ${option} ${size}`}
+        type={htmlType}
+        {...rest}
+      >
         {children}
       </BtnWrapper>
     );
@@ -36,7 +44,7 @@ const primaryStyle = css`
   --outline-color: var(--primary-alpha-10);
 
   --filled-bg-color: var(--primary-base);
-  --filled-boder-color: var(--primary-base);
+  --filled-border-color: var(--primary-base);
   --filled-text-color: black;
   --filled-bg-color-hover: var(--primary-darker);
   --filled-border-color-hover: var(--primary-darker);
@@ -56,7 +64,7 @@ const primaryStyle = css`
   --stroke-text-color-focus: var(--primary-base);
 
   --lighter-bg-color: var(--primary-alpha-10);
-  --lighter-boder-color: var(--primary-alpha-10);
+  --lighter-border-color: var(--primary-alpha-10);
   --lighter-text-color: var(--primary-base);
   --lighter-bg-color-hover: var(--bg-strong-950);
   --lighter-border-color-hover: var(--primary-alpha-10);
@@ -66,7 +74,7 @@ const primaryStyle = css`
   --lighter-text-color-focus: var(--primary-base);
 
   --ghost-bg-color: transparent;
-  --ghost-boder-color: transparent;
+  --ghost-border-color: transparent;
   --ghost-text-color: var(--primary-base);
   --ghost-bg-color-hover: var(--primary-alpha-10);
   --ghost-border-color-hover: var(--primary-alpha-10);
@@ -80,7 +88,7 @@ const neutralStyle = css`
   --outline-color: var(--neutral-alpha-10);
 
   --filled-bg-color: var(--bg-white-0);
-  --filled-boder-color: var(--bg-white-0);
+  --filled-border-color: var(--bg-white-0);
   --filled-text-color: var(--text-white-0);
   --filled-bg-color-hover: var(--bg-sub-300);
   --filled-border-color-hover: var(--bg-sub-300);
@@ -100,7 +108,7 @@ const neutralStyle = css`
   --stroke-text-color-focus: var(--text-strong-950);
 
   --lighter-bg-color: var(--bg-surface-800);
-  --lighter-boder-color: var(--bg-surface-800);
+  --lighter-border-color: var(--bg-surface-800);
   --lighter-text-color: var(--text-sub-600);
   --lighter-bg-color-hover: var(--bg-strong-950);
   --lighter-border-color-hover: var(--stroke-soft-200);
@@ -110,7 +118,7 @@ const neutralStyle = css`
   --lighter-text-color-focus: var(--text-strong-950);
 
   --ghost-bg-color: transparent;
-  --ghost-boder-color: transparent;
+  --ghost-border-color: transparent;
   --ghost-text-color: var(--text-sub-600);
   --ghost-bg-color-hover: var(--bg-surface-800);
   --ghost-border-color-hover: var(--bg-surface-800);
@@ -124,7 +132,7 @@ const errorStyle = css`
   --outline-color: var(--error-lighter);
 
   --filled-bg-color: var(--error-base);
-  --filled-boder-color: var(--error-base);
+  --filled-border-color: var(--error-base);
   --filled-text-color: white;
   --filled-bg-color-hover: var(--error-dark);
   --filled-border-color-hover: var(--error-dark);
@@ -144,7 +152,7 @@ const errorStyle = css`
   --stroke-text-color-focus: var(--error-base);
 
   --lighter-bg-color: var(--error-lighter);
-  --lighter-boder-color: var(--error-lighter);
+  --lighter-border-color: var(--error-lighter);
   --lighter-text-color: var(--error-base);
   --lighter-bg-color-hover: var(--bg-strong-950);
   --lighter-border-color-hover: var(--error-base);
@@ -154,7 +162,7 @@ const errorStyle = css`
   --lighter-text-color-focus: var(--error-base);
 
   --ghost-bg-color: transparent;
-  --ghost-boder-color: transparent;
+  --ghost-border-color: transparent;
   --ghost-text-color: var(--error-base);
   --ghost-bg-color-hover: var(--error-lighter);
   --ghost-border-color-hover: var(--error-lighter);
