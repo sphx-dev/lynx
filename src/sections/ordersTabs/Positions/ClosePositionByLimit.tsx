@@ -36,7 +36,7 @@ export const ClosePositionByLimitModal = ({
   const { t } = useTranslation();
   const { address } = useChainCosmoshub();
   const { markets } = useMarkets();
-  const market = markets.find((m) => m.id === position.marketId);
+  const market = markets.find(m => m.id === position.marketId);
 
   const { handleSubmit, setValue, register, watch } =
     useForm<ClosePositionFromProps>({
@@ -112,8 +112,7 @@ export const ClosePositionByLimitModal = ({
           <h5 style={{ margin: "19px 0 10px 0" }}>Close Quantity</h5>
           <SliderButtonWrapper>
             <Button
-              size="xs"
-              type="button"
+              size="xxsmall"
               onClick={() =>
                 setValue("size", Number(position.size) / 4 / PRECISION)
               }
@@ -121,8 +120,7 @@ export const ClosePositionByLimitModal = ({
               25%
             </Button>
             <Button
-              size="xs"
-              type="button"
+              size="xxsmall"
               onClick={() =>
                 setValue("size", Number(position.size) / 2 / PRECISION)
               }
@@ -130,8 +128,7 @@ export const ClosePositionByLimitModal = ({
               50%
             </Button>
             <Button
-              size="xs"
-              type="button"
+              size="xxsmall"
               onClick={() =>
                 setValue("size", ((Number(position.size) / 4) * 3) / PRECISION)
               }
@@ -139,8 +136,7 @@ export const ClosePositionByLimitModal = ({
               75%
             </Button>
             <Button
-              size="xs"
-              type="button"
+              size="xxsmall"
               onClick={() =>
                 setValue("size", Number(position.size) / PRECISION)
               }
@@ -158,16 +154,15 @@ export const ClosePositionByLimitModal = ({
           />
           <ButtonWrapper>
             <Button
-              size="lg"
+              size="small"
               onClick={() => onClose()}
               disabled={limitStatus.isLoading}
             >
               {t("cancel")}
             </Button>
             <Button
-              size="lg"
-              variant="primary"
-              type="submit"
+              size="small"
+              htmlType="submit"
               disabled={limitStatus.isLoading}
             >
               {t("confirm")}

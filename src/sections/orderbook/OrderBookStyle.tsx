@@ -4,6 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   border-color: #263946;
+  height: 100%;
 `;
 
 export const TableContainer = styled.div`

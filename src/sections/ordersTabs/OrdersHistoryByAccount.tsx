@@ -308,7 +308,7 @@ const OrdersHistoryByAccount = () => {
   const { subscribe, usnuscribe } = usePubSub();
 
   const refetchCallback = useCallback(
-    (data) => {
+    (data: { page: string }) => {
       if (data.page !== "orderHistory") {
         return;
       }

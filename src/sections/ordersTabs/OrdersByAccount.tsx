@@ -64,7 +64,7 @@ const useOrderColumns = ({
     setCancellingOrders([...cancellingOrders, orderId]);
   };
   const removeCancellingOrder = (orderId: string) => {
-    setCancellingOrders((co) => co.filter((o) => o !== orderId));
+    setCancellingOrders(co => co.filter(o => o !== orderId));
   };
 
   const columns = [
@@ -276,7 +276,7 @@ const useOrderColumns = ({
 
         const status = getStatusByMessage(order);
         const orderId = order.chain_order_id;
-        const isCancelling = cancellingOrders.some((o) => o === orderId);
+        const isCancelling = cancellingOrders.some(o => o === orderId);
         const onClickHandler = async () => {
           if (address) {
             try {
@@ -324,7 +324,7 @@ const useOrderColumns = ({
               (props.getValue()?.row?.subData?.length > 0 ? (
                 <Button
                   color="secondary"
-                  size="xs"
+                  size="xxsmall"
                   onClick={() => {
                     setPartialOrders(props.getValue()?.row?.subData || []);
                     openPartialsModal();
@@ -338,7 +338,7 @@ const useOrderColumns = ({
               (props.getValue()?.row?.subData?.length > 0 ? (
                 <Button
                   color="secondary"
-                  size="xs"
+                  size="xxsmall"
                   onClick={() => {
                     setPartialOrders(props.getValue()?.row?.subData || []);
                     openPartialsModal();
@@ -349,8 +349,8 @@ const useOrderColumns = ({
               ) : null)}
             {status === OrderStatus.ORDER_STATUS_OPEN && (
               <Button
-                variant="error"
-                size="xs"
+                type="error"
+                size="xxsmall"
                 disabled={isCancelling}
                 onClick={onClickHandler}
               >
@@ -476,7 +476,7 @@ const OrdersByAccount = () => {
   const { subscribe, usnuscribe } = usePubSub();
 
   const refetchCallback = useCallback(
-    (data) => {
+    (data: { page: string }) => {
       if (data.page !== "pending") {
         return;
       }

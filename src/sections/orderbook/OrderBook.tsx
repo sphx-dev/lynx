@@ -19,90 +19,124 @@ import { asksToState, orderToState } from "./helpers";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useOrderBookData } from "./useOrderBookData";
+import aIcon from "@/assets/icons/orderbookselector-a.svg";
+import bIcon from "@/assets/icons/orderbookselector-b.svg";
+import abIcon from "@/assets/icons/orderbookselector-ab.svg";
 
 const HEADERS = ["price", "amount", "total"];
 const MIN_RECORDS = 9;
-const MAX_RECORDS = 20;
+const MAX_RECORDS = 40;
+
+type SideSelection = "A" | "B" | "AB";
+const SideSelector = ({
+  onChange,
+}: {
+  onChange: (side: SideSelection) => void;
+}) => {
+  const [selected, setSelected] = useState<SideSelection>("AB");
+  return (
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        justifyContent: "end",
+        alignItems: "center",
+      }}
+    >
+      <ABButton
+        onClick={() => {
+          setSelected("AB");
+          onChange("AB");
+        }}
+        $selected={selected === "AB"}
+      >
+        <Icon src={abIcon} />
+      </ABButton>
+      <ABButton
+        onClick={() => {
+          setSelected("B");
+          onChange("B");
+        }}
+        $selected={selected === "B"}
+      >
+        <Icon src={bIcon} />
+      </ABButton>
+      <ABButton
+        onClick={() => {
+          setSelected("A");
+          onChange("A");
+        }}
+        $selected={selected === "A"}
+      >
+        <Icon src={aIcon} />
+      </ABButton>
+    </div>
+  );
+};
+
+const ABButton = styled.button<{ $selected: boolean }>`
+  position: relative;
+  background-color: transparent;
+  height: 22px;
+  width: 22px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ $selected }) =>
+    $selected ? "var(--primary-base)" : "transparent"};
+  border-radius: 3px;
+`;
+
+const Icon = styled.img`
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const OrderBook: FunctionComponent = () => {
   const { t } = useTranslation();
   const containerRef = useRef(null);
-  const asksBidsRef = useRef(null);
-  const { data: book, isLoading } = useOrderBook(asksBidsRef);
+  const [side, setSide] = useState<SideSelection>("AB");
+  const { data: book, isLoading } = useOrderBook(containerRef, side);
 
   return (
-    <Container ref={containerRef} data-testid="orderbook-tab">
-      {!isLoading && (book?.bids?.length || book?.asks?.length) ? (
-        <AsksBidsContainer
-          data-testid="asks-and-bids-container"
-          ref={asksBidsRef}
-        >
-          <TableContainer>
-            <TitleRow titles={HEADERS} />
-            <PriceLevelsWrapper>
-              <PriceLevels
-                // levels={book.asks.slice(0, records)}
-                levels={book.asks}
-                orderType={OrderType.ASKS}
-              />
-            </PriceLevelsWrapper>
-          </TableContainer>
-          <Divider spread={book.spread} percentage={book.spreadPercentage} />
-          <TableContainer>
-            <PriceLevelsWrapper>
-              <PriceLevels
-                // levels={book.bids.slice(
-                //   book.bids.length - records >= 0
-                //     ? book.bids.length - records
-                //     : 0,
-                //   book.bids.length
-                // )}
-                levels={book.bids}
-                orderType={OrderType.BIDS}
-              />
-            </PriceLevelsWrapper>
-          </TableContainer>
-        </AsksBidsContainer>
-      ) : (
-        <Stack justify="center" align="center" style={{ flex: "1 0 auto" }}>
-          <Text variant="textXLarge" color="soft400">
-            {isLoading ? t("loading") : t("noData")}
-          </Text>
-        </Stack>
-      )}
-      {/* <div onClick={() => setSizeOption((x) => (x + 1) % 3)}>
-        {sizeOption === 0 && (
-          <BidsAsksSize bidsSize={book?.bids_size} asksSize={book?.asks_size} />
+    <>
+      <SideSelector onChange={s => setSide(s)} />
+      <Container ref={containerRef} data-testid="orderbook-tab">
+        {!isLoading && (book?.bids?.length || book?.asks?.length) ? (
+          <AsksBidsContainer data-testid="asks-and-bids-container">
+            <TableContainer>
+              <TitleRow titles={HEADERS} />
+              <PriceLevelsWrapper>
+                <PriceLevels levels={book.asks} orderType={OrderType.ASKS} />
+              </PriceLevelsWrapper>
+            </TableContainer>
+            <Divider spread={book.spread} percentage={book.spreadPercentage} />
+            <TableContainer>
+              <PriceLevelsWrapper>
+                <PriceLevels levels={book.bids} orderType={OrderType.BIDS} />
+              </PriceLevelsWrapper>
+            </TableContainer>
+          </AsksBidsContainer>
+        ) : (
+          <Stack justify="center" align="center" style={{ flex: "1 0 auto" }}>
+            <Text variant="textXLarge" color="soft400">
+              {isLoading ? t("loading") : t("noData")}
+            </Text>
+          </Stack>
         )}
-        {sizeOption === 1 && (
-          <BidsAsksSize
-            bidsSize={book?.bids_size_sum}
-            asksSize={book?.asks_size_sum}
-            formatFn={(value: number) => value.toFixed(2) + " " + symbol}
-          />
-        )}
-        {sizeOption === 2 && (
-          <BidsAsksSize
-            bidsSize={book?.bids_size_sum_value}
-            asksSize={book?.asks_size_sum_value}
-            formatFn={formatDollars}
-          />
-        )}
-        <StreamingInfo />
-      </div> */}
-    </Container>
+      </Container>
+    </>
   );
 };
-
-// const MIN_SIDE = 27;
-// const MAX_SIDE = 100 - MIN_SIDE - MIN_SIDE;
 
 const AsksBidsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   flex: 1 0 auto;
-  height: calc(100vh - 375px);
   overflow: hidden;
 `;
 
@@ -156,8 +190,6 @@ const PriceLevels = ({
             )}
             <PriceLevelRow
               key={size + total}
-              // total={total}
-              // size={size}
               total={total}
               size={size}
               amount={amount}
@@ -200,7 +232,7 @@ const formatNumber = (arg: number): string => {
 
 export default OrderBook;
 
-const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
+const useOrderBook = (ref: RefObject<HTMLDivElement>, side: SideSelection) => {
   const [records, setRecords] = useState(MIN_RECORDS);
   const { selectedMarket } = useMarkets();
 
@@ -208,26 +240,30 @@ const useOrderBook = (ref: RefObject<HTMLDivElement>) => {
 
   useLayoutEffect(() => {
     if (ref.current) {
-      const winHeight = window.outerHeight - 168;
       const columnHeight = ref.current?.clientHeight - 75;
-      const h = Math.min(winHeight, columnHeight);
       const r = Math.max(
-        Math.min(Math.floor(h / 27 / 2), MAX_RECORDS)
+        Math.min(Math.floor(columnHeight / 27), MAX_RECORDS)
         // MIN_RECORDS
       );
 
-      setRecords(r ? r : MIN_RECORDS);
-      // setRecords(20);
+      // setRecords(10);
+      setRecords(r);
     }
   }, [responseData, ref]);
 
+  const askRecords =
+    side === "A" ? records : side === "AB" ? Math.floor(records / 2) : 0;
+  const bidsRecords =
+    side === "B" ? records : side === "AB" ? Math.floor(records / 2) : 0;
+
   return {
     ...responseData,
-    data: parseOrderBokData(responseData.data, records),
+    data: parseOrderBokData(responseData.data, askRecords, bidsRecords),
+    // data: parseOrderBokData(responseData.data, 13),
   };
 };
 
-function parseOrderBokData(data: any, records: number = MIN_RECORDS) {
+function parseOrderBokData(data: any, askRecords: number, bidsRecords: number) {
   let bidsSizeSum = 0;
   let bidsSizeSumValue = 0;
   data?.bids?.forEach((bid: any) => {
@@ -236,7 +272,7 @@ function parseOrderBokData(data: any, records: number = MIN_RECORDS) {
     bidsSizeSumValue += Number(bid.quantity) * Number(bid.price);
   });
 
-  const bids = orderToState(data?.bids?.slice(0, records) ?? []);
+  const bids = orderToState(data?.bids?.slice(0, bidsRecords) ?? []);
   let asksSizeSum = 0;
   let asksSizeSumValue = 0;
   data?.asks?.forEach((ask: any) => {
@@ -247,13 +283,13 @@ function parseOrderBokData(data: any, records: number = MIN_RECORDS) {
 
   const asks = asksToState(
     data?.asks?.slice(
-      Math.max(0, data?.asks?.length - records),
+      Math.max(0, data?.asks?.length - askRecords),
       data?.asks?.length
     ) ?? []
   );
 
-  const maxBid = bids.length ? bids[0].price : 0;
-  const minAsk = asks.length ? asks[asks.length - 1].price : 0;
+  const maxBid = data?.bids?.length ? data.bids[0].price : 0;
+  const minAsk = data?.asks?.length ? data.asks[data.asks.length - 1].price : 0;
   const spread = Math.abs(maxBid - minAsk);
   const spreadPercentage = Math.abs(spread / maxBid) * 100;
   return {

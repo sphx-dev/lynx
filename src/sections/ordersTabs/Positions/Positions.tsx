@@ -29,7 +29,7 @@ const Positions = () => {
   const { subscribe, usnuscribe } = usePubSub();
 
   const refetchCallback = useCallback(
-    (data) => {
+    (data: { page: string }) => {
       if (data.page !== "positions") {
         return;
       }

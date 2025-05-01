@@ -39,13 +39,13 @@ export const ShowTpSlModal = ({
   const resultsTp = useOrdersById([tpOrderId]);
   const resultsSl = useOrdersById([slOrderId]);
   const dataTp = resultsTp
-    .map((r) => r.data)
-    .filter((d) => !!d)
-    .map((d) => ({ ...d, type: "TP" }));
+    .map(r => r.data)
+    .filter(d => !!d)
+    .map(d => ({ ...d, type: "TP" }));
   const dataSl = resultsSl
-    .map((r) => r.data)
-    .filter((d) => !!d)
-    .map((d) => ({ ...d, type: "SL" }));
+    .map(r => r.data)
+    .filter(d => !!d)
+    .map(d => ({ ...d, type: "SL" }));
 
   let data = [...dataTp, ...dataSl].toSorted((a, b) => {
     return Number(a.timestamp! - b.timestamp!);
@@ -144,8 +144,9 @@ const useTpSlColumns = (
           <>
             {status === OrderStatus.ORDER_STATUS_OPEN && (
               <Button
-                variant="link"
-                size="xs"
+                type="neutral"
+                option="ghost"
+                size="xxsmall"
                 onClick={() =>
                   cancelOrder({
                     address,

@@ -141,8 +141,9 @@ export const usePositionColumnsV2 = function (
           <>
             {hasDetails && (
               <Button
-                variant="secondary"
-                size="xs"
+                type="neutral"
+                option="lighter"
+                size="xxsmall"
                 onClick={() => {
                   console.log("SHOW TP/SL", slOrderId, tpOrderId);
                   showTpSl(position);
@@ -171,7 +172,7 @@ export const usePositionColumnsV2 = function (
           >
             <Button
               variant="secondary"
-              size="xs"
+              size="xxsmall"
               data-testid={`close-position-market-${props.row.index}`}
               onClick={() => {
                 closePosition(OrderType.ORDER_TYPE_MARKET, position);
@@ -181,7 +182,7 @@ export const usePositionColumnsV2 = function (
             </Button>
             <Button
               variant="secondary"
-              size="xs"
+              size="xxsmall"
               data-testid={`close-position-limit-${props.row.index}`}
               onClick={() => {
                 closePosition(OrderType.ORDER_TYPE_LIMIT, position);

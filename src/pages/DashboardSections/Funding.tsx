@@ -87,7 +87,7 @@ export const Funding = () => {
         <DatePickerContainer>
           <DatePickerLabel>{t("From")}:</DatePickerLabel>
           <DatePicker
-            onChange={(date) => {
+            onChange={date => {
               // setTimeout fixes interblocking issue with selected
               setTimeout(() => setFromDate(date), 100);
             }}
@@ -98,7 +98,7 @@ export const Funding = () => {
         <DatePickerContainer>
           <DatePickerLabel>{t("To")}:</DatePickerLabel>
           <DatePicker
-            onChange={(date) => {
+            onChange={date => {
               // setTimeout fixes interblocking issue with selected
               setTimeout(() => setToDate(date), 100);
             }}

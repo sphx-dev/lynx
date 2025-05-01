@@ -39,10 +39,10 @@ const MarginAccountsPage = () => {
   const [balances, setBalances] = useState<any[]>([]);
   useEffect(() => {
     if (marginAccounts && marginAccounts.length) {
-      const promises = marginAccounts.map((account) =>
+      const promises = marginAccounts.map(account =>
         getBalance(account.address, DENOMUSDC)
       );
-      Promise.all(promises).then((balances) => {
+      Promise.all(promises).then(balances => {
         setBalances(balances);
       });
     } else {
@@ -102,7 +102,7 @@ const MarginAccountsPage = () => {
                 placeholder="10.00 USD"
                 type="number"
                 value={sendAmount}
-                onChange={(event) => {
+                onChange={event => {
                   setSendAmount((event.target as HTMLInputElement).value);
                 }}
               />
@@ -128,7 +128,7 @@ const MarginAccountsPage = () => {
                         setCanSend(true);
                         setSendAmount("");
                       },
-                      (error) => {
+                      error => {
                         errorAlert(error.message);
                         setCanSend(true);
                       }
