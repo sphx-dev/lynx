@@ -222,7 +222,7 @@ const useNestedOrderColumns = () => {
           (acc: number, item: any) => acc + Number(item.quantity),
           0
         );
-        if (!data) {
+        if (!data || total === 0) {
           return null;
         }
         return `Total: ${total}`;
@@ -247,7 +247,7 @@ const useNestedOrderColumns = () => {
             acc + Number(item.quantity) * Number(item.price),
           0
         );
-        if (!data) {
+        if (!data || totalQuantity === 0 || totalPrice === 0) {
           return null;
         }
         return `Avg. ${formatDollars(totalPrice / totalQuantity)} `;
@@ -294,7 +294,7 @@ const OrdersHistoryByAccount = () => {
 
   const [page, setPage] = useState<number>(0);
 
-  const pageSize = 10;
+  const pageSize = 1;
   const { data, isFetching, refetch } = useQuery(
     ["query-orders-history", address, page, pageSize],
     queryOrdersHistoryByAccount,
@@ -386,6 +386,7 @@ const PartialsModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { t } = useTranslation();
   const { data, isFetching } = useQuery(
     ["query-partials", orderId],
     () => getPartialsBy(orderId),
@@ -398,6 +399,9 @@ const PartialsModal = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      <Text variant="textMedium" as="h2">
+        {t("orderHistoryDetails")}
+      </Text>
       <div style={{ minWidth: "500px", minHeight: "150px" }}>
         {isFetching && <LoaderBar />}
         <Table

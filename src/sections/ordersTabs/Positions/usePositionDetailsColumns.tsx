@@ -130,7 +130,7 @@ export const usePositionDetailsColumns = () => {
       header: t("side"),
       cell: (props: any) => (
         <Text color={props.getValue() === "buy" ? "bull" : "bear"}>
-          {props.getValue()}
+          {t(props.getValue())}
         </Text>
       ),
     },

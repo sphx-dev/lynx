@@ -1,3 +1,8 @@
+import {
+  RiArrowLeftSLine,
+  RiArrowRightSLine,
+  RiMoreLine,
+} from "@remixicon/react";
 import { useMemo } from "react";
 import styled from "styled-components";
 
@@ -29,7 +34,7 @@ export const Pagination = ({
           key={"prev"}
           onClick={() => setPage(page - 1 < 0 ? 0 : page - 1)}
         >
-          {"<"}
+          <LeftArrow />
         </PageButton>
         {pages.map(p => (
           <PageButton
@@ -46,7 +51,7 @@ export const Pagination = ({
             setPage(page + 1 > totalPages - 1 ? totalPages - 1 : page + 1)
           }
         >
-          {">"}
+          <RightArrow />
         </PageButton>
       </PagesContainer>
     );
@@ -56,10 +61,14 @@ export const Pagination = ({
     <PagesContainer>
       <FirstPages page={page} setPage={setPage} totalPages={totalPages} />
       {page < SIDE_PAGES || page >= totalPages - SIDE_PAGES ? (
-        <PageButtonShort key={"dots_prev"}>{"..."}</PageButtonShort>
+        <PageButtonShort key={"dots_prev"}>
+          <Dots />
+        </PageButtonShort>
       ) : (
         <>
-          <PageButtonShort key={"dots_prev"}>{"..."}</PageButtonShort>
+          <PageButtonShort key={"dots_prev"}>
+            <Dots />
+          </PageButtonShort>
 
           <PageButton
             key={page}
@@ -69,7 +78,9 @@ export const Pagination = ({
             {page + 1}
           </PageButton>
 
-          <PageButtonShort key={"dots_next"}>{"..."}</PageButtonShort>
+          <PageButtonShort key={"dots_next"}>
+            <Dots />
+          </PageButtonShort>
         </>
       )}
       <LastPages page={page} setPage={setPage} totalPages={totalPages} />
@@ -96,7 +107,7 @@ const FirstPages = ({
         key={"prev"}
         onClick={() => setPage(page - 1 < 0 ? 0 : page - 1)}
       >
-        {"<"}
+        <LeftArrow />
       </PageButton>
       {pages.map((p, index) => (
         <PageButton
@@ -144,11 +155,44 @@ const LastPages = ({
           setPage(page + 1 > totalPages - 1 ? totalPages - 1 : page + 1)
         }
       >
-        {">"}
+        <RightArrow />
       </PageButton>
     </>
   );
 };
+
+const RightArrow = styled(RiArrowRightSLine)`
+  width: 16px;
+  height: 16px;
+  color: var(--text-sub-600);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const LeftArrow = styled(RiArrowLeftSLine)`
+  width: 16px;
+  height: 16px;
+  color: var(--text-sub-600);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const Dots = styled(RiMoreLine)`
+  width: 16px;
+  height: 16px;
+  color: var(--text-sub-600);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const PagesContainer = styled.div`
   min-height: 30px;
@@ -158,57 +202,58 @@ const PagesContainer = styled.div`
 `;
 
 const PageButton = styled.button`
-  min-width: 30px;
-  min-height: 30px;
-  font-family: var(--text-sm-font-family);
-  font-size: var(--text-sm-font-size);
-  font-weight: var(--text-sm-font-weight);
-  line-height: var(--text-sm-line-height);
+  position: relative;
+  min-width: 24px;
+  min-height: 24px;
+  font-family: var(--text-x-small-font-family);
+  font-size: var(--text-x-small-font-size);
+  font-weight: var(--text-x-small-font-weight);
+  line-height: var(--text-x-small-line-height);
 
-  color: var(--text-primary-color);
-
-  background-color: var(--button-secondary-background-default);
+  color: var(--text-sub-600);
+  background-color: var(--bg-strong-950);
 
   &:focus {
     border: 1px solid var(--button-secondary-border-focused);
   }
   &:hover,
   &.selected {
-    background: var(--button-secondary-background-hovered);
+    background-color: var(--bg-strong-900);
   }
   &:active {
-    background: var(--button-secondary-background-pressed);
+    background: var(--bg-surface-800);
   }
   border: 1px solid transparent;
   &:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
   }
   &:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
   }
 `;
 
 const PageButtonShort = styled.button`
-  min-width: 20px;
-  min-height: 30px;
+  position: relative;
+  min-width: 24px;
+  min-height: 24px;
 
-  font-family: var(--text-sm-font-family);
-  font-size: var(--text-sm-font-size);
-  font-weight: var(--text-sm-font-weight);
-  line-height: var(--text-sm-line-height);
+  font-family: var(--text-x-small-font-family);
+  font-size: var(--text-x-small-font-size);
+  font-weight: var(--text-x-small-font-weight);
+  line-height: var(--text-x-small-line-height);
 
-  color: var(--text-primary-color);
-  background-color: var(--button-secondary-background-default);
+  color: var(--text-sub-600);
+  background-color: var(--bg-strong-950);
 
   border: 1px solid transparent;
   &:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
   }
   &:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
   }
 `;

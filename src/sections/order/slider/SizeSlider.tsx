@@ -23,7 +23,7 @@ export const SizeSlider = ({
         step={1}
         defaultValue={[defaultValue]}
         aria-label="Size"
-        onChange={(ev) => {
+        onChange={ev => {
           setValue(Number((ev.target as HTMLInputElement).value) || 0);
           onChange(Number((ev.target as HTMLInputElement).value) || 0);
         }}

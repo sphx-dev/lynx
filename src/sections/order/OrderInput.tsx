@@ -106,7 +106,7 @@ function OrderInput() {
   const { data: positions } = useQueryPositionsByAccount(address);
 
   const positionInMarket = positions?.find(
-    (position) => position.symbol === selectedMarket?.ticker
+    position => position.symbol === selectedMarket?.ticker
   );
 
   const positionSide =
@@ -382,7 +382,7 @@ function OrderInput() {
     <Wrapper>
       <Stack spacing={20}>
         <form
-          onSubmit={handleSubmit(placeOrder, (errors) => {
+          onSubmit={handleSubmit(placeOrder, errors => {
             console.log(errors);
           })}
         >
@@ -446,7 +446,7 @@ function OrderInput() {
               </div>
               <div>
                 <SizeSlider
-                  onChange={(size) => {
+                  onChange={size => {
                     if (amount) {
                       setValue(
                         "volume",

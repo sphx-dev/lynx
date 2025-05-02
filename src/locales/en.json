@@ -12,6 +12,7 @@
   "orders": "Orders",
   "orderbook": "Orderbook",
   "orderHistory": "Order History",
+  "orderHistoryDetails": "Order History Details",
   "trades": "Trades",
   "uP&L": "uP&L",
   "lev.": "Lev.",
@@ -24,6 +25,8 @@
   "date": "Date",
   "slide": "Slide",
   "orderType": "Order Type",
+  "full": "Full",
+  "partial": "Partial",
   "partials": "Partials",
   "partialOrderType": "Partial Order Type",
   "requiredPrice": "Req. Price",
@@ -115,5 +118,7 @@
   "ordersReduceInfo": "Orders will only reduce the current position",
   "long": "Long",
   "short": "Short",
+  "buy": "Buy",
+  "sell": "Sell",
   "order.youNeedAMarginAccount": "You need a Margin Account with funds to place an order"
 }
