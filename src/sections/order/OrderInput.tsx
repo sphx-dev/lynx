@@ -39,6 +39,7 @@ import {
   TabButton,
 } from "@/components/TabButton/TabButton";
 import { Button } from "@/components/ButtonV2/Button";
+import { SizeSlider } from "./slider/SizeSlider";
 
 const options: [
   { label: string; value: OrderType },
@@ -105,7 +106,7 @@ function OrderInput() {
   const { data: positions } = useQueryPositionsByAccount(address);
 
   const positionInMarket = positions?.find(
-    position => position.symbol === selectedMarket?.ticker
+    (position) => position.symbol === selectedMarket?.ticker
   );
 
   const positionSide =
@@ -381,7 +382,7 @@ function OrderInput() {
     <Wrapper>
       <Stack spacing={20}>
         <form
-          onSubmit={handleSubmit(placeOrder, errors => {
+          onSubmit={handleSubmit(placeOrder, (errors) => {
             console.log(errors);
           })}
         >
@@ -438,6 +439,25 @@ function OrderInput() {
                 rightSide={selectedMarket?.baseAsset || ""}
                 autoComplete="off"
               />
+              <div>
+                <Text variant="textXSmall" color="grey">
+                  {t("total")}:
+                </Text>
+              </div>
+              <div>
+                <SizeSlider
+                  onChange={(size) => {
+                    if (amount) {
+                      setValue(
+                        "volume",
+                        (((amount / PRECISION) * size) / 100).toFixed(3)
+                      );
+                    }
+                  }}
+                  disabled={!amount}
+                  defaultValue={0}
+                />
+              </div>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {/* <div style={{ display: "flex", justifyContent: "center" }}>
                   {isReduceOnly ? (

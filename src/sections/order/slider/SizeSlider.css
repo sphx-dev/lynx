@@ -1,0 +1,137 @@
+.SliderRoot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 100%;
+  height: 20px;
+}
+
+.SliderTrack {
+  background-color: var(--bg-surface-800);
+  position: relative;
+  flex-grow: 1;
+  border-radius: 9999px;
+  height: 1px;
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: -5px;
+    width: 7px;
+    height: 7px;
+    background-color: var(--bg-surface-900);
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--bg-surface-800);
+  }
+}
+
+.SliderRange {
+  position: absolute;
+  background-color: var(--primary-base);
+  border-radius: 9999px;
+  height: 100%;
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    width: 7px;
+    height: 7px;
+    background-color: var(--bg-surface-900);
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--primary-base);
+  }
+}
+
+.SliderThumb {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  /* background-color: var(--primary-base); */
+  background-color: var(--bg-surface-900);
+  background: linear-gradient(
+    40deg,
+    var(--primary-base) -100%,
+    var(--bg-surface-900) 80%
+  );
+  /* box-shadow: 0 2px 10px var(--stroke-sub-300); */
+  border-radius: 24px;
+  border: 1px solid var(--primary-base);
+
+  transition: background-color 0.3s ease;
+
+  & .tooltip {
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: -37px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-family: var(--text-x-small-font-family);
+    font-weight: var(--text-x-small-font-weight);
+    font-size: var(--text-x-small-font-size);
+    line-height: var(--text-x-small-line-height);
+    background-color: var(--bg-strong-950);
+    border: 1px solid var(--stroke-soft-200);
+    color: var(--text-base);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--bg-strong-950) transparent transparent transparent;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 7px;
+      border-style: solid;
+      border-color: var(--stroke-soft-200) transparent transparent transparent;
+    }
+  }
+  &:hover .tooltip {
+    opacity: 1;
+  }
+}
+
+.SliderThumb:hover {
+  background-color: yellow;
+}
+.SliderThumb:focus {
+  outline: none;
+  /* box-shadow: 0 0 0 5px red; */
+}
+
+.point {
+  display: block;
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background-color: var(--bg-surface-900);
+  border-radius: 9999px;
+  transform: translate(-50%, 0);
+  border: 1px solid var(--bg-surface-800);
+  &.active {
+    border-color: var(--primary-base);
+  }
+}
