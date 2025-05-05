@@ -25,7 +25,7 @@ service:
 
 ingress:
   enabled: true
-  domain: testnet.sphx.dev
+  domain: sphx.cloud
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/load-balancer-name: "testnet-lynxweb"
@@ -34,12 +34,12 @@ ingress:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/healthcheck-path: "/healthcheck"
     alb.ingress.kubernetes.io/success-codes: '200'
-    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-2:585008044223:certificate/185c7241-fe1d-407c-ac4b-c571a9e6d7a0"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-2:585008044223:certificate/52a40d8a-0714-43f5-8a5d-d5b4144d29bf"
     alb.ingress.kubernetes.io/tags: cluster=testnet-lynxweb
   path: /
   pathType: Prefix
   hosts:
-    - www.testnet.sphx.dev
+    - www.sphx.cloud
   servicePort: 9898
 
 resources: { }
