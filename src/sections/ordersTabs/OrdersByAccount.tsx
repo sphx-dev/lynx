@@ -23,6 +23,7 @@ import { Button } from "@/components/ButtonV2/Button";
 import { usePubSub } from "@/hooks/usePubSub";
 import { RELOAD_ORDER_TABS } from "./OrderTabs";
 import { errorAlert, successAlert } from "@/components/Toast/Toast";
+import { LinkButton } from "@/components/ButtonV2/LinkButton";
 
 const FF_SMART_SIGN = false;
 
@@ -64,7 +65,7 @@ const useOrderColumns = ({
     setCancellingOrders([...cancellingOrders, orderId]);
   };
   const removeCancellingOrder = (orderId: string) => {
-    setCancellingOrders(co => co.filter(o => o !== orderId));
+    setCancellingOrders((co) => co.filter((o) => o !== orderId));
   };
 
   const columns = [
@@ -276,7 +277,7 @@ const useOrderColumns = ({
 
         const status = getStatusByMessage(order);
         const orderId = order.chain_order_id;
-        const isCancelling = cancellingOrders.some(o => o === orderId);
+        const isCancelling = cancellingOrders.some((o) => o === orderId);
         const onClickHandler = async () => {
           if (address) {
             try {
@@ -285,9 +286,9 @@ const useOrderColumns = ({
               if (config.SIGNATURE_BASED_CANCEL) {
                 const response = await cancelOrderSigned(address, order);
                 if (response?.status === 200) {
-                  successAlert("Order canceled successfully");
+                  successAlert(t("cancelOrderSuccess"));
                 } else {
-                  errorAlert("Order cancel failed");
+                  errorAlert(t("cancelOrderFailed"));
                 }
               } else if (FF_SMART_SIGN && smartSign) {
                 let response = await cancelOrderSmart({
@@ -295,9 +296,9 @@ const useOrderColumns = ({
                   number: orderId.split(":")[1],
                 });
                 if (response.status === 200) {
-                  successAlert("Order canceled successfully");
+                  successAlert(t("cancelOrderSuccess"));
                 } else {
-                  errorAlert("Order cancel failed");
+                  errorAlert(t("cancelOrderFailed"));
                 }
               } else {
                 await cancelOrder({
@@ -308,10 +309,11 @@ const useOrderColumns = ({
                   },
                   memo: `Cancel order #${orderId}`,
                 });
-                successAlert("Order canceled successfully");
+                successAlert(t("cancelOrderSuccess"));
               }
             } catch (error) {
               console.error(error);
+              errorAlert(t("cancelOrderFailed"));
             } finally {
               removeCancellingOrder(orderId);
             }
@@ -322,40 +324,40 @@ const useOrderColumns = ({
           <>
             {status === OrderStatus.ORDER_STATUS_FILLED &&
               (props.getValue()?.row?.subData?.length > 0 ? (
-                <Button
-                  color="secondary"
-                  size="xxsmall"
+                <LinkButton
+                  color="grey"
+                  size="small"
                   onClick={() => {
                     setPartialOrders(props.getValue()?.row?.subData || []);
                     openPartialsModal();
                   }}
                 >
                   {t("details")} ({props.getValue()?.row?.subData?.length})
-                </Button>
+                </LinkButton>
               ) : null)}
 
             {status === OrderStatus.ORDER_STATUS_PARTIALLY_FILLED &&
               (props.getValue()?.row?.subData?.length > 0 ? (
-                <Button
-                  color="secondary"
-                  size="xxsmall"
+                <LinkButton
+                  color="grey"
+                  size="small"
                   onClick={() => {
                     setPartialOrders(props.getValue()?.row?.subData || []);
                     openPartialsModal();
                   }}
                 >
                   {t("partials")} ({props.getValue()?.row?.subData?.length})
-                </Button>
+                </LinkButton>
               ) : null)}
             {status === OrderStatus.ORDER_STATUS_OPEN && (
-              <Button
+              <LinkButton
                 type="error"
-                size="xxsmall"
+                size="small"
                 disabled={isCancelling}
                 onClick={onClickHandler}
               >
-                {isCancelling ? "Canceling..." : "Cancel"}
-              </Button>
+                {isCancelling ? t("canceling") : t("cancel")}
+              </LinkButton>
             )}
           </>
         );

@@ -266,7 +266,7 @@ const ghostStyle = css`
 `;
 
 const BtnWrapper = styled.button`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
