@@ -47,5 +47,12 @@ code {
 @font-face {
   font-family: "Inter";
   src: local("Inter"),
+    url("./assets/fonts/inter/Inter-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 500;
+  src: local("Inter"),
     url("./assets/fonts/inter/Inter-Medium.woff") format("woff");
 }

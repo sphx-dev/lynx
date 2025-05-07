@@ -5,6 +5,7 @@ import { getThemeColors } from "../../theme";
 import { useTranslation } from "react-i18next";
 import { VerticalDivider } from "@/components/Input";
 import { t } from "i18next";
+import { Message } from "@/components/Toast/Toast";
 
 export const Wrapper = styled.div`
   background: var(--bg-surface-900);
@@ -63,19 +64,15 @@ export const sellStyle = css`
 `;
 
 export const PlaceOrderMessage = () => {
-  return <PlaceHolder>{t("order.youNeedAMarginAccount")}</PlaceHolder>;
+  return (
+    <Message
+      size="large"
+      status="warning"
+      body={t("order.youNeedAMarginAccount")}
+      type="filled"
+    />
+  );
 };
-export const PlaceHolder = styled.div`
-  padding: 14px 14px 16px 14px;
-  font-family: var(--text-small-font-family);
-  font-size: var(--text-small-font-size);
-  font-weight: var(--text-small-font-weight);
-  line-height: var(--text-small-line-height);
-  color: white;
-  background: var(--warning-base);
-  border: 0;
-  border-radius: 12px;
-`;
 
 export const PriceEstimation = ({
   label,

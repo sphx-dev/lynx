@@ -294,7 +294,7 @@ const OrdersHistoryByAccount = () => {
 
   const [page, setPage] = useState<number>(0);
 
-  const pageSize = 1;
+  const pageSize = 10;
   const { data, isFetching, refetch } = useQuery(
     ["query-orders-history", address, page, pageSize],
     queryOrdersHistoryByAccount,

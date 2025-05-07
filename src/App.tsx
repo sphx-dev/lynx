@@ -6,7 +6,7 @@ import { ThemeInterface, themes } from "./theme";
 import { ThemeProvider } from "styled-components";
 import Header from "./components/Header/Header";
 import Footer from "./sections/footer";
-import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "@/components/Toast/Toast";
 import { Modal, useModalStore } from "./components/Modal/Modal";
 import { DepositForm } from "./components/Modal/DepositForm";
 import { WithdrawForm } from "./components/Modal/WithdrawForm";
@@ -27,7 +27,7 @@ function App() {
       <Header />
       {content}
       <Footer />
-      <Toaster />
+      <ToastContainer />
       <Modal isOpen={isOpen} onClose={closeModal}>
         {openModalType === "DEPOSIT" && <DepositForm />}
         {openModalType === "WITHDRAW" && <WithdrawForm />}

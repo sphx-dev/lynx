@@ -4,7 +4,11 @@ import { Divider, Group, Stack, Switcher, Text } from "../../components";
 import Summary from "./Summary";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { errorAlert, promiseAlert, successAlert } from "../../utils/alerts";
+import {
+  errorAlert,
+  promiseAlert,
+  successAlert,
+} from "@/components/Toast/Toast";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { ConnectButton } from "../../components/ConnectButton";
 import { schema } from "./orderSchema";
@@ -225,8 +229,9 @@ function OrderInput() {
       if (config.SIGNATURE_BASED_PLACEMENT) {
         const orderType =
           values.orderType === OrderType.ORDER_TYPE_LIMIT ? "limit" : "market";
-        try {
-          await placeOrderSigned(address, selectedMarket?.ticker!, {
+
+        promiseAlert(
+          placeOrderSigned(address, selectedMarket?.ticker!, {
             price: Number(values.price),
             volume: Number(values.volume),
             is_buy: values.isBuy,
@@ -234,17 +239,25 @@ function OrderInput() {
             trigger_price: 0,
             order_type: orderType,
             chain_order_id: selectedAddress + ":" + Date.now() * 1000,
-          });
+          }),
 
-          setValue("takeProfit", "");
-          setValue("stopLoss", "");
-          successAlert(t("orderPlacedSuccess"));
-        } catch (error) {
-          console.log(error);
-          errorAlert(t("errorPlacingOrder"));
-        } finally {
-          setIsPlacingOrder(false);
-        }
+          {
+            pending: t("waitingForApproval"),
+            success: t("orderPlacedSuccess"),
+            // error: (txt: string) => <div>{txt}</div>,
+            error: t("errorPlacingOrder"),
+          }
+        )
+          .then(() => {
+            setValue("takeProfit", "");
+            setValue("stopLoss", "");
+          })
+          .catch(error => {
+            console.error(error);
+          })
+          .finally(() => {
+            setIsPlacingOrder(false);
+          });
       } else {
         if (values.orderType === OrderType.ORDER_TYPE_MARKET) {
           setIsPlacingOrder(true);
@@ -257,10 +270,10 @@ function OrderInput() {
                 quantity: quantity,
                 leverage: Number(values.leverage),
                 marketTicker: selectedMarket?.ticker!,
+              }).finally(() => {
+                setIsPlacingOrder(false);
               });
 
-              // setValue("price", "");
-              // setValue("volume", "");
               setValue("takeProfit", "");
               setValue("stopLoss", "");
               successAlert(t("orderPlacedSuccess"));
@@ -282,13 +295,15 @@ function OrderInput() {
                 stopLoss: stopLossValue,
                 takeProfit: takeProfitValue,
                 marketId: BigInt(marketId),
-              }) /*.then(value => {
-              console.log("placeMarketOrder", value);
-              return this;
-            })*/,
-              <div>{t("waitingForApproval")}</div>,
-              <div>{t("orderPlacedSuccess")}</div>,
-              (txt: string) => <div>{txt}</div>
+              }),
+              {
+                pending: t("waitingForApproval"),
+                success: t("orderPlacedSuccess"),
+                error: t("errorPlacingOrder"),
+              }
+              // <div>{t("waitingForApproval")}</div>,
+              // <div>{t("orderPlacedSuccess")}</div>,
+              // (txt: string) => <div>{txt}</div>
             )
               .then(() => {
                 // setValue("price", "");
@@ -688,13 +703,14 @@ function sendLimitOrderToChain(
       stopLoss: stopLossValue,
       takeProfit: takeProfitValue,
       marketId: BigInt(marketId),
-    }) /*.then(value => {
-      console.log("placeLimitOrder", value);
-      console.log("placeLimitOrder transactionHash:", value?.transactionHash);
-      return this;
-    })*/,
-    <div>{t("waitingForApproval")}</div>,
-    () => <div>{t("orderPlacedSuccess")}</div>,
-    (txt: string) => <div>{txt}</div>
+    }),
+    {
+      pending: t("waitingForApproval"),
+      success: t("orderPlacedSuccess"),
+      error: t("errorPlacingOrder"),
+    }
+    // <div>{t("waitingForApproval")}</div>,
+    // () => <div>{t("orderPlacedSuccess")}</div>,
+    // (txt: string) => <div>{txt}</div>
   );
 }

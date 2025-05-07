@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 import { getBalance } from "../utils/getBalance";
 import { Coin } from "@cosmjs/proto-signing";
 import { sendTokens } from "../utils/sendTokens";
-import { errorAlert, infoAlert, successAlert } from "../utils/alerts";
 import { Input } from "@/components/Input";
 import { DENOMUSDC, PRECISION } from "@/constants";
 import { Link } from "react-router-dom";
 import config from "@/config";
 import { Button } from "@/components/ButtonV2/Button";
+import { errorAlert, infoAlert, successAlert } from "@/components/Toast/Toast";
 
 const MarginAccountsPage = () => {
   const { address, reconnect } = useChainCosmoshub();

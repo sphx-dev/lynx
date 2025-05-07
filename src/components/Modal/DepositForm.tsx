@@ -6,9 +6,9 @@ import styled from "styled-components";
 import Divider from "../Divider";
 import { useBalance } from "../../hooks/useBalance";
 import { sendTokens } from "../../utils/sendTokens";
-import { successAlert } from "../../utils/alerts";
 import { DENOMUSDC, PRECISION } from "@/constants";
 import { Button } from "../ButtonV2/Button";
+import { successAlert } from "../Toast/Toast";
 
 async function depositToMarginAccount({
   address,

@@ -1,0 +1,25 @@
+:root {
+  --toastify-toast-width: 390px;
+  --toastify-toast-padding: 0px;
+  --toastify-toast-min-height: 32px;
+
+  --toastify-color-light: transparent;
+  --toastify-text-color-warning: transparent;
+  --toastify-text-color-error: transparent;
+  --toastify-text-color-info: transparent;
+  --toastify-text-color-success: transparent;
+  --toastify-text-color-default: transparent;
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 0.7s linear infinite;
+}

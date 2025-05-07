@@ -5,9 +5,9 @@ import {
 import { MarginAccountInfo } from "proto-codecs/codegen/sphx/marginacc/margin_account";
 import { create } from "zustand";
 import { useCallback, useEffect } from "react";
-import { errorAlert, successAlert } from "@/utils/alerts";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useTranslation } from "react-i18next";
+import { errorAlert, successAlert } from "@/components/Toast/Toast";
 
 type MarginAccountState = {
   marginAccounts: MarginAccountInfo[];

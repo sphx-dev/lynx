@@ -6,7 +6,6 @@ import PlaceHolder from "./PlaceHolder";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useCancelOrder, useCancelOrderSmart } from "../../hooks/useOrders";
 import { useTranslation } from "react-i18next";
-import { errorAlert, successAlert } from "@/utils/alerts";
 import dayjs from "dayjs";
 import { OrderStatus } from "proto-codecs/codegen/sphx/order/validated_order";
 import { Pagination } from "@/components/Pagination";
@@ -23,6 +22,7 @@ import { TableRowMarket } from "@/components/Table/TableRowMarket";
 import { Button } from "@/components/ButtonV2/Button";
 import { usePubSub } from "@/hooks/usePubSub";
 import { RELOAD_ORDER_TABS } from "./OrderTabs";
+import { errorAlert, successAlert } from "@/components/Toast/Toast";
 
 const FF_SMART_SIGN = false;
 

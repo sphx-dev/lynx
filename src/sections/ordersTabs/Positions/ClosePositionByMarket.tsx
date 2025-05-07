@@ -2,11 +2,11 @@ import { Button } from "@/components/ButtonV2/Button";
 import { Input } from "@/components/Input";
 // import { BigIntInput } from "@/components/Input/BigIntInput";
 import { Modal } from "@/components/Modal/Modal";
+import { promiseAlert } from "@/components/Toast/Toast";
 import { PRECISION } from "@/constants";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarkets } from "@/hooks/useMarkets";
 import { useCreateOrder } from "@/hooks/useOrders";
-import { promiseAlert } from "@/utils/alerts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { OrderSide } from "proto-codecs/codegen/sphx/order/order";
 import {
@@ -81,9 +81,14 @@ export const ClosePositionByMarketModal = ({
         }).then(() => {
           onClose();
         }),
-        <div>{t("waitingForApproval")}</div>,
-        () => <div>{t("orderPlacedSuccess")}</div>,
-        (txt: string) => <div>{txt}</div>
+        {
+          pending: t("waitingForApproval"),
+          success: t("orderPlacedSuccess"),
+          error: t("errorPlacingOrder"),
+        }
+        // <div>{t("waitingForApproval")}</div>,
+        // () => <div>{t("orderPlacedSuccess")}</div>,
+        // (txt: string) => <div>{txt}</div>
       );
     },
     [placeMarketOrder, position, address, onClose, t]

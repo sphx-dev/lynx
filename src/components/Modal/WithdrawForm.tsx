@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useChainCosmoshub } from "../../hooks/useChainCosmoshub";
 import { useMarginAccount } from "../../hooks/useMarginAccounts";
 import { useBalance } from "../../hooks/useBalance";
-import { successAlert } from "../../utils/alerts";
 import styled from "styled-components";
 import { Button } from "../ButtonV2/Button";
 import { Input } from "../Input";
 import { DENOMUSDC, PRECISION } from "@/constants";
+import { successAlert } from "../Toast/Toast";
 
 export const WithdrawForm = () => {
   const { address } = useChainCosmoshub();
