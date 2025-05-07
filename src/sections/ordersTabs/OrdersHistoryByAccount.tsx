@@ -18,6 +18,7 @@ import { TableRowMarket } from "@/components/Table/TableRowMarket";
 import { LinkButton } from "@/components/ButtonV2/LinkButton";
 import { usePubSub } from "@/hooks/usePubSub";
 import { RELOAD_ORDER_TABS } from "./OrderTabs";
+import { StatusBadge } from "@/components/Badge/StatusBadge";
 
 const queryOrdersHistoryByAccount = async ({
   queryKey,
@@ -125,23 +126,30 @@ const useOrderColumns = ({
 
     {
       accessorFn: (order: any) => {
+        let status = "disabled";
         let label = "ORDER_STATUS_FILLED_OB";
         if (order?.hash) {
           label = "ORDER_STATUS_FILLED";
+          status = "completed";
         }
         if (order.source === "partial") {
           label = "ORDER_STATUS_PARTIALLY_FILLED";
+          status = "pending";
         }
         if (Number(order.price) === 0) {
           label = "ORDER_STATUS_CANCELED";
+          status = "failed";
         }
         return {
+          status: status,
           label: label,
         };
       },
       header: t("status"),
       cell: (props: any) => (
-        <Text variant="textXSmall">{t(props.getValue().label)}</Text>
+        <StatusBadge status={props.getValue().status} styleType="light" dot>
+          {t(props.getValue().label)}
+        </StatusBadge>
       ),
     },
 
@@ -301,7 +309,7 @@ const OrdersHistoryByAccount = () => {
     {
       enabled: !!address,
       staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchInterval: 5000,
+      refetchInterval: 5000000,
     }
   );
 

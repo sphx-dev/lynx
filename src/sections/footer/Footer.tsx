@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { RiHeadphoneLine } from "@remixicon/react";
+import { StatusBadge } from "@/components/Badge/StatusBadge";
 
 const Wrapper = styled.footer`
   background-color: var(--neutral-1000);
@@ -11,38 +12,6 @@ const Wrapper = styled.footer`
   padding: 0px 30px;
   height: 36px;
   border-top: 1px solid var(--stroke-soft-200);
-`;
-
-interface IStatusProps {
-  $isConnected?: boolean;
-}
-
-const Status = styled.div<IStatusProps>`
-  font-family: var(--text-x-small-font-family);
-  font-size: var(--text-x-small-font-size);
-  font-weight: var(--text-x-small-font-weight);
-  line-height: var(--text-x-small-line-height);
-
-  color: ${({ $isConnected }) =>
-    $isConnected ? `var(--verified-base)` : `var(--error-base)`};
-
-  background-color: ${({ $isConnected }) =>
-    $isConnected ? `var(--verified-lighter)` : `var(--error-lighter)`};
-
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  border-radius: 6px;
-  padding: 4px 8px;
-
-  .status-icon {
-    background-color: ${({ $isConnected }) =>
-      $isConnected ? `var(--verified-base)` : `var(--error-base)`};
-    width: 6px;
-    height: 6px;
-    margin-right: 6px;
-    border-radius: 50%;
-  }
 `;
 
 const Nav = styled.nav`
@@ -81,10 +50,13 @@ const Footer = () => {
           {t("docs")}
         </NavItem>
       </Nav>
-      <Status $isConnected={isConnected}>
-        <div className="status-icon" />
+      <StatusBadge
+        status={isConnected ? "completed" : "failed"}
+        styleType="light"
+        dot
+      >
         {isConnected ? t("online") : t("offline")}
-      </Status>
+      </StatusBadge>
     </Wrapper>
   );
 };

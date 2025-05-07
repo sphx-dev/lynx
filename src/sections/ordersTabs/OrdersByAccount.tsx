@@ -19,7 +19,6 @@ import styled from "styled-components";
 import { Modal } from "@/components/Modal/Modal";
 import { signArbitrary } from "@/utils/getOfflineSigner";
 import { TableRowMarket } from "@/components/Table/TableRowMarket";
-import { Button } from "@/components/ButtonV2/Button";
 import { usePubSub } from "@/hooks/usePubSub";
 import { RELOAD_ORDER_TABS } from "./OrderTabs";
 import { errorAlert, successAlert } from "@/components/Toast/Toast";
@@ -65,7 +64,7 @@ const useOrderColumns = ({
     setCancellingOrders([...cancellingOrders, orderId]);
   };
   const removeCancellingOrder = (orderId: string) => {
-    setCancellingOrders((co) => co.filter((o) => o !== orderId));
+    setCancellingOrders(co => co.filter(o => o !== orderId));
   };
 
   const columns = [
@@ -277,7 +276,7 @@ const useOrderColumns = ({
 
         const status = getStatusByMessage(order);
         const orderId = order.chain_order_id;
-        const isCancelling = cancellingOrders.some((o) => o === orderId);
+        const isCancelling = cancellingOrders.some(o => o === orderId);
         const onClickHandler = async () => {
           if (address) {
             try {

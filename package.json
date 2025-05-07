@@ -12,6 +12,7 @@
     "test:dev": "vitest",
     "get:proto": "./scripts/getSphxProto.sh",
     "format": "prettier --write .",
+    "l": "yarn lint:fix && yarn type-check",
     "lint": "eslint --ext .ts,.tsx ./src --max-warnings=0",
     "lint_debug": "eslint --debug --ext .ts,.tsx ./src --max-warnings=0",
     "lint:fix": "eslint --fix --ext .ts,.tsx ./src",
