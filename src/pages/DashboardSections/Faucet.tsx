@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Title } from "./styled";
 import styled from "styled-components";
 import { Input } from "@/components/Input";
 import { useEffect, useState } from "react";
@@ -10,6 +9,7 @@ import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { Link } from "react-router-dom";
 import { LoaderBar } from "@/components/LoaderBar";
 import { Button } from "@/components/ButtonV2/Button";
+import { Text } from "@/components";
 
 export const Faucet = () => {
   const { t } = useTranslation();
@@ -59,11 +59,16 @@ export const Faucet = () => {
 
   return (
     <div>
-      <Title>{t("faucet")}</Title>
+      <Text as="h2" variant="textLarge">
+        {t("faucet")}
+      </Text>
 
       <DefaultContainer>
         <BlockWrapper>
-          <MessageBox>{t("faucetMessage")}</MessageBox>
+          <Text variant="textMedium" style={{ marginBlock: "2rem 3rem" }}>
+            {t("faucetMessage")}
+          </Text>
+
           <Row>
             <Input
               placeholder={t("enterAddress")}
@@ -145,12 +150,6 @@ const BlockWrapper = styled.div`
 const Row = styled.div`
   display: flex;
   justify-content: center;
-`;
-
-const MessageBox = styled.div`
-  line-height: 1.5rem;
-  width: 100%;
-  padding-bottom: 0.8rem;
 `;
 
 const ErrorMessageBox = styled.div`

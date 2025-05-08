@@ -97,10 +97,11 @@ export const PriceEstimation = ({
 };
 
 const InputWrapper = styled.div`
-  border: 1px solid var(--bg-surface-900);
+  --input-height: 36px;
+  height: var(--input-height);
   border-radius: 6px;
   width: 100%;
-  padding: 7px 12px;
+  padding: 0px 12px;
 
   background-color: var(--bg-surface-800);
 
@@ -113,5 +114,8 @@ const StyledNonInput = styled.div`
   text-align: right;
   width: 100%;
   color: var(--text-bull);
-  ${({ theme }) => theme.fonts.typography.textNumMd}
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
 `;

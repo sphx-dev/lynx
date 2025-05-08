@@ -2,7 +2,7 @@ import styled from "styled-components";
 import logo from "../../assets/header-logo.svg";
 import Nav from "./navbar";
 import { navLinks } from "./navbar/config";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const Container = styled.div`
 const LeftBlock = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 4px;
 `;
 
 const Logo = styled.img`
@@ -32,7 +32,7 @@ const Logo = styled.img`
 const VerticalDivider = styled.div`
   width: 1px;
   height: 24px;
-  margin: 0 30px 0 20px;
+  margin: 0 40px 0 40px;
   background-color: var(--stroke-soft-200);
 `;
 
@@ -47,16 +47,30 @@ const StyledLink = styled(Link)`
   letter-spacing: var(--text-small-letter-spacing);
 
   color: var(--text-strong-950);
+
+  padding: 6px 16px;
+  border-radius: 50px;
+
+  &.active {
+    background-color: var(--primary-alpha-6);
+    color: var(--primary-base);
+  }
 `;
 
 const Header = () => {
+  const location = useLocation();
   return (
     <Container>
       <LeftBlock>
         <Logo src={logo} />
         <VerticalDivider />
         {navLinks.map(({ title, path, target }) => (
-          <StyledLink to={path} key={title} target={target}>
+          <StyledLink
+            to={path}
+            key={title}
+            target={target}
+            className={location.pathname.includes(path) ? "active" : ""}
+          >
             {title}
           </StyledLink>
         ))}

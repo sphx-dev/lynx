@@ -1,4 +1,4 @@
-@import "./theme/index.css";
+/* @import "./theme/index.css"; */
 
 html {
   height: 100%;
@@ -10,6 +10,7 @@ body {
   overflow-y: auto;
   background-color: var(--bg-strong-1000);
   color: var(--text-strong-950);
+  color: var(--neutral-0);
 }
 
 * {

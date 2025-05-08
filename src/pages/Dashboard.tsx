@@ -1,9 +1,10 @@
-import { Stack } from "../components";
+import { Stack, Text } from "../components";
 import styled from "styled-components";
 import { Sidebar } from "./DashboardSections/Sidebar";
 import { Link, useOutlet } from "react-router-dom";
-import { Container, RightWrapper, Title } from "./DashboardSections/styled";
+import { Container, RightWrapper } from "./DashboardSections/styled";
 import { ROUTES } from "@/routes";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
   const outlet = useOutlet();
@@ -33,14 +34,18 @@ export default Dashboard;
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
-  min-height: calc(100vh - 28px - 100px);
-  gap: 16px;
+  min-height: calc(100vh - 44px - 100px);
+  padding: 8px;
+  gap: 8px;
 `;
 
 const DefaultDashboardContent = () => {
+  const { t } = useTranslation();
   return (
     <>
-      <Title>Overview</Title>
+      <Text as="h2" variant="textLarge">
+        {t("Overview")}
+      </Text>
       <DefaultContainer>
         <BlockWrapper>
           <SectionBlock to={ROUTES.dashboardFunding}>Funding</SectionBlock>

@@ -3,14 +3,13 @@ import { useChainCosmoshub } from "@/hooks/useChainCosmoshub";
 import { useMarginAccount } from "@/hooks/useMarginAccounts";
 import { useMarkets } from "@/hooks/useMarkets";
 import DatePicker from "@/components/ReactDatepickerCustom/DatePicker";
-import { Divider, Table } from "@/components";
+import { Divider, Table, Text } from "@/components";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import SymbolSelect from "@/components/SymbolSelect/SymbolSelect";
 import { useFundingRateColumns } from "./useFundingRateColumns";
 import { fetchFundingRateLogs } from "./useFundingRate";
-import { Title } from "./styled";
 import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ButtonV2/Button";
 
@@ -65,25 +64,19 @@ export const Funding = () => {
 
   return (
     <div>
-      <Title>{t("fundingRateLogs")}</Title>
+      <Text as="h2" variant="textLarge">
+        {t("fundingRateLogs")}
+      </Text>
 
       <div
         style={{
           display: "flex",
           gap: "18px",
-          alignItems: "end",
-          minHeight: "60px",
+          paddingTop: "22px",
+          alignItems: "center",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "end",
-            minHeight: "50px",
-          }}
-        >
-          <SymbolSelect />
-        </div>
+        <SymbolSelect />
         <DatePickerContainer>
           <DatePickerLabel>{t("From")}:</DatePickerLabel>
           <DatePicker
@@ -106,7 +99,7 @@ export const Funding = () => {
             dateFormat="yyyy/MM/dd"
           />
         </DatePickerContainer>
-        <Button onClick={onSubmit} disabled={loadButtonDisabled}>
+        <Button onClick={onSubmit} disabled={loadButtonDisabled} size="small">
           Load
         </Button>
       </div>
@@ -175,13 +168,15 @@ const DatePickerContainer = styled.div`
   flex-direction: column;
   gap: 2px;
   align-items: flex-start;
+  margin-top: -22px;
 `;
 
 const DatePickerLabel = styled.label`
-  font-family: "Poppins-Regular";
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
+
   color: #ffffff;
   text-align: left;
 `;

@@ -25,32 +25,35 @@ interface InputWrapperProps {
 const numberRegex = /^\d*\.?\d*$/;
 
 const StyledInput = styled.input`
-  padding-block: 8px;
-  font-family: var(--text-num-md-font-family);
-  font-size: var(--text-num-md-font-size);
-  font-weight: var(--text-num-md-font-weight);
-  line-height: var(--text-num-md-line-height);
+  height: var(--input-height);
+  font-family: var(--text-small-font-family);
+  font-size: var(--text-small-font-size);
+  font-weight: var(--text-small-font-weight);
+  line-height: var(--text-small-line-height);
   text-align: right;
   border: none;
   background: none;
   outline: none;
   flex: 1;
   max-width: 100%;
-  color: var(--text-primary);
+  color: var(--text-strong-950);
   &:focus,
   &:focus-visible {
     outline: none;
-    color: var(--text-primary);
+    color: var(--text-sub-600);
   }
   &::placeholder,
   &::-webkit-input-placeholder,
   &:-ms-input-placeholder {
-    color: var(--text-tertiary);
+    color: var(--text-strong-950);
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+  &:active {
+    color: var(--text-strong-950);
   }
 
   /* Firefox */
@@ -61,9 +64,17 @@ const StyledInput = styled.input`
 
 export const VerticalDivider = styled.div`
   width: 1px;
-  height: 34px;
+  height: var(--input-height);
   background-color: var(--stroke-soft-200);
   margin: -10px 0;
+`;
+
+const SideWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--input-height);
+  min-width: 36px;
 `;
 
 const errorStyle = css`
@@ -71,6 +82,8 @@ const errorStyle = css`
 `;
 
 export const InputWrapper = styled.div<InputWrapperProps>`
+  --input-height: 36px;
+  height: var(--input-height);
   border: 1px solid var(--stroke-soft-200);
   border-radius: 6px;
   width: 100%;
@@ -80,11 +93,12 @@ export const InputWrapper = styled.div<InputWrapperProps>`
       return disabled ? "var(--bg-strong-900)" : "var(--bg-strong-950)";
     }
 
-    return disabled
-      ? /*getThemeColors(theme).input[variant].background.disabled*/ "var(--bg-strong-900)"
-      : /*getThemeColors(theme).input[variant].background.default}*/ "var(--bg-strong-950)";
+    return disabled ? "var(--bg-strong-900)" : "var(--bg-strong-950)";
   }};
+
+  &:focus,
   &:focus-within {
+    background-color: var(--bg-strong-950);
     border-color: ${({ theme, variant }) =>
       variant === "error" ? "var(--error-base)" : "var(--stroke-soft-200)"};
   }
@@ -160,7 +174,9 @@ export const Input = forwardRef<Ref, InputProps>(
         >
           {leftSide && (
             <>
-              <Text color="disabled300">{leftSide}</Text>
+              <SideWrapper>
+                <Text color="disabled300">{leftSide}</Text>
+              </SideWrapper>
               <VerticalDivider />
             </>
           )}
@@ -177,7 +193,9 @@ export const Input = forwardRef<Ref, InputProps>(
           {rightSide && (
             <>
               <VerticalDivider />
-              <Text color="disabled300">{rightSide}</Text>
+              <SideWrapper>
+                <Text color="disabled300">{rightSide}</Text>
+              </SideWrapper>
             </>
           )}
         </InputWrapper>

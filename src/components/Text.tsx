@@ -44,9 +44,10 @@ interface TextProps
 }
 
 const StyledText = styled.p<TextProps>`
-  color: var(--text-primary);
-  ${({ align }) => align && `text-align: ${align};`}
-  margin-bottom: 0 !important;
+  /* color: var(--text-primary); */
+  color: var(--neutral-0);
+  ${({ align }) =>
+    align && `text-align: ${align};`}/* margin-bottom: 0 !important; */
 `;
 
 const Text = ({
